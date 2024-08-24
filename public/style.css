@@ -4,7 +4,7 @@
 
 body {
   /* font-family: sans-serif; */
-  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
   background: #f1f1f1;
 }
 
@@ -43,7 +43,7 @@ body {
   margin: 0px 5px 5px 0px;
   height: 25px;
   background: white;
-  border-color: #Ababab;
+  border-color: #ababab;
   border-width: 1px;
   border-style: solid;
 
@@ -57,15 +57,15 @@ body {
 .grid-container-main {
   display: grid;
   grid-template-areas:
-    'header header header header header header header header header header header header'
-    'left right right right right right right right right right right right';
+    "header header header header header header header header header header header header"
+    "left right right right right right right right right right right right";
 }
 
 .grid-container-sub {
   display: grid;
   grid-template-areas:
-    'header header header header header header header header header header header header'
-    'left left left middle middle middle middle middle middle right right right';
+    "header header header header header header header header header header header header"
+    "left left left middle middle middle middle middle middle right right right";
 }
 
 .left {
@@ -80,7 +80,7 @@ body {
   margin: 0px 5px 5px 5px;
   background: white;
   height: 325px;
-  border-color: #Ababab;
+  border-color: #ababab;
   border-width: 1px;
   border-style: solid;
   overflow: auto;
@@ -90,7 +90,7 @@ body {
   margin: 0px 5px 5px 5px;
   background: white;
   height: 125px;
-  border-color: #Ababab;
+  border-color: #ababab;
   border-width: 1px;
   border-style: solid;
 }
@@ -112,7 +112,7 @@ body {
   height: calc(100vh - 85px);
   background: white;
   margin: 0px 5px 5px 0px;
-  border-color: #Ababab;
+  border-color: #ababab;
   border-width: 1px;
   border-style: solid;
   overflow: auto;
@@ -130,7 +130,7 @@ body {
   height: calc(100vh - 85px);
   background: white;
   margin: 0px 5px 5px 0px;
-  border-color: #Ababab;
+  border-color: #ababab;
   border-width: 1px;
   border-style: solid;
 }
@@ -147,7 +147,7 @@ body {
   height: calc(100vh - 85px);
   background: white;
   margin: 0px 5px 5px 0px;
-  border-color: #Ababab;
+  border-color: #ababab;
   border-width: 1px;
   border-style: solid;
 }
@@ -171,11 +171,11 @@ body {
 @media (max-width: 600px) {
   .grid-container {
     grid-template-areas:
-      'header header header header header header'
-      'left left left left left left'
-      'middle middle middle middle middle middle'
-      'right right right right right right'
-      'footer footer footer footer footer footer';
+      "header header header header header header"
+      "left left left left left left"
+      "middle middle middle middle middle middle"
+      "right right right right right right"
+      "footer footer footer footer footer footer";
   }
 }
 
@@ -246,13 +246,13 @@ body {
 }
 
 /* On mouse-over, add a grey background color */
-.container:hover input~.checkmark {
+.container:hover input ~ .checkmark {
   background-color: #ccc;
 }
 
 /* When the checkbox is checked, add a blue background */
-.container input:checked~.checkmark {
-  background-color: #2196F3;
+.container input:checked ~ .checkmark {
+  background-color: #2196f3;
 }
 
 /* Create the checkmark/indicator (hidden when not checked) */
@@ -263,7 +263,7 @@ body {
 }
 
 /* Show the checkmark when checked */
-.container input:checked~.checkmark:after {
+.container input:checked ~ .checkmark:after {
   display: block;
 }
 
@@ -281,7 +281,6 @@ body {
 }
 
 /* end : style for checkbox */
-
 
 /* new styles */
 
@@ -413,7 +412,7 @@ body {
 
 .btnOrange {
   border: none;
-  background: #F39C12;
+  background: #f39c12;
   color: white;
   font-size: 11px;
   width: 100px;
@@ -434,7 +433,6 @@ body {
   font-size: 11px;
   width: 70px;
   height: 12px;
-
 }
 
 .btnBlue {
@@ -513,7 +511,7 @@ body {
   margin: 0px 5px 5px 5px;
   background: white;
   height: calc(100vh - 515px);
-  border-color: #Ababab;
+  border-color: #ababab;
   border-width: 1px;
   border-style: solid;
   /* align-items: center; */
@@ -541,5 +539,5 @@ body {
 
 .btnYearBlue {
   background: #1987bb;
-  color: white
+  color: white;
 }

@@ -1,0 +1,545 @@
+* {
+  box-sizing: border-box;
+}
+
+body {
+  /* font-family: sans-serif; */
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  background: #f1f1f1;
+}
+
+.headerTop {
+  grid-area: header;
+  height: 50px;
+}
+
+.headerRight {
+  grid-area: header;
+  height: 30px;
+}
+
+.banner {
+  margin: 5px;
+  background: #1987bb;
+  height: 40px;
+
+  display: flex;
+  align-items: center;
+  align-content: center;
+  justify-content: center;
+  color: white;
+  font-size: 25px;
+}
+
+.bannerImage {
+  width: 20px;
+  height: 20px;
+  -webkit-filter: invert(100%);
+  filter: invert(100%);
+  margin: 0px 10px 0px 0px;
+}
+
+.statusSummary {
+  margin: 0px 5px 5px 0px;
+  height: 25px;
+  background: white;
+  border-color: #Ababab;
+  border-width: 1px;
+  border-style: solid;
+
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+  color: #1987bb;
+  font-weight: bold;
+}
+
+.grid-container-main {
+  display: grid;
+  grid-template-areas:
+    'header header header header header header header header header header header header'
+    'left right right right right right right right right right right right';
+}
+
+.grid-container-sub {
+  display: grid;
+  grid-template-areas:
+    'header header header header header header header header header header header header'
+    'left left left middle middle middle middle middle middle right right right';
+}
+
+.left {
+  grid-area: left;
+}
+
+.right {
+  grid-area: right;
+}
+
+.tocTop {
+  margin: 0px 5px 5px 5px;
+  background: white;
+  height: 325px;
+  border-color: #Ababab;
+  border-width: 1px;
+  border-style: solid;
+  overflow: auto;
+}
+
+.tocMiddle {
+  margin: 0px 5px 5px 5px;
+  background: white;
+  height: 125px;
+  border-color: #Ababab;
+  border-width: 1px;
+  border-style: solid;
+}
+
+/* .tocBottom {
+  margin: 0px 5px 5px 5px;
+  background: white;
+  height: calc(100vh - 515px);
+  border-color: #Ababab;
+  border-width: 1px;
+  border-style: solid;
+} */
+
+.rightLeft {
+  grid-area: left;
+}
+
+.activeProjects {
+  height: calc(100vh - 85px);
+  background: white;
+  margin: 0px 5px 5px 0px;
+  border-color: #Ababab;
+  border-width: 1px;
+  border-style: solid;
+  overflow: auto;
+}
+
+.middle {
+  grid-area: middle;
+}
+
+.rightMiddle {
+  grid-area: middle;
+}
+
+.map {
+  height: calc(100vh - 85px);
+  background: white;
+  margin: 0px 5px 5px 0px;
+  border-color: #Ababab;
+  border-width: 1px;
+  border-style: solid;
+}
+
+.right {
+  grid-area: right;
+}
+
+.rightRight {
+  grid-area: right;
+}
+
+.projectStatus {
+  height: calc(100vh - 85px);
+  background: white;
+  margin: 0px 5px 5px 0px;
+  border-color: #Ababab;
+  border-width: 1px;
+  border-style: solid;
+}
+
+.divProjectName {
+  display: inline-block;
+  border-bottom: lightgrey solid 1px;
+  line-height: 14px;
+  padding-left: 5px;
+  padding-top: 5px;
+  width: 100%;
+}
+
+.footer {
+  grid-area: footer;
+  background-color: #f1f1f1;
+  padding: 10px;
+  text-align: center;
+}
+
+@media (max-width: 600px) {
+  .grid-container {
+    grid-template-areas:
+      'header header header header header header'
+      'left left left left left left'
+      'middle middle middle middle middle middle'
+      'right right right right right right'
+      'footer footer footer footer footer footer';
+  }
+}
+
+.projectType {
+  margin: 5px;
+}
+
+.spanTOCHeading {
+  display: block;
+  color: #1987bb;
+  font-weight: bold;
+  margin-bottom: 10px;
+}
+
+.spanProjectCount {
+  color: #1987bb;
+  font-size: xxx-large;
+  font-weight: bolder;
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-around;
+}
+
+.spanProjectName {
+  color: #1987bb;
+  font-weight: bold;
+  font-size: 11px;
+  cursor: pointer;
+}
+
+.spanProgramName {
+  font-size: 10px;
+  color: grey;
+}
+
+/* start : style for checkbox */
+/* The container */
+.container {
+  display: block;
+  position: relative;
+  padding-left: 30px;
+  margin-bottom: 7px;
+  cursor: pointer;
+  font-size: 14px;
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+}
+
+/* Hide the browser's default checkbox */
+.container input {
+  position: absolute;
+  opacity: 0;
+  cursor: pointer;
+  height: 0;
+  width: 0;
+}
+
+/* Create a custom checkbox */
+.checkmark {
+  position: absolute;
+  top: 0;
+  left: 0;
+  height: 20px;
+  width: 20px;
+  background-color: #eee;
+}
+
+/* On mouse-over, add a grey background color */
+.container:hover input~.checkmark {
+  background-color: #ccc;
+}
+
+/* When the checkbox is checked, add a blue background */
+.container input:checked~.checkmark {
+  background-color: #2196F3;
+}
+
+/* Create the checkmark/indicator (hidden when not checked) */
+.checkmark:after {
+  content: "";
+  position: absolute;
+  display: none;
+}
+
+/* Show the checkmark when checked */
+.container input:checked~.checkmark:after {
+  display: block;
+}
+
+/* Style the checkmark/indicator */
+.container .checkmark:after {
+  left: 7px;
+  top: 2px;
+  width: 7px;
+  height: 13px;
+  border: solid white;
+  border-width: 0 3px 3px 0;
+  -webkit-transform: rotate(45deg);
+  -ms-transform: rotate(45deg);
+  transform: rotate(45deg);
+}
+
+/* end : style for checkbox */
+
+
+/* new styles */
+
+.grid-container-main2 {
+  display: grid;
+  grid-template-rows: 50px calc(100vh - 50px);
+}
+
+.banner2 {
+  margin: 5px;
+  background: #1987bb;
+  height: 40px;
+
+  display: flex;
+  align-items: center;
+  align-content: center;
+  justify-content: center;
+  color: white;
+  font-size: 25px;
+}
+
+.bannerImage2 {
+  width: 20px;
+  height: 20px;
+  -webkit-filter: invert(100%);
+  filter: invert(100%);
+  margin: 0px 10px 0px 0px;
+}
+
+.grid-container-sub2 {
+  display: grid;
+  grid-template-columns: 275px calc(100vw - 275px);
+}
+
+.grid-container-right2 {
+  display: grid;
+  grid-template-rows: 30px calc(100vh - 85px);
+}
+
+.grid-container-contentright {
+  display: grid;
+  grid-template-columns: 250px auto 250px;
+}
+
+.activeProjects2 {
+  height: calc(100vh - 85px);
+  background: white;
+  margin: 0px 5px 5px 0px;
+  border-color: #ababab;
+  border-width: 1px;
+  border-style: solid;
+  overflow: auto;
+}
+
+.map2 {
+  height: calc(100vh - 85px);
+  background: white;
+  margin: 0px 5px 5px 0px;
+  border-color: #ababab;
+  border-width: 1px;
+  border-style: solid;
+}
+
+.projectStatus2 {
+  height: calc(100vh - 85px);
+  background: white;
+  margin: 0px 5px 5px 0px;
+  border-color: #ababab;
+  border-width: 1px;
+  border-style: solid;
+  padding: 5px;
+  overflow: auto;
+}
+
+.spanProjectCount2 {
+  color: #1987bb;
+  font-size: xxx-large;
+  font-weight: bolder;
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-around;
+}
+
+.projectDetails {
+  display: inline-block;
+  line-height: 18px;
+  /* padding-left: 5px;
+  padding-top: 5px; */
+  width: 100%;
+}
+
+.divPrevNext {
+  justify-content: space-around;
+}
+
+#preNxtContent {
+  display: flex;
+  align-content: center;
+  justify-content: space-around;
+  align-items: center;
+}
+
+#nxtBtn {
+  background: transparent;
+  border: 0px;
+  font-weight: bolder;
+  cursor: pointer;
+}
+
+#preBtn {
+  background: transparent;
+  border: 0px;
+  font-weight: bolder;
+  cursor: pointer;
+}
+
+.spanProjectHeading {
+  color: #1987bb;
+  font-size: 18px;
+}
+
+.btnRed {
+  border: none;
+  background: red;
+  color: white;
+  font-size: 11px;
+  width: 100px;
+}
+
+.btnOrange {
+  border: none;
+  background: #F39C12;
+  color: white;
+  font-size: 11px;
+  width: 100px;
+}
+
+.btnGreen {
+  border: none;
+  background: green;
+  color: white;
+  font-size: 11px;
+  width: 100px;
+}
+
+.btnGrey {
+  border: none;
+  background: #dddddd;
+  color: white;
+  font-size: 11px;
+  width: 70px;
+  height: 12px;
+
+}
+
+.btnBlue {
+  border: none;
+  background: #1987bb;
+  color: white;
+  font-size: 11px;
+  width: 70px;
+  height: 12px;
+}
+
+.spanProjectStatus {
+  color: red;
+  font-size: 14px;
+  font-weight: bold;
+}
+
+.spanHeading {
+  color: black;
+  font-size: 12px;
+  font-weight: bold;
+}
+
+.spanText {
+  color: grey;
+  font-size: 12px;
+}
+
+.divProjectDetailsMargin {
+  margin-top: 16px;
+}
+
+.divProjectStatus {
+  display: flex;
+  justify-content: space-around;
+}
+
+.divProjectPhaseButton {
+  display: flex;
+  justify-content: space-between;
+}
+
+.divProjectPhaseText {
+  display: flex;
+  justify-content: space-between;
+  font-size: 9px;
+  color: grey;
+}
+
+::-webkit-scrollbar {
+  width: 3px;
+  height: 3px;
+  border-left: 0;
+  background: rgba(0, 0, 0, 0);
+}
+
+::-webkit-scrollbar-thumb {
+  background: #1987bb;
+  border-radius: 0;
+}
+
+.btnYear {
+  border: none;
+  /* background: #dddddd; */
+  /* color: black; */
+  font-size: 11px;
+  width: 70px;
+  height: 25px;
+}
+
+.tocBottom {
+  display: flex;
+  align-content: center;
+  flex-direction: column;
+  justify-content: center;
+  margin: 0px 5px 5px 5px;
+  background: white;
+  height: calc(100vh - 515px);
+  border-color: #Ababab;
+  border-width: 1px;
+  border-style: solid;
+  /* align-items: center; */
+}
+
+.divYearFirstRow {
+  display: flex;
+  justify-content: space-around;
+  padding-bottom: 10px;
+}
+
+.divYearSecondRow {
+  display: flex;
+  justify-content: space-around;
+}
+
+.divSpanTOCHeading {
+  margin-left: 5px;
+}
+
+.btnYearGrey {
+  background: #dddddd;
+  color: black;
+}
+
+.btnYearBlue {
+  background: #1987bb;
+  color: white
+}

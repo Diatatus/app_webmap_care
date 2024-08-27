@@ -39,126 +39,11 @@ body {
   margin: 0px 10px 0px 0px;
 }
 
-.statusSummary {
-  margin: 0px 5px 5px 0px;
-  height: 25px;
-  background: white;
-  border-color: #ababab;
-  border-width: 1px;
-  border-style: solid;
-
-  display: flex;
-  justify-content: space-around;
-  align-items: center;
-  color: #1987bb;
-  font-weight: bold;
-}
-
-.grid-container-main {
-  display: grid;
-  grid-template-areas:
-    "header header header header header header header header header header header header"
-    "left right right right right right right right right right right right";
-}
-
-.grid-container-sub {
-  display: grid;
-  grid-template-areas:
-    "header header header header header header header header header header header header"
-    "left left left middle middle middle middle middle middle right right right";
-}
-
-.left {
-  grid-area: left;
-}
-
-.right {
-  grid-area: right;
-}
-
-.tocTop {
-  margin: 0px 5px 5px 5px;
-  background: white;
-  height: 325px;
-  border-color: #ababab;
-  border-width: 1px;
-  border-style: solid;
-  overflow: auto;
-}
-
-.tocMiddle {
-  margin: 0px 5px 5px 5px;
-  background: white;
-  height: 125px;
-  border-color: #ababab;
-  border-width: 1px;
-  border-style: solid;
-}
-
-/* .tocBottom {
-  margin: 0px 5px 5px 5px;
-  background: white;
-  height: calc(100vh - 515px);
-  border-color: #Ababab;
-  border-width: 1px;
-  border-style: solid;
-} */
-
-.rightLeft {
-  grid-area: left;
-}
-
-.activeProjects {
-  height: calc(100vh - 85px);
-  background: white;
-  margin: 0px 5px 5px 0px;
-  border-color: #ababab;
-  border-width: 1px;
-  border-style: solid;
-  overflow: auto;
-}
-
-.middle {
-  grid-area: middle;
-}
-
-.rightMiddle {
-  grid-area: middle;
-}
-
 .map {
-  height: calc(100vh - 85px);
-  background: white;
-  margin: 0px 5px 5px 0px;
-  border-color: #ababab;
-  border-width: 1px;
-  border-style: solid;
-}
-
-.right {
-  grid-area: right;
-}
-
-.rightRight {
-  grid-area: right;
-}
-
-.projectStatus {
-  height: calc(100vh - 85px);
-  background: white;
-  margin: 0px 5px 5px 0px;
-  border-color: #ababab;
-  border-width: 1px;
-  border-style: solid;
-}
-
-.divProjectName {
-  display: inline-block;
-  border-bottom: lightgrey solid 1px;
-  line-height: 14px;
-  padding-left: 5px;
-  padding-top: 5px;
+  position: fixed;
   width: 100%;
+  height: 100%;
+  z-index: 0;
 }
 
 .footer {
@@ -166,17 +51,6 @@ body {
   background-color: #f1f1f1;
   padding: 10px;
   text-align: center;
-}
-
-@media (max-width: 600px) {
-  .grid-container {
-    grid-template-areas:
-      "header header header header header header"
-      "left left left left left left"
-      "middle middle middle middle middle middle"
-      "right right right right right right"
-      "footer footer footer footer footer footer";
-  }
 }
 
 .projectType {
@@ -302,14 +176,6 @@ body {
   font-size: 25px;
 }
 
-.bannerImage2 {
-  width: 20px;
-  height: 20px;
-  -webkit-filter: invert(100%);
-  filter: invert(100%);
-  margin: 0px 10px 0px 0px;
-}
-
 .grid-container-sub2 {
   display: grid;
   grid-template-columns: 275px calc(100vw - 275px);
@@ -336,12 +202,10 @@ body {
 }
 
 .map2 {
-  height: calc(100vh - 85px);
-  background: white;
-  margin: 0px 5px 5px 0px;
-  border-color: #ababab;
-  border-width: 1px;
-  border-style: solid;
+  position: fixed;
+  width: 100%;
+  height: 100%;
+  z-index: 0;
 }
 
 .projectStatus2 {

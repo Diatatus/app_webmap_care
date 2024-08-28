@@ -15,7 +15,7 @@ app.use(express.static(path.join(__dirname, "public")));
 // Configurer le dossier 'node_modules' pour être accessible publiquement
 app.use("/node_modules", express.static(path.join(__dirname, "node_modules")));
 
-// Route pour servir le fichier index.html
+// Serve loading.html as the default page
 app.get("/", (req, res) => {
   res.sendFile(path.join(__dirname, "public", "index.html"));
 });

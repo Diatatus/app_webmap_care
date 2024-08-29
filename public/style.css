@@ -76,3 +76,87 @@ html {
 .zoom-btn:hover {
   background-color: rgba(0, 0, 0, 0.6); /* Less transparency on hover */
 }
+
+/* Base styling for the layer switcher */
+.layer-switcher {
+  position: absolute;
+  bottom: 50px; /* Distance from the bottom of the map */
+  right: 10px; /* Distance from the right side of the map */
+  background-color: rgba(255, 255, 255, 0.9);
+  border-radius: 8px;
+  box-shadow: 0px 2px 10px rgba(0, 0, 0, 0.3);
+  z-index: 1000;
+  overflow: hidden;
+  transition: width 0.3s ease, height 0.3s ease; /* Smooth expand/collapse */
+}
+
+/* Initial collapsed state */
+.layer-switcher.collapsed {
+  width: 50px;
+  height: 50px;
+}
+
+/* Expanded state on hover */
+.layer-switcher:hover {
+  width: 150px; /* Smaller width */
+  height: auto;
+}
+
+/* Styling for the placeholder or icon */
+#switcher-icon {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  cursor: pointer;
+}
+
+/* Hide the layer options by default */
+.layer-options {
+  display: none;
+  flex-direction: column;
+  gap: 8px; /* Slightly reduced space between options */
+  padding: 5px; /* Reduced padding */
+}
+
+/* Show the layer options when the switcher is hovered */
+.layer-switcher:hover .layer-options {
+  display: flex;
+}
+
+/* Styling for each layer option */
+.layer-option {
+  position: relative;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+/* Styling for the images */
+.layer-option img {
+  width: 100%; /* Full width of the container */
+  height: auto;
+  border-radius: 4px;
+}
+
+/* Styling for the spans (overlay text) */
+.layer-option span {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  padding: 3px; /* Slightly reduced padding */
+  background-color: rgba(0, 0, 0, 0.5);
+  color: white;
+  text-align: center;
+  font-size: 12px; /* Slightly reduced font size */
+  border-radius: 0 0 4px 4px;
+}
+
+/* Hover effect on the entire option */
+.layer-option:hover {
+  background-color: rgba(200, 200, 200, 0.5);
+}

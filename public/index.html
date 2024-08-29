@@ -46,6 +46,26 @@
     <div id="care-logo">
       <img src="./resources/images/care.png" alt="Care Logo" />
     </div>
+    <div id="custom-layer-switcher" class="layer-switcher collapsed">
+      <!-- Placeholder or icon for collapsed state -->
+      <div id="switcher-icon">
+        <img src="./resources/images/layer-group-solid.svg" />
+        <span>Fonds</span>
+      </div>
+
+      <!-- Layer options (initially hidden) -->
+      <div id="layer-options" class="layer-options">
+        <!-- Example layers preview -->
+        <div class="layer-option" onclick="switchLayer('OSM')">
+          <img src="./resources/images/Openstreetmap_logo.svg.png" />
+          <span>OSM</span>
+        </div>
+        <div class="layer-option" onclick="switchLayer('Aerial')">
+          <img src="./resources/images/arial.jpg" />
+          <span>Aerial</span>
+        </div>
+      </div>
+    </div>
 
     <div id="zoom-controls">
       <button id="zoom-in" class="zoom-btn">+</button>

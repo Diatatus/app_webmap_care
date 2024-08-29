@@ -37,11 +37,46 @@ document.getElementById("zoom-out").addEventListener("click", function () {
     duration: 250, // Duration in milliseconds
   });
 });
+function switchLayer(layerName) {
+  var layers = map.getLayers().getArray();
+  layers.forEach(function (layer) {
+    if (layer.get("name") === layerName) {
+      layer.setVisible(true);
+    } else {
+      layer.setVisible(false);
+    }
+  });
+}
 
-var osmLayer = new ol.layer.Tile({
-  source: new ol.source.OSM(),
+//Bing map Tile
+
+var bingMapsAerial = new ol.layer.Tile({
+  title: "Aerial",
+  visible: false,
+  baseLayer: true,
+  type: "base",
+  preload: Infinity,
+  source: new ol.source.BingMaps({
+    key: "AuOKP0N2ww907dY398Ci9ZKg38AqF2jc7q1QchUixWw30TpwdCt4T36ip-OyE49R",
+    imagerySet: "Aerial",
+  }),
+  name: "Aerial",
 });
-map.addLayer(osmLayer);
+
+var osm = new ol.layer.Tile({
+  title: "OSM",
+  baseLayer: true,
+  source: new ol.source.OSM(),
+  visible: true,
+  name: "OSM",
+});
+
+map.addLayer(osm);
+map.addLayer(bingMapsAerial);
+
+// Initially, set only one layer visible
+osm.setVisible(true);
+bingMapsAerial.setVisible(false);
 
 var displayProjectType = config.projects;
 var projectStatus = config.status;

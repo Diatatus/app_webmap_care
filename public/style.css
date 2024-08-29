@@ -26,7 +26,10 @@ html {
 #care-logo {
   position: absolute;
   bottom: 10px; /* Distance from the bottom of the map */
-  left: 10px; /* Distance from the left side of the map */
+  left: 50%; /* Start at the middle of the map */
+  transform: translateX(
+    -50%
+  ); /* Shift the logo back by 50% of its width to center it */
   z-index: 1000; /* Ensure it appears above other map elements */
 }
 
@@ -34,4 +37,42 @@ html {
   width: 100px; /* Adjust the size of the logo */
   height: auto;
   opacity: 1; /* Slight transparency for better integration */
+}
+
+/* Positioning the custom zoom controls */
+#zoom-controls {
+  position: absolute;
+  top: 100px; /* Distance from the top */
+  right: 20px; /* Distance from the right side */
+  display: flex;
+  flex-direction: column;
+  gap: 10px; /* Space between the zoom in and zoom out buttons */
+  z-index: 1000; /* Ensure it appears above other map elements */
+}
+
+/* Styling the custom zoom buttons */
+.zoom-btn {
+  background-color: rgba(
+    102,
+    102,
+    102,
+    0.7
+  ); /* Semi-transparent white background */
+  border: none;
+  border-radius: 50%; /* Make the buttons round */
+  width: 40px;
+  height: 40px;
+  font-size: 20px;
+  color: white; /* Button text color */
+  cursor: pointer;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.3); /* Optional shadow for better visibility */
+  line-height: 0; /* Reset line-height to avoid vertical misalignment */
+  padding: 0;
+}
+
+.zoom-btn:hover {
+  background-color: rgba(0, 0, 0, 0.6); /* Less transparency on hover */
 }

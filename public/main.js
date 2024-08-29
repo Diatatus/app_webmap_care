@@ -1,9 +1,8 @@
 const customproj = ol.proj.get(config.viewProjection);
+// The Map
 var mapView = new ol.View({
-  center: ol.proj.fromLonLat(config.mapview.center),
-  zoom: config.mapview.zoom,
-  maxZoom: config.mapview.maxzoom,
-  projection: customproj,
+  center: ol.proj.fromLonLat([12.2, 7.5]),
+  zoom: 6.2,
 });
 
 var map = new ol.Map({
@@ -11,13 +10,33 @@ var map = new ol.Map({
   view: mapView,
   controls: [],
 });
-map.addControl(new ol.control.Zoom());
+
+// Attribution control
 map.addControl(
   new ol.control.Attribution({
     collapsible: true,
     collapsed: true,
   })
 );
+
+// Assume 'map' is your OpenLayers map instance
+document.getElementById("zoom-in").addEventListener("click", function () {
+  var view = map.getView();
+  var zoom = view.getZoom();
+  view.animate({
+    zoom: zoom + 1,
+    duration: 250, // Duration in milliseconds
+  });
+});
+
+document.getElementById("zoom-out").addEventListener("click", function () {
+  var view = map.getView();
+  var zoom = view.getZoom();
+  view.animate({
+    zoom: zoom - 1,
+    duration: 250, // Duration in milliseconds
+  });
+});
 
 var osmLayer = new ol.layer.Tile({
   source: new ol.source.OSM(),

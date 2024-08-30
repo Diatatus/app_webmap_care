@@ -1,0 +1,53 @@
+<!DOCTYPE >
+<html lang="en">
+  <head>
+    <title>Loader example</title>
+    <style>
+      .loading-gif {
+        max-width: 500px;
+      }
+
+      .pre-loader {
+        position: fixed;
+        z-index: 100; /** make sure this is the highest value compared to all other divs **/
+        top: 0;
+        left: 0;
+        background: #191f26;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        height: 100%;
+        width: 100%;
+      }
+
+      .pre-loader.hidden {
+        animation: fadeOut 2s; /** change to 1s */
+        animation-fill-mode: forwards;
+      }
+
+      @keyframes fadeOut {
+        100% {
+          opacity: 0;
+          visibility: hidden;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <!--- Your content goes here -->
+    <p>Page content</p>
+    <div class="pre-loader">
+      <img
+        class="loading-gif"
+        alt="loading"
+        src="https://media0.giphy.com/media/11FuEnXyGsXFba/source.gif" />
+    </div>
+
+    <!-- js to hide preloader loading is done -->
+    <script type="text/javascript">
+      setTimeout(function () {
+        window.location.href = "";
+      }, 40000);
+    </script>
+  </body>
+</html>

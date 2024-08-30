@@ -1,3 +1,9 @@
+$(document).ready(function () {
+  setTimeout(function () {
+    $("#loading").fadeOut(); // Masquer le div de chargement après 3 secondes
+  }, 2000); // Délai de 3000 millisecondes (3 secondes)
+});
+
 const customproj = ol.proj.get(config.viewProjection);
 // The Map
 var mapView = new ol.View({
@@ -12,12 +18,6 @@ var map = new ol.Map({
 });
 
 // Attribution control
-map.addControl(
-  new ol.control.Attribution({
-    collapsible: true,
-    collapsed: true,
-  })
-);
 
 // Assume 'map' is your OpenLayers map instance
 document.getElementById("zoom-in").addEventListener("click", function () {

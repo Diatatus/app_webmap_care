@@ -4,6 +4,36 @@ $(document).ready(function () {
   }, 2000); // Délai de 3000 millisecondes (3 secondes)
 });
 
+// Get elements
+const hamburgerMenu = document.getElementById("hamburger-menu");
+const sidebar = document.getElementById("sidebar");
+const closeSidebarBtn = document.getElementById("close-sidebar");
+
+// Event listener to open sidebar
+hamburgerMenu.addEventListener("click", function () {
+  sidebar.classList.add("active");
+  // Hide other elements when sidebar is active
+  hamburgerMenu.style.display = "none";
+  document.getElementById("search-bar").style.display = "none";
+  document.getElementById("layer-slider").style.display = "none";
+});
+
+// Event listener to close sidebar
+closeSidebarBtn.addEventListener("click", function () {
+  sidebar.classList.remove("active");
+  // Show other elements when sidebar is closed
+  hamburgerMenu.style.display = "block";
+  document.getElementById("search-bar").style.display = "block";
+  document.getElementById("layer-slider").style.display = "flex";
+});
+
+document.querySelectorAll(".layer-button").forEach((button) => {
+  button.addEventListener("click", function () {
+    const layerName = this.textContent;
+    // Ajoutez votre logique pour basculer les couches ici
+  });
+});
+
 const customproj = ol.proj.get(config.viewProjection);
 // The Map
 var mapView = new ol.View({

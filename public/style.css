@@ -67,6 +67,112 @@ html {
   border: none; /* Supprime les bordures */
 }
 
+/* Hamburger menu icon */
+.hamburger-menu {
+  position: absolute;
+  top: 10px;
+  left: 10px;
+  z-index: 1001;
+  cursor: pointer;
+  font-size: 30px;
+  background-color: rgba(255, 255, 255, 0.9);
+  padding: 5px;
+  border-radius: 5px;
+}
+
+.hamburger-menu span {
+  display: block;
+  font-size: 24px;
+}
+
+/* Sidebar */
+.sidebar {
+  position: fixed;
+  left: -250px;
+  top: 0;
+  bottom: 0;
+  width: 250px;
+  background-color: #fff;
+  box-shadow: 2px 0px 5px rgba(0, 0, 0, 0.5);
+  z-index: 1000;
+  overflow-y: auto;
+  transition: all 0.3s ease;
+  display: flex;
+  flex-direction: column;
+}
+
+.sidebar.active {
+  left: 0;
+}
+
+.sidebar-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 10px;
+  background-color: #f1f1f1;
+  border-bottom: 1px solid #ddd;
+}
+
+/* Bouton de fermeture de la side-bar */
+.close-btn {
+  background: none;
+  border: none;
+  font-size: 20px;
+  cursor: pointer;
+  color: #333;
+}
+
+.sidebar-content {
+  padding: 15px;
+  flex: 1;
+}
+
+/* Search bar */
+.search-bar {
+  position: absolute;
+  top: 10px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 300px;
+  max-width: 90%;
+  background-color: rgba(255, 255, 255, 0.9);
+  padding: 10px;
+  border-radius: 5px;
+  box-shadow: 0px 2px 10px rgba(0, 0, 0, 0.3);
+  z-index: 1000;
+}
+
+/* Layer slider */
+.layer-slider {
+  position: absolute;
+  top: 60px;
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  justify-content: center;
+  background-color: rgba(255, 255, 255, 0.9);
+  padding: 5px;
+  border-radius: 5px;
+  box-shadow: 0px 2px 10px rgba(0, 0, 0, 0.3);
+  z-index: 1000;
+}
+
+.layer-button {
+  padding: 5px 10px;
+  border: none;
+  background-color: #f1f1f1;
+  margin: 0 5px;
+  border-radius: 3px;
+  cursor: pointer;
+  font-size: 14px;
+  white-space: nowrap;
+}
+
+.layer-button:hover {
+  background-color: #ddd;
+}
+
 /* CSS for the CARE logo */
 #care-logo {
   position: absolute;
@@ -129,10 +235,10 @@ html {
   right: 10px;
   background-color: rgba(255, 255, 255, 0.9);
   border-radius: 8px;
-  box-shadow: 0px 2px 10px rgba(0, 0, 0, 0.3);
+  border: 2px solid rgba(0, 0, 0, 0.3); /* Contour sombre */
   z-index: 1000;
   overflow: hidden;
-  transition: width 0.5s ease, height 0.5s ease; /* Smooth expand/collapse */
+  transition: border-color 0.3s ease; /* Transition pour le changement de couleur du contour */
 }
 
 /* Initial collapsed state */
@@ -143,6 +249,7 @@ html {
 
 /* Expanded state on hover */
 .layer-switcher:hover {
+  border-color: rgba(0, 0, 0, 0.6); /* Contour plus sombre au survol */
   width: auto; /* Automatically adjust width based on content */
   height: auto; /* Automatically adjust height based on content */
 }
@@ -194,7 +301,7 @@ html {
   justify-content: center;
   align-items: center;
   cursor: pointer;
-  transition: background-color 0.3s ease;
+  transition: background-color 0.5s ease;
   width: 100px; /* Set a fixed width */
   height: 60px; /* Set a fixed height */
 }

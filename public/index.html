@@ -55,7 +55,9 @@
   </div>
 
   <body>
-    <div id="map" class="map2"></div>
+    <div id="map-container">
+      <div id="map" class="map2"></div>
+    </div>
     <div id="care-logo">
       <img src="./resources/images/care_.png" alt="Care Logo" />
     </div>
@@ -75,12 +77,22 @@
     </div>
 
     <div id="search-bar" class="search-bar">
-      <input type="text" placeholder="Rechercher dans la carte..." />
+      <input type="text" id="search-input" placeholder="Rechercher...">
+      <img src="path/to/loupe-icon.svg" alt="Search" id="search-icon">
+  </div>
+    <div id="layer-slider" class="custom-layer-slider-horizontal">
+      <div class="layer-option">
+        <img src="./resources/images/house.svg" alt="Base-bureaux" class="layer-icon">
+        <span>Base-bureaux</span>
     </div>
-    <div id="layer-slider" class="layer-slider">
-      <button class="layer-button">Base-Bureaux</button>
-      <button class="layer-button">Projets</button>
-      <button class="layer-button">Partenaires</button>
+    <div class="layer-option">
+        <img src="./resources/images/projets.svg" alt="Projets" class="layer-icon">
+        <span>Projets</span>
+    </div>
+    <div class="layer-option">
+        <img src="./resources/images/partner.svg" alt="Partenaires" class="layer-icon">
+        <span>Partenaires</span>
+    </div>
     </div>
     <div id="custom-layer-switcher" class="layer-switcher collapsed">
       <!-- Placeholder or icon for collapsed state -->
@@ -106,6 +118,8 @@
       <button id="zoom-in" class="zoom-btn">+</button>
       <button id="zoom-out" class="zoom-btn">-</button>
     </div>
+      </div>
+
 
     <!-- <script src="resources/proj4js/proj4-src.js"></script> -->
     <script src="./resources/config.js"></script>

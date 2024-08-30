@@ -8,10 +8,13 @@ $(document).ready(function () {
 const hamburgerMenu = document.getElementById("hamburger-menu");
 const sidebar = document.getElementById("sidebar");
 const closeSidebarBtn = document.getElementById("close-sidebar");
+const mapContainer = document.getElementById("map-container");
 
 // Event listener to open sidebar
 hamburgerMenu.addEventListener("click", function () {
   sidebar.classList.add("active");
+  // Adjust the map size based on sidebar's width
+  mapContainer.style.left = "300px";
   // Hide other elements when sidebar is active
   hamburgerMenu.style.display = "none";
   document.getElementById("search-bar").style.display = "none";
@@ -21,6 +24,8 @@ hamburgerMenu.addEventListener("click", function () {
 // Event listener to close sidebar
 closeSidebarBtn.addEventListener("click", function () {
   sidebar.classList.remove("active");
+  // Reset the map size when sidebar is closed
+  mapContainer.style.left = "0";
   // Show other elements when sidebar is closed
   hamburgerMenu.style.display = "block";
   document.getElementById("search-bar").style.display = "block";
@@ -32,6 +37,17 @@ document.querySelectorAll(".layer-button").forEach((button) => {
     const layerName = this.textContent;
     // Ajoutez votre logique pour basculer les couches ici
   });
+});
+
+const layerSlider = document.getElementById("layer-slider");
+const layerIcon = document.getElementById("layer-slider-icon");
+
+layerSlider.addEventListener("mouseover", function () {
+  layerIcon.style.display = "none";
+});
+
+layerSlider.addEventListener("mouseout", function () {
+  layerIcon.style.display = "block";
 });
 
 const customproj = ol.proj.get(config.viewProjection);

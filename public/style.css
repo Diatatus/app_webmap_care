@@ -137,21 +137,22 @@ html {
 
 .care-search-bar {
   position: absolute;
-  top: 30px; /* Ajustez selon votre préférence */
-  left: 20%; /* Centrer horizontalement */
+  top: 30px;
+  left: 20%; /* Centré horizontalement */
   transform: translateX(-50%);
-
   display: flex;
   align-items: center;
   padding: 10px 20px;
   background-color: rgba(255, 255, 255, 0.9);
-  border-radius: 30px;
+  border-radius: 8px;
   box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
-  z-index: 1000; /* Assurez-vous qu'il apparaît au-dessus de la carte */
+  z-index: 1000;
+  width: 70%; /* Ajustement pour les grands écrans */
+  max-width: 500px; /* Limite la largeur maximale */
 }
 
 #care-logo {
-  width: 100px; /* Augmentez la taille ici */
+  width: 150px; /* Taille du logo pour grands écrans */
   height: auto;
   margin-right: 10px;
 }
@@ -175,60 +176,85 @@ html {
 /* Pour les tablettes et petits écrans */
 @media screen and (max-width: 768px) {
   .care-search-bar {
-    top: 50px;
-    left: 50%;
-    width: 50%; /* Réduit la largeur de la barre de recherche */
+    position: absolute;
+    top: 30px;
+    left: 50%; /* Centre la barre de recherche horizontalement */
+    transform: translateX(
+      -50%
+    ); /* Assure que la barre de recherche est centrée */
+    width: 50%; /* Réduit la largeur de la barre de recherche à 50% de l'écran */
+    padding: 8px 20px; /* Maintient un padding confortable */
+    display: flex;
+    align-items: center;
+    background-color: #fff;
+    border-radius: 8px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.15);
   }
 
   #care-logo {
-    width: 40px; /* Réduit la taille du logo */
+    width: 100px; /* Réduit la taille du logo pour les tablettes */
+    margin-right: 8px; /* Assure un espacement entre le logo et le champ de recherche */
   }
 
   #care-search-input {
-    font-size: 12px; /* Réduit la taille du texte */
+    flex: 1; /* Permet au champ de recherche de s'étendre pour utiliser tout l'espace disponible */
+    font-size: 12px; /* Réduit la taille du texte pour qu'il s'ajuste bien à la taille de la barre */
+    border: none;
+    outline: none;
   }
 
   #care-search-icon {
-    width: 20px; /* Réduit la taille de l'icône de recherche */
+    width: 20px; /* Ajuste la taille de l'icône de recherche pour être proportionnelle */
+    height: 20px;
   }
 }
 
 /* Pour les très petits écrans (smartphones) */
 @media screen and (max-width: 390px) {
   .care-search-bar {
-    top: 50px;
-    left: 60%;
-    width: 100%; /* Utilise toute la largeur disponible */
-    padding: 6px 12px; /* Réduit le padding pour s'adapter à la largeur */
+    position: absolute;
+    top: 30px;
+    left: 50%; /* Centre la barre de recherche horizontalement */
+    transform: translateX(-50%); /* Centre la barre de recherche */
+    width: 80%; /* Utilise 80% de la largeur disponible */
+    padding: 8px 20px; /* Réduit le padding pour s'adapter à la largeur */
+    display: flex;
+    align-items: center;
+    background-color: #fff;
+    border-radius: 8px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.15);
   }
 
   #care-logo {
-    width: 30px; /* Réduit encore la taille du logo */
-    margin-right: 8px;
+    width: 60px; /* Réduit encore la taille du logo */
+    margin-right: 8px; /* Espace entre le logo et le champ de recherche */
   }
 
   #care-search-input {
-    font-size: 12px; /* Conserve une petite taille de texte pour les petits écrans */
+    flex: 1; /* Permet à l'input de prendre toute la place restante */
+    font-size: 14px; /* Ajuste la taille de la police pour les petits écrans */
+    border: none;
+    outline: none;
   }
 
   #care-search-icon {
     width: 20px; /* Maintient la taille de l'icône */
+    height: 20px;
   }
 }
 
 /* Style principal du conteneur */
 #layer-slider-container {
   display: flex;
-  align-items: center;
-  justify-content: center;
+  align-items: left;
+  justify-content: left;
   position: absolute;
   top: 20px;
   left: 40%;
   z-index: 1000; /* Assurez-vous qu'il soit au-dessus des autres éléments */
   padding: 10px;
-  background-color: rgba(255, 255, 255, 0.9);
+
   border-radius: 8px;
-  box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
 }
 
 /* Style du Layer Slider Horizontal */
@@ -242,13 +268,14 @@ html {
 
 .layer-option {
   display: flex;
-  align-items: center;
+  align-items: last baseline;
+  margin-right: 10%;
 }
 
 .btn {
   display: flex;
   align-items: center;
-  padding: 8px 16px;
+  padding: 12px 20px;
   background-color: #fff;
   border-radius: 16px;
   cursor: pointer;
@@ -266,80 +293,110 @@ html {
 /* Effet au survol */
 .layer-option:hover .btn {
   transform: scale(1.05);
+  padding: 12px 20px;
+  border-radius: 16px;
+  border: none;
+  font-size: 14px;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.15);
 }
 
-/* Style pour les flèches du slider */
-.slider-arrow {
-  font-size: 24px;
-  cursor: pointer;
-  color: #333;
-  padding: 10px;
-  z-index: 10;
-  user-select: none;
-}
-
-.left-arrow {
-  position: absolute;
-  left: 10px;
-}
-
-.right-arrow {
-  position: absolute;
-  right: 10px;
-}
-
-/* Responsive Design */
+/* Responsive Design pour les écrans jusqu'à 768px */
 @media screen and (max-width: 768px) {
   #layer-slider-container {
     position: absolute;
-    flex-direction: column;
     top: 100px;
-    left: 30%;
-    z-index: 1000; /* Assurez-vous qu'il soit au-dessus des autres éléments */
+    left: 50%;
+    transform: translateX(-50%);
+    z-index: 1000;
+    width: 80%;
   }
 
   .custom-layer-slider-horizontal {
-    flex-direction: column; /* Aligne verticalement les options */
-    gap: 15px; /* Augmente l'espacement entre les boutons */
+    display: flex;
+    flex-direction: column;
+    align-items: center; /* Aligne les boutons à gauche */
+    gap: 10px; /* Espacement uniforme entre les boutons */
     padding: 10px 0;
   }
+
   .layer-option {
-    flex-direction: column;
-    padding: 6px 12px;
-    margin-right: 6px;
+    display: flex;
+    align-items: center;
+    width: 100%; /* Prend toute la largeur du parent */
   }
 
-  .layer-icon {
-    width: 20px;
-    height: 20px;
-    margin-right: 6px;
+  .btn {
+    display: flex;
+    align-items: center;
+    padding: 8px 16px;
+    background-color: #fff;
+    border-radius: 16px;
+    cursor: pointer;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.15);
+    border: none;
+    font-size: 12px;
+    width: 100%; /* Le bouton prend toute la largeur disponible */
+    transition: transform 0.3s ease, box-shadow 0.3s ease; /* Uniformise la transition */
+  }
+
+  .btn i {
+    margin-right: 8px;
+    font-size: 16px;
+  }
+
+  .layer-option:hover .btn {
+    transform: scale(1.05); /* Effet de survol */
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2); /* Légère augmentation de l'ombre */
   }
 }
 
-/* Responsive Design */
+/* Responsive Design pour les écrans jusqu'à 390px */
 @media screen and (max-width: 390px) {
   #layer-slider-container {
     position: absolute;
-    flex-direction: column;
-    top: 100px;
-    left: 10%;
-    z-index: 1000; /* Assurez-vous qu'il soit au-dessus des autres éléments */
-  }
-  .custom-layer-slider-horizontal {
-    flex-direction: column; /* Aligne verticalement les options */
-    gap: 15px; /* Augmente l'espacement entre les boutons */
-    padding: 10px 0;
-  }
-  .layer-option {
-    flex-direction: column;
-    padding: 6px 12px;
-    margin-right: 6px;
+    top: 80px;
+    left: 50%;
+    transform: translateX(-50%);
+    z-index: 1000;
+    width: 90%;
   }
 
-  .layer-icon {
-    width: 20px;
-    height: 20px;
+  .custom-layer-slider-horizontal {
+    display: flex;
+    flex-direction: column;
+    align-items: center; /* Aligne les boutons à gauche */
+    gap: 8px; /* Espacement uniforme entre les boutons */
+    padding: 5px 0;
+  }
+
+  .layer-option {
+    display: flex;
+    align-items: center;
+    width: 100%; /* Prend toute la largeur du parent */
+  }
+
+  .btn {
+    display: flex;
+    align-items: center;
+    padding: 6px 12px;
+    background-color: #fff;
+    border-radius: 12px;
+    cursor: pointer;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.15);
+    border: none;
+    font-size: 10px;
+    width: 100%; /* Le bouton prend toute la largeur disponible */
+    transition: transform 0.3s ease, box-shadow 0.3s ease; /* Uniformise la transition */
+  }
+
+  .btn i {
     margin-right: 6px;
+    font-size: 14px;
+  }
+
+  .layer-option:hover .btn {
+    transform: scale(1.05); /* Effet de survol */
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2); /* Légère augmentation de l'ombre */
   }
 }
 

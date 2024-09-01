@@ -10,46 +10,6 @@ const sidebar = document.getElementById("sidebar");
 const closeSidebarBtn = document.getElementById("close-sidebar");
 const mapContainer = document.getElementById("map-container");
 
-// Event listener to open sidebar
-hamburgerMenu.addEventListener("click", function () {
-  sidebar.classList.add("active");
-  // Adjust the map size based on sidebar's width
-  mapContainer.style.left = "300px";
-  // Hide other elements when sidebar is active
-  hamburgerMenu.style.display = "none";
-  document.getElementById("search-bar").style.display = "none";
-  document.getElementById("layer-slider").style.display = "none";
-});
-
-// Event listener to close sidebar
-closeSidebarBtn.addEventListener("click", function () {
-  sidebar.classList.remove("active");
-  // Reset the map size when sidebar is closed
-  mapContainer.style.left = "0";
-  // Show other elements when sidebar is closed
-  hamburgerMenu.style.display = "block";
-  document.getElementById("search-bar").style.display = "block";
-  document.getElementById("layer-slider").style.display = "flex";
-});
-
-const layerSlider = document.getElementById("layer-slider");
-const leftArrow = document.querySelector(".left-arrow");
-const rightArrow = document.querySelector(".right-arrow");
-
-leftArrow.addEventListener("click", () => {
-  layerSlider.scrollBy({
-    left: -200, // Ajustez cette valeur pour contrôler la quantité de défilement
-    behavior: "smooth",
-  });
-});
-
-rightArrow.addEventListener("click", () => {
-  layerSlider.scrollBy({
-    left: 200, // Ajustez cette valeur pour contrôler la quantité de défilement
-    behavior: "smooth",
-  });
-});
-
 const customproj = ol.proj.get(config.viewProjection);
 // The Map
 var mapView = new ol.View({

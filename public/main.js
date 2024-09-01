@@ -32,22 +32,22 @@ closeSidebarBtn.addEventListener("click", function () {
   document.getElementById("layer-slider").style.display = "flex";
 });
 
-document.querySelectorAll(".layer-button").forEach((button) => {
-  button.addEventListener("click", function () {
-    const layerName = this.textContent;
-    // Ajoutez votre logique pour basculer les couches ici
+const layerSlider = document.getElementById("layer-slider");
+const leftArrow = document.querySelector(".left-arrow");
+const rightArrow = document.querySelector(".right-arrow");
+
+leftArrow.addEventListener("click", () => {
+  layerSlider.scrollBy({
+    left: -200, // Ajustez cette valeur pour contrôler la quantité de défilement
+    behavior: "smooth",
   });
 });
 
-const layerSlider = document.getElementById("layer-slider");
-const layerIcon = document.getElementById("layer-slider-icon");
-
-layerSlider.addEventListener("mouseover", function () {
-  layerIcon.style.display = "none";
-});
-
-layerSlider.addEventListener("mouseout", function () {
-  layerIcon.style.display = "block";
+rightArrow.addEventListener("click", () => {
+  layerSlider.scrollBy({
+    left: 200, // Ajustez cette valeur pour contrôler la quantité de défilement
+    behavior: "smooth",
+  });
 });
 
 const customproj = ol.proj.get(config.viewProjection);

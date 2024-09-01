@@ -9,7 +9,7 @@
     <link
       rel="stylesheet"
       href="/node_modules/bootstrap/dist/css/bootstrap.css" />
-    <link rel="stylesheet" href="/node_modules/font-awesome/css/all.min.css" />
+
     <link rel="stylesheet" href="/node_modules/ol/ol.css" />
     <script src="/node_modules/ol/dist/ol.js"></script>
     <script src="/node_modules/bootstrap/dist/js/bootstrap.js"></script>
@@ -26,6 +26,11 @@
       type="text/javascript"
       src="https://code.jquery.com/jquery-1.11.0.min.js"></script>
     <!-- FontAwesome -->
+    <link rel="stylesheet" href="/node_modules/font-awesome/css/all.min.css" />
+    <link
+      rel="stylesheet"
+      href="/node_modules/@fortawesome/fontawesome-free/css/all.min.css" />
+    <!-- Add icon library -->
     <link
       rel="stylesheet"
       href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" />
@@ -57,6 +62,47 @@
   <body>
     <div id="map-container">
       <div id="map" class="map2"></div>
+
+      <div id="care-search-bar" class="care-search-bar">
+        <img
+          src="./resources/images/care_.png "
+          alt="CARE Logo"
+          id="care-logo" />
+        <input
+          type="text"
+          id="care-search-input"
+          placeholder="Rechercher un projet..." />
+        <img
+          src="./resources/images/search.png"
+          alt="Search"
+          id="care-search-icon" />
+      </div>
+      <div id="layer-slider-container">
+        <div class="slider-arrow left-arrow">&#8249;</div>
+        <!-- Flèche gauche -->
+        <div id="layer-slider" class="custom-layer-slider-horizontal">
+          <div class="layer-option">
+            <button class="btn"><i class="fas fa-house"></i>Bases</button>
+          </div>
+          <div class="layer-option">
+            <div class="layer-option">
+              <button class="btn">
+                <i class="fas fa-list-check"></i>Projets
+              </button>
+            </div>
+          </div>
+          <div class="layer-option">
+            <div class="layer-option">
+              <button class="btn">
+                <i class="fas fa-people-group"></i>Partenaires
+              </button>
+            </div>
+          </div>
+          <!-- Ajoutez d'autres options de couche ici -->
+        </div>
+        <div class="slider-arrow right-arrow">&#8250;</div>
+        <!-- Flèche droite -->
+      </div>
     </div>
 
     <div id="hamburger-menu" class="hamburger-menu">
@@ -74,25 +120,6 @@
       </div>
     </div>
 
-    <div id="care-search-bar" class="care-search-bar">
-      <img src="./resources/images/care_.png alt="CARE Logo" id="care-logo">
-      <input type="text" id="care-search-input" placeholder="Rechercher un lieu...">
-      <img src="./resources/images/search.png" alt="Search" id="care-search-icon">
-  </div>
-    <div id="layer-slider" class="custom-layer-slider-horizontal">
-      <div class="layer-option">
-        <img src="./resources/images/house.svg" alt="Base-bureaux" class="layer-icon">
-        <span>Base-bureaux</span>
-    </div>
-    <div class="layer-option">
-        <img src="./resources/images/projets.svg" alt="Projets" class="layer-icon">
-        <span>Projets</span>
-    </div>
-    <div class="layer-option">
-        <img src="./resources/images/partner.svg" alt="Partenaires" class="layer-icon">
-        <span>Partenaires</span>
-    </div>
-    </div>
     <div id="custom-layer-switcher" class="layer-switcher collapsed">
       <!-- Placeholder or icon for collapsed state -->
       <div id="switcher-icon">
@@ -117,8 +144,6 @@
       <button id="zoom-in" class="zoom-btn">+</button>
       <button id="zoom-out" class="zoom-btn">-</button>
     </div>
-      </div>
-
 
     <!-- <script src="resources/proj4js/proj4-src.js"></script> -->
     <script src="./resources/config.js"></script>

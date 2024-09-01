@@ -9,7 +9,7 @@
   left: 0;
   width: 100%;
   height: 100%;
-  background-color: rgba(255, 255, 255, 0.8); /* Fond semi-transparent */
+  background-color: rgba(255, 255, 255, 1); /* Fond semi-transparent */
   display: flex;
   justify-content: center;
   align-items: center;
@@ -58,6 +58,16 @@ html {
   background: #f1f1f1;
 }
 
+/* Map styles */
+#map-container {
+  position: absolute;
+  top: 0;
+  right: 0;
+  left: 0;
+  bottom: 0;
+  transition: left 0.3s ease; /* Transition pour l'adaptation de la carte */
+}
+
 .map,
 .map2 {
   height: 100%; /* 100% de la hauteur du viewport */
@@ -70,14 +80,14 @@ html {
 /* Hamburger menu icon */
 .hamburger-menu {
   position: absolute;
-  top: 10px;
+  top: 30px;
   left: 10px;
   z-index: 1001;
   cursor: pointer;
-  font-size: 30px;
+  font-size: 40px;
   background-color: rgba(255, 255, 255, 0.9);
-  padding: 5px;
-  border-radius: 5px;
+  padding: 10px;
+  border-radius: 50%;
 }
 
 .hamburger-menu span {
@@ -100,16 +110,6 @@ html {
 
 .sidebar.active {
   width: 300px; /* Largeur de la side-bar une fois ouverte */
-}
-
-/* Map styles */
-#map-container {
-  position: absolute;
-  top: 0;
-  right: 0;
-  left: 0;
-  bottom: 0;
-  transition: left 0.3s ease; /* Transition pour l'adaptation de la carte */
 }
 
 .sidebar-header {
@@ -135,24 +135,27 @@ html {
   flex: 1;
 }
 
-/* Conteneur principal */
 .care-search-bar {
+  position: absolute;
+  top: 30px; /* Ajustez selon votre préférence */
+  left: 20%; /* Centrer horizontalement */
+  transform: translateX(-50%);
+
   display: flex;
   align-items: center;
-  padding: 5px 10px;
+  padding: 10px 20px;
   background-color: rgba(255, 255, 255, 0.9);
   border-radius: 30px;
   box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+  z-index: 1000; /* Assurez-vous qu'il apparaît au-dessus de la carte */
 }
 
-/* Logo de CARE */
 #care-logo {
-  width: 30px;
+  width: 100px; /* Augmentez la taille ici */
   height: auto;
   margin-right: 10px;
 }
 
-/* Barre de recherche */
 #care-search-input {
   border: none;
   outline: none;
@@ -163,87 +166,181 @@ html {
   margin-right: 10px;
 }
 
-/* Icône de recherche */
 #care-search-icon {
   width: 24px;
   height: 24px;
   cursor: pointer;
 }
 
-/* Ajustement de la largeur pour les petits écrans */
+/* Pour les tablettes et petits écrans */
 @media screen and (max-width: 768px) {
   .care-search-bar {
-    width: 100%;
+    top: 50px;
+    left: 50%;
+    width: 50%; /* Réduit la largeur de la barre de recherche */
   }
 
   #care-logo {
-    width: 25px;
+    width: 40px; /* Réduit la taille du logo */
   }
 
   #care-search-input {
-    font-size: 12px;
+    font-size: 12px; /* Réduit la taille du texte */
   }
 
   #care-search-icon {
-    width: 20px;
+    width: 20px; /* Réduit la taille de l'icône de recherche */
   }
 }
 
-/* Style du Layer Slider Horizontal */
-.custom-layer-slider-horizontal {
+/* Pour les très petits écrans (smartphones) */
+@media screen and (max-width: 390px) {
+  .care-search-bar {
+    top: 50px;
+    left: 60%;
+    width: 100%; /* Utilise toute la largeur disponible */
+    padding: 6px 12px; /* Réduit le padding pour s'adapter à la largeur */
+  }
+
+  #care-logo {
+    width: 30px; /* Réduit encore la taille du logo */
+    margin-right: 8px;
+  }
+
+  #care-search-input {
+    font-size: 12px; /* Conserve une petite taille de texte pour les petits écrans */
+  }
+
+  #care-search-icon {
+    width: 20px; /* Maintient la taille de l'icône */
+  }
+}
+
+/* Style principal du conteneur */
+#layer-slider-container {
   display: flex;
-  padding: 80px;
-  right: 80px;
+  align-items: center;
+  justify-content: center;
+  position: absolute;
+  top: 20px;
+  left: 40%;
+  z-index: 1000; /* Assurez-vous qu'il soit au-dessus des autres éléments */
+  padding: 10px;
   background-color: rgba(255, 255, 255, 0.9);
   border-radius: 8px;
   box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
 }
 
+/* Style du Layer Slider Horizontal */
+.custom-layer-slider-horizontal {
+  display: flex;
+  overflow-x: auto;
+  scroll-behavior: smooth;
+  padding: 0 50px;
+  gap: 10px; /* Espacement entre les boutons */
+}
+
 .layer-option {
   display: flex;
   align-items: center;
-  margin-right: 20px; /* Espacement entre les options */
+}
+
+.btn {
+  display: flex;
+  align-items: center;
+  padding: 8px 16px;
+  background-color: #fff;
+  border-radius: 16px;
   cursor: pointer;
-}
-
-.layer-option img.layer-icon {
-  width: 24px;
-  height: 24px;
-  margin-right: 8px;
-}
-
-.layer-option span {
+  transition: transform 0.3s ease;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.15);
+  border: none;
   font-size: 14px;
+}
+
+.btn i {
+  margin-right: 8px; /* Espace entre l'icône et le texte */
+  font-size: 18px;
+}
+
+/* Effet au survol */
+.layer-option:hover .btn {
+  transform: scale(1.05);
+}
+
+/* Style pour les flèches du slider */
+.slider-arrow {
+  font-size: 24px;
+  cursor: pointer;
+  color: #333;
+  padding: 10px;
+  z-index: 10;
+  user-select: none;
+}
+
+.left-arrow {
+  position: absolute;
+  left: 10px;
+}
+
+.right-arrow {
+  position: absolute;
+  right: 10px;
 }
 
 /* Responsive Design */
 @media screen and (max-width: 768px) {
+  #layer-slider-container {
+    position: absolute;
+    flex-direction: column;
+    top: 100px;
+    left: 30%;
+    z-index: 1000; /* Assurez-vous qu'il soit au-dessus des autres éléments */
+  }
+
   .custom-layer-slider-horizontal {
-    flex-direction: column; /* Passe en mode colonne pour les petits écrans */
-    align-items: center;
+    flex-direction: column; /* Aligne verticalement les options */
+    gap: 15px; /* Augmente l'espacement entre les boutons */
+    padding: 10px 0;
   }
-
   .layer-option {
-    margin-right: 0;
-    margin-bottom: 10px; /* Espacement entre les options dans le mode colonne */
+    flex-direction: column;
+    padding: 6px 12px;
+    margin-right: 6px;
   }
 
-  .layer-option img.layer-icon {
+  .layer-icon {
     width: 20px;
     height: 20px;
-  }
-
-  .layer-option span {
-    font-size: 12px;
+    margin-right: 6px;
   }
 }
 
-.layer-option {
-  transition: transform 0.3s ease;
-}
+/* Responsive Design */
+@media screen and (max-width: 390px) {
+  #layer-slider-container {
+    position: absolute;
+    flex-direction: column;
+    top: 100px;
+    left: 10%;
+    z-index: 1000; /* Assurez-vous qu'il soit au-dessus des autres éléments */
+  }
+  .custom-layer-slider-horizontal {
+    flex-direction: column; /* Aligne verticalement les options */
+    gap: 15px; /* Augmente l'espacement entre les boutons */
+    padding: 10px 0;
+  }
+  .layer-option {
+    flex-direction: column;
+    padding: 6px 12px;
+    margin-right: 6px;
+  }
 
-.layer-option:hover {
-  transform: scale(1.1);
+  .layer-icon {
+    width: 20px;
+    height: 20px;
+    margin-right: 6px;
+  }
 }
 
 /* Positioning the custom zoom controls */

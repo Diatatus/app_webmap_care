@@ -77,64 +77,6 @@ html {
   border: none; /* Supprime les bordures */
 }
 
-/* Hamburger menu icon */
-.hamburger-menu {
-  position: absolute;
-  top: 30px;
-  left: 10px;
-  z-index: 1001;
-  cursor: pointer;
-  font-size: 40px;
-  background-color: rgba(255, 255, 255, 0.9);
-  padding: 10px;
-  border-radius: 50%;
-}
-
-.hamburger-menu span {
-  display: block;
-  font-size: 24px;
-}
-
-/* Side-bar styles */
-.sidebar {
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 0; /* Initialement, la side-bar est cachée */
-  height: 100%;
-  background-color: #f4f4f4;
-  overflow-x: hidden;
-  transition: width 0.3s ease; /* Transition fluide */
-  z-index: 1000; /* Pour être au-dessus de la carte */
-}
-
-.sidebar.active {
-  width: 300px; /* Largeur de la side-bar une fois ouverte */
-}
-
-.sidebar-header {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  padding: 10px;
-  background-color: #f1f1f1;
-  border-bottom: 1px solid #ddd;
-}
-
-/* Bouton de fermeture de la side-bar */
-.close-btn {
-  background: none;
-  border: none;
-  font-size: 20px;
-  cursor: pointer;
-  color: #333;
-}
-
-.sidebar-content {
-  padding: 15px;
-  flex: 1;
-}
-
 .care-search-bar {
   position: absolute;
   top: 30px;
@@ -143,34 +85,51 @@ html {
   display: flex;
   align-items: center;
   padding: 10px 20px;
-  background-color: rgba(255, 255, 255, 0.9);
+  background-color: rgba(255, 255, 255, 1);
   border-radius: 8px;
   box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
   z-index: 1000;
-  width: 70%; /* Ajustement pour les grands écrans */
-  max-width: 500px; /* Limite la largeur maximale */
+  width: 70%;
+  max-width: 500px;
 }
 
 #care-logo {
-  width: 150px; /* Taille du logo pour grands écrans */
+  width: 150px;
   height: auto;
   margin-right: 10px;
 }
 
-#care-search-input {
-  border: none;
-  outline: none;
-  flex-grow: 1;
-  padding: 5px 10px;
-  border-radius: 20px;
-  font-size: 14px;
-  margin-right: 10px;
+/* Conteneur pour l'input et l'icône */
+.search-container {
+  position: relative;
+  width: 100%;
 }
 
-#care-search-icon {
-  width: 24px;
-  height: 24px;
-  cursor: pointer;
+#care-search-input {
+  width: 100%;
+  border: 2px solid #ff440050; /* Contour orange foncé */
+  padding: 10px 20px 10px 40px; /* Laisse de l'espace pour l'icône */
+  border-radius: 20px;
+  font-size: 14px;
+  width: calc(100% - 40px); /* Ajuste la largeur en tenant compte de l'icône */
+  background-color: rgba(255, 255, 255, 0.5);
+  transition: background-color 0.3s ease, padding 0.3s ease; /* Animation smooth */
+}
+
+.search-icon {
+  position: absolute;
+  left: 10px;
+  top: 50%;
+  transform: translateY(-50%);
+  color: #ff4500; /* Couleur orange foncé */
+  font-size: 18px;
+  pointer-events: none; /* Laisse l'input capturer les clics */
+}
+
+/* Animation lors du clic pour la saisie */
+#care-search-input:focus {
+  background-color: rgba(255, 255, 255, 0.8); /* Accentue la couleur */
+  padding: 10px 20px 10px 45px; /* Ajuste le padding pour mettre en évidence l'icône */
 }
 
 /* Pour les tablettes et petits écrans */
@@ -196,16 +155,42 @@ html {
     margin-right: 8px; /* Assure un espacement entre le logo et le champ de recherche */
   }
 
+  /* Conteneur pour l'input et l'icône */
+  .search-container {
+    position: relative;
+    width: 100%;
+  }
+
   #care-search-input {
     flex: 1; /* Permet au champ de recherche de s'étendre pour utiliser tout l'espace disponible */
     font-size: 12px; /* Réduit la taille du texte pour qu'il s'ajuste bien à la taille de la barre */
-    border: none;
+    border: 2px solid #ff440050; /* Contour orange foncé */
     outline: none;
+    padding: 8px 10px 8px 40px; /* Espace pour l'icône */
+    border-radius: 20px;
+    width: calc(
+      100% - 40px
+    ); /* Ajuste la largeur en tenant compte de l'icône */
+    background-color: rgba(255, 255, 255, 0.5);
+    transition: background-color 0.3s ease, border-color 0.3s ease,
+      padding 0.3s ease; /* Animation smooth */
   }
 
-  #care-search-icon {
-    width: 20px; /* Ajuste la taille de l'icône de recherche pour être proportionnelle */
-    height: 20px;
+  .search-icon {
+    position: absolute;
+    left: 10px;
+    top: 50%;
+    transform: translateY(-50%);
+    color: #ff4500; /* Couleur orange foncé */
+    font-size: 18px;
+    pointer-events: none; /* Laisse l'input capturer les clics */
+  }
+
+  /* Animation lors du clic pour la saisie */
+  #care-search-input:focus {
+    background-color: rgba(255, 255, 255, 0.8); /* Accentue la couleur */
+    padding: 8px 10px 8px 45px; /* Ajuste le padding pour mettre en évidence l'icône */
+    border-color: #ffa500; /* Change la couleur de la bordure au focus */
   }
 }
 
@@ -230,16 +215,49 @@ html {
     margin-right: 8px; /* Espace entre le logo et le champ de recherche */
   }
 
+  /* Conteneur pour l'input et l'icône */
+  .search-container {
+    position: relative;
+    width: 100%;
+  }
+
   #care-search-input {
     flex: 1; /* Permet à l'input de prendre toute la place restante */
     font-size: 14px; /* Ajuste la taille de la police pour les petits écrans */
-    border: none;
+    border: 2px solid #ff4500; /* Contour orange foncé */
     outline: none;
+    padding: 8px 10px 8px 40px; /* Espace pour l'icône */
+    border-radius: 20px;
+    background-color: rgba(255, 255, 255, 0.5);
+    transition: background-color 0.3s ease, border-color 0.3s ease,
+      padding 0.3s ease; /* Animation smooth */
+    width: calc(
+      100% - 40px
+    ); /* Ajuste la largeur en tenant compte de l'icône */
   }
 
-  #care-search-icon {
-    width: 20px; /* Maintient la taille de l'icône */
-    height: 20px;
+  .search-icon {
+    position: absolute;
+    left: 10px;
+    top: 50%;
+    transform: translateY(-50%);
+    color: #ff4500; /* Couleur orange foncé */
+    font-size: 16px; /* Légèrement plus petite pour les petits écrans */
+    pointer-events: none; /* Laisse l'input capturer les clics */
+    transition: font-size 0.3s ease; /* Animation smooth pour l'icône */
+  }
+
+  /* Animation lors du clic pour la saisie */
+  #care-search-input:focus {
+    background-color: rgba(255, 255, 255, 0.8); /* Accentue la couleur */
+    padding: 8px 10px 8px 45px; /* Ajuste le padding pour mettre en évidence l'icône */
+    border-color: #ffa500; /* Change la couleur de la bordure au focus */
+  }
+
+  /* Allonger l'input lors du survol sur l'icône */
+  .search-icon:hover + #care-search-input {
+    padding-left: 60px; /* Augmente l'espace pour l'icône */
+    transition: padding-left 0.3s ease; /* Animation smooth pour le padding */
   }
 }
 
@@ -253,7 +271,6 @@ html {
   left: 40%;
   z-index: 1000; /* Assurez-vous qu'il soit au-dessus des autres éléments */
   padding: 10px;
-
   border-radius: 8px;
 }
 
@@ -264,6 +281,14 @@ html {
   scroll-behavior: smooth;
   padding: 0 50px;
   gap: 10px; /* Espacement entre les boutons */
+
+  /* Masquer la barre de défilement sur tous les navigateurs */
+  scrollbar-width: none; /* Firefox */
+  -ms-overflow-style: none; /* Internet Explorer 10+ */
+}
+
+.custom-layer-slider-horizontal::-webkit-scrollbar {
+  display: none; /* Masquer la barre de défilement sur Chrome, Safari et Opera */
 }
 
 .layer-option {

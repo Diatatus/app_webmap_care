@@ -113,14 +113,15 @@ const styleFunction = function (feature) {
   }
 };
 
-var projectsLayer = new ol.layer.Vector({
+var regions_cmr = new ol.layer.Vector({
   source: new ol.source.Vector({
-    url: "./resources/data/projects.geojson",
+    url: "http://localhost:3000/api/regions", // URL de l'endpoint Node.js pour récupérer les données GeoJSON
     format: new ol.format.GeoJSON(),
   }),
-  style: styleFunction,
+  // Vous pouvez définir un style personnalisé pour les entités
 });
-map.addLayer(projectsLayer);
+
+map.addLayer(regions_cmr);
 
 var reloadFlag = false;
 map.on("movestart", (e) => {

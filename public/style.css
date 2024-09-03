@@ -264,12 +264,13 @@ html {
 /* Style principal du conteneur */
 #layer-slider-container {
   display: flex;
-  align-items: left;
-  justify-content: left;
+  align-items: center;
+  justify-content: center;
   position: absolute;
-  top: 20px;
-  left: 40%;
-  z-index: 1000; /* Assurez-vous qu'il soit au-dessus des autres éléments */
+  top: 30px;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 1000;
   padding: 10px;
   border-radius: 8px;
 }
@@ -277,151 +278,134 @@ html {
 /* Style du Layer Slider Horizontal */
 .custom-layer-slider-horizontal {
   display: flex;
-  overflow-x: auto;
-  scroll-behavior: smooth;
-  padding: 0 50px;
-  gap: 10px; /* Espacement entre les boutons */
-
-  /* Masquer la barre de défilement sur tous les navigateurs */
-  scrollbar-width: none; /* Firefox */
-  -ms-overflow-style: none; /* Internet Explorer 10+ */
-}
-
-.custom-layer-slider-horizontal::-webkit-scrollbar {
-  display: none; /* Masquer la barre de défilement sur Chrome, Safari et Opera */
-}
-
-.layer-option {
-  display: flex;
-  align-items: last baseline;
-  margin-right: 10%;
+  gap: 15px; /* Espacement entre les boutons */
+  white-space: nowrap; /* Empêche le retour à la ligne des boutons */
 }
 
 .btn {
-  display: flex;
+  display: inline-flex;
   align-items: center;
+  justify-content: center;
   padding: 12px 20px;
   background-color: #fff;
-  border-radius: 16px;
+  border-radius: 8px;
   cursor: pointer;
-  transition: transform 0.3s ease;
+  transition: transform 0.3s ease, opacity 0.3s ease, box-shadow 0.3s ease;
   box-shadow: 0 2px 5px rgba(0, 0, 0, 0.15);
   border: none;
   font-size: 14px;
 }
 
 .btn i {
-  margin-right: 8px; /* Espace entre l'icône et le texte */
+  margin-right: 8px;
   font-size: 18px;
 }
 
 /* Effet au survol */
-.layer-option:hover .btn {
+.btn:hover {
   transform: scale(1.05);
-  padding: 12px 20px;
-  border-radius: 16px;
-  border: none;
-  font-size: 14px;
-  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.15);
+  opacity: 0.9;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+  background-color: #d36036;
 }
 
 /* Responsive Design pour les écrans jusqu'à 768px */
 @media screen and (max-width: 768px) {
+  /* Style principal du conteneur */
   #layer-slider-container {
+    display: flex;
+    align-items: center;
+    justify-content: center;
     position: absolute;
     top: 100px;
     left: 50%;
     transform: translateX(-50%);
     z-index: 1000;
-    width: 80%;
+    padding: 10px;
+    border-radius: 8px;
   }
 
+  /* Style du Layer Slider Horizontal */
   .custom-layer-slider-horizontal {
     display: flex;
-    flex-direction: column;
-    align-items: center; /* Aligne les boutons à gauche */
-    gap: 10px; /* Espacement uniforme entre les boutons */
-    padding: 10px 0;
-  }
-
-  .layer-option {
-    display: flex;
-    align-items: center;
-    width: 100%; /* Prend toute la largeur du parent */
+    gap: 10px; /* Espacement entre les boutons */
+    white-space: nowrap; /* Empêche le retour à la ligne des boutons */
   }
 
   .btn {
-    display: flex;
+    display: inline-flex;
     align-items: center;
-    padding: 8px 16px;
+    justify-content: center;
+    padding: 12px 20px;
     background-color: #fff;
-    border-radius: 16px;
+    border-radius: 8px;
     cursor: pointer;
+    transition: transform 0.3s ease, opacity 0.3s ease, box-shadow 0.3s ease;
     box-shadow: 0 2px 5px rgba(0, 0, 0, 0.15);
     border: none;
-    font-size: 12px;
-    width: 100%; /* Le bouton prend toute la largeur disponible */
-    transition: transform 0.3s ease, box-shadow 0.3s ease; /* Uniformise la transition */
+    font-size: 14px;
   }
 
   .btn i {
     margin-right: 8px;
-    font-size: 16px;
+    font-size: 18px;
   }
 
-  .layer-option:hover .btn {
-    transform: scale(1.05); /* Effet de survol */
-    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2); /* Légère augmentation de l'ombre */
+  /* Effet au survol */
+  .btn:hover {
+    transform: scale(1.05);
+    opacity: 0.9;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
   }
 }
 
 /* Responsive Design pour les écrans jusqu'à 390px */
 @media screen and (max-width: 390px) {
+  /* Style principal du conteneur */
   #layer-slider-container {
+    display: flex;
+    align-items: center;
+    justify-content: center;
     position: absolute;
-    top: 80px;
+    top: 100px;
     left: 50%;
     transform: translateX(-50%);
     z-index: 1000;
-    width: 90%;
+    padding: 10px;
+    border-radius: 8px;
   }
 
+  /* Style du Layer Slider Horizontal */
   .custom-layer-slider-horizontal {
     display: flex;
-    flex-direction: column;
-    align-items: center; /* Aligne les boutons à gauche */
-    gap: 8px; /* Espacement uniforme entre les boutons */
-    padding: 5px 0;
-  }
-
-  .layer-option {
-    display: flex;
-    align-items: center;
-    width: 100%; /* Prend toute la largeur du parent */
+    gap: 10px; /* Espacement entre les boutons */
+    white-space: nowrap; /* Empêche le retour à la ligne des boutons */
   }
 
   .btn {
-    display: flex;
+    display: inline-flex;
     align-items: center;
-    padding: 6px 12px;
+    justify-content: center;
+    padding: 12px 20px;
     background-color: #fff;
-    border-radius: 12px;
+    border-radius: 8px;
     cursor: pointer;
+    transition: transform 0.3s ease, opacity 0.3s ease, box-shadow 0.3s ease;
     box-shadow: 0 2px 5px rgba(0, 0, 0, 0.15);
     border: none;
-    font-size: 10px;
-    width: 100%; /* Le bouton prend toute la largeur disponible */
-    transition: transform 0.3s ease, box-shadow 0.3s ease; /* Uniformise la transition */
-  }
-
-  .btn i {
-    margin-right: 6px;
     font-size: 14px;
   }
 
-  .layer-option:hover .btn {
-    transform: scale(1.05); /* Effet de survol */
-    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2); /* Légère augmentation de l'ombre */
+  .btn i {
+    margin-right: 8px;
+    font-size: 18px;
+  }
+
+  /* Effet au survol */
+  .btn:hover {
+    transform: scale(1.05);
+    opacity: 0.9;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
   }
 }
 

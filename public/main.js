@@ -10,7 +10,7 @@ const sidebar = document.getElementById("sidebar");
 const closeSidebarBtn = document.getElementById("close-sidebar");
 const mapContainer = document.getElementById("map-container");
 
-const customproj = ol.proj.get(config.viewProjection);
+const customproj = ol.proj.get("EPSG:4326");
 // The Map
 var mapView = new ol.View({
   center: ol.proj.fromLonLat([12.2, 7.5]),
@@ -84,6 +84,17 @@ map.addLayer(bingMapsAerial);
 osm.setVisible(true);
 bingMapsAerial.setVisible(false);
 
+var regions_cmr = new ol.layer.Vector({
+  source: new ol.source.Vector({
+    url: "/api/regions", // URL de l'endpoint Node.js pour récupérer les données GeoJSON
+    format: new ol.format.GeoJSON(),
+  }),
+  projection: customproj,
+  // Vous pouvez définir un style personnalisé pour les entités
+});
+
+map.addLayer(regions_cmr);
+
 var displayProjectType = config.projects;
 var projectStatus = config.status;
 
@@ -112,16 +123,6 @@ const styleFunction = function (feature) {
     return styles[feature.getGeometry().getType()];
   }
 };
-
-var regions_cmr = new ol.layer.Vector({
-  source: new ol.source.Vector({
-    url: "http://localhost:3000/api/regions", // URL de l'endpoint Node.js pour récupérer les données GeoJSON
-    format: new ol.format.GeoJSON(),
-  }),
-  // Vous pouvez définir un style personnalisé pour les entités
-});
-
-map.addLayer(regions_cmr);
 
 var reloadFlag = false;
 map.on("movestart", (e) => {

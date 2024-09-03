@@ -550,3 +550,9 @@ html {
 .layer-option:hover {
   background-color: rgba(200, 200, 200, 0.5);
 }
+
+.ol-popup h1 {
+  font-size: 1em;
+  background-size: 2em;
+  padding-left: 3em;
+}

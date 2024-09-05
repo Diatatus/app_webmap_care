@@ -5,9 +5,7 @@ $(document).ready(function () {
 });
 
 // Get elements
-const hamburgerMenu = document.getElementById("hamburger-menu");
-const sidebar = document.getElementById("sidebar");
-const closeSidebarBtn = document.getElementById("close-sidebar");
+
 const mapContainer = document.getElementById("map-container");
 
 const customproj = ol.proj.get("EPSG:4326");

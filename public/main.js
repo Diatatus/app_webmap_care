@@ -201,3 +201,63 @@ function toggleLayer(eve) {
     }
   });
 }
+
+// Récupérer les éléments
+const toggleButton = document.getElementById("toggleButton");
+const closeButton = document.getElementById("closeButton");
+const storyDiv = document.getElementById("story");
+
+// Masquer la div à l'accueil
+storyDiv.style.display = "none";
+
+// Fonction pour afficher la div au clic sur le bouton "Bases"
+toggleButton.addEventListener("click", function () {
+  storyDiv.style.display = "block"; // Afficher la div
+});
+
+// Fonction pour masquer la div au clic sur le bouton "Fermer"
+closeButton.addEventListener("click", function () {
+  storyDiv.style.display = "none"; // Masquer la div
+});
+
+// Add placemark
+var placemark = new ol.Overlay.Placemark();
+map.addOverlay(placemark);
+
+// The storymap
+var story = new ol.control.Storymap({
+  html: document.getElementById("story"),
+  //target: document.getElementById("story"),
+  minibar: true,
+  //className: 'scrollBox'
+});
+
+// Show image fullscreen on click
+var fullscreen = new ol.control.Overlay({
+  hideOnClick: true,
+  className: "zoom",
+});
+map.addControl(fullscreen);
+story.on("clickimage", function (e) {
+  console.log(e);
+  fullscreen.showImage(e.img.src, e);
+});
+
+// Fly to the chapter on the map
+story.on("scrollto", function (e) {
+  if (e.name === "start") {
+    placemark.hide();
+  } else {
+    placemark.show(e.coordinate);
+  }
+});
+
+function setClassName(c) {
+  console.log(c);
+  story.element.classList.remove("scrollLine");
+  story.element.classList.remove("scrollBox");
+  if (c) story.element.classList.add(c);
+  window.dispatchEvent(new Event("resize"));
+}
+
+map.addControl(story);

@@ -100,37 +100,35 @@ map.addLayer(bingMapsAerial);
 osm.setVisible(true);
 bingMapsAerial.setVisible(false);
 
-// Ajout de la couche avec le style déclaré en tant que variable
-map.addLayer(
-  new ol.layer.Vector({
-    name: "Régions",
-    source: new ol.source.Vector({
-      url: "/api/regions", // URL de l'endpoint Node.js pour récupérer les données GeoJSON
-      format: new ol.format.GeoJSON(),
-    }),
-    style: function (f) {
-      return new ol.style.Style({
-        image: new ol.style.RegularShape({
-          radius: 5,
-          radius2: 0,
-          points: 4,
-          stroke: new ol.style.Stroke({ color: "#000", width: 1 }),
-        }),
-        text: new ol.style.Text({
-          text: f.get("id").toString(),
-          font: "bold 11px sans-serif",
-        }),
-        stroke: new ol.style.Stroke({
-          width: 1,
-          color: [255, 128, 0],
-        }),
-        fill: new ol.style.Fill({
-          color: [255, 128, 0, 0.2],
-        }),
-      });
-    },
-  })
-);
+// Créez la couche "Régions" avec les styles définis
+var regionLayer = new ol.layer.Vector({
+  name: "Régions",
+  source: new ol.source.Vector({
+    url: "/api/regions", // URL de l'endpoint Node.js pour récupérer les données GeoJSON
+    format: new ol.format.GeoJSON(),
+  }),
+  style: function (f) {
+    return new ol.style.Style({
+      image: new ol.style.RegularShape({
+        radius: 5,
+        radius2: 0,
+        points: 4,
+        stroke: new ol.style.Stroke({ color: "#000", width: 1 }),
+      }),
+      text: new ol.style.Text({
+        text: f.get("id").toString(),
+        font: "bold 11px sans-serif",
+      }),
+      stroke: new ol.style.Stroke({
+        width: 1,
+        color: [255, 128, 0],
+      }),
+      fill: new ol.style.Fill({
+        color: [255, 128, 0, 0.2],
+      }),
+    });
+  },
+});
 
 // Variable pour savoir si la couche est actuellement visible ou non
 var regionLayerVisible = false;

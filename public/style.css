@@ -303,7 +303,7 @@ html {
   justify-content: center;
   position: absolute;
   top: 30px;
-  left: 50%;
+  left: 55%;
   transform: translateX(-50%);
   z-index: 1000;
   padding: 10px;
@@ -341,7 +341,7 @@ html {
   transform: scale(1.05);
   opacity: 0.9;
   box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
-  background-color: #d36036;
+  background-color: #ff6123;
 }
 
 /* Responsive Design pour les écrans jusqu'à 768px */

@@ -24,6 +24,9 @@ var map = new ol.Map({
 // Attribution control
 
 // Assume 'map' is your OpenLayers map instance
+// Enregistrer la vue initiale
+var initialCenter = [12.2, 7.5]; // Remplacez par les coordonnées initiales de votre carte
+var initialZoom = 6; // Remplacez par le zoom initial de votre carte
 document.getElementById("zoom-in").addEventListener("click", function () {
   var view = map.getView();
   var zoom = view.getZoom();
@@ -41,6 +44,16 @@ document.getElementById("zoom-out").addEventListener("click", function () {
     duration: 250, // Duration in milliseconds
   });
 });
+document.getElementById("zoom-initial").addEventListener("click", function () {
+  var view = map.getView();
+  var zoom = view.getZoom();
+  view.animate({
+    center: ol.proj.fromLonLat(initialCenter),
+    zoom: initialZoom,
+    duration: 250, // Duration in milliseconds
+  });
+});
+
 function switchLayer(layerName) {
   var layers = map.getLayers().getArray();
   layers.forEach(function (layer) {
@@ -118,6 +131,22 @@ map.addLayer(
     },
   })
 );
+
+// Variable pour savoir si la couche est actuellement visible ou non
+var regionLayerVisible = false;
+
+// Gestion du clic sur le bouton pour afficher/masquer la couche
+document.getElementById("toggleRegions").addEventListener("click", function () {
+  if (!regionLayerVisible) {
+    // Si la couche n'est pas visible, l'ajouter à la carte
+    map.addLayer(regionLayer);
+    regionLayerVisible = true;
+  } else {
+    // Si la couche est visible, la retirer de la carte
+    map.removeLayer(regionLayer);
+    regionLayerVisible = false;
+  }
+});
 
 // Select  interaction
 var select = new ol.interaction.Select({
@@ -203,7 +232,7 @@ function toggleLayer(eve) {
 }
 
 // Récupérer les éléments
-const toggleButton = document.getElementById("toggleButton");
+const toggleButton = document.getElementById("toggleBases");
 const closeButton = document.getElementById("closeButton");
 const storyDiv = document.getElementById("story");
 

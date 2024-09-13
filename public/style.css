@@ -341,7 +341,7 @@ html {
   transform: scale(1.05);
   opacity: 0.9;
   box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
-  background-color: #ff6123;
+  background-color: #e46217b4;
 }
 
 /* Responsive Design pour les écrans jusqu'à 768px */
@@ -590,4 +590,29 @@ html {
   font-size: 1em;
   background-size: 2em;
   padding-left: 3em;
+  color: #ff4500;
+}
+
+.ol-popup .closeBox {
+  background-color: #ff4500;
+}
+
+.ol-popup .closeBox:hover {
+  background-color: #ff6347;
+}
+
+.ol-popup .ol-popupfeature .ol-zoombt {
+  color: #ff4500;
+}
+.ol-popup.default > div {
+  border: 1px solid #ff4500;
+}
+
+.ol-popup.default .anchor {
+  color: #ff4500;
+}
+
+.ol-popup .ol-popupfeature .ol-prev,
+.ol-popup .ol-popupfeature .ol-next {
+  color: #ff4500;
 }

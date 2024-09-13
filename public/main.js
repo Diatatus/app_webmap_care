@@ -26,7 +26,7 @@ var map = new ol.Map({
 // Assume 'map' is your OpenLayers map instance
 // Enregistrer la vue initiale
 var initialCenter = [12.2, 7.5]; // Remplacez par les coordonnées initiales de votre carte
-var initialZoom = 6; // Remplacez par le zoom initial de votre carte
+var initialZoom = 6.2; // Remplacez par le zoom initial de votre carte
 document.getElementById("zoom-in").addEventListener("click", function () {
   var view = map.getView();
   var zoom = view.getZoom();
@@ -130,8 +130,10 @@ var regionLayer = new ol.layer.Vector({
   },
 });
 
+map.addLayer(regionLayer);
+
 // Variable pour savoir si la couche est actuellement visible ou non
-var regionLayerVisible = false;
+var regionLayerVisible = true;
 
 // Gestion du clic sur le bouton pour afficher/masquer la couche
 document.getElementById("toggleRegions").addEventListener("click", function () {

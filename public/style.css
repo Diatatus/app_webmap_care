@@ -101,6 +101,16 @@ html {
   padding: 10px;
 }
 
+.ol-control.ol-storymap {
+  top: 120px;
+  left: 20px;
+  bottom: 0.5em;
+  max-width: 35%;
+  border-radius: 0.5em;
+  height: auto;
+  background-color: rgba(255, 255, 255, 0.5);
+}
+
 #story img {
   display: block;
   margin: auto;

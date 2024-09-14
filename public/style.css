@@ -97,9 +97,10 @@ html {
 #story {
   height: 400px;
   top: 150%;
-  left: 50%;
+  left: 150%;
   padding: 10px;
 }
+
 #story img {
   display: block;
   margin: auto;
@@ -108,6 +109,7 @@ html {
 #story .chapter.ol-select {
   background-color: rgba(255, 255, 255, 0.8);
 }
+
 .options a {
   cursor: pointer;
 }

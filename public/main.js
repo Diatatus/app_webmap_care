@@ -46,7 +46,6 @@ document.getElementById("zoom-out").addEventListener("click", function () {
 });
 document.getElementById("zoom-initial").addEventListener("click", function () {
   var view = map.getView();
-  var zoom = view.getZoom();
   view.animate({
     center: ol.proj.fromLonLat(initialCenter),
     zoom: initialZoom,

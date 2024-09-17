@@ -69,6 +69,8 @@ html {
   right: 0;
   left: 0;
   bottom: 0;
+  height: 100%; /* 100% de la hauteur du viewport */
+  width: 100%;
   transition: left 0.3s ease; /* Transition pour l'adaptation de la carte */
 }
 
@@ -314,9 +316,8 @@ html {
   align-items: center;
   justify-content: center;
   position: absolute;
-  top: 30px;
-  left: 55%;
-  transform: translateX(-50%);
+  top: 80px;
+
   z-index: 1000;
   padding: 10px;
   border-radius: 8px;

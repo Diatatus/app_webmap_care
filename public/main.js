@@ -13,6 +13,8 @@ const customproj = ol.proj.get("EPSG:4326");
 var mapView = new ol.View({
   center: ol.proj.fromLonLat([12.2, 7.5]),
   zoom: 6.2,
+  rotation: false, // Désactiver la rotation initiale
+  constrainRotation: true, // Empêcher la rotation accidentelle
 });
 
 var map = new ol.Map({

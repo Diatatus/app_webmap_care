@@ -63,19 +63,10 @@ html {
 }
 
 /* Map styles */
-#map-container {
-  position: absolute;
-  top: 0;
-  right: 0;
-  left: 0;
-  bottom: 0;
-  height: 100%; /* 100% de la hauteur du viewport */
-  width: 100%;
-  transition: left 0.3s ease; /* Transition pour l'adaptation de la carte */
-}
 
 .map,
 .map2 {
+  position: absolute;
   height: 100%; /* 100% de la hauteur du viewport */
   width: 100%; /* 100% de la largeur du viewport */
   background: white;

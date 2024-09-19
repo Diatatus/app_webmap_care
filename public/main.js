@@ -13,16 +13,25 @@ const customproj = ol.proj.get("EPSG:4326");
 var mapView = new ol.View({
   center: ol.proj.fromLonLat([12.2, 7.5]),
   zoom: 6.2,
-  rotation: false, // Désactiver la rotation initiale
+  rotation: 0, // Désactiver la rotation initiale
   constrainRotation: true, // Empêcher la rotation accidentelle
 });
 
-var map = new ol.Map({
-  target: "map",
-  view: mapView,
-  controls: [],
-});
+// Créer une liste d'interactions sans les interactions de rotation
+var interactions = [
+  new ol.interaction.DragPan(), // Permet de faire glisser la carte
+  new ol.interaction.PinchZoom(), // Permet de zoomer avec les gestes tactiles
+  new ol.interaction.MouseWheelZoom(), // Permet de zoomer avec la molette de la souris
+  new ol.interaction.DragZoom(), // Permet de zoomer en sélectionnant une zone avec la souris
+];
 
+// Initialiser la carte avec les interactions définies
+var map = new ol.Map({
+  target: "map", // Ciblez l'élément div avec l'ID "map"
+  view: mapView,
+  interactions: new ol.Collection(interactions), // Utilisation des interactions personnalisées
+  controls: [], // Garde les contrôles par défaut si vous le souhaitez
+});
 // Attribution control
 
 // Assume 'map' is your OpenLayers map instance

@@ -307,8 +307,8 @@ html {
   align-items: center;
   justify-content: center;
   position: absolute;
-  top: 80px;
-
+  top: 40px;
+  left: 600px;
   z-index: 1000;
   padding: 10px;
   border-radius: 8px;

@@ -114,7 +114,7 @@ bingMapsAerial.setVisible(false);
 var regionLayer = new ol.layer.Vector({
   name: "Régions",
   source: new ol.source.Vector({
-    url: "/api/regions", // URL de l'endpoint Node.js pour récupérer les données GeoJSON
+    url: "/api/regions_villes", // URL de l'endpoint Node.js pour récupérer les données GeoJSON
     format: new ol.format.GeoJSON(),
   }),
   style: function (f) {

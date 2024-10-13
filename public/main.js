@@ -171,59 +171,32 @@ var popup = new ol.Overlay.PopupFeature({
   popupClass: "default anim",
   select: select,
   canFix: true,
-  /** /
-  template: function(f) {
-    return {
-      title: function(f) { return f.get('nom')+' ('+f.get('id')+')' },
-      attributes: { 
-        region: { title: 'Région' }, 
-        arrond: 'arrond', 
-        cantons: 'cantons', 
-        communes: 'communes', 
-        pop: 'pop' 
-      }
-    }
-  },
-  /**/
 
   closeBox: true,
+
   template: {
-    title:
-      // 'nom',   // only display the name
-      function (f) {
-        return f.get("nom") + " (" + f.get("id_pays") + ")";
-      },
-    // [ 'region', 'arrond', 'cantons', 'communes', 'pop' ]
+    title: function (f) {
+      return f.get("nom");
+    },
     attributes: {
       nom: { title: "Région" },
-      nombre_departements: { title: "Départements" },
-      nombre_communes: { title: "Communes" },
-      communes_arrondissement: { title: "Communauté Urbaine" },
-      nombre_population: { title: "Population" },
-      superficie: { title: "Superficie" },
-      // with prefix and suffix
-      pop: {
-        title: "Population", // attribute's title
-        before: "", // something to add before
-        format: ol.Overlay.PopupFeature.localString(), // format as local string
-        after: " hab.", // something to add after
-      },
-      // calculated attribute
-      pop2: {
-        title: "Population (kHab.)", // attribute's title
-        format: function (val, f) {
-          return (
-            Math.round(parseInt(f.get("pop")) / 100).toLocaleString() + " kHab."
-          );
+      total_pop: { title: "Population totale" },
+      popsexmasc: { title: "Population masculine" },
+      popsexfem: { title: "Population féminine" },
+      denspopreg: { title: "Densité de population" },
+      // Insert a canvas for the graph
+      chart: {
+        title: "Graphique Démographique",
+        format: function () {
+          return '<canvas id="popup-chart" width="400" height="200"></canvas>';
         },
       },
-      /* Using localString with a date * /
-        'date': { 
-          title: 'Date', 
-          format: ol.Overlay.PopupFeature.localString(undefined, { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' }) 
-        }
-        /**/
     },
+  },
+
+  onshow: function (popup, feature) {
+    // Create the chart once the popup is shown
+    createDemographicChart(feature);
   },
 });
 

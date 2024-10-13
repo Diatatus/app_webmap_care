@@ -166,41 +166,129 @@ var select = new ol.interaction.Select({
 });
 map.addInteraction(select);
 
-// Select control
-var popup = new ol.Overlay.PopupFeature({
-  popupClass: "default anim",
-  select: select,
-  canFix: true,
-
-  closeBox: true,
-
-  template: {
-    title: function (f) {
-      return f.get("nom");
-    },
-    attributes: {
-      nom: { title: "Région" },
-      total_pop: { title: "Population totale" },
-      popsexmasc: { title: "Population masculine" },
-      popsexfem: { title: "Population féminine" },
-      denspopreg: { title: "Densité de population" },
-      // Insert a canvas for the graph
-      chart: {
-        title: "Graphique Démographique",
-        format: function () {
-          return '<canvas id="popup-chart" width="400" height="200"></canvas>';
-        },
+function createCharts(feature) {
+  // Demographic data
+  var demographyData = {
+    labels: [
+      "Total Population",
+      "Male Population",
+      "Female Population",
+      "Population Density",
+    ],
+    datasets: [
+      {
+        label: "Demography",
+        data: [
+          feature.get("total_pop"),
+          feature.get("popsexmasc"),
+          feature.get("popsexfem"),
+          feature.get("denspopreg"),
+        ],
+        backgroundColor: ["#FF6384", "#36A2EB", "#FFCE56", "#4BC0C0"],
       },
-    },
-  },
+    ],
+  };
 
-  onshow: function (popup, feature) {
-    // Create the chart once the popup is shown
-    createDemographicChart(feature);
-  },
+  // Health data
+  var healthData = {
+    labels: [
+      "HIV Prevalence (Males 15-49)",
+      "HIV Prevalence (Females 15-49)",
+      "Handwashing Facilities",
+      "Access to Improved Water",
+    ],
+    datasets: [
+      {
+        label: "Health",
+        data: [
+          feature.get("prev_vih_Hoe_15-49 ans"),
+          feature.get("prev_vih-Fem_15-49 ans"),
+          feature.get("inst_lavmain_lim"),
+          feature.get("acces_eau_amel"),
+        ],
+        backgroundColor: ["#FF6384", "#36A2EB", "#FFCE56", "#4BC0C0"],
+      },
+    ],
+  };
+
+  // Economy and Employment data
+  var economyData = {
+    labels: [
+      "Poverty Rate",
+      "Unemployment Rate",
+      "Financial Inclusion (EMF Access)",
+    ],
+    datasets: [
+      {
+        label: "Economy & Employment",
+        data: [
+          feature.get("taux_pvrt"),
+          feature.get("taux_chom"),
+          feature.get("incl_fin_emf"),
+        ],
+        backgroundColor: ["#FF6384", "#36A2EB", "#FFCE56"],
+      },
+    ],
+  };
+
+  // Family Planning data
+  var familyData = {
+    labels: [
+      "Unmet Need for Family Planning",
+      "Women Using Modern Contraceptives",
+      "Men Justifying Domestic Violence",
+      "Women Justifying Domestic Violence",
+    ],
+    datasets: [
+      {
+        label: "Family & Planning",
+        data: [
+          feature.get("besoins_nonsatisf_pf"),
+          feature.get("fem_utilmethcontracep_mod"),
+          feature.get("justif_violconj_hom"),
+          feature.get("justif_violconj_fem"),
+        ],
+        backgroundColor: ["#FF6384", "#36A2EB", "#FFCE56", "#4BC0C0"],
+      },
+    ],
+  };
+
+  // Create Demography chart
+  new Chart(document.getElementById("demography-chart"), {
+    type: "bar",
+    data: demographyData,
+  });
+
+  // Create Health chart
+  new Chart(document.getElementById("health-chart"), {
+    type: "bar",
+    data: healthData,
+  });
+
+  // Create Economy chart
+  new Chart(document.getElementById("economy-chart"), {
+    type: "bar",
+    data: economyData,
+  });
+
+  // Create Family Planning chart
+  new Chart(document.getElementById("family-chart"), {
+    type: "bar",
+    data: familyData,
+  });
+}
+
+map.on("click", function (evt) {
+  var feature = map.forEachFeatureAtPixel(evt.pixel, function (feature) {
+    return feature;
+  });
+
+  if (feature) {
+    // Display the popup and pass the feature data to create charts
+    document.getElementById("popup-info").style.display = "block";
+    createCharts(feature);
+  }
 });
-
-map.addOverlay(popup);
 
 function toggleLayer(eve) {
   var lyrname = eve.target.value;

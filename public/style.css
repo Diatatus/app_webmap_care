@@ -596,10 +596,10 @@ html {
 .popup-container {
   display: none; /* Initially hidden */
   position: absolute;
-  top: 20%;
+  top: 15%;
   right: 10%;
   width: 400px;
-  height: 550px; /* Define height */
+  height: 630px; /* Define height */
   background-color: rgba(255, 255, 255, 0.9);
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
   border-radius: 10px;
@@ -650,4 +650,26 @@ html {
   background-color: #f8f8f8;
   border: 1px solid #ddd;
   border-radius: 8px;
+}
+
+.popup-footer {
+  margin-top: 20px;
+  text-align: center;
+  padding: 10px;
+  background-color: #f1f1f1;
+  border-top: 1px solid #ccc;
+}
+
+.source-logos {
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+  margin-top: 10px;
+}
+
+.source-logo {
+  max-width: 30px; /* Set a maximum width */
+  height: auto; /* Keep the aspect ratio */
+  object-fit: contain; /* Ensure the logo fits within the container without stretching */
+  margin-right: 5px; /* Add some spacing between logos */
 }

@@ -591,30 +591,37 @@ html {
 }
 
 /* General styles for the popup-info container */
-/* Styles for the popup-info container */
-/* Styles for the popup-info container */
-.popup-info {
+
+/* Main container that holds both the close button and the popup info */
+.popup-container {
   display: none; /* Initially hidden */
   position: absolute;
   top: 20%;
   right: 10%;
-  width: 350px; /* Defined width */
-  height: 400px; /* Defined height */
+  width: 400px;
+  height: 450px; /* Define height */
   background-color: rgba(255, 255, 255, 0.9);
-  padding: 15px;
-  border-radius: 10px;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+  border-radius: 10px;
   z-index: 1000;
-  opacity: 0; /* Initially transparent */
-  transition: opacity 0.5s ease-in-out; /* Smooth transition */
-  overflow-y: scroll; /* Enables vertical scrolling */
+  opacity: 0;
+  transition: opacity 0.5s ease-in-out;
+  overflow: hidden; /* Hide overflow of internal elements */
 }
 
-/* Button to close the popup */
+/* Wrapper for the close button */
+#popup-close-btn-wrapper {
+  display: flex;
+  justify-content: flex-end;
+  background-color: rgba(255, 255, 255, 0.9);
+  padding: 5px;
+  position: sticky;
+  top: 0;
+  z-index: 1001;
+}
+
+/* Close button styling */
 .popup-close-btn {
-  position: absolute;
-  top: 10px;
-  right: 10px;
   background-color: transparent;
   border: none;
   font-size: 20px;
@@ -623,19 +630,23 @@ html {
 }
 
 .popup-close-btn:hover {
-  color: #ff0000; /* Highlighted color on hover */
+  color: #ff0000;
 }
 
-/* Heading style for sections */
+/* Popup content (scrollable) */
+.popup-info {
+  padding: 15px;
+  max-height: 380px; /* Ensure the content inside is scrollable */
+  overflow-y: auto; /* Enable vertical scrolling */
+}
+
 .popup-info h3 {
   margin-top: 10px;
   margin-bottom: 10px;
-  color: #333;
   font-family: Arial, sans-serif;
   font-size: 16px;
 }
 
-/* Canvas styling */
 .popup-info canvas {
   width: 100%;
   height: 200px;

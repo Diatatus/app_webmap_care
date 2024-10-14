@@ -298,31 +298,44 @@ map.on("click", function (evt) {
   }
 });
 
-// Function to open the popup with smooth transition
+// Function to open the popup with a smooth transition
 function showPopup(feature) {
-  const popup = document.getElementById("popup-info");
-  popup.style.display = "block";
-  setTimeout(() => {
-    popup.style.opacity = 1; // Fade in effect
-  }, 10); // Small delay for smooth effect
+  const popupContainer = document.getElementById("popup-container");
+  popupContainer.style.display = "block"; // Make the container visible
 
-  // Pass feature data to create charts (assuming createCharts is a function that renders charts based on feature data)
+  setTimeout(() => {
+    popupContainer.style.opacity = 1; // Fade-in effect
+  }, 10); // Short delay for smooth transition
+
+  // Call the function to create charts, passing the feature data
   createCharts(feature);
 }
 
 // Function to close the popup
 function closePopup() {
-  const popup = document.getElementById("popup-info");
-  popup.style.opacity = 0; // Start fading out
+  const popupContainer = document.getElementById("popup-container");
+  popupContainer.style.opacity = 0; // Fade-out effect
+
   setTimeout(() => {
-    popup.style.display = "none"; // Hide after fading out
-  }, 500); // Match with transition duration (0.5s)
+    popupContainer.style.display = "none"; // Hide after fade-out
+  }, 500); // Matches the fade-out transition duration
 }
 
 // Add event listener to the close button
 document
   .getElementById("popup-close-btn")
   .addEventListener("click", closePopup);
+
+// Event listener for clicking on the map to show the popup
+map.on("click", function (evt) {
+  const feature = map.forEachFeatureAtPixel(evt.pixel, function (feature) {
+    return feature;
+  });
+
+  if (feature) {
+    showPopup(feature); // Display the popup when a feature is clicked
+  }
+});
 
 function toggleLayer(eve) {
   var lyrname = eve.target.value;

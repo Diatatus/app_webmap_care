@@ -161,7 +161,7 @@ document.getElementById("toggleRegions").addEventListener("click", function () {
 // Select  interaction
 var select = new ol.interaction.Select({
   hitTolerance: 5,
-  multi: true,
+  multi: false,
   condition: ol.events.condition.singleClick,
 });
 map.addInteraction(select);
@@ -298,9 +298,18 @@ map.on("click", function (evt) {
   }
 });
 
-// Function to open the popup with a smooth transition
+// Function to open the popup with a smooth transition and insert the zone name
 function showPopup(feature) {
   const popupContainer = document.getElementById("popup-container");
+
+  // Get the zone name (assuming the feature has a 'zoneName' property)
+  const zoneName = feature.get("nom");
+
+  // Insert the zone name in the left span element
+  document.getElementById(
+    "zone-name"
+  ).innerHTML = `<strong>${zoneName}</strong>`;
+
   popupContainer.style.display = "block"; // Make the container visible
 
   setTimeout(() => {
@@ -321,7 +330,7 @@ function closePopup() {
   }, 500); // Matches the fade-out transition duration
 }
 
-// Add event listener to the close button
+// Re-bind the close button event listener
 document
   .getElementById("popup-close-btn")
   .addEventListener("click", closePopup);

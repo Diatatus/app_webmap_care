@@ -210,10 +210,10 @@ function createCharts(feature) {
       {
         label: "Health",
         data: [
-          feature.get("prev_vih_Hoe_15-49 ans"),
-          feature.get("prev_vih-Fem_15-49 ans"),
-          feature.get("inst_lavmain_lim"),
-          feature.get("acces_eau_amel"),
+          feature.get("pvihhom"),
+          feature.get("pvihfem"),
+          feature.get("ill"),
+          feature.get("aea"),
         ],
         backgroundColor: ["#FF6384", "#36A2EB", "#FFCE56", "#4BC0C0"],
       },
@@ -231,9 +231,9 @@ function createCharts(feature) {
       {
         label: "Economy & Employment",
         data: [
-          feature.get("taux_pvrt"),
-          feature.get("taux_chom"),
-          feature.get("incl_fin_emf"),
+          feature.get("tauxpvrt"),
+          feature.get("chom"),
+          feature.get("ife"),
         ],
         backgroundColor: ["#FF6384", "#36A2EB", "#FFCE56"],
       },
@@ -252,10 +252,10 @@ function createCharts(feature) {
       {
         label: "Family & Planning",
         data: [
-          feature.get("besoins_nonsatisf_pf"),
-          feature.get("fem_utilmethcontracep_mod"),
-          feature.get("justif_violconj_hom"),
-          feature.get("justif_violconj_fem"),
+          feature.get("pf"),
+          feature.get("fcpm"),
+          feature.get("vch"),
+          feature.get("vcf"),
         ],
         backgroundColor: ["#FF6384", "#36A2EB", "#FFCE56", "#4BC0C0"],
       },
@@ -293,11 +293,36 @@ map.on("click", function (evt) {
   });
 
   if (feature) {
-    // Display the popup and pass the feature data to create charts
-    document.getElementById("popup-info").style.display = "block";
-    createCharts(feature);
+    // Show popup with feature data
+    showPopup(feature);
   }
 });
+
+// Function to open the popup with smooth transition
+function showPopup(feature) {
+  const popup = document.getElementById("popup-info");
+  popup.style.display = "block";
+  setTimeout(() => {
+    popup.style.opacity = 1; // Fade in effect
+  }, 10); // Small delay for smooth effect
+
+  // Pass feature data to create charts (assuming createCharts is a function that renders charts based on feature data)
+  createCharts(feature);
+}
+
+// Function to close the popup
+function closePopup() {
+  const popup = document.getElementById("popup-info");
+  popup.style.opacity = 0; // Start fading out
+  setTimeout(() => {
+    popup.style.display = "none"; // Hide after fading out
+  }, 500); // Match with transition duration (0.5s)
+}
+
+// Add event listener to the close button
+document
+  .getElementById("popup-close-btn")
+  .addEventListener("click", closePopup);
 
 function toggleLayer(eve) {
   var lyrname = eve.target.value;

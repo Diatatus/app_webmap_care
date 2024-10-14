@@ -166,8 +166,17 @@ var select = new ol.interaction.Select({
 });
 map.addInteraction(select);
 
+// Global variables to store chart instances
+var demographyChart, healthChart, economyChart, familyChart;
+
 function createCharts(feature) {
-  // Demographic data
+  // Destroy existing charts if they exist
+  if (demographyChart) demographyChart.destroy();
+  if (healthChart) healthChart.destroy();
+  if (economyChart) economyChart.destroy();
+  if (familyChart) familyChart.destroy();
+
+  // Demography data
   var demographyData = {
     labels: [
       "Total Population",
@@ -211,7 +220,7 @@ function createCharts(feature) {
     ],
   };
 
-  // Economy and Employment data
+  // Economy data
   var economyData = {
     labels: [
       "Poverty Rate",
@@ -254,25 +263,25 @@ function createCharts(feature) {
   };
 
   // Create Demography chart
-  new Chart(document.getElementById("demography-chart"), {
+  demographyChart = new Chart(document.getElementById("demography-chart"), {
     type: "bar",
     data: demographyData,
   });
 
   // Create Health chart
-  new Chart(document.getElementById("health-chart"), {
+  healthChart = new Chart(document.getElementById("health-chart"), {
     type: "bar",
     data: healthData,
   });
 
   // Create Economy chart
-  new Chart(document.getElementById("economy-chart"), {
+  economyChart = new Chart(document.getElementById("economy-chart"), {
     type: "bar",
     data: economyData,
   });
 
   // Create Family Planning chart
-  new Chart(document.getElementById("family-chart"), {
+  familyChart = new Chart(document.getElementById("family-chart"), {
     type: "bar",
     data: familyData,
   });

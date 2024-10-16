@@ -673,3 +673,33 @@ html {
   object-fit: contain; /* Ensure the logo fits within the container without stretching */
   margin-right: 5px; /* Add some spacing between logos */
 }
+
+#demography-icons {
+  display: flex;
+  justify-content: space-around;
+  margin-bottom: 20px;
+}
+
+.demography-icon-group {
+  text-align: center;
+}
+
+.demography-icon-group i {
+  font-size: 2em;
+  color: #4bc0c0; /* You can adjust the color */
+}
+
+.demography-icon-group span {
+  display: block;
+  margin-top: 5px;
+  font-size: 1.2em;
+  font-weight: bold;
+}
+
+#demography-bar-chart-container {
+  width: 50%;
+  height: auto;
+}
+.chartjs-legend i {
+  font-size: 20px; /* Adjust this size if necessary */
+}

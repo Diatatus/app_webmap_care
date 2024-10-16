@@ -208,11 +208,24 @@
 
       <div id="popup-info" class="popup-info">
         <!-- Demography Section -->
-        <h3>Démographie</h3>
-        <canvas id="demography-chart"></canvas>
+        <h3><strong>Démographie</strong></h3>
+        <br />
+        <div id="demography-icons">
+          <div class="demography-icon-group">
+            <i class="fas fa-users"></i>
+            <span id="total-population-info"></span>
+          </div>
+          <div class="demography-icon-group">
+            <i class="fas fa-street-view"></i>
+            <span id="population-density-info"></span>
+          </div>
+        </div>
+        <div id="demography-bar-chart-container">
+          <canvas id="demography-chart"></canvas>
+        </div>
 
         <!-- Health Section -->
-        <h3>Santé</h3>
+        <h3><strong>Santé</strong></h3>
         <canvas id="health-chart"></canvas>
 
         <!-- Economy and Employment Section -->

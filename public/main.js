@@ -6,32 +6,33 @@ $(document).ready(function () {
 
 // Get elements
 
-const mapContainer = document.getElementById("map-container");
-
 const customproj = ol.proj.get("EPSG:4326");
+
 // The Map
 var mapView = new ol.View({
   center: ol.proj.fromLonLat([12.2, 7.5]),
   zoom: 6.2,
-  rotation: 0, // Désactiver la rotation initiale
-  constrainRotation: true, // Empêcher la rotation accidentelle
+  minZoom: 6.2, // Prevent zooming out below this zoom level
+  rotation: 0, // Disable initial rotation
+  constrainRotation: true, // Prevent accidental rotation
 });
 
-// Créer une liste d'interactions sans les interactions de rotation
+// Create a list of interactions without rotation interactions
 var interactions = [
-  new ol.interaction.DragPan(), // Permet de faire glisser la carte
-  new ol.interaction.PinchZoom(), // Permet de zoomer avec les gestes tactiles
-  new ol.interaction.MouseWheelZoom(), // Permet de zoomer avec la molette de la souris
-  new ol.interaction.DragZoom(), // Permet de zoomer en sélectionnant une zone avec la souris
+  new ol.interaction.DragPan(), // Allows panning of the map
+  new ol.interaction.PinchZoom(), // Allows pinch zooming (for touch devices)
+  new ol.interaction.MouseWheelZoom(), // Allows zooming with the mouse wheel
+  new ol.interaction.DragZoom(), // Allows zooming by selecting a region
 ];
 
-// Initialiser la carte avec les interactions définies
+// Initialize the map with the defined interactions
 var map = new ol.Map({
-  target: "map", // Ciblez l'élément div avec l'ID "map"
+  target: "map", // Target the 'map' div element
   view: mapView,
-  interactions: new ol.Collection(interactions), // Utilisation des interactions personnalisées
-  controls: [], // Garde les contrôles par défaut si vous le souhaitez
+  interactions: new ol.Collection(interactions), // Use customized interactions
+  controls: [], // Customize or keep default controls as desired
 });
+
 // Attribution control
 
 // Assume 'map' is your OpenLayers map instance
@@ -179,24 +180,25 @@ function createCharts(feature) {
   // Demography data
   var demographyData = {
     labels: [
-      "Total Population",
-      "Male Population",
-      "Female Population",
-      "Population Density",
+      "Homme", // Icon for Male
+      "Femme", // Icon for Female
     ],
     datasets: [
       {
-        label: "Demography",
+        label: "Population",
         data: [
-          feature.get("total_pop"),
-          feature.get("popsexmasc"),
-          feature.get("popsexfem"),
-          feature.get("denspopreg"),
+          feature.get("popsexmasc"), // Male Population
+          feature.get("popsexfem"), // Female Population
         ],
-        backgroundColor: ["#FF6384", "#36A2EB", "#FFCE56", "#4BC0C0"],
+        backgroundColor: ["#36A2EB", "#FF6384"], // Blue for Male, Pink for Female
       },
     ],
   };
+  // Set the total population and population density values under the icons
+  document.getElementById("total-population-info").textContent =
+    feature.get("total_pop").toLocaleString() + " habitants";
+  document.getElementById("population-density-info").textContent =
+    feature.get("denspopreg") + " hab/km²";
 
   // Health data
   var healthData = {
@@ -264,8 +266,16 @@ function createCharts(feature) {
 
   // Create Demography chart
   demographyChart = new Chart(document.getElementById("demography-chart"), {
-    type: "bar",
+    type: "pie", // Change chart type to pie
     data: demographyData,
+    options: {
+      responsive: true,
+      plugins: {
+        legend: {
+          position: "bottom",
+        },
+      },
+    },
   });
 
   // Create Health chart

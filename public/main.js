@@ -180,8 +180,8 @@ function createCharts(feature) {
   // Demography data
   var demographyData = {
     labels: [
-      "Homme", // Icon for Male
-      "Femme", // Icon for Female
+      "Hommes", // Icon for Male
+      "Femmes", // Icon for Female
     ],
     datasets: [
       {
@@ -206,10 +206,10 @@ function createCharts(feature) {
 
   // Health data for the horizontal bar chart (HIV prevalence)
   var healthData = {
-    labels: ["Prévalence VIH (Hommes 15-49)", "Prévalence VIH (Femmes 15-49)"],
+    labels: ["Hommes", "Femmes"],
     datasets: [
       {
-        label: "Prévalence VIH",
+        label: "Prévalence VIH 15-49 ans",
         data: [
           feature.get("pvihhom"), // HIV Prevalence (Males)
           feature.get("pvihfem"), // HIV Prevalence (Females)
@@ -276,9 +276,12 @@ function createCharts(feature) {
   });
 
   // Create Health chart
-  healthChart = new Chart(document.getElementById("health-chart"), {
-    type: "bar",
+  var healthChart = new Chart(document.getElementById("health-chart"), {
+    type: "bar", // Use bar chart
     data: healthData,
+    options: {
+      indexAxis: "y", // Set the axis to horizontal
+    },
   });
 
   // Create Economy chart

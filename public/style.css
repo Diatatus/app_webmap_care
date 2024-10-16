@@ -711,12 +711,16 @@ html {
   padding: 20px 0;
 }
 
+#health-icons p {
+  color: black; /* Black color for the text */
+}
+
 #health-icons div {
   text-align: center;
   width: 48%;
 }
 
-#health-chart {
-  width: 100%;
-  max-height: 200px; /* Adjust the chart height as needed */
+#health-bar-chart-container {
+  width: 50%;
+  height: 200px; /* Adjust the chart height as needed */
 }

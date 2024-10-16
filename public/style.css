@@ -704,23 +704,78 @@ html {
   font-size: 20px; /* Adjust this size if necessary */
 }
 
+/* General Styles */
 #health-icons {
   display: flex;
-  color: rgb(88, 197, 240);
   justify-content: space-between;
   padding: 20px 0;
 }
 
-#health-icons p {
-  color: black; /* Black color for the text */
+#hiv-icons {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 20px 0;
 }
 
-#health-icons div {
+/* Positioning and Styling for Each Icon */
+#access-water-icon,
+#handwashing-icon {
   text-align: center;
   width: 48%;
 }
 
-#health-bar-chart-container {
-  width: 50%;
-  height: 200px; /* Adjust the chart height as needed */
+/* Ribbon Centered */
+#hiv-ribbon {
+  text-align: center;
+  margin-bottom: 20px;
+}
+
+#hiv-gender-icons {
+  display: flex;
+  justify-content: space-between;
+  width: 100%;
+}
+
+#hiv-male,
+#hiv-female {
+  text-align: center;
+  width: 48%;
+}
+
+/* Distinct Colors for Each Section */
+#access-water-icon i {
+  color: #36a2eb; /* Cyan */
+}
+
+#handwashing-icon i {
+  color: #36a2eb; /* Yellow */
+}
+
+#hiv-ribbon i {
+  color: red; /* Red Ribbon for HIV Awareness */
+}
+
+#hiv-male i {
+  color: #36a2eb; /* Blue for Males */
+}
+
+#hiv-female i {
+  color: #ff6384; /* Pink for Females */
+}
+
+/* Ensure Text is Black */
+#health-icons p,
+#hiv-icons p {
+  color: black;
+}
+
+/* Optional: Adjust icon sizes */
+#hiv-ribbon i {
+  font-size: 3em; /* Bigger Ribbon Icon */
+}
+
+#hiv-male i,
+#hiv-female i {
+  font-size: 2em;
 }

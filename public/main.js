@@ -168,12 +168,11 @@ var select = new ol.interaction.Select({
 map.addInteraction(select);
 
 // Global variables to store chart instances
-var demographyChart, healthChart, economyChart, familyChart;
+var demographyChart, economyChart, familyChart;
 
 function createCharts(feature) {
   // Destroy existing charts if they exist
   if (demographyChart) demographyChart.destroy();
-  if (healthChart) healthChart.destroy();
   if (economyChart) economyChart.destroy();
   if (familyChart) familyChart.destroy();
 
@@ -201,23 +200,12 @@ function createCharts(feature) {
     feature.get("denspopreg") + " hab/km²";
 
   // Assuming 'feature' contains the data for the selected region
-  document.getElementById("access-water").textContent = feature.get("aea"); // Access to water
+  document.getElementById("access-water").textContent = feature.get("aea"); // Access to improved water
   document.getElementById("handwashing").textContent = feature.get("ill"); // Handwashing facilities
 
-  // Health data for the horizontal bar chart (HIV prevalence)
-  var healthData = {
-    labels: ["Hommes", "Femmes"],
-    datasets: [
-      {
-        label: "Prévalence VIH 15-49 ans",
-        data: [
-          feature.get("pvihhom"), // HIV Prevalence (Males)
-          feature.get("pvihfem"), // HIV Prevalence (Females)
-        ],
-        backgroundColor: ["#36A2EB", "#FF6384"],
-      },
-    ],
-  };
+  // HIV Prevalence
+  document.getElementById("hiv-males").textContent = feature.get("pvihhom"); // HIV Prevalence (Males)
+  document.getElementById("hiv-females").textContent = feature.get("pvihfem"); // HIV Prevalence (Females)
 
   // Economy data
   var economyData = {
@@ -272,15 +260,6 @@ function createCharts(feature) {
           position: "bottom",
         },
       },
-    },
-  });
-
-  // Create Health chart
-  var healthChart = new Chart(document.getElementById("health-chart"), {
-    type: "bar", // Use bar chart
-    data: healthData,
-    options: {
-      indexAxis: "y", // Set the axis to horizontal
     },
   });
 

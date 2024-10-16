@@ -227,14 +227,14 @@
         <!-- Health Section -->
         <h3><strong>Santé</strong></h3>
         <div id="health-icons">
-          <div>
+          <div id="access-water-icon">
             <i class="fas fa-droplet fa-2x"></i>
             <p>
               Accès à une source améliorée d'eau de boisson :<br />
               <strong><span id="access-water"></span>%</strong>
             </p>
           </div>
-          <div>
+          <div id="handwashing-icon">
             <i class="fas fa-hand-holding-droplet fa-2x"></i>
             <p>
               Ménage disposant d'installation limitée de lavage des mains:<br />
@@ -242,8 +242,27 @@
             </p>
           </div>
         </div>
-        <div id="health-bar-chart-container">
-          <canvas id="health-chart"></canvas>
+
+        <!-- HIV Prevalence Section -->
+        <div id="hiv-icons">
+          <div id="hiv-ribbon" class="icon-center">
+            <i class="fas fa-ribbon fa-3x"></i>
+            <p><strong>Prévalence VIH 15-49 ans</strong></p>
+          </div>
+          <div id="hiv-gender-icons" class="icon-gender">
+            <div id="hiv-male">
+              <i class="fas fa-mars fa-2x"></i>
+              <p>
+                Hommes : <strong><span id="hiv-males"></span>%</strong>
+              </p>
+            </div>
+            <div id="hiv-female">
+              <i class="fas fa-venus fa-2x"></i>
+              <p>
+                Femmes : <strong><span id="hiv-females"></span>%</strong>
+              </p>
+            </div>
+          </div>
         </div>
 
         <!-- Economy and Employment Section -->

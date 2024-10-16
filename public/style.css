@@ -703,3 +703,20 @@ html {
 .chartjs-legend i {
   font-size: 20px; /* Adjust this size if necessary */
 }
+
+#health-icons {
+  display: flex;
+  color: rgb(88, 197, 240);
+  justify-content: space-between;
+  padding: 20px 0;
+}
+
+#health-icons div {
+  text-align: center;
+  width: 48%;
+}
+
+#health-chart {
+  width: 100%;
+  max-height: 200px; /* Adjust the chart height as needed */
+}

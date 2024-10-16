@@ -200,24 +200,21 @@ function createCharts(feature) {
   document.getElementById("population-density-info").textContent =
     feature.get("denspopreg") + " hab/km²";
 
-  // Health data
+  // Assuming 'feature' contains the data for the selected region
+  document.getElementById("access-water").textContent = feature.get("aea"); // Access to water
+  document.getElementById("handwashing").textContent = feature.get("ill"); // Handwashing facilities
+
+  // Health data for the horizontal bar chart (HIV prevalence)
   var healthData = {
-    labels: [
-      "HIV Prevalence (Males 15-49)",
-      "HIV Prevalence (Females 15-49)",
-      "Handwashing Facilities",
-      "Access to Improved Water",
-    ],
+    labels: ["Prévalence VIH (Hommes 15-49)", "Prévalence VIH (Femmes 15-49)"],
     datasets: [
       {
-        label: "Health",
+        label: "Prévalence VIH",
         data: [
-          feature.get("pvihhom"),
-          feature.get("pvihfem"),
-          feature.get("ill"),
-          feature.get("aea"),
+          feature.get("pvihhom"), // HIV Prevalence (Males)
+          feature.get("pvihfem"), // HIV Prevalence (Females)
         ],
-        backgroundColor: ["#FF6384", "#36A2EB", "#FFCE56", "#4BC0C0"],
+        backgroundColor: ["#36A2EB", "#FF6384"],
       },
     ],
   };

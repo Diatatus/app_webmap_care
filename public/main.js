@@ -168,12 +168,12 @@ var select = new ol.interaction.Select({
 map.addInteraction(select);
 
 // Global variables to store chart instances
-var demographyChart, economyChart, familyChart;
+var demographyChart, familyChart;
 
 function createCharts(feature) {
   // Destroy existing charts if they exist
   if (demographyChart) demographyChart.destroy();
-  if (economyChart) economyChart.destroy();
+
   if (familyChart) familyChart.destroy();
 
   // Demography data
@@ -207,25 +207,12 @@ function createCharts(feature) {
   document.getElementById("hiv-males").textContent = feature.get("pvihhom"); // HIV Prevalence (Males)
   document.getElementById("hiv-females").textContent = feature.get("pvihfem"); // HIV Prevalence (Females)
 
-  // Economy data
-  var economyData = {
-    labels: [
-      "Poverty Rate",
-      "Unemployment Rate",
-      "Financial Inclusion (EMF Access)",
-    ],
-    datasets: [
-      {
-        label: "Economy & Employment",
-        data: [
-          feature.get("tauxpvrt"),
-          feature.get("chom"),
-          feature.get("ife"),
-        ],
-        backgroundColor: ["#FF6384", "#36A2EB", "#FFCE56"],
-      },
-    ],
-  };
+  // Assuming 'feature' contains the data for the selected region
+  document.getElementById("poverty-rate").textContent = feature.get("tauxpvrt");
+  document.getElementById("unemployment-rate").textContent =
+    feature.get("chom");
+  document.getElementById("financial-inclusion").textContent =
+    feature.get("ife");
 
   // Family Planning data
   var familyData = {
@@ -261,12 +248,6 @@ function createCharts(feature) {
         },
       },
     },
-  });
-
-  // Create Economy chart
-  economyChart = new Chart(document.getElementById("economy-chart"), {
-    type: "bar",
-    data: economyData,
   });
 
   // Create Family Planning chart

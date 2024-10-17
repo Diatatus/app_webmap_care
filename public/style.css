@@ -699,6 +699,7 @@ html {
 #demography-bar-chart-container {
   width: 50%;
   height: auto;
+  margin-left: 100px; /* Add some spacing on the left */
 }
 .chartjs-legend i {
   font-size: 20px; /* Adjust this size if necessary */
@@ -778,4 +779,34 @@ html {
 #hiv-male i,
 #hiv-female i {
   font-size: 2em;
+}
+
+/* Economy Section Icons */
+#economy-icons {
+  display: flex;
+  justify-content: space-between;
+  padding: 20px 0;
+}
+
+#economy-icons div {
+  text-align: center;
+  width: 32%;
+}
+
+/* Distinct Icon Colors */
+#poverty-rate-icon i {
+  color: #ff6384; /* Red for Poverty */
+}
+
+#unemployment-rate-icon i {
+  color: #36a2eb; /* Blue for Unemployment */
+}
+
+#financial-inclusion-icon i {
+  color: #ffce56; /* Yellow for Financial Inclusion */
+}
+
+/* Text Formatting */
+#economy-icons p {
+  color: black; /* Text in black */
 }

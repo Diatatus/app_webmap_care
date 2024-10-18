@@ -200,6 +200,7 @@ function createCharts(feature) {
     feature.get("denspopreg") + " hab/km²";
 
   // Assuming 'feature' contains the data for the selected region
+  document.getElementById("access-sanity").textContent = feature.get("asa"); // Access to improved water
   document.getElementById("access-water").textContent = feature.get("aea"); // Access to improved water
   document.getElementById("handwashing").textContent = feature.get("ill"); // Handwashing facilities
 

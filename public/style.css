@@ -614,7 +614,7 @@ html {
   justify-content: space-between;
   align-items: center;
   padding: 10px;
-  background-color: #db9b83;
+  background-color: #e46217b4;
   border-bottom: 1px solid #ccc;
 }
 
@@ -657,7 +657,7 @@ html {
   text-align: center;
   padding: 10px;
   background-color: #f1f1f1;
-  border-top: 1px solid #ccc;
+  border-top: 1px solid #000000;
 }
 
 .source-logos {
@@ -668,8 +668,8 @@ html {
 }
 
 .source-logo {
-  max-width: 30px; /* Set a maximum width */
-  height: auto; /* Keep the aspect ratio */
+  max-width: 50px; /* Set a maximum width */
+  height: 50px; /* Keep the aspect ratio */
   object-fit: contain; /* Ensure the logo fits within the container without stretching */
   margin-right: 5px; /* Add some spacing between logos */
 }
@@ -721,7 +721,8 @@ html {
 
 /* Positioning and Styling for Each Icon */
 #access-water-icon,
-#handwashing-icon {
+#handwashing-icon,
+#access-sanity-icon {
   text-align: center;
   width: 48%;
 }
@@ -745,6 +746,9 @@ html {
 }
 
 /* Distinct Colors for Each Section */
+#access-sanity-icon i {
+  color: #eb8836; /* Cyan */
+}
 #access-water-icon i {
   color: #36a2eb; /* Cyan */
 }

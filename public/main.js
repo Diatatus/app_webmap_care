@@ -214,28 +214,21 @@ function createCharts(feature) {
   document.getElementById("financial-inclusion").textContent =
     feature.get("ife");
 
+  // Assuming 'feature' contains the data for the selected region
+  document.getElementById("unmet-need").textContent = feature.get("pf"); // Family planning unmet need
+  document.getElementById("contraceptive-use").textContent =
+    feature.get("fcpm"); // Women using contraceptives
+
   // Family Planning data
   var familyData = {
-    labels: [
-      "Unmet Need for Family Planning",
-      "Women Using Modern Contraceptives",
-      "Men Justifying Domestic Violence",
-      "Women Justifying Domestic Violence",
-    ],
+    labels: ["Hommes", "Femmes"],
     datasets: [
       {
-        label: "Family & Planning",
-        data: [
-          feature.get("pf"),
-          feature.get("fcpm"),
-          feature.get("vch"),
-          feature.get("vcf"),
-        ],
-        backgroundColor: ["#FF6384", "#36A2EB", "#FFCE56", "#4BC0C0"],
+        data: [feature.get("vch"), feature.get("vcf")], // Men and Women who justify domestic violence
+        backgroundColor: ["#36A2EB", "#FF6384"], // Blue for Men, Red for Women
       },
     ],
   };
-
   // Create Demography chart
   demographyChart = new Chart(document.getElementById("demography-chart"), {
     type: "pie", // Change chart type to pie
@@ -251,10 +244,13 @@ function createCharts(feature) {
   });
 
   // Create Family Planning chart
-  familyChart = new Chart(document.getElementById("family-chart"), {
-    type: "bar",
-    data: familyData,
-  });
+  familyChart = new Chart(
+    document.getElementById("domestic-violence-pie-chart"),
+    {
+      type: "pie",
+      data: familyData,
+    }
+  );
 }
 
 map.on("click", function (evt) {

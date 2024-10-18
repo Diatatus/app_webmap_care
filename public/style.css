@@ -614,7 +614,7 @@ html {
   justify-content: space-between;
   align-items: center;
   padding: 10px;
-  background-color: #f1f1f1;
+  background-color: #db9b83;
   border-bottom: 1px solid #ccc;
 }
 
@@ -795,7 +795,7 @@ html {
 
 /* Distinct Icon Colors */
 #poverty-rate-icon i {
-  color: #ff6384; /* Red for Poverty */
+  color: #359e2b; /* Red for Poverty */
 }
 
 #unemployment-rate-icon i {
@@ -809,4 +809,50 @@ html {
 /* Text Formatting */
 #economy-icons p {
   color: black; /* Text in black */
+}
+
+/* Family Planning Icons */
+#family-planning-icons {
+  display: flex;
+  justify-content: space-between;
+  padding: 20px 0;
+}
+
+#family-planning-icons div {
+  text-align: center;
+  width: 48%;
+}
+
+/* Distinct Icon Colors */
+#unmet-need-icon i {
+  color: #ff6384; /* Red for unmet needs */
+}
+
+#contraceptive-use-icon i {
+  color: #ff6384; /* Blue for contraceptive use */
+}
+#domestic-violence-icon i {
+  color: #626d6b;
+}
+
+/* Domestic Violence Section */
+#domestic-violence-section {
+  margin-top: 30px;
+  text-align: center;
+}
+
+#domestic-violence-icon {
+  margin-bottom: 10px;
+}
+
+#domestic-violence-pie-chart-container {
+  width: 50%;
+  height: auto;
+  margin-left: 100px; /* Center the pie chart */
+}
+
+/* General Text Styling */
+#family-planning-icons p,
+#domestic-violence-icon p {
+  color: black;
 }

@@ -126,10 +126,6 @@ var regionLayer = new ol.layer.Vector({
         points: 4,
         stroke: new ol.style.Stroke({ color: "#000", width: 1 }),
       }),
-      text: new ol.style.Text({
-        text: f.get("id").toString(),
-        font: "bold 11px sans-serif",
-      }),
       stroke: new ol.style.Stroke({
         width: 1,
         color: [255, 128, 0],

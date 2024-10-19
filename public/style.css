@@ -1,8 +1,9 @@
+/* Universal box-sizing */
 * {
   box-sizing: border-box;
 }
 
-/* Arrière-plan avec image JPEG */
+/* Loader Background */
 #loading {
   display: flex;
   justify-content: center;
@@ -12,36 +13,38 @@
   left: 0;
   width: 100%;
   height: 100%;
-  background-size: cover; /* Couvre toute la page */
+  background-size: cover;
   z-index: 9999;
   background-color: rgba(255, 255, 255, 0.9);
 }
 
-/* Style de la boîte de chargement */
+/* Loader Box */
 .loader {
   position: relative;
   display: flex;
   flex-direction: column;
   align-items: center;
+  padding: 20px;
 }
 
-/* Logo animé */
+/* Animated Logo */
 .animated-logo {
-  width: 120px; /* Taille ajustée */
+  width: 15vw; /* Adjust the width using vw for better scaling */
+  max-width: 100px; /* Max width for larger screens */
   height: auto;
-  animation: spin 2s linear infinite; /* Animation de rotation */
-  opacity: 1; /* Transparence */
+  animation: spin 2s linear infinite;
 }
 
-/* Logo statique */
+/* Static Logo */
 .static-logo {
-  width: 150px; /* Taille ajustée */
+  width: 18vw; /* Responsive width */
+  max-width: 120px; /* Max width for larger screens */
   height: auto;
-  opacity: 1; /* Transparence */
-  margin-top: 10px;
+  opacity: 1;
+  margin-top: 15px;
 }
 
-/* Animation de rotation */
+/* Rotation Animation */
 @keyframes spin {
   from {
     transform: rotate(0deg);
@@ -51,27 +54,48 @@
   }
 }
 
+/* Responsive Scaling */
+@media (max-width: 768px) {
+  /* For tablets and smaller screens */
+  .animated-logo {
+    width: 25vw;
+  }
+  .static-logo {
+    width: 30vw;
+  }
+}
+
+@media (max-width: 480px) {
+  /* For mobile phones */
+  .animated-logo {
+    width: 35vw;
+  }
+  .static-logo {
+    width: 40vw;
+  }
+}
+
+/* Body and HTML */
 body,
 html {
   margin: 0;
   padding: 0;
   height: 100%;
   width: 100%;
-  overflow: hidden; /* Empêche le défilement */
+  overflow: hidden; /* Prevent scrolling */
   font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
   background: #f1f1f1;
 }
 
 /* Map styles */
-
 .map,
 .map2 {
   position: absolute;
-  height: 100%; /* 100% de la hauteur du viewport */
-  width: 100%; /* 100% de la largeur du viewport */
+  height: 100%;
+  width: 100%;
   background: white;
-  margin: 0; /* Supprime les marges */
-  border: none; /* Supprime les bordures */
+  margin: 0;
+  border: none;
 }
 
 [data-fullscreen] #map {
@@ -82,6 +106,7 @@ html {
   height: unset !important;
   z-index: 10;
 }
+
 .ol-zoom {
   left: auto;
   right: 0.5em;
@@ -172,135 +197,6 @@ html {
   padding: 10px 20px 10px 45px; /* Ajuste le padding pour mettre en évidence l'icône */
 }
 
-/* Pour les tablettes et petits écrans */
-@media screen and (max-width: 768px) {
-  .care-search-bar {
-    position: absolute;
-    top: 30px;
-    left: 50%; /* Centre la barre de recherche horizontalement */
-    transform: translateX(
-      -50%
-    ); /* Assure que la barre de recherche est centrée */
-    width: 50%; /* Réduit la largeur de la barre de recherche à 50% de l'écran */
-    padding: 8px 20px; /* Maintient un padding confortable */
-    display: flex;
-    align-items: center;
-    background-color: #fff;
-    border-radius: 8px;
-    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.15);
-  }
-
-  #care-logo {
-    width: 100px; /* Réduit la taille du logo pour les tablettes */
-    margin-right: 8px; /* Assure un espacement entre le logo et le champ de recherche */
-  }
-
-  /* Conteneur pour l'input et l'icône */
-  .search-container {
-    position: relative;
-    width: 100%;
-  }
-
-  #care-search-input {
-    flex: 1; /* Permet au champ de recherche de s'étendre pour utiliser tout l'espace disponible */
-    font-size: 12px; /* Réduit la taille du texte pour qu'il s'ajuste bien à la taille de la barre */
-    border: 2px solid #ff440050; /* Contour orange foncé */
-    outline: none;
-    padding: 8px 10px 8px 40px; /* Espace pour l'icône */
-    border-radius: 20px;
-    width: calc(
-      100% - 40px
-    ); /* Ajuste la largeur en tenant compte de l'icône */
-    background-color: rgba(255, 255, 255, 0.5);
-    transition: background-color 0.3s ease, border-color 0.3s ease,
-      padding 0.3s ease; /* Animation smooth */
-  }
-
-  .search-icon {
-    position: absolute;
-    left: 10px;
-    top: 50%;
-    transform: translateY(-50%);
-    color: #ff4500; /* Couleur orange foncé */
-    font-size: 18px;
-    pointer-events: none; /* Laisse l'input capturer les clics */
-  }
-
-  /* Animation lors du clic pour la saisie */
-  #care-search-input:focus {
-    background-color: rgba(255, 255, 255, 0.8); /* Accentue la couleur */
-    padding: 8px 10px 8px 45px; /* Ajuste le padding pour mettre en évidence l'icône */
-    border-color: #ffa500; /* Change la couleur de la bordure au focus */
-  }
-}
-
-/* Pour les très petits écrans (smartphones) */
-@media screen and (max-width: 390px) {
-  .care-search-bar {
-    position: absolute;
-    top: 30px;
-    left: 50%; /* Centre la barre de recherche horizontalement */
-    transform: translateX(-50%); /* Centre la barre de recherche */
-    width: 80%; /* Utilise 80% de la largeur disponible */
-    padding: 8px 20px; /* Réduit le padding pour s'adapter à la largeur */
-    display: flex;
-    align-items: center;
-    background-color: #fff;
-    border-radius: 8px;
-    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.15);
-  }
-
-  #care-logo {
-    width: 80px; /* Réduit encore la taille du logo */
-    margin-right: 8px; /* Espace entre le logo et le champ de recherche */
-  }
-
-  /* Conteneur pour l'input et l'icône */
-  .search-container {
-    position: relative;
-    width: 100%;
-  }
-
-  #care-search-input {
-    flex: 1; /* Permet à l'input de prendre toute la place restante */
-    font-size: 14px; /* Ajuste la taille de la police pour les petits écrans */
-    border: 2px solid #ff4500; /* Contour orange foncé */
-    outline: none;
-    padding: 8px 10px 8px 40px; /* Espace pour l'icône */
-    border-radius: 20px;
-    background-color: rgba(255, 255, 255, 0.5);
-    transition: background-color 0.3s ease, border-color 0.3s ease,
-      padding 0.3s ease; /* Animation smooth */
-    width: calc(
-      100% - 40px
-    ); /* Ajuste la largeur en tenant compte de l'icône */
-  }
-
-  .search-icon {
-    position: absolute;
-    left: 10px;
-    top: 50%;
-    transform: translateY(-50%);
-    color: #ff4500; /* Couleur orange foncé */
-    font-size: 16px; /* Légèrement plus petite pour les petits écrans */
-    pointer-events: none; /* Laisse l'input capturer les clics */
-    transition: font-size 0.3s ease; /* Animation smooth pour l'icône */
-  }
-
-  /* Animation lors du clic pour la saisie */
-  #care-search-input:focus {
-    background-color: rgba(255, 255, 255, 0.8); /* Accentue la couleur */
-    padding: 8px 10px 8px 45px; /* Ajuste le padding pour mettre en évidence l'icône */
-    border-color: #ffa500; /* Change la couleur de la bordure au focus */
-  }
-
-  /* Allonger l'input lors du survol sur l'icône */
-  .search-icon:hover + #care-search-input {
-    padding-left: 60px; /* Augmente l'espace pour l'icône */
-    transition: padding-left 0.3s ease; /* Animation smooth pour le padding */
-  }
-}
-
 /* Style principal du conteneur */
 #layer-slider-container {
   display: flex;
@@ -346,106 +242,6 @@ html {
   opacity: 0.9;
   box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
   background-color: #e46217b4;
-}
-
-/* Responsive Design pour les écrans jusqu'à 768px */
-@media screen and (max-width: 768px) {
-  /* Style principal du conteneur */
-  #layer-slider-container {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    position: absolute;
-    top: 100px;
-    left: 50%;
-    transform: translateX(-50%);
-    z-index: 1000;
-    padding: 10px;
-    border-radius: 8px;
-  }
-
-  /* Style du Layer Slider Horizontal */
-  .custom-layer-slider-horizontal {
-    display: flex;
-    gap: 10px; /* Espacement entre les boutons */
-    white-space: nowrap; /* Empêche le retour à la ligne des boutons */
-  }
-
-  .btn {
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    padding: 12px 20px;
-    background-color: #fff;
-    border-radius: 8px;
-    cursor: pointer;
-    transition: transform 0.3s ease, opacity 0.3s ease, box-shadow 0.3s ease;
-    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.15);
-    border: none;
-    font-size: 14px;
-  }
-
-  .btn i {
-    margin-right: 8px;
-    font-size: 18px;
-  }
-
-  /* Effet au survol */
-  .btn:hover {
-    transform: scale(1.05);
-    opacity: 0.9;
-    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
-  }
-}
-
-/* Responsive Design pour les écrans jusqu'à 390px */
-@media screen and (max-width: 390px) {
-  /* Style principal du conteneur */
-  #layer-slider-container {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    position: absolute;
-    top: 100px;
-    left: 50%;
-    transform: translateX(-50%);
-    z-index: 1000;
-    padding: 10px;
-    border-radius: 8px;
-  }
-
-  /* Style du Layer Slider Horizontal */
-  .custom-layer-slider-horizontal {
-    display: flex;
-    gap: 10px; /* Espacement entre les boutons */
-    white-space: nowrap; /* Empêche le retour à la ligne des boutons */
-  }
-
-  .btn {
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    padding: 12px 20px;
-    background-color: #fff;
-    border-radius: 8px;
-    cursor: pointer;
-    transition: transform 0.3s ease, opacity 0.3s ease, box-shadow 0.3s ease;
-    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.15);
-    border: none;
-    font-size: 14px;
-  }
-
-  .btn i {
-    margin-right: 8px;
-    font-size: 18px;
-  }
-
-  /* Effet au survol */
-  .btn:hover {
-    transform: scale(1.05);
-    opacity: 0.9;
-    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
-  }
 }
 
 /* Positioning the custom zoom controls */
@@ -747,7 +543,7 @@ html {
 
 /* Distinct Colors for Each Section */
 #access-sanity-icon i {
-  color: #eb8836; /* Cyan */
+  color: #ff4500; /* Cyan */
 }
 #access-water-icon i {
   color: #36a2eb; /* Cyan */

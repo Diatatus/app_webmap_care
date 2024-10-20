@@ -322,22 +322,23 @@ function toggleLayer(eve) {
 }
 
 // Récupérer les éléments
+// Get the toggle button and the story div
 const toggleButton = document.getElementById("toggleBases");
-const closeButton = document.getElementById("closeButton");
 const storyDiv = document.getElementById("story");
 
-// Masquer la div à l'accueil
-storyDiv.style.display = "none";
+// Function to toggle the display of the story div
+function toggleStoryDiv() {
+  if (storyDiv.style.display === "none" || storyDiv.style.display === "") {
+    storyDiv.style.display = "block"; // Show the story div
+  } else {
+    storyDiv.style.display = "none"; // Hide the story div
+  }
 
-// Fonction pour afficher la div au clic sur le bouton "Bases"
-toggleButton.addEventListener("click", function () {
-  storyDiv.style.display = "block"; // Afficher la div
-});
+  storyDiv.offsetHeight;
+}
 
-// Fonction pour masquer la div au clic sur le bouton "Fermer"
-closeButton.addEventListener("click", function () {
-  storyDiv.style.display = "none"; // Masquer la div
-});
+// Add click event listener to the toggle button
+toggleButton.addEventListener("click", toggleStoryDiv);
 
 // Add placemark
 var placemark = new ol.Overlay.Placemark();

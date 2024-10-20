@@ -113,7 +113,8 @@ html {
 }
 
 #story {
-  height: 400px;
+  height: 300px;
+  width: 500px;
   top: 150%;
   left: 150%;
   padding: 10px;
@@ -142,10 +143,11 @@ html {
   cursor: pointer;
 }
 
+/* Care Search Bar */
 .care-search-bar {
   position: absolute;
   top: 30px;
-  left: 20%; /* Centré horizontalement */
+  left: 50%; /* Center horizontally */
   transform: translateX(-50%);
   display: flex;
   align-items: center;
@@ -154,17 +156,16 @@ html {
   border-radius: 8px;
   box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
   z-index: 1000;
-  width: 70%;
+  width: 80%; /* Adjusted width for responsiveness */
   max-width: 500px;
 }
 
 #care-logo {
-  width: 150px;
+  width: 120px;
   height: auto;
   margin-right: 10px;
 }
 
-/* Conteneur pour l'input et l'icône */
 .search-container {
   position: relative;
   width: 100%;
@@ -172,13 +173,12 @@ html {
 
 #care-search-input {
   width: 100%;
-  border: 2px solid #ff440050; /* Contour orange foncé */
-  padding: 10px 20px 10px 40px; /* Laisse de l'espace pour l'icône */
+  border: 2px solid #ff440050; /* Orange border */
+  padding: 10px 20px 10px 40px;
   border-radius: 20px;
   font-size: 14px;
-  width: calc(100% - 40px); /* Ajuste la largeur en tenant compte de l'icône */
   background-color: rgba(255, 255, 255, 0.5);
-  transition: background-color 0.3s ease, padding 0.3s ease; /* Animation smooth */
+  transition: background-color 0.3s ease, padding 0.3s ease;
 }
 
 .search-icon {
@@ -186,54 +186,97 @@ html {
   left: 10px;
   top: 50%;
   transform: translateY(-50%);
-  color: #ff4500; /* Couleur orange foncé */
+  color: #ff4500; /* Dark orange color */
   font-size: 18px;
-  pointer-events: none; /* Laisse l'input capturer les clics */
+  pointer-events: none;
 }
 
-/* Animation lors du clic pour la saisie */
+/* Focus effect */
 #care-search-input:focus {
-  background-color: rgba(255, 255, 255, 0.8); /* Accentue la couleur */
-  padding: 10px 20px 10px 45px; /* Ajuste le padding pour mettre en évidence l'icône */
+  background-color: rgba(255, 255, 255, 0.8);
+  padding: 10px 20px 10px 45px;
 }
 
-/* Style principal du conteneur */
+/* Media Queries for responsiveness */
+@media (max-width: 768px) {
+  .care-search-bar {
+    width: 90%;
+    max-width: 400px;
+  }
+
+  #care-logo {
+    width: 100px;
+  }
+
+  #care-search-input {
+    font-size: 12px;
+  }
+}
+
+@media (max-width: 480px) {
+  .care-search-bar {
+    width: 95%;
+    max-width: 350px;
+    padding: 8px 15px;
+  }
+
+  #care-logo {
+    width: 80px;
+  }
+
+  #care-search-input {
+    font-size: 12px;
+  }
+
+  .search-icon {
+    font-size: 16px;
+  }
+}
+
+/* Adjusted style for responsive layout and proper positioning */
 #layer-slider-container {
   display: flex;
   align-items: center;
   justify-content: center;
   position: absolute;
-  top: 40px;
-  left: 600px;
+  top: 110px; /* Adjusted to place below the search bar */
+  left: 50%;
+  transform: translateX(-50%); /* Centers the slider horizontally */
   z-index: 1000;
   padding: 10px;
+  background-color: rgba(255, 255, 255, 0);
   border-radius: 8px;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0);
+  width: 90%; /* Makes it responsive */
+  max-width: 600px; /* Maximum width for larger screens */
 }
 
-/* Style du Layer Slider Horizontal */
+/* Responsive layout for the buttons */
 .custom-layer-slider-horizontal {
   display: flex;
-  gap: 15px; /* Espacement entre les boutons */
-  white-space: nowrap; /* Empêche le retour à la ligne des boutons */
+  gap: 15px; /* Space between buttons */
+  flex-wrap: wrap; /* Wraps buttons to next line on small screens */
+  justify-content: center; /* Centers the buttons */
 }
 
+/* Style for smaller buttons */
 .btn {
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  padding: 12px 20px;
+  padding: 8px 12px; /* Reduced padding */
   background-color: #fff;
   border-radius: 8px;
   cursor: pointer;
   transition: transform 0.3s ease, opacity 0.3s ease, box-shadow 0.3s ease;
   box-shadow: 0 2px 5px rgba(0, 0, 0, 0.15);
   border: none;
-  font-size: 14px;
+  font-size: 12px; /* Reduced font size */
 }
 
 .btn i {
-  margin-right: 8px;
-  font-size: 18px;
+  margin-right: 6px; /* Reduced spacing between icon and text */
+  font-size: 16px; /* Reduced icon size */
 }
 
 /* Effet au survol */
@@ -242,6 +285,34 @@ html {
   opacity: 0.9;
   box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
   background-color: #e46217b4;
+}
+/* Media query for smaller screens */
+@media (max-width: 768px) {
+  #layer-slider-container {
+    width: 100%; /* Use full width on small screens */
+    max-width: none; /* Remove max-width limit */
+    padding: 8px;
+  }
+
+  .btn {
+    font-size: 10px;
+    padding: 6px 10px; /* Further reduced padding on small screens */
+  }
+
+  .btn i {
+    font-size: 14px; /* Smaller icons on small screens */
+  }
+}
+
+@media (max-width: 480px) {
+  .btn {
+    font-size: 8px; /* Even smaller font size on very small screens */
+    padding: 5px 8px; /* Reduced padding on very small screens */
+  }
+
+  .btn i {
+    font-size: 12px; /* Reduced icon size for very small screens */
+  }
 }
 
 /* Positioning the custom zoom controls */

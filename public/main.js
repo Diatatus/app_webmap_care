@@ -333,8 +333,6 @@ function toggleStoryDiv() {
   } else {
     storyDiv.style.display = "none"; // Hide the story div
   }
-
-  storyDiv.offsetHeight;
 }
 
 // Add click event listener to the toggle button

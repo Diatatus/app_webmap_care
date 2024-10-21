@@ -113,7 +113,7 @@ html {
 }
 
 #story {
-  height: 300px;
+  height: 600px;
   width: 500px;
   top: 150%;
   left: 150%;
@@ -137,6 +137,26 @@ html {
 }
 #story .chapter.ol-select {
   background-color: rgba(255, 255, 255, 0.8);
+}
+
+@media (max-width: 1440px) {
+  #story {
+    height: 600px;
+    width: 400px;
+    top: 150%;
+    left: 150%;
+    padding: 10px;
+  }
+}
+
+@media (max-width: 768px) {
+  #story {
+    height: 500px;
+    width: 400px;
+    top: 150%;
+    left: 150%;
+    padding: 10px;
+  }
 }
 
 .options a {

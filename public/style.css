@@ -113,7 +113,7 @@ html {
 }
 
 #story {
-  height: 600px;
+  height: 200px;
   width: 500px;
   top: 150%;
   left: 150%;
@@ -121,12 +121,12 @@ html {
 }
 
 .ol-control.ol-storymap {
-  top: 120px;
+  top: 150px;
   left: 20px;
   bottom: 0.5em;
   max-width: 35%;
   border-radius: 0.5em;
-  height: auto;
+  height: 600px;
   background-color: rgba(255, 255, 255, 0.5);
 }
 
@@ -139,20 +139,40 @@ html {
   background-color: rgba(255, 255, 255, 0.8);
 }
 
-@media (max-width: 1440px) {
+/* Hide story div for tablets with a resolution of 768x1024 */
+@media (max-width: 768px) {
+  .ol-control.ol-storymap {
+    top: 150px;
+    left: 20px;
+    bottom: 0.5em;
+    max-width: 35%;
+    border-radius: 0.5em;
+    height: 500px;
+    background-color: rgba(255, 255, 255, 0.5);
+  }
   #story {
-    height: 600px;
-    width: 400px;
+    height: 200px;
+    width: 500px;
     top: 150%;
     left: 150%;
     padding: 10px;
   }
 }
 
-@media (max-width: 768px) {
-  #story {
+/* Hide story div for smartphones with a resolution of 390x844 */
+@media (max-width: 390px) {
+  .ol-control.ol-storymap {
+    top: 150px;
+    left: 20px;
+    bottom: 0.5em;
+    max-width: 35%;
+    border-radius: 0.5em;
     height: 500px;
-    width: 400px;
+    background-color: rgba(255, 255, 255, 0.5);
+  }
+  #story {
+    height: 200px;
+    width: 500px;
     top: 150%;
     left: 150%;
     padding: 10px;
@@ -484,7 +504,7 @@ html {
   display: none; /* Initially hidden */
   position: absolute;
   top: 15%;
-  right: 10%;
+  right: 5%;
   width: 400px;
   height: 630px; /* Define height */
   background-color: rgba(255, 255, 255, 0.9);

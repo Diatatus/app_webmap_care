@@ -335,6 +335,22 @@ function toggleStoryDiv() {
   }
 }
 
+window.onload = function () {
+  const storyDiv = document.getElementById("story");
+  const isHomepage = window.location.pathname === "./index.html"; // Check if it's the homepage
+
+  // If on homepage, apply media queries for tablets and smartphones
+  if (isHomepage) {
+    if (window.matchMedia("(max-width: 768px)").matches) {
+      storyDiv.style.display = "none"; // Hide on tablets (768x1024)
+    }
+
+    if (window.matchMedia("(max-width: 390px)").matches) {
+      storyDiv.style.display = "none"; // Hide on smartphones (390x844)
+    }
+  }
+};
+
 // Add click event listener to the toggle button
 toggleButton.addEventListener("click", toggleStoryDiv);
 

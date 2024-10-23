@@ -121,12 +121,12 @@ html {
 }
 
 .ol-control.ol-storymap {
-  top: 150px;
+  top: 300px;
   left: 20px;
   bottom: 0.5em;
-  max-width: 35%;
+  max-width: 100%;
   border-radius: 0.5em;
-  height: 600px;
+  height: 300px;
   background-color: rgba(255, 255, 255, 0.5);
 }
 
@@ -142,17 +142,17 @@ html {
 /* Hide story div for tablets with a resolution of 768x1024 */
 @media (max-width: 768px) {
   .ol-control.ol-storymap {
-    top: 150px;
+    top: 670px;
     left: 20px;
     bottom: 0.5em;
-    max-width: 35%;
+    max-width: 100%;
     border-radius: 0.5em;
-    height: 500px;
+    height: 300px;
     background-color: rgba(255, 255, 255, 0.5);
   }
   #story {
     height: 200px;
-    width: 500px;
+    width: 400px;
     top: 150%;
     left: 150%;
     padding: 10px;
@@ -167,25 +167,39 @@ html {
 /* Hide story div for smartphones with a resolution of 390x844 */
 @media (max-width: 390px) {
   .ol-control.ol-storymap {
-    top: 150px;
+    top: 450px;
     left: 20px;
     bottom: 0.5em;
-    max-width: 35%;
+    max-width: 100%;
     border-radius: 0.5em;
-    height: 500px;
+    height: 370px;
     background-color: rgba(255, 255, 255, 0.5);
   }
   #story {
     height: 200px;
-    width: 400px;
-    top: 150%;
-    left: 150%;
+    width: 300px;
+    top: auto;
+    left: auto;
     padding: 10px;
   }
   #story img {
     display: block;
     margin: auto;
     max-width: 100%;
+  }
+}
+
+/* Hide story div for devices with 768x1024 resolution (tablets) */
+@media only screen and (max-width: 768px) and (max-height: 1024px) {
+  #story {
+    display: none;
+  }
+}
+
+/* Hide story div for devices with 390x844 resolution (smartphones) */
+@media only screen and (max-width: 390px) and (max-height: 844px) {
+  #story {
+    display: none;
   }
 }
 

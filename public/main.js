@@ -90,7 +90,7 @@ var bingMapsAerial = new ol.layer.Tile({
   preload: Infinity,
   source: new ol.source.BingMaps({
     key: "AuOKP0N2ww907dY398Ci9ZKg38AqF2jc7q1QchUixWw30TpwdCt4T36ip-OyE49R",
-    imagerySet: "Aerial",
+    imagerySet: "AerialWithLabelsOnDemand",
   }),
   name: "Aerial",
 });
@@ -337,7 +337,7 @@ function toggleStoryDiv() {
 
 window.onload = function () {
   const storyDiv = document.getElementById("story");
-  const isHomepage = window.location.pathname === "./index.html"; // Check if it's the homepage
+  const isHomepage = window.location.pathname === "index.html"; // Check if it's the homepage
 
   // If on homepage, apply media queries for tablets and smartphones
   if (isHomepage) {

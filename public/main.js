@@ -173,15 +173,20 @@ var partnerLayer = new ol.layer.Vector({
     return new ol.style.Style({
       image: new ol.style.Icon({
         anchor: [0.5, 1],
-        src: "./resources/images/people-group-solid.svg", // Le fichier SVG de ton partenaire
+        src: "./resources/images/people-group-solid.svg", // Icône SVG par défaut
         scale: 1, // Taille initiale de l'icône
       }),
       text: new ol.style.Text({
         text: feature.get("sigle"),
+        font: "bold 12px Arial",
         fill: new ol.style.Fill({
-          color: "#000000", // Couleur de texte par défaut
+          color: "#ffffff", // Texte en blanc
         }),
-        offsetY: -25, // Positionnement du texte par rapport à l'icône
+        stroke: new ol.style.Stroke({
+          color: "#000000", // Halo noir autour du texte
+          width: 3,
+        }),
+        offsetY: -25, // Décalage vertical pour placer le texte au-dessus de l'icône
       }),
     });
   },
@@ -198,12 +203,18 @@ var selectPartner = new ol.interaction.Select({
       image: new ol.style.Icon({
         anchor: [0.5, 1],
         src: "./resources/images/people-group-solid.svg",
-        scale: 1.5, // Augmentation de la taille lors de la sélection
+        scale: 1.5, // Agrandir l'icône lors de la sélection
+        color: "#ffffff", // Icône avec un halo blanc
       }),
       text: new ol.style.Text({
         text: feature.get("sigle"),
+        font: "bold 12px Arial",
         fill: new ol.style.Fill({
-          color: "#FF0000", // Changement de couleur lors de la sélection
+          color: "#FF0000", // Texte en rouge lors de la sélection
+        }),
+        stroke: new ol.style.Stroke({
+          color: "#ffffff", // Halo blanc autour du texte sélectionné
+          width: 3,
         }),
         offsetY: -25,
       }),
@@ -211,24 +222,29 @@ var selectPartner = new ol.interaction.Select({
   },
 });
 
-// Ajouter l'interaction à la carte
+// Ajouter l'interaction de sélection à la carte
 map.addInteraction(selectPartner);
 
-// Gestion des événements de sélection
+// Gestion des événements de sélection et de dé-sélection
 selectPartner.on("select", function (e) {
   e.selected.forEach(function (feature) {
-    // Appliquer le style sélectionné
+    // Style personnalisé lors de la sélection
     feature.setStyle(
       new ol.style.Style({
         image: new ol.style.Icon({
           anchor: [0.5, 1],
           src: "./resources/images/people-group-solid.svg",
-          scale: 1.5, // Taille plus grande lors de la sélection
+          scale: 1.5, // Agrandir l'icône sélectionnée
         }),
         text: new ol.style.Text({
           text: feature.get("sigle"),
+          font: "bold 12px Arial",
           fill: new ol.style.Fill({
-            color: "#FF0000", // Couleur changée lors de la sélection
+            color: "#FF0000", // Couleur rouge lors de la sélection
+          }),
+          stroke: new ol.style.Stroke({
+            color: "#ffffff", // Halo blanc autour du texte
+            width: 3,
           }),
           offsetY: -25,
         }),
@@ -241,6 +257,21 @@ selectPartner.on("select", function (e) {
     feature.setStyle(null); // Revenir au style par défaut
   });
 });
+
+// Gestion du clic sur le bouton pour afficher/masquer la couche
+document
+  .getElementById("togglePartenaires")
+  .addEventListener("click", function () {
+    if (!partnerLayerVisible) {
+      // Si la couche n'est pas visible, l'ajouter à la carte
+      map.addLayer(partnerLayer);
+      partnerLayerVisible = true;
+    } else {
+      // Si la couche est visible, la retirer de la carte
+      map.removeLayer(partnerLayer);
+      partnerLayerVisible = false;
+    }
+  });
 
 // Global variables to store chart instances
 var demographyChart, familyChart;

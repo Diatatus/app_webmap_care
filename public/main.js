@@ -294,7 +294,7 @@ var clusterStyle = function (feature) {
       image: new ol.style.Circle({
         radius: 10 + Math.min(size, 20),
         fill: new ol.style.Fill({
-          color: "rgba(0, 150, 0, 0.6)",
+          color: "rgba(255, 69, 0, 0.6)",
         }),
         stroke: new ol.style.Stroke({
           color: "#fff",

@@ -329,29 +329,6 @@ function createCharts(feature) {
   );
 }
 
-// Interaction : afficher un popup uniquement pour la couche regions
-
-// Utilisation de forEachLayerAtPixel pour vérifier les couches
-// Interaction : afficher un popup uniquement pour la couche regions
-map.on("click", function (evt) {
-  var feature = null;
-  var layer = null;
-
-  if (layer === regionLayer) {
-    map.forEachFeatureAtPixel(evt.pixel, function (feature) {
-      return feature;
-    });
-    layer = lyr; // Définit la couche sélectionnée
-  }
-  if (feature && layer === regionLayer) {
-    // Afficher le popup avec les données de la feature sélectionnée
-    showPopup(feature); // Fonction existante pour afficher le popup
-  } else {
-    // Ne rien afficher si ce n'est pas la couche regions
-    return null;
-  }
-});
-
 // Function to open the popup with a smooth transition and insert the zone name
 function showPopup(feature) {
   const popupContainer = document.getElementById("popup-container");
@@ -389,14 +366,24 @@ document
   .getElementById("popup-close-btn")
   .addEventListener("click", closePopup);
 
-// Event listener for clicking on the map to show the popup
+// Interaction : afficher un popup uniquement pour la couche regions
+
+// Utilisation de forEachLayerAtPixel pour vérifier les couches
+// Interaction : afficher un popup uniquement pour la couche regions
 map.on("click", function (evt) {
-  const feature = map.forEachFeatureAtPixel(evt.pixel, function (feature) {
-    return feature;
+  var feature = map.forEachFeatureAtPixel(evt.pixel, function (feature, layer) {
+    if (layer === regionLayer) {
+      // Vérifie si la couche est la couche regions
+      return feature;
+    }
   });
 
   if (feature) {
-    showPopup(feature); // Display the popup when a feature is clicked
+    // Afficher le popup avec les données de la feature sélectionnée
+    showPopup(feature); // Fonction pour afficher le popup
+  } else {
+    // Ne rien afficher si aucune entité de la couche regions n'est cliquée
+    return;
   }
 });
 

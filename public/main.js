@@ -216,7 +216,7 @@ var selectPartner = new ol.interaction.Select({
           color: "#ffffff", // Halo blanc autour du texte sélectionné
           width: 3,
         }),
-        offsetY: -25,
+        offsetX: 30,
       }),
     });
   },
@@ -246,7 +246,7 @@ selectPartner.on("select", function (e) {
             color: "#ffffff", // Halo blanc autour du texte
             width: 3,
           }),
-          offsetY: -25,
+          offsetX: 30,
         }),
       })
     );
@@ -257,6 +257,8 @@ selectPartner.on("select", function (e) {
     feature.setStyle(null); // Revenir au style par défaut
   });
 });
+
+var partnerLayerVisible = true;
 
 // Gestion du clic sur le bouton pour afficher/masquer la couche
 document
@@ -270,6 +272,116 @@ document
       // Si la couche est visible, la retirer de la carte
       map.removeLayer(partnerLayer);
       partnerLayerVisible = false;
+    }
+  });
+
+// Définir la source des clusters
+var clusterSource = new ol.source.Cluster({
+  distance: 25, // La distance entre les points pour être regroupés en clusters
+  source: new ol.source.Vector({
+    url: "/api/care_partner", // Votre endpoint GeoJSON
+    format: new ol.format.GeoJSON(),
+  }),
+});
+
+// Style des clusters
+var clusterStyle = function (feature) {
+  var size = feature.get("features").length; // Obtenir la taille du cluster
+  if (size > 1) {
+    // Si c'est un cluster
+    // Style pour les clusters (plusieurs points regroupés)
+    return new ol.style.Style({
+      image: new ol.style.Circle({
+        radius: 10 + Math.min(size, 20),
+        fill: new ol.style.Fill({
+          color: "rgba(0, 150, 0, 0.6)",
+        }),
+        stroke: new ol.style.Stroke({
+          color: "#fff",
+          width: 2,
+        }),
+      }),
+      text: new ol.style.Text({
+        text: size.toString(),
+        fill: new ol.style.Fill({
+          color: "#fff",
+        }),
+        stroke: new ol.style.Stroke({
+          color: "#000",
+          width: 2,
+        }),
+      }),
+    });
+  }
+};
+
+// Définir la couche des clusters avec le style
+var clusterLayer = new ol.layer.Vector({
+  source: clusterSource,
+  style: clusterStyle, // Appliquer le style aux clusters
+});
+
+// Garder la logique de sélection intacte
+var selectInteraction = new ol.interaction.Select({
+  layers: [clusterLayer], // Appliquer l'interaction uniquement sur la couche cluster
+  style: function (feature) {
+    var originalFeatures = feature.get("features");
+    if (originalFeatures.length === 1) {
+      var originalFeature = originalFeatures[0];
+      // Style pour la sélection
+      return cyanSelectionFeatureStyle; // Style de sélection de projet (jaune pin)
+    }
+    return null; // Pas de style spécifique pour les clusters sélectionnés
+  },
+});
+
+map.addInteraction(selectInteraction); // Ajouter l'interaction à la carte
+
+// Ajout des deux couches mais on alterne en fonction du zoom
+
+// Seuil de zoom pour basculer entre les couches
+var zoomThreshold = 12;
+
+// Fonction pour ajuster l'opacité des couches en fonction du zoom actuel
+function adjustLayerOpacity() {
+  var zoom = map.getView().getZoom();
+
+  if (zoom > zoomThreshold) {
+    // Afficher les projets individuels, masquer les clusters
+    clusterLayer.setOpacity(0);
+    partnerLayer.setOpacity(1);
+  } else {
+    // Afficher les clusters, masquer les projets individuels
+    clusterLayer.setOpacity(1);
+    partnerLayer.setOpacity(0);
+  }
+}
+
+// Appeler la fonction au changement de zoom
+map.getView().on("change:resolution", function () {
+  adjustLayerOpacity(); // Ajuster l'opacité lors du changement de résolution (zoom)
+});
+
+// Appeler la fonction lors du chargement initial pour ajuster l'opacité selon le zoom par défaut
+adjustLayerOpacity();
+
+// Ajouter les deux couches à la carte
+map.addLayer(clusterLayer);
+
+var clusterLayerVisible = true;
+
+// Gestion du clic sur le bouton pour afficher/masquer la couche
+document
+  .getElementById("togglePartenaires")
+  .addEventListener("click", function () {
+    if (!clusterLayerVisible) {
+      // Si la couche n'est pas visible, l'ajouter à la carte
+      map.addLayer(clusterLayer);
+      clusterLayerVisible = true;
+    } else {
+      // Si la couche est visible, la retirer de la carte
+      map.removeLayer(clusterLayer);
+      clusterLayerVisible = false;
     }
   });
 

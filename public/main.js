@@ -155,12 +155,19 @@ document.getElementById("toggleRegions").addEventListener("click", function () {
   }
 });
 
-// Select  interaction
+// Select interaction
 var select = new ol.interaction.Select({
   hitTolerance: 5,
   multi: false,
   condition: ol.events.condition.singleClick,
+  // Filtrer les couches sélectionnables (exclure partnerLayer)
+  filter: function (feature, layer) {
+    // Retourner vrai uniquement si ce n'est pas la couche partnerLayer
+    return layer !== partnerLayer;
+  },
 });
+
+// Ajouter l'interaction à la carte
 map.addInteraction(select);
 
 // Charger les données GeoJSON des partenaires
@@ -174,7 +181,7 @@ var partnerLayer = new ol.layer.Vector({
       image: new ol.style.Icon({
         anchor: [0.5, 1],
         src: "./resources/images/people-group-solid.svg", // Icône SVG par défaut
-        scale: 1, // Taille initiale de l'icône
+        scale: 0.3, // Taille initiale de l'icône
       }),
       text: new ol.style.Text({
         text: feature.get("sigle"),
@@ -186,7 +193,7 @@ var partnerLayer = new ol.layer.Vector({
           color: "#000000", // Halo noir autour du texte
           width: 3,
         }),
-        offsetY: -25, // Décalage vertical pour placer le texte au-dessus de l'icône
+        offsetX: 35, // Décalage vertical pour placer le texte au-dessus de l'icône
       }),
     });
   },
@@ -195,58 +202,57 @@ var partnerLayer = new ol.layer.Vector({
 // Ajouter la couche des partenaires à la carte
 map.addLayer(partnerLayer);
 
-// Interaction de sélection uniquement pour la couche partenaire
+// Interaction de sélection pour la couche des partenaires
 var selectPartner = new ol.interaction.Select({
   layers: [partnerLayer], // Limiter la sélection à la couche des partenaires
   style: function (feature) {
     return new ol.style.Style({
       image: new ol.style.Icon({
         anchor: [0.5, 1],
-        src: "./resources/images/people-group-solid.svg",
-        scale: 1.5, // Agrandir l'icône lors de la sélection
-        color: "#ffffff", // Icône avec un halo blanc
+        src: "./resources/images/people-group-solid-y.svg", // Icône jaune lors de la sélection
+        scale: 0.4, // Agrandir légèrement l'icône
       }),
       text: new ol.style.Text({
         text: feature.get("sigle"),
         font: "bold 12px Arial",
         fill: new ol.style.Fill({
-          color: "#FF0000", // Texte en rouge lors de la sélection
+          color: "#0000FF", // Texte en bleu lors de la sélection
         }),
         stroke: new ol.style.Stroke({
           color: "#ffffff", // Halo blanc autour du texte sélectionné
-          width: 3,
+          width: 4,
         }),
-        offsetX: 30,
+        offsetX: 35, // Positionnement vertical du texte
       }),
     });
   },
 });
 
-// Ajouter l'interaction de sélection à la carte
+// Ajouter l'interaction à la carte
 map.addInteraction(selectPartner);
 
-// Gestion des événements de sélection et de dé-sélection
+// Gestion des événements de sélection
 selectPartner.on("select", function (e) {
   e.selected.forEach(function (feature) {
-    // Style personnalisé lors de la sélection
+    // Appliquer le style sélectionné
     feature.setStyle(
       new ol.style.Style({
         image: new ol.style.Icon({
           anchor: [0.5, 1],
-          src: "./resources/images/people-group-solid.svg",
-          scale: 1.5, // Agrandir l'icône sélectionnée
+          src: "./resources/images/people-group-solid-y.svg", // Icône jaune pour la sélection
+          scale: 0.4, // Taille plus grande
         }),
         text: new ol.style.Text({
           text: feature.get("sigle"),
           font: "bold 12px Arial",
           fill: new ol.style.Fill({
-            color: "#FF0000", // Couleur rouge lors de la sélection
+            color: "#0000FF", // Texte en bleu
           }),
           stroke: new ol.style.Stroke({
-            color: "#ffffff", // Halo blanc autour du texte
-            width: 3,
+            color: "#ffffff", // Halo blanc
+            width: 4,
           }),
-          offsetX: 30,
+          offsetX: 35, // Même positionnement vertical
         }),
       })
     );
@@ -320,22 +326,6 @@ var clusterLayer = new ol.layer.Vector({
   source: clusterSource,
   style: clusterStyle, // Appliquer le style aux clusters
 });
-
-// Garder la logique de sélection intacte
-var selectInteraction = new ol.interaction.Select({
-  layers: [clusterLayer], // Appliquer l'interaction uniquement sur la couche cluster
-  style: function (feature) {
-    var originalFeatures = feature.get("features");
-    if (originalFeatures.length === 1) {
-      var originalFeature = originalFeatures[0];
-      // Style pour la sélection
-      return cyanSelectionFeatureStyle; // Style de sélection de projet (jaune pin)
-    }
-    return null; // Pas de style spécifique pour les clusters sélectionnés
-  },
-});
-
-map.addInteraction(selectInteraction); // Ajouter l'interaction à la carte
 
 // Ajout des deux couches mais on alterne en fonction du zoom
 

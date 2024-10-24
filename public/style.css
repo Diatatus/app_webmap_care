@@ -121,12 +121,12 @@ html {
 }
 
 .ol-control.ol-storymap {
-  top: 300px;
+  top: 100px;
   left: 20px;
   bottom: 0.5em;
   max-width: 100%;
   border-radius: 0.5em;
-  height: 300px;
+  height: 650px;
   background-color: rgba(255, 255, 255, 0.5);
 }
 

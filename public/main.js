@@ -11,8 +11,8 @@ const customproj = ol.proj.get("EPSG:4326");
 // The Map
 var mapView = new ol.View({
   center: ol.proj.fromLonLat([12.2, 7.5]),
-  zoom: 6.2,
-  minZoom: 6.2, // Prevent zooming out below this zoom level
+  zoom: 6,
+  minZoom: 6, // Prevent zooming out below this zoom level
   rotation: 0, // Disable initial rotation
   constrainRotation: true, // Prevent accidental rotation
 });
@@ -38,7 +38,7 @@ var map = new ol.Map({
 // Assume 'map' is your OpenLayers map instance
 // Enregistrer la vue initiale
 var initialCenter = [12.2, 7.5]; // Remplacez par les coordonnées initiales de votre carte
-var initialZoom = 6.2; // Remplacez par le zoom initial de votre carte
+var initialZoom = 6; // Remplacez par le zoom initial de votre carte
 document.getElementById("zoom-in").addEventListener("click", function () {
   var view = map.getView();
   var zoom = view.getZoom();

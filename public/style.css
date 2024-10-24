@@ -133,7 +133,7 @@ html {
 #story img {
   display: block;
   margin: auto;
-  max-width: 100%;
+  max-width: 80%;
 }
 #story .chapter.ol-select {
   background-color: rgba(255, 255, 255, 0.8);
@@ -160,7 +160,7 @@ html {
   #story img {
     display: block;
     margin: auto;
-    max-width: 100%;
+    max-width: 80%;
   }
 }
 
@@ -174,6 +174,7 @@ html {
     border-radius: 0.5em;
     height: 370px;
     background-color: rgba(255, 255, 255, 0.5);
+    z-index: 3000;
   }
   #story {
     height: 200px;
@@ -185,21 +186,32 @@ html {
   #story img {
     display: block;
     margin: auto;
+    max-width: 80%;
+  }
+}
+
+@media (max-width: 360px) {
+  .ol-control.ol-storymap {
+    top: 420px;
+    left: 20px;
+    bottom: 0.5em;
     max-width: 100%;
+    border-radius: 0.5em;
+    height: 360px;
+    background-color: rgba(255, 255, 255, 0.5);
+    z-index: 3000;
   }
-}
-
-/* Hide story div for devices with 768x1024 resolution (tablets) */
-@media only screen and (max-width: 768px) and (max-height: 1024px) {
   #story {
-    display: none;
+    height: 200px;
+    width: 300px;
+    top: auto;
+    left: auto;
+    padding: 10px;
   }
-}
-
-/* Hide story div for devices with 390x844 resolution (smartphones) */
-@media only screen and (max-width: 390px) and (max-height: 844px) {
-  #story {
-    display: none;
+  #story img {
+    display: block;
+    margin: auto;
+    max-width: 80%;
   }
 }
 
@@ -538,6 +550,25 @@ html {
   opacity: 0;
   transition: opacity 0.5s ease-in-out;
   overflow: hidden; /* Hide overflow of internal elements */
+}
+
+@media (max-width: 390px) {
+  .popup-container {
+    top: 13%;
+    right: 4%;
+    width: 350px;
+    height: 630px; /* Define height */
+  }
+}
+
+@media (max-width: 360px) {
+  .popup-container {
+    top: 13%;
+    right: 1.5%;
+    width: 350px;
+    height: 630px; /* Define height */
+    z-index: 3000;
+  }
 }
 
 .popup-header {

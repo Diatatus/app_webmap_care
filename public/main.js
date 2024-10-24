@@ -163,6 +163,85 @@ var select = new ol.interaction.Select({
 });
 map.addInteraction(select);
 
+// Charger les données GeoJSON des partenaires
+var partnerLayer = new ol.layer.Vector({
+  source: new ol.source.Vector({
+    url: "/api/care_partner", // Ton endpoint pour récupérer les partenaires
+    format: new ol.format.GeoJSON(),
+  }),
+  style: function (feature) {
+    return new ol.style.Style({
+      image: new ol.style.Icon({
+        anchor: [0.5, 1],
+        src: "./resources/images/people-group-solid.svg", // Le fichier SVG de ton partenaire
+        scale: 1, // Taille initiale de l'icône
+      }),
+      text: new ol.style.Text({
+        text: feature.get("sigle"),
+        fill: new ol.style.Fill({
+          color: "#000000", // Couleur de texte par défaut
+        }),
+        offsetY: -25, // Positionnement du texte par rapport à l'icône
+      }),
+    });
+  },
+});
+
+// Ajouter la couche des partenaires à la carte
+map.addLayer(partnerLayer);
+
+// Interaction de sélection uniquement pour la couche partenaire
+var selectPartner = new ol.interaction.Select({
+  layers: [partnerLayer], // Limiter la sélection à la couche des partenaires
+  style: function (feature) {
+    return new ol.style.Style({
+      image: new ol.style.Icon({
+        anchor: [0.5, 1],
+        src: "./resources/images/people-group-solid.svg",
+        scale: 1.5, // Augmentation de la taille lors de la sélection
+      }),
+      text: new ol.style.Text({
+        text: feature.get("sigle"),
+        fill: new ol.style.Fill({
+          color: "#FF0000", // Changement de couleur lors de la sélection
+        }),
+        offsetY: -25,
+      }),
+    });
+  },
+});
+
+// Ajouter l'interaction à la carte
+map.addInteraction(selectPartner);
+
+// Gestion des événements de sélection
+selectPartner.on("select", function (e) {
+  e.selected.forEach(function (feature) {
+    // Appliquer le style sélectionné
+    feature.setStyle(
+      new ol.style.Style({
+        image: new ol.style.Icon({
+          anchor: [0.5, 1],
+          src: "./resources/images/people-group-solid.svg",
+          scale: 1.5, // Taille plus grande lors de la sélection
+        }),
+        text: new ol.style.Text({
+          text: feature.get("sigle"),
+          fill: new ol.style.Fill({
+            color: "#FF0000", // Couleur changée lors de la sélection
+          }),
+          offsetY: -25,
+        }),
+      })
+    );
+  });
+
+  e.deselected.forEach(function (feature) {
+    // Réinitialiser le style si la sélection est annulée
+    feature.setStyle(null); // Revenir au style par défaut
+  });
+});
+
 // Global variables to store chart instances
 var demographyChart, familyChart;
 
@@ -250,14 +329,26 @@ function createCharts(feature) {
   );
 }
 
-map.on("click", function (evt) {
-  var feature = map.forEachFeatureAtPixel(evt.pixel, function (feature) {
-    return feature;
-  });
+// Interaction : afficher un popup uniquement pour la couche regions
 
-  if (feature) {
-    // Show popup with feature data
-    showPopup(feature);
+// Utilisation de forEachLayerAtPixel pour vérifier les couches
+// Interaction : afficher un popup uniquement pour la couche regions
+map.on("click", function (evt) {
+  var feature = null;
+  var layer = null;
+
+  if (layer === regionLayer) {
+    map.forEachFeatureAtPixel(evt.pixel, function (feature) {
+      return feature;
+    });
+    layer = lyr; // Définit la couche sélectionnée
+  }
+  if (feature && layer === regionLayer) {
+    // Afficher le popup avec les données de la feature sélectionnée
+    showPopup(feature); // Fonction existante pour afficher le popup
+  } else {
+    // Ne rien afficher si ce n'est pas la couche regions
+    return null;
   }
 });
 

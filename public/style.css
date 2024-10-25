@@ -223,54 +223,119 @@ html {
 .care-search-bar {
   position: absolute;
   top: 30px;
-  left: 50%; /* Center horizontally */
+  left: 50%;
   transform: translateX(-50%);
   display: flex;
   align-items: center;
-  padding: 10px 20px;
-  background-color: rgba(255, 255, 255, 1);
+  padding: 10px 15px;
+  background-color: rgba(
+    255,
+    255,
+    255,
+    1
+  ); /* CARE's primary color in semi-transparent */
   border-radius: 8px;
   box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
   z-index: 1000;
-  width: 80%; /* Adjusted width for responsiveness */
+  width: 80%;
   max-width: 500px;
+  transition: all 0.3s ease;
 }
 
 #care-logo {
-  width: 120px;
+  width: 100px;
   height: auto;
-  margin-right: 10px;
+  margin-right: 8px;
 }
 
+/* Input and Icon container */
 .search-container {
   position: relative;
   width: 100%;
 }
 
-#care-search-input {
+/* Input styling */
+#inpt_search {
   width: 100%;
-  border: 2px solid #ff440050; /* Orange border */
-  padding: 10px 20px 10px 40px;
+  border: 2px solid #ffa500; /* Border color to match CARE’s color scheme */
+  padding: 10px 40px;
   border-radius: 20px;
-  font-size: 14px;
-  background-color: rgba(255, 255, 255, 0.5);
-  transition: background-color 0.3s ease, padding 0.3s ease;
+  font-size: 16px;
+  color: #444;
+  background-color: rgba(255, 255, 255, 0.9);
+  transition: background-color 0.3s ease;
 }
 
+/* Icon styling */
 .search-icon {
   position: absolute;
   left: 10px;
   top: 50%;
   transform: translateY(-50%);
-  color: #ff4500; /* Dark orange color */
+  color: #e55b00; /* Darker CARE color for contrast */
   font-size: 18px;
   pointer-events: none;
 }
 
-/* Focus effect */
-#care-search-input:focus {
-  background-color: rgba(255, 255, 255, 0.8);
-  padding: 10px 20px 10px 45px;
+/* Focus effect on input */
+#inpt_search:focus {
+  background-color: #fff5e5;
+  border-color: #e55b00;
+}
+
+/* Suggestions dropdown */
+.liveDataDiv {
+  position: absolute;
+  top: 45px;
+  width: 100%;
+  max-height: 200px;
+  overflow-y: auto;
+  background-color: rgba(255, 255, 255, 0.9);
+  border: 1px solid #e55b00;
+  border-radius: 5px;
+  box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.2);
+  font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+  font-size: 1em;
+  line-height: 1.5;
+}
+
+.liveDataDiv:empty {
+  display: none;
+}
+
+/* Table inside live search */
+#assetSearchTableID {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+#assetSearchTableID th,
+#assetSearchTableID td {
+  padding: 8px 10px;
+  text-align: left;
+}
+
+#assetSearchTableID th {
+  color: #e55b00;
+  font-weight: bold;
+}
+
+#assetSearchTableID td:hover {
+  background-color: #ffe6cc;
+  color: #e55b00;
+  cursor: pointer;
+}
+
+@media (max-width: 600px) {
+  .care-search-bar {
+    width: 95%;
+  }
+  #care-logo {
+    width: 80px;
+  }
+  #inpt_search {
+    font-size: 14px;
+  }
 }
 
 /* Media Queries for responsiveness */
@@ -821,153 +886,4 @@ html {
 #family-planning-icons p,
 #domestic-violence-icon p {
   color: black;
-}
-
-/*** start : CSS for search bar ***/
-
-/* html,body{height:100%;margin:0;}body{background:#913D88;font:13px monospace;color:#FFFFFF}p{margin-top:30px}.cntr{display:table;width:100%;height:100%;.cntr-innr{display:table-cell;text-align:center;vertical-align:middle}} */
-
-/*** STYLES ***/
-/*** STYLES ***/
-
-.search1 {
-  width: 100%;
-  position: absolute;
-  display: flex;
-}
-
-.searchTerm {
-  width: 100%;
-  border: 3px solid #0074d9;
-  border-right: none;
-  padding: 5px;
-  height: 20px;
-  border-radius: 5px 0 0 5px;
-  outline: none;
-  color: #9dbfaf;
-}
-
-.searchTerm:focus {
-  color: #0074d9;
-}
-
-.searchButton {
-  width: 40px;
-  height: 36px;
-  border: 1px solid #0074d9;
-  background: #0074d9;
-  text-align: center;
-  color: #fff;
-  border-radius: 0 5px 5px 0;
-  cursor: pointer;
-  font-size: 20px;
-}
-
-/*Resize the wrap to see the search bar change!*/
-.wrap {
-  width: 30%;
-  position: absolute;
-  top: 2%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-}
-
-.search {
-  display: inline-block;
-  position: absolute;
-  top: 10px;
-  left: 100%;
-  height: 30px;
-  width: 30px;
-  box-sizing: border-box;
-  /* margin: 0px 8px 7px 0px; */
-  margin-left: -200px;
-  padding: 7px 9px 5px 9px;
-  border: 3px solid rgba(60, 116, 189, 0.3);
-  background-color: rgba(155, 192, 241, 0.3);
-  border-radius: 25px;
-  transition: all 200ms ease;
-  cursor: text;
-}
-
-/*** start : CSS for search bar ***/
-
-.liveDataDiv {
-  position: fixed;
-  left: 60%;
-  top: 45px;
-  margin-left: -335px;
-  width: 360px;
-  background-color: rgba(155, 192, 241, 0.7);
-  font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
-  font-size: 1em;
-  line-height: 1.45;
-  border-radius: 5px;
-  border: 3px solid rgba(60, 116, 189, 0.4);
-  box-shadow: outset 1px 2px 8px rgba(0, 0, 0, 0.07);
-}
-
-.liveDataDiv:empty {
-  display: none;
-}
-
-/* #assetSearchTableID {
-  background-color: rgba(245, 245, 245, 0.6);
-} */
-
-#assetSearchTableID td th {
-  padding-left: 5px;
-}
-#assetSearchTableID th {
-  color: black;
-}
-
-/* #assetSearchTableID tr:hover { font-weight: bolder; background-color: rgb(225, 225, 225); } */
-/* #assetSearchTableID tr:hover { font-weight: bolder; background-color: rgb(225, 225, 225); } */
-
-#assetSearchTableID th:nth-child(1),
-#assetSearchTableID td:nth-child(1) {
-  width: 75px;
-}
-
-#assetSearchTableID th:nth-child(2),
-#assetSearchTableID td:nth-child(2) {
-  width: auto;
-}
-
-#assetSearchTableID td:nth-child(2):hover
-/* {font-weight: bolder; background-color: rgb(225, 225, 225);} */ {
-  font-weight: bolder;
-  color: red;
-}
-
-#assetSearchTableID,
-td,
-th {
-  /* padding: 0px 5px 0px 5px; */
-  border: 0px;
-}
-
-#assetSearchTableID,
-tr {
-  text-align: left;
-  vertical-align: top;
-}
-
-/*** start : CSS for search bar ***/
-
-#btnCrosshair {
-  z-index: 2000;
-  position: absolute;
-  background-color: rgba(0, 0, 0, 0);
-  width: 40px;
-  height: 40px;
-  right: 5px;
-  bottom: 15px;
-  border: none;
-  color: grey;
-}
-
-#btnCrosshair.clicked {
-  color: red;
 }

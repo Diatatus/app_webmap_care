@@ -608,7 +608,6 @@ inputBox.onkeyup = function () {
       createLiveSearchTable();
 
       const layers = [
-        { name: "public.regions_villes", attribute: "nom" },
         { name: "public.partenaire", attribute: "nom" },
         { name: "public.partenaire", attribute: "sigle" },
       ];

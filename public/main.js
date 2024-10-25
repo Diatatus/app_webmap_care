@@ -704,12 +704,30 @@ function zoomToFeature(featureElement, layerName, attributeName) {
       value: value_txt,
     }),
     success: function (response) {
+      console.log("Received geometry:", response.geometry);
+
       if (response.geometry) {
         const geometry = JSON.parse(response.geometry);
-        const coordinates = geometry.coordinates;
 
-        if (coordinates.length) {
-          const extent = ol.extent.boundingExtent(coordinates.flat(2));
+        if (geometry.type === "Point") {
+          let [x, y] = geometry.coordinates;
+
+          // Transform coordinates from EPSG:4326 to EPSG:3857
+          const transformedCoords = ol.proj.transform(
+            [x, y],
+            "EPSG:4326",
+            "EPSG:3857"
+          );
+
+          // Create a buffer around the transformed point
+          const pointExtent = ol.extent.buffer(
+            [...transformedCoords, ...transformedCoords],
+            1000
+          );
+          map.getView().fit(pointExtent, { duration: 1000 });
+        } else if (geometry.coordinates && geometry.coordinates.length) {
+          // Handle non-point geometry
+          const extent = ol.extent.boundingExtent(geometry.coordinates.flat(2));
           if (!ol.extent.isEmpty(extent)) {
             map.getView().fit(extent, { duration: 1000 });
           } else {
@@ -722,7 +740,7 @@ function zoomToFeature(featureElement, layerName, attributeName) {
         console.warn("No geometry data found for feature.");
       }
     },
-    error: function (xhr, status, error) {
+    error: function (error) {
       console.error("Error fetching geometry:", error);
     },
   });

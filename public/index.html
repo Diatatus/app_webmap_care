@@ -64,7 +64,15 @@
     <div id="care-search-bar" class="care-search-bar">
       <img src="./resources/images/care_.png" alt="CARE Logo" id="care-logo" />
       <div class="search-container">
-        <input type="text" id="care-search-input" placeholder="Rechercher..." />
+        <input
+          id="inpt_search"
+          type="text"
+          class="searchTerm"
+          placeholder="Chercher un lieu, une adresse..." />
+        <button type="submit" class="searchButton">
+          <i class="fa fa-search"></i>
+        </button>
+        <div class="liveDataDiv" id="liveDataDiv"></div>
         <i class="fas fa-search search-icon"></i>
       </div>
     </div>

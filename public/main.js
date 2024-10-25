@@ -524,6 +524,7 @@ function toggleLayer(eve) {
   var lyrname = eve.target.value;
   var checkedStatus = eve.target.checked;
   var lyrList = map.getLayers();
+  var geojson;
 
   lyrList.forEach(function (element) {
     if (lyrname == element.get("title")) {
@@ -590,3 +591,139 @@ function setClassName(c) {
 }
 
 map.addControl(story);
+
+// Main search function to handle user input
+var txtVal = "";
+var inputBox = document.getElementById("inpt_search");
+var liveDataDivEle = document.getElementById("liveDataDiv");
+var searchTable = document.createElement("table");
+var queryGeoJSON;
+
+inputBox.onkeyup = function () {
+  const newVal = this.value.trim();
+  if (newVal !== txtVal) {
+    txtVal = newVal;
+    if (txtVal.length > 2) {
+      clearResults();
+      createLiveSearchTable();
+
+      const layers = [
+        { name: "public.regions_villes", attribute: "nom" },
+        { name: "public.partenaire", attribute: "nom" },
+        { name: "public.partenaire", attribute: "sigle" },
+      ];
+
+      layers.forEach((layer) => {
+        $.ajax({
+          url: "http://localhost:3000/api/liveSearch", // Node.js server endpoint
+          type: "POST",
+          data: JSON.stringify({
+            request: "liveSearch",
+            searchTxt: txtVal,
+            searchLayer: layer.name,
+            searchAttribute: layer.attribute,
+          }),
+          contentType: "application/json",
+          dataType: "json",
+          success: function (response) {
+            createRows(response, layer.name);
+          },
+        });
+      });
+    } else {
+      clearResults();
+    }
+  }
+};
+
+// Create the table structure for displaying search results
+function createLiveSearchTable() {
+  searchTable.setAttribute("class", "assetSearchTableClass");
+  searchTable.setAttribute("id", "assetSearchTableID");
+
+  const tableHeaderRow = document.createElement("tr");
+  const tableHeader1 = document.createElement("th");
+  tableHeader1.innerHTML = "Layer";
+  const tableHeader2 = document.createElement("th");
+  tableHeader2.innerHTML = "Object";
+
+  tableHeaderRow.appendChild(tableHeader1);
+  tableHeaderRow.appendChild(tableHeader2);
+  searchTable.appendChild(tableHeaderRow);
+}
+
+// Populate table rows with the response data from each layer
+function createRows(data, layerName) {
+  data.forEach((item, index) => {
+    const tableRow = document.createElement("tr");
+    const td1 = document.createElement("td");
+    if (index === 0) {
+      td1.innerHTML = layerName;
+    }
+
+    const td2 = document.createElement("td");
+    const attribute = Object.keys(item)[0];
+    td2.innerHTML = item[attribute];
+    td2.setAttribute(
+      "onClick",
+      `zoomToFeature(this, '${layerName}', '${attribute}')`
+    );
+
+    tableRow.appendChild(td1);
+    tableRow.appendChild(td2);
+    searchTable.appendChild(tableRow);
+  });
+
+  liveDataDivEle.appendChild(searchTable);
+  const ibControl = new ol.control.Control({
+    element: liveDataDivEle,
+  });
+  map.addControl(ibControl);
+}
+
+// Clear previous search results
+function clearResults() {
+  liveDataDivEle.innerHTML = "";
+  searchTable.innerHTML = "";
+  if (queryGeoJSON) {
+    map.removeLayer(queryGeoJSON);
+  }
+}
+
+// Zoom to the feature by constructing the URL with query parameters
+function zoomToFeature(featureElement, layerName, attributeName) {
+  const value_txt = featureElement.innerHTML;
+
+  $.ajax({
+    url: "http://localhost:3000/api/zoomFeature",
+    type: "POST",
+    contentType: "application/json",
+    data: JSON.stringify({
+      layerName: layerName,
+      attributeName: attributeName,
+      value: value_txt,
+    }),
+    success: function (response) {
+      if (response.geometry) {
+        const geometry = JSON.parse(response.geometry);
+        const coordinates = geometry.coordinates;
+
+        if (coordinates.length) {
+          const extent = ol.extent.boundingExtent(coordinates.flat(2));
+          if (!ol.extent.isEmpty(extent)) {
+            map.getView().fit(extent, { duration: 1000 });
+          } else {
+            console.warn("Empty extent for feature.");
+          }
+        } else {
+          console.warn("No coordinates available for feature.");
+        }
+      } else {
+        console.warn("No geometry data found for feature.");
+      }
+    },
+    error: function (xhr, status, error) {
+      console.error("Error fetching geometry:", error);
+    },
+  });
+}

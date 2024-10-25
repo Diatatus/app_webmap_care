@@ -16,6 +16,58 @@ app.use(express.static(path.join(__dirname, "public")));
 // Configurer le dossier 'node_modules' pour être accessible publiquement
 app.use("/node_modules", express.static(path.join(__dirname, "node_modules")));
 
+// Search endpoint
+app.post("/api/liveSearch", async (req, res) => {
+  const { request, searchTxt, searchLayer, searchAttribute } = req.body;
+
+  if (request === "liveSearch") {
+    try {
+      // Construct the query dynamically based on search layer and attribute
+      const query = `SELECT * FROM ${searchLayer} WHERE LOWER(${searchAttribute}) LIKE LOWER($1) ORDER BY ${searchAttribute} ASC LIMIT 10`;
+      const values = [`%${searchTxt}%`]; // Use parameterized query to avoid SQL injection
+
+      const result = await pool.query(query, values);
+
+      // Format response to match PHP script output
+      const response = result.rows.map((row) => ({
+        [searchAttribute]: row[searchAttribute],
+      }));
+
+      res.json(response);
+    } catch (err) {
+      console.error("Erreur lors de la récupération des données:", err.stack);
+      res
+        .status(500)
+        .json({ error: "Erreur lors de la récupération des données" });
+    }
+  } else {
+    res.status(400).json({ error: "Invalid request" });
+  }
+});
+
+app.post("/api/zoomFeature", async (req, res) => {
+  const { layerName, attributeName, value } = req.body;
+
+  try {
+    const query = `
+      SELECT ST_AsGeoJSON(geom) as geometry 
+      FROM ${layerName} 
+      WHERE ${attributeName} = $1
+      LIMIT 1;
+    `;
+    const result = await pool.query(query, [value]);
+
+    if (result.rows.length > 0 && result.rows[0].geometry) {
+      res.json({ geometry: result.rows[0].geometry });
+    } else {
+      res.status(404).json({ error: "No geometry available for this feature" });
+    }
+  } catch (error) {
+    console.error("Error in zoomFeature query:", error);
+    res.status(500).json({ error: "Failed to fetch feature geometry" });
+  }
+});
+
 // Endpoint pour récupérer les données GeoJSON de PostGIS
 app.get("/api/regions_villes", async (req, res) => {
   try {

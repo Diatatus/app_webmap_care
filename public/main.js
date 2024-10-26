@@ -524,7 +524,6 @@ function toggleLayer(eve) {
   var lyrname = eve.target.value;
   var checkedStatus = eve.target.checked;
   var lyrList = map.getLayers();
-  var geojson;
 
   lyrList.forEach(function (element) {
     if (lyrname == element.get("title")) {
@@ -597,7 +596,6 @@ var txtVal = "";
 var inputBox = document.getElementById("inpt_search");
 var liveDataDivEle = document.getElementById("liveDataDiv");
 var searchTable = document.createElement("table");
-var queryGeoJSON;
 
 inputBox.onkeyup = function () {
   const newVal = this.value.trim();
@@ -608,8 +606,8 @@ inputBox.onkeyup = function () {
       createLiveSearchTable();
 
       const layers = [
-        { name: "public.partenaire", attribute: "nom" },
-        { name: "public.partenaire", attribute: "sigle" },
+        { name: "partenaire", attribute: "nom" },
+        { name: "partenaire", attribute: "sigle" },
       ];
 
       layers.forEach((layer) => {
@@ -680,12 +678,28 @@ function createRows(data, layerName) {
   map.addControl(ibControl);
 }
 
+// Define a specific selection style for highlighted features
+const selectionStyle = new ol.style.Style({
+  image: new ol.style.Icon({
+    anchor: [0.5, 1],
+    src: "./resources/images/people-group-solid-y.svg", // Yellow icon for selection
+    scale: 0.4,
+  }),
+  text: new ol.style.Text({
+    text: "", // Text will be set dynamically per feature
+    font: "bold 12px Arial",
+    fill: new ol.style.Fill({ color: "#0000FF" }), // Blue text
+    stroke: new ol.style.Stroke({ color: "#ffffff", width: 4 }), // White halo
+    offsetX: 35,
+  }),
+});
+
 // Clear previous search results
 function clearResults() {
   liveDataDivEle.innerHTML = "";
   searchTable.innerHTML = "";
-  if (queryGeoJSON) {
-    map.removeLayer(queryGeoJSON);
+  if (selectPartner) {
+    map.removeLayer(selectPartner);
   }
 }
 
@@ -724,6 +738,29 @@ function zoomToFeature(featureElement, layerName, attributeName) {
             1000
           );
           map.getView().fit(pointExtent, { duration: 1000 });
+          // Create a new feature and apply selection style
+          const feature = new ol.Feature(new ol.geom.Point(transformedCoords));
+          feature.setStyle(
+            new ol.style.Style({
+              image: new ol.style.Icon({
+                anchor: [0.5, 1],
+                src: "./resources/images/people-group-solid-y.svg",
+                scale: 0.4,
+              }),
+              text: new ol.style.Text({
+                text: value_txt,
+                font: "bold 12px Arial",
+                fill: new ol.style.Fill({ color: "#0000FF" }),
+                stroke: new ol.style.Stroke({ color: "#ffffff", width: 4 }),
+                offsetX: 35,
+              }),
+            })
+          );
+
+          // Add the feature to the partner layer source
+          const partnerLayerSource = partnerLayer.getSource();
+          partnerLayerSource.clear(); // Clear previous selections
+          partnerLayerSource.addFeature(feature);
         } else if (geometry.coordinates && geometry.coordinates.length) {
           // Handle non-point geometry
           const extent = ol.extent.boundingExtent(geometry.coordinates.flat(2));

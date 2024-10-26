@@ -236,7 +236,6 @@ html {
   ); /* CARE's primary color in semi-transparent */
   border-radius: 8px;
   box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
-  z-index: 1000;
   width: 80%;
   max-width: 500px;
   transition: all 0.3s ease;
@@ -286,8 +285,9 @@ html {
 /* Suggestions dropdown */
 .liveDataDiv {
   position: absolute;
-  top: 45px;
-  width: 100%;
+  top: 100px;
+  left: 550px;
+  width: 30%;
   max-height: 200px;
   overflow-y: auto;
   background-color: rgba(255, 255, 255, 0.9);
@@ -295,8 +295,9 @@ html {
   border-radius: 5px;
   box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.2);
   font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
-  font-size: 1em;
+  font-size: 0.8em;
   line-height: 1.5;
+  z-index: 2000;
 }
 
 .liveDataDiv:empty {
@@ -383,13 +384,13 @@ html {
   top: 110px; /* Adjusted to place below the search bar */
   left: 50%;
   transform: translateX(-50%); /* Centers the slider horizontally */
-  z-index: 1000;
   padding: 10px;
   background-color: rgba(255, 255, 255, 0);
   border-radius: 8px;
   box-shadow: 0 2px 5px rgba(0, 0, 0, 0);
   width: 90%; /* Makes it responsive */
   max-width: 600px; /* Maximum width for larger screens */
+  z-index: 800;
 }
 
 /* Responsive layout for the buttons */

@@ -180,8 +180,8 @@ var partnerLayer = new ol.layer.Vector({
     return new ol.style.Style({
       image: new ol.style.Icon({
         anchor: [0.5, 1],
-        src: "./resources/images/people-group-solid.svg", // Icône SVG par défaut
-        scale: 0.3, // Taille initiale de l'icône
+        src: "./resources/images/partner_1.svg", // Icône SVG par défaut
+        scale: 0.4, // Taille initiale de l'icône
       }),
       text: new ol.style.Text({
         text: feature.get("sigle"),
@@ -209,8 +209,8 @@ var selectPartner = new ol.interaction.Select({
     return new ol.style.Style({
       image: new ol.style.Icon({
         anchor: [0.5, 1],
-        src: "./resources/images/people-group-solid-y.svg", // Icône jaune lors de la sélection
-        scale: 0.4, // Agrandir légèrement l'icône
+        src: "./resources/images/partner_2.svg", // Icône jaune lors de la sélection
+        scale: 0.5, // Agrandir légèrement l'icône
       }),
       text: new ol.style.Text({
         text: feature.get("sigle"),
@@ -239,8 +239,8 @@ selectPartner.on("select", function (e) {
       new ol.style.Style({
         image: new ol.style.Icon({
           anchor: [0.5, 1],
-          src: "./resources/images/people-group-solid-y.svg", // Icône jaune pour la sélection
-          scale: 0.4, // Taille plus grande
+          src: "./resources/images/partner_2.svg", // Icône jaune pour la sélection
+          scale: 0.5, // Taille plus grande
         }),
         text: new ol.style.Text({
           text: feature.get("sigle"),
@@ -683,7 +683,7 @@ const selectionStyle = new ol.style.Style({
   image: new ol.style.Icon({
     anchor: [0.5, 1],
     src: "./resources/images/people-group-solid-y.svg", // Yellow icon for selection
-    scale: 0.4,
+    scale: 0.5,
   }),
   text: new ol.style.Text({
     text: "", // Text will be set dynamically per feature
@@ -744,8 +744,8 @@ function zoomToFeature(featureElement, layerName, attributeName) {
             new ol.style.Style({
               image: new ol.style.Icon({
                 anchor: [0.5, 1],
-                src: "./resources/images/people-group-solid-y.svg",
-                scale: 0.4,
+                src: "./resources/images/partner_2.svg",
+                scale: 0.5,
               }),
               text: new ol.style.Text({
                 text: value_txt,

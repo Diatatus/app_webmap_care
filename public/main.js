@@ -694,12 +694,13 @@ const selectionStyle = new ol.style.Style({
   }),
 });
 
+var queryJSON;
 // Clear previous search results
 function clearResults() {
   liveDataDivEle.innerHTML = "";
   searchTable.innerHTML = "";
-  if (selectPartner) {
-    map.removeLayer(selectPartner);
+  if (queryJSON) {
+    map.removeLayer(queryJSON);
   }
 }
 

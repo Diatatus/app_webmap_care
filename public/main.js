@@ -193,7 +193,7 @@ var partnerLayer = new ol.layer.Vector({
           color: "#000000", // Halo noir autour du texte
           width: 3,
         }),
-        offsetX: 35, // Décalage vertical pour placer le texte au-dessus de l'icône
+        offsetX: 20, // Décalage vertical pour placer le texte au-dessus de l'icône
       }),
     });
   },
@@ -210,7 +210,7 @@ var selectPartner = new ol.interaction.Select({
       image: new ol.style.Icon({
         anchor: [0.5, 1],
         src: "./resources/images/partner_location_y.svg", // Icône jaune lors de la sélection
-        scale: 0.3, // Agrandir légèrement l'icône
+        scale: 0.2, // Agrandir légèrement l'icône
       }),
       text: new ol.style.Text({
         text: feature.get("sigle"),
@@ -222,7 +222,7 @@ var selectPartner = new ol.interaction.Select({
           color: "#ffffff", // Halo blanc autour du texte sélectionné
           width: 4,
         }),
-        offsetX: 35, // Positionnement vertical du texte
+        offsetX: 20, // Positionnement vertical du texte
       }),
     });
   },
@@ -600,7 +600,7 @@ inputBox.onkeyup = function () {
   }
 };
 
-// Create the table structure for displaying search results
+// Function to create the search table
 function createLiveSearchTable() {
   searchTable.setAttribute("class", "assetSearchTableClass");
   searchTable.setAttribute("id", "assetSearchTableID");
@@ -614,49 +614,42 @@ function createLiveSearchTable() {
   tableHeaderRow.appendChild(tableHeader1);
   tableHeaderRow.appendChild(tableHeader2);
   searchTable.appendChild(tableHeaderRow);
+
+  // Append the table to the liveDataDiv
+  liveDataDivEle.appendChild(searchTable);
 }
 
-// Populate table rows with the response data from each layer
+// Function to create table rows
 function createRows(data, layerName) {
-  data.forEach((item, index) => {
+  data.forEach((item) => {
     const tableRow = document.createElement("tr");
     const td1 = document.createElement("td");
-    if (index === 0) {
-      td1.innerHTML = layerName;
-    }
+    td1.innerHTML = layerName;
 
     const td2 = document.createElement("td");
     const attribute = Object.keys(item)[0];
     td2.innerHTML = item[attribute];
-    td2.setAttribute(
-      "onClick",
-      `zoomToFeature(this, '${layerName}', '${attribute}')`
-    );
+    td2.addEventListener("click", function () {
+      zoomToFeature(td2, layerName, attribute);
+      clearResults(); // Hide table after selection
+    });
 
     tableRow.appendChild(td1);
     tableRow.appendChild(td2);
     searchTable.appendChild(tableRow);
   });
-
-  liveDataDivEle.appendChild(searchTable);
-  const ibControl = new ol.control.Control({
-    element: liveDataDivEle,
-  });
-  map.addControl(ibControl);
 }
 
-// Clear the search results table and live data div
-var queryJSON;
+var queryGeoJSON = null; // Initialize to hold GeoJSON layer if needed
+
 // Clear previous search results
 function clearResults() {
   liveDataDivEle.innerHTML = "";
   searchTable.innerHTML = "";
-  if (selectPartner) {
-    map.removeLayer(selectPartner);
-  }
+  // Removed line: map.removeLayer(queryGeoJSON);
 }
 
-// Zoom to the feature by constructing the URL with query parameters
+// Function to zoom and highlight a specific feature in the partner layer
 function zoomToFeature(featureElement, layerName, attributeName) {
   const value_txt = featureElement.innerHTML;
 
@@ -670,8 +663,6 @@ function zoomToFeature(featureElement, layerName, attributeName) {
       value: value_txt,
     }),
     success: function (response) {
-      console.log("Received geometry:", response.geometry);
-
       if (response.geometry) {
         const geometry = JSON.parse(response.geometry);
 
@@ -685,35 +676,39 @@ function zoomToFeature(featureElement, layerName, attributeName) {
             "EPSG:3857"
           );
 
-          // Create a buffer around the transformed point
+          // Fit map view to selected feature
           const pointExtent = ol.extent.buffer(
             [...transformedCoords, ...transformedCoords],
             1000
           );
           map.getView().fit(pointExtent, { duration: 1000 });
-          // Create a new feature and apply selection style
-          const feature = new ol.Feature(new ol.geom.Point(transformedCoords));
-          feature.setStyle(
-            new ol.style.Style({
-              image: new ol.style.Icon({
-                anchor: [0.5, 1],
-                src: "./resources/images/partner_location_y.svg",
-                scale: 0.3,
-              }),
-              text: new ol.style.Text({
-                text: value_txt,
-                font: "bold 12px Arial",
-                fill: new ol.style.Fill({ color: "#0000FF" }),
-                stroke: new ol.style.Stroke({ color: "#ffffff", width: 4 }),
-                offsetX: 20,
-              }),
-            })
-          );
 
-          // Add the feature to the partner layer source
+          // Find the existing feature in the partnerLayer source and apply selection style
           const partnerLayerSource = partnerLayer.getSource();
-          partnerLayerSource.clear(); // Clear previous selections
-          partnerLayerSource.addFeature(feature);
+          const featureToHighlight = partnerLayerSource
+            .getFeatures()
+            .find((f) => f.get(attributeName) === value_txt);
+
+          if (featureToHighlight) {
+            featureToHighlight.setStyle(
+              new ol.style.Style({
+                image: new ol.style.Icon({
+                  anchor: [0.5, 1],
+                  src: "./resources/images/partner_location_y.svg", // Yellow icon for selection
+                  scale: 0.3, // Increased scale for selected icon
+                }),
+                text: new ol.style.Text({
+                  text: featureToHighlight.get("sigle"),
+                  font: "bold 12px Arial",
+                  fill: new ol.style.Fill({ color: "#0000FF" }), // Blue text
+                  stroke: new ol.style.Stroke({ color: "#ffffff", width: 4 }), // White halo
+                  offsetX: 20,
+                }),
+              })
+            );
+          } else {
+            console.warn("Feature not found in partner layer.");
+          }
         } else if (geometry.coordinates && geometry.coordinates.length) {
           // Handle non-point geometry
           const extent = ol.extent.boundingExtent(geometry.coordinates.flat(2));

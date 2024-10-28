@@ -180,8 +180,8 @@ var partnerLayer = new ol.layer.Vector({
     return new ol.style.Style({
       image: new ol.style.Icon({
         anchor: [0.5, 1],
-        src: "./resources/images/partner_1.svg", // Icône SVG par défaut
-        scale: 0.4, // Taille initiale de l'icône
+        src: "./resources/images/partner_location.svg", // Icône SVG par défaut
+        scale: 0.15, // Taille initiale de l'icône
       }),
       text: new ol.style.Text({
         text: feature.get("sigle"),
@@ -209,8 +209,8 @@ var selectPartner = new ol.interaction.Select({
     return new ol.style.Style({
       image: new ol.style.Icon({
         anchor: [0.5, 1],
-        src: "./resources/images/partner_2.svg", // Icône jaune lors de la sélection
-        scale: 0.5, // Agrandir légèrement l'icône
+        src: "./resources/images/partner_location_y.svg", // Icône jaune lors de la sélection
+        scale: 0.3, // Agrandir légèrement l'icône
       }),
       text: new ol.style.Text({
         text: feature.get("sigle"),
@@ -230,39 +230,6 @@ var selectPartner = new ol.interaction.Select({
 
 // Ajouter l'interaction à la carte
 map.addInteraction(selectPartner);
-
-// Gestion des événements de sélection
-selectPartner.on("select", function (e) {
-  e.selected.forEach(function (feature) {
-    // Appliquer le style sélectionné
-    feature.setStyle(
-      new ol.style.Style({
-        image: new ol.style.Icon({
-          anchor: [0.5, 1],
-          src: "./resources/images/partner_2.svg", // Icône jaune pour la sélection
-          scale: 0.5, // Taille plus grande
-        }),
-        text: new ol.style.Text({
-          text: feature.get("sigle"),
-          font: "bold 12px Arial",
-          fill: new ol.style.Fill({
-            color: "#0000FF", // Texte en bleu
-          }),
-          stroke: new ol.style.Stroke({
-            color: "#ffffff", // Halo blanc
-            width: 4,
-          }),
-          offsetX: 35, // Même positionnement vertical
-        }),
-      })
-    );
-  });
-
-  e.deselected.forEach(function (feature) {
-    // Réinitialiser le style si la sélection est annulée
-    feature.setStyle(null); // Revenir au style par défaut
-  });
-});
 
 var partnerLayerVisible = true;
 
@@ -678,29 +645,14 @@ function createRows(data, layerName) {
   map.addControl(ibControl);
 }
 
-// Define a specific selection style for highlighted features
-const selectionStyle = new ol.style.Style({
-  image: new ol.style.Icon({
-    anchor: [0.5, 1],
-    src: "./resources/images/people-group-solid-y.svg", // Yellow icon for selection
-    scale: 0.5,
-  }),
-  text: new ol.style.Text({
-    text: "", // Text will be set dynamically per feature
-    font: "bold 12px Arial",
-    fill: new ol.style.Fill({ color: "#0000FF" }), // Blue text
-    stroke: new ol.style.Stroke({ color: "#ffffff", width: 4 }), // White halo
-    offsetX: 35,
-  }),
-});
-
+// Clear the search results table and live data div
 var queryJSON;
 // Clear previous search results
 function clearResults() {
   liveDataDivEle.innerHTML = "";
   searchTable.innerHTML = "";
-  if (queryJSON) {
-    map.removeLayer(queryJSON);
+  if (selectPartner) {
+    map.removeLayer(selectPartner);
   }
 }
 
@@ -745,15 +697,15 @@ function zoomToFeature(featureElement, layerName, attributeName) {
             new ol.style.Style({
               image: new ol.style.Icon({
                 anchor: [0.5, 1],
-                src: "./resources/images/partner_2.svg",
-                scale: 0.5,
+                src: "./resources/images/partner_location_y.svg",
+                scale: 0.3,
               }),
               text: new ol.style.Text({
                 text: value_txt,
                 font: "bold 12px Arial",
                 fill: new ol.style.Fill({ color: "#0000FF" }),
                 stroke: new ol.style.Stroke({ color: "#ffffff", width: 4 }),
-                offsetX: 35,
+                offsetX: 20,
               }),
             })
           );

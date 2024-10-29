@@ -193,7 +193,7 @@ var partnerLayer = new ol.layer.Vector({
           color: "#000000", // Halo noir autour du texte
           width: 3,
         }),
-        offsetX: 20, // Décalage vertical pour placer le texte au-dessus de l'icône
+        offsetX: -20, // Décalage vertical pour placer le texte au-dessus de l'icône
       }),
     });
   },
@@ -222,7 +222,7 @@ var selectPartner = new ol.interaction.Select({
           color: "#ffffff", // Halo blanc autour du texte sélectionné
           width: 4,
         }),
-        offsetX: 20, // Positionnement vertical du texte
+        offsetX: -20, // Positionnement vertical du texte
       }),
     });
   },
@@ -607,9 +607,9 @@ function createLiveSearchTable() {
 
   const tableHeaderRow = document.createElement("tr");
   const tableHeader1 = document.createElement("th");
-  tableHeader1.innerHTML = "Layer";
+  tableHeader1.innerHTML = "Données";
   const tableHeader2 = document.createElement("th");
-  tableHeader2.innerHTML = "Object";
+  tableHeader2.innerHTML = "Résultats";
 
   tableHeaderRow.appendChild(tableHeader1);
   tableHeaderRow.appendChild(tableHeader2);
@@ -695,14 +695,14 @@ function zoomToFeature(featureElement, layerName, attributeName) {
                 image: new ol.style.Icon({
                   anchor: [0.5, 1],
                   src: "./resources/images/partner_location_y.svg", // Yellow icon for selection
-                  scale: 0.3, // Increased scale for selected icon
+                  scale: 0.2, // Increased scale for selected icon
                 }),
                 text: new ol.style.Text({
                   text: featureToHighlight.get("sigle"),
                   font: "bold 12px Arial",
                   fill: new ol.style.Fill({ color: "#0000FF" }), // Blue text
                   stroke: new ol.style.Stroke({ color: "#ffffff", width: 4 }), // White halo
-                  offsetX: 20,
+                  offsetX: -20,
                 }),
               })
             );

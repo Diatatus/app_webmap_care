@@ -171,64 +171,81 @@ var select = new ol.interaction.Select({
 map.addInteraction(select);
 
 // Charger les données GeoJSON des partenaires
+// Charger les données GeoJSON des partenaires avec style par défaut
 var partnerLayer = new ol.layer.Vector({
   source: new ol.source.Vector({
-    url: "/api/care_partner", // Ton endpoint pour récupérer les partenaires
+    url: "/api/care_partner",
     format: new ol.format.GeoJSON(),
   }),
   style: function (feature) {
-    return new ol.style.Style({
-      image: new ol.style.Icon({
-        anchor: [0.5, 1],
-        src: "./resources/images/partner_location.svg", // Icône SVG par défaut
-        scale: 0.15, // Taille initiale de l'icône
-      }),
-      text: new ol.style.Text({
-        text: feature.get("sigle"),
-        font: "bold 12px Arial",
-        fill: new ol.style.Fill({
-          color: "#ffffff", // Texte en blanc
-        }),
-        stroke: new ol.style.Stroke({
-          color: "#000000", // Halo noir autour du texte
-          width: 3,
-        }),
-        offsetX: -20, // Décalage vertical pour placer le texte au-dessus de l'icône
-      }),
-    });
+    return createDefaultStyle(feature);
   },
 });
 
 // Ajouter la couche des partenaires à la carte
 map.addLayer(partnerLayer);
 
-// Interaction de sélection pour la couche des partenaires
-var selectPartner = new ol.interaction.Select({
-  layers: [partnerLayer], // Limiter la sélection à la couche des partenaires
-  style: function (feature) {
-    return new ol.style.Style({
-      image: new ol.style.Icon({
-        anchor: [0.5, 1],
-        src: "./resources/images/partner_location_y.svg", // Icône jaune lors de la sélection
-        scale: 0.2, // Agrandir légèrement l'icône
-      }),
-      text: new ol.style.Text({
-        text: feature.get("sigle"),
-        font: "bold 12px Arial",
-        fill: new ol.style.Fill({
-          color: "#0000FF", // Texte en bleu lors de la sélection
-        }),
-        stroke: new ol.style.Stroke({
-          color: "#ffffff", // Halo blanc autour du texte sélectionné
-          width: 4,
-        }),
-        offsetX: -20, // Positionnement vertical du texte
-      }),
-    });
-  },
+// Fonction pour créer le style par défaut
+function createDefaultStyle(feature) {
+  return new ol.style.Style({
+    image: new ol.style.Icon({
+      anchor: [0.5, 1],
+      src: "./resources/images/partner_location.svg",
+      scale: 0.15,
+    }),
+    text: new ol.style.Text({
+      text: feature.get("sigle"),
+      font: "bold 12px Arial",
+      fill: new ol.style.Fill({ color: "#ffffff" }),
+      stroke: new ol.style.Stroke({ color: "#000000", width: 3 }),
+      offsetY: -15, // Place l'étiquette au-dessus de l'icône
+    }),
+  });
+}
+
+// Fonction de style pour la sélection et le survol
+function createHighlightStyle(feature) {
+  return new ol.style.Style({
+    image: new ol.style.Icon({
+      anchor: [0.5, 1],
+      src: "./resources/images/partner_location_y.svg",
+      scale: 0.2,
+    }),
+    text: new ol.style.Text({
+      text: feature.get("sigle"),
+      font: "bold 12px Arial",
+      fill: new ol.style.Fill({ color: "#0000FF" }),
+      stroke: new ol.style.Stroke({ color: "#ffffff", width: 4 }),
+      offsetY: -15, // Assure une position constante de l'étiquette
+    }),
+  });
+}
+
+// Gestion du survol de la couche partnerLayer
+let currentHoveredFeature = null;
+map.on("pointermove", function (evt) {
+  if (currentHoveredFeature) {
+    currentHoveredFeature.setStyle(createDefaultStyle(currentHoveredFeature));
+    currentHoveredFeature = null;
+  }
+
+  // Applique le style de survol uniquement aux entités de partnerLayer
+  map.forEachFeatureAtPixel(evt.pixel, function (feature, layer) {
+    if (layer === partnerLayer) {
+      feature.setStyle(createHighlightStyle(feature));
+      currentHoveredFeature = feature;
+      return true;
+    }
+  });
 });
 
-// Ajouter l'interaction à la carte
+// Interaction de sélection pour la couche des partenaires
+var selectPartner = new ol.interaction.Select({
+  layers: [partnerLayer],
+  style: function (feature) {
+    return createHighlightStyle(feature);
+  },
+});
 map.addInteraction(selectPartner);
 
 var partnerLayerVisible = true;
@@ -649,10 +666,7 @@ function clearResults() {
   // Removed line: map.removeLayer(queryGeoJSON);
 }
 
-// Function to zoom and highlight a specific feature in the partner layer
-// Fonction pour zoomer et sélectionner un point spécifique
 function zoomToFeature(featureElement, layerName, attributeName) {
-  // Texte de l'attribut à rechercher
   const value_txt = featureElement.innerHTML;
 
   // Désélectionner tous les points avant de sélectionner un nouveau point
@@ -684,21 +698,27 @@ function zoomToFeature(featureElement, layerName, attributeName) {
             "EPSG:3857"
           );
 
-          // Créer un buffer autour du point transformé et zoomer dessus
+          // Zoomer sur la zone d'extension autour du point
           const pointExtent = ol.extent.buffer(
             [...transformedCoords, ...transformedCoords],
             1000
           );
           map.getView().fit(pointExtent, { duration: 1000 });
 
-          // Créer une nouvelle entité (feature) pour la sélection
-          const feature = new ol.Feature(new ol.geom.Point(transformedCoords));
-          feature.set("sigle", value_txt); // Assigner un attribut pour l'identification
+          // Trouver la feature existante dans partnerLayer
+          let foundFeature = null;
+          partnerLayer.getSource().forEachFeature(function (feature) {
+            if (feature.get("sigle") === value_txt) {
+              foundFeature = feature;
+            }
+          });
 
-          // Ajouter l'entité au `partnerLayer` et la sélectionner
-          const partnerLayerSource = partnerLayer.getSource();
-          partnerLayerSource.addFeature(feature);
-          selectPartner.getFeatures().push(feature); // Activer la sélection
+          // Si la feature est trouvée, la sélectionner
+          if (foundFeature) {
+            selectPartner.getFeatures().push(foundFeature); // Activer la sélection
+          } else {
+            console.warn("Feature introuvable dans partnerLayer.");
+          }
         } else {
           console.warn("Aucune coordonnée disponible pour cette entité.");
         }

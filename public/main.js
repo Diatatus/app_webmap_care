@@ -650,9 +650,15 @@ function clearResults() {
 }
 
 // Function to zoom and highlight a specific feature in the partner layer
+// Fonction pour zoomer et sélectionner un point spécifique
 function zoomToFeature(featureElement, layerName, attributeName) {
+  // Texte de l'attribut à rechercher
   const value_txt = featureElement.innerHTML;
 
+  // Désélectionner tous les points avant de sélectionner un nouveau point
+  selectPartner.getFeatures().clear();
+
+  // Requête pour récupérer les coordonnées du point dans la base de données
   $.ajax({
     url: "http://localhost:3000/api/zoomFeature",
     type: "POST",
@@ -663,69 +669,45 @@ function zoomToFeature(featureElement, layerName, attributeName) {
       value: value_txt,
     }),
     success: function (response) {
+      console.log("Géométrie reçue :", response.geometry);
+
       if (response.geometry) {
         const geometry = JSON.parse(response.geometry);
 
         if (geometry.type === "Point") {
           let [x, y] = geometry.coordinates;
 
-          // Transform coordinates from EPSG:4326 to EPSG:3857
+          // Transformation des coordonnées de EPSG:4326 à EPSG:3857
           const transformedCoords = ol.proj.transform(
             [x, y],
             "EPSG:4326",
             "EPSG:3857"
           );
 
-          // Fit map view to selected feature
+          // Créer un buffer autour du point transformé et zoomer dessus
           const pointExtent = ol.extent.buffer(
             [...transformedCoords, ...transformedCoords],
             1000
           );
           map.getView().fit(pointExtent, { duration: 1000 });
 
-          // Find the existing feature in the partnerLayer source and apply selection style
-          const partnerLayerSource = partnerLayer.getSource();
-          const featureToHighlight = partnerLayerSource
-            .getFeatures()
-            .find((f) => f.get(attributeName) === value_txt);
+          // Créer une nouvelle entité (feature) pour la sélection
+          const feature = new ol.Feature(new ol.geom.Point(transformedCoords));
+          feature.set("sigle", value_txt); // Assigner un attribut pour l'identification
 
-          if (featureToHighlight) {
-            featureToHighlight.setStyle(
-              new ol.style.Style({
-                image: new ol.style.Icon({
-                  anchor: [0.5, 1],
-                  src: "./resources/images/partner_location_y.svg", // Yellow icon for selection
-                  scale: 0.2, // Increased scale for selected icon
-                }),
-                text: new ol.style.Text({
-                  text: featureToHighlight.get("sigle"),
-                  font: "bold 12px Arial",
-                  fill: new ol.style.Fill({ color: "#0000FF" }), // Blue text
-                  stroke: new ol.style.Stroke({ color: "#ffffff", width: 4 }), // White halo
-                  offsetX: -20,
-                }),
-              })
-            );
-          } else {
-            console.warn("Feature not found in partner layer.");
-          }
-        } else if (geometry.coordinates && geometry.coordinates.length) {
-          // Handle non-point geometry
-          const extent = ol.extent.boundingExtent(geometry.coordinates.flat(2));
-          if (!ol.extent.isEmpty(extent)) {
-            map.getView().fit(extent, { duration: 1000 });
-          } else {
-            console.warn("Empty extent for feature.");
-          }
+          // Ajouter l'entité au `partnerLayer` et la sélectionner
+          const partnerLayerSource = partnerLayer.getSource();
+          partnerLayerSource.addFeature(feature);
+          selectPartner.getFeatures().push(feature); // Activer la sélection
         } else {
-          console.warn("No coordinates available for feature.");
+          console.warn("Aucune coordonnée disponible pour cette entité.");
         }
       } else {
-        console.warn("No geometry data found for feature.");
+        console.warn("Aucune donnée de géométrie trouvée pour l'entité.");
       }
     },
     error: function (error) {
-      console.error("Error fetching geometry:", error);
+      console.error("Erreur lors de la récupération de la géométrie :", error);
     },
   });
 }

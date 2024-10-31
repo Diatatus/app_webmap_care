@@ -88,12 +88,12 @@ app.get("/api/regions_villes", async (req, res) => {
   }
 });
 
-app.get("/api/cameroun", async (req, res) => {
+app.get("/api/world_map", async (req, res) => {
   try {
     const result = await pool.query(
       "SELECT jsonb_build_object('type', 'FeatureCollection', 'features', jsonb_agg(feature)) " +
         "FROM (SELECT jsonb_build_object('type', 'Feature', 'geometry', ST_AsGeoJSON(geom)::jsonb, " +
-        "'properties', to_jsonb(row) - 'geom') AS feature FROM (SELECT * FROM cameroun) row) features;"
+        "'properties', to_jsonb(row) - 'geom') AS feature FROM (SELECT * FROM world_map) row) features;"
     );
     res.json(result.rows[0].jsonb_build_object);
   } catch (err) {

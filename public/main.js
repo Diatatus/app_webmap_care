@@ -142,6 +142,71 @@ map.addLayer(regionLayer);
 // Variable pour savoir si la couche est actuellement visible ou non
 var regionLayerVisible = true;
 
+// Importer la couche de limite du Cameroun
+var cameroonMaskLayer = new ol.layer.Vector({
+  source: new ol.source.Vector({
+    url: "/api/regions_villes", // URL de l'endpoint Node.js pour les limites du Cameroun
+    format: new ol.format.GeoJSON(),
+  }),
+  style: new ol.style.Style({
+    fill: new ol.style.Fill({
+      color: "rgba(255, 255, 255, 0)", // Transparence pour voir la couche en dessous
+    }),
+    stroke: new ol.style.Stroke({
+      color: "#FF8000", // Couleur de la bordure
+      width: 2,
+    }),
+  }),
+});
+
+map.addLayer(cameroonMaskLayer);
+
+// Fonction de masquage pour limiter l'affichage aux limites du Cameroun
+function maskBackground(event) {
+  const context = event.context;
+  context.save();
+  context.clearRect(0, 0, context.canvas.width, context.canvas.height);
+
+  // Obtenir les coordonnées des limites du Cameroun pour le type MultiPolygon
+  cameroonMaskLayer
+    .getSource()
+    .getFeatures()
+    .forEach((feature) => {
+      const geometry = feature
+        .getGeometry()
+        .clone()
+        .transform("EPSG:4326", map.getView().getProjection());
+
+      // Boucle à travers chaque polygone du MultiPolygon
+      geometry.getPolygons().forEach((polygon) => {
+        const coords = polygon.getCoordinates()[0]; // Récupère les coordonnées de chaque polygone
+        context.beginPath();
+        coords.forEach((coord, index) => {
+          const pixel = map.getPixelFromCoordinate(coord);
+          if (index === 0) {
+            context.moveTo(pixel[0], pixel[1]);
+          } else {
+            context.lineTo(pixel[0], pixel[1]);
+          }
+        });
+        context.closePath();
+      });
+    });
+
+  // Utiliser l'opération `destination-in` pour afficher uniquement à l'intérieur du polygone
+  context.globalCompositeOperation = "destination-in";
+  context.fillStyle = "rgba(0, 0, 0, 1)";
+  context.fill();
+  context.restore();
+}
+
+// Appliquer le masque aux couches de fond
+osm.on("postrender", maskBackground);
+bingMapsAerial.on("postrender", maskBackground);
+
+// Rendre la couche de limite visible pour référence
+cameroonMaskLayer.setVisible(true);
+
 // Gestion du clic sur le bouton pour afficher/masquer la couche
 document.getElementById("toggleRegions").addEventListener("click", function () {
   if (!regionLayerVisible) {
@@ -708,7 +773,10 @@ function zoomToFeature(featureElement, layerName, attributeName) {
           // Trouver la feature existante dans partnerLayer
           let foundFeature = null;
           partnerLayer.getSource().forEachFeature(function (feature) {
-            if (feature.get("sigle") === value_txt) {
+            if (
+              feature.get("sigle") === value_txt ||
+              feature.get("nom") === value_txt
+            ) {
               foundFeature = feature;
             }
           });

@@ -112,6 +112,34 @@ osm.setVisible(true);
 bingMapsAerial.setVisible(false);
 
 // Créez la couche "Régions" avec les styles définis
+var CamerounLayer = new ol.layer.Vector({
+  name: "Cameroun",
+  source: new ol.source.Vector({
+    url: "/api/cameroun", // URL de l'endpoint Node.js pour récupérer les données GeoJSON
+    format: new ol.format.GeoJSON(),
+  }),
+  style: function (f) {
+    return new ol.style.Style({
+      image: new ol.style.RegularShape({
+        radius: 5,
+        radius2: 0,
+        points: 4,
+        stroke: new ol.style.Stroke({ color: "#000", width: 1 }),
+      }),
+      stroke: new ol.style.Stroke({
+        width: 0.1,
+        color: [255, 128, 0],
+      }),
+      fill: new ol.style.Fill({
+        color: [255, 128, 0, 0],
+      }),
+    });
+  },
+});
+
+map.addLayer(CamerounLayer);
+
+// Créez la couche "Régions" avec les styles définis
 var regionLayer = new ol.layer.Vector({
   name: "Régions",
   source: new ol.source.Vector({
@@ -141,34 +169,6 @@ map.addLayer(regionLayer);
 
 // Variable pour savoir si la couche est actuellement visible ou non
 var regionLayerVisible = true;
-
-// Créez la couche "Régions" avec les styles définis
-var CamerounLayer = new ol.layer.Vector({
-  name: "Cameroun",
-  source: new ol.source.Vector({
-    url: "/api/cameroun", // URL de l'endpoint Node.js pour récupérer les données GeoJSON
-    format: new ol.format.GeoJSON(),
-  }),
-  style: function (f) {
-    return new ol.style.Style({
-      image: new ol.style.RegularShape({
-        radius: 5,
-        radius2: 0,
-        points: 4,
-        stroke: new ol.style.Stroke({ color: "#000", width: 1 }),
-      }),
-      stroke: new ol.style.Stroke({
-        width: 0.1,
-        color: [255, 128, 0],
-      }),
-      fill: new ol.style.Fill({
-        color: [255, 128, 0, 0],
-      }),
-    });
-  },
-});
-
-map.addLayer(CamerounLayer);
 
 // Créez la couche "Régions" avec les styles définis
 var worldMapLayer = new ol.layer.Vector({

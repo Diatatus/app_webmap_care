@@ -545,11 +545,7 @@ document
 // Interaction : afficher un popup uniquement pour la couche regions
 map.on("click", function (evt) {
   var feature = map.forEachFeatureAtPixel(evt.pixel, function (feature, layer) {
-    if (layer === regionLayer) {
-      // Vérifie si la couche est la couche regions
-      return feature;
-    }
-    if (layer === CamerounLayer) {
+    if (layer === regionLayer || layer === CamerounLayer) {
       // Vérifie si la couche est la couche regions
       return feature;
     }
@@ -563,6 +559,23 @@ map.on("click", function (evt) {
     return;
   }
 });
+
+// Function to show the popup with feature data at the application load
+function showInitialPopup() {
+  // Vérifier que CamerounLayer a bien été ajoutée à la carte
+  CamerounLayer.getSource().once("change", function (e) {
+    if (CamerounLayer.getSource().getState() === "ready") {
+      // Obtenir la première entité de la couche Cameroun
+      const features = CamerounLayer.getSource().getFeatures();
+      if (features.length > 0) {
+        // Afficher le popup pour la première entité
+        showPopup(features[0]);
+      }
+    }
+  });
+}
+
+showInitialPopup();
 
 function toggleLayer(eve) {
   var lyrname = eve.target.value;

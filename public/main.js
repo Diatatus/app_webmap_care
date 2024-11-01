@@ -142,21 +142,58 @@ map.addLayer(regionLayer);
 // Variable pour savoir si la couche est actuellement visible ou non
 var regionLayerVisible = true;
 
-// Importer la couche de la carte du monde sans le Cameroun
-var worldMapLayer = new ol.layer.Vector({
+// Créez la couche "Régions" avec les styles définis
+var CamerounLayer = new ol.layer.Vector({
+  name: "Cameroun",
   source: new ol.source.Vector({
-    url: "/api/world_map", // Endpoint pour obtenir les limites de la carte du monde
+    url: "/api/cameroun", // URL de l'endpoint Node.js pour récupérer les données GeoJSON
     format: new ol.format.GeoJSON(),
   }),
-  style: new ol.style.Style({
-    fill: new ol.style.Fill({
-      color: "rgba(255, 255, 255, 0.8)", // Remplissage blanc opaque
-    }),
-    stroke: new ol.style.Stroke({
-      color: "rgba(0, 0, 0, 0)", // Aucune couleur de contour (transparence totale)
-      width: 0, // Pas de bordure visible
-    }),
+  style: function (f) {
+    return new ol.style.Style({
+      image: new ol.style.RegularShape({
+        radius: 5,
+        radius2: 0,
+        points: 4,
+        stroke: new ol.style.Stroke({ color: "#000", width: 1 }),
+      }),
+      stroke: new ol.style.Stroke({
+        width: 0.1,
+        color: [255, 128, 0],
+      }),
+      fill: new ol.style.Fill({
+        color: [255, 128, 0, 0],
+      }),
+    });
+  },
+});
+
+map.addLayer(CamerounLayer);
+
+// Créez la couche "Régions" avec les styles définis
+var worldMapLayer = new ol.layer.Vector({
+  name: "WorldMap",
+  source: new ol.source.Vector({
+    url: "/api/world_map", // URL de l'endpoint Node.js pour récupérer les données GeoJSON
+    format: new ol.format.GeoJSON(),
   }),
+  style: function (f) {
+    return new ol.style.Style({
+      image: new ol.style.RegularShape({
+        radius: 5,
+        radius2: 0,
+        points: 4,
+        stroke: new ol.style.Stroke({ color: "#000", width: 1 }),
+      }),
+      stroke: new ol.style.Stroke({
+        width: 0.1,
+        color: [255, 128, 0],
+      }),
+      fill: new ol.style.Fill({
+        color: [50, 50, 50, 0.8],
+      }),
+    });
+  },
 });
 
 map.addLayer(worldMapLayer);
@@ -509,6 +546,10 @@ document
 map.on("click", function (evt) {
   var feature = map.forEachFeatureAtPixel(evt.pixel, function (feature, layer) {
     if (layer === regionLayer) {
+      // Vérifie si la couche est la couche regions
+      return feature;
+    }
+    if (layer === CamerounLayer) {
       // Vérifie si la couche est la couche regions
       return feature;
     }

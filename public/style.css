@@ -118,7 +118,7 @@ html {
   top: 150%;
   left: 150%;
   padding: 10px;
-  z-index: 3000;
+  z-index: 5000;
 }
 
 .ol-control.ol-storymap {
@@ -129,13 +129,14 @@ html {
   border-radius: 0.5em;
   height: 650px;
   background-color: rgba(255, 255, 255, 0.5);
-  z-index: 3000;
+  z-index: 5000;
 }
 
 #story img {
   display: block;
   margin: auto;
   max-width: 100%;
+  z-index: 5000;
 }
 #story .chapter.ol-select {
   background-color: rgba(255, 255, 255, 0.8);

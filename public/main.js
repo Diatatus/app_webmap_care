@@ -219,7 +219,7 @@ var select = new ol.interaction.Select({
   // Filtrer les couches sélectionnables (exclure partnerLayer)
   filter: function (feature, layer) {
     // Retourner vrai uniquement si ce n'est pas la couche partnerLayer
-    return layer !== partnerLayer && layer !== worldMapLayer;
+    return layer !== partnerLayer;
   },
 });
 

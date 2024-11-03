@@ -219,7 +219,7 @@ var select = new ol.interaction.Select({
   // Filtrer les couches sélectionnables (exclure partnerLayer)
   filter: function (feature, layer) {
     // Retourner vrai uniquement si ce n'est pas la couche partnerLayer
-    return layer !== partnerLayer;
+    return layer !== partnerLayer && layer !== worldMapLayer;
   },
 });
 
@@ -365,6 +365,31 @@ var clusterStyle = function (feature) {
 var clusterLayer = new ol.layer.Vector({
   source: clusterSource,
   style: clusterStyle, // Appliquer le style aux clusters
+});
+
+// Gestion du zoom lors du clic sur un cluster
+map.on("click", function (evt) {
+  map.forEachFeatureAtPixel(evt.pixel, function (feature, layer) {
+    if (layer === clusterLayer) {
+      var clusteredFeatures = feature.get("features");
+      if (clusteredFeatures.length > 1) {
+        // Plusieurs entités dans le cluster : zoomer sur l'étendue
+        var extent = ol.extent.createEmpty();
+        clusteredFeatures.forEach(function (f) {
+          ol.extent.extend(extent, f.getGeometry().getExtent());
+        });
+        map.getView().fit(extent, { duration: 1000 });
+      } else if (clusteredFeatures.length === 1) {
+        // Une seule entité : zoomer directement dessus
+        var coordinates = clusteredFeatures[0].getGeometry().getCoordinates();
+        map.getView().animate({
+          center: coordinates,
+          zoom: Math.max(map.getView().getZoom() + 2, 15), // Zoomer légèrement
+          duration: 1000,
+        });
+      }
+    }
+  });
 });
 
 // Ajout des deux couches mais on alterne en fonction du zoom

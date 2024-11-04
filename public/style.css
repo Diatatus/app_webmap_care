@@ -890,3 +890,16 @@ html {
 #domestic-violence-icon p {
   color: black;
 }
+
+.ol-popup {
+  position: absolute;
+  background-color: white;
+  padding: 10px;
+  border-radius: 8px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+  display: none;
+  z-index: 1000;
+}
+.ol-popup-content {
+  font-size: 14px;
+}

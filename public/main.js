@@ -304,6 +304,53 @@ var selectPartner = new ol.interaction.Select({
 });
 map.addInteraction(selectPartner);
 
+// Création du popup
+var popup = new ol.Overlay({
+  element: document.getElementById("popup"),
+  positioning: "bottom-center",
+  stopEvent: true,
+  offset: [0, -10],
+});
+map.addOverlay(popup);
+
+// Fonction pour créer le contenu du popup
+function showPartnerInfo(feature) {
+  const content = document.getElementById("popup-content");
+  const nom = feature.get("nom");
+  const sigle = feature.get("sigle");
+  const activite = feature.get("act_srvc_o");
+  const logoUrl = feature.get("img_logo"); // URL du logo si disponible
+  const info = feature.get("info");
+
+  // Contenu du popup
+  content.innerHTML = `
+    <strong>${nom}</strong> <br />
+    <img src="${logoUrl}" alt="Logo" style="width: 50px; height: auto;" /> <br />
+    Sigle: ${sigle} <br />
+    Activité: ${activite} <br />
+    ${info}
+  `;
+
+  popup.setPosition(feature.getGeometry().getCoordinates());
+  document.getElementById("popup").style.display = "block";
+}
+
+// Gestion du survol sur la couche partnerLayer
+map.on("pointermove", function (evt) {
+  const feature = map.forEachFeatureAtPixel(
+    evt.pixel,
+    function (feature, layer) {
+      return layer === partnerLayer ? feature : null;
+    }
+  );
+
+  if (feature) {
+    showPartnerInfo(feature);
+  } else {
+    document.getElementById("popup").style.display = "none";
+  }
+});
+
 var partnerLayerVisible = true;
 
 // Gestion du clic sur le bouton pour afficher/masquer la couche

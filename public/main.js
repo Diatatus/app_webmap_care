@@ -304,51 +304,40 @@ var selectPartner = new ol.interaction.Select({
 });
 map.addInteraction(selectPartner);
 
-// Création du popup
-var popup = new ol.Overlay({
-  element: document.getElementById("popup"),
-  positioning: "bottom-center",
-  stopEvent: true,
-  offset: [0, -10],
-});
-map.addOverlay(popup);
-
-// Fonction pour créer le contenu du popup
-function showPartnerInfo(feature) {
-  const content = document.getElementById("popup-content");
-  const nom = feature.get("nom");
-  const sigle = feature.get("sigle");
-  const activite = feature.get("act_srvc_o");
-  const logoUrl = feature.get("img_logo"); // URL du logo si disponible
-  const info = feature.get("info");
-
-  // Contenu du popup
-  content.innerHTML = `
-    <strong>${nom}</strong> <br />
-    <img src="${logoUrl}" alt="Logo" style="width: 50px; height: auto;" /> <br />
-    Sigle: ${sigle} <br />
-    Activité: ${activite} <br />
-    ${info}
-  `;
-
-  popup.setPosition(feature.getGeometry().getCoordinates());
-  document.getElementById("popup").style.display = "block";
-}
-
-// Gestion du survol sur la couche partnerLayer
 map.on("pointermove", function (evt) {
-  const feature = map.forEachFeatureAtPixel(
-    evt.pixel,
-    function (feature, layer) {
-      return layer === partnerLayer ? feature : null;
-    }
-  );
+  map.forEachFeatureAtPixel(evt.pixel, function (feature, layer) {
+    if (layer === partnerLayer) {
+      // Set the popup content
+      document.getElementById("partner-name").textContent = feature.get("nom");
+      document.getElementById("partner-rating").textContent =
+        feature.get("rating") || "4.0"; // Replace with actual rating if available
+      document.getElementById("partner-type").textContent =
+        feature.get("type") || "Business Type"; // Example
+      document.getElementById("partner-status").textContent =
+        feature.get("status") || "Closed - Opens at 8:30";
+      document.getElementById("partner-activity").textContent =
+        feature.get("activity") || "Service Offered";
 
-  if (feature) {
-    showPartnerInfo(feature);
-  } else {
-    document.getElementById("popup").style.display = "none";
-  }
+      // Set the logo
+      document.getElementById("partner-logo").src =
+        feature.get("logoUrl") || "./path/to/default/logo.png"; // Update to actual property
+
+      // Position and display the popup
+      const popup = document.getElementById("partner-popup");
+      popup.style.left = evt.pixel[0] + "px";
+      popup.style.top = evt.pixel[1] - 150 + "px"; // Adjust position above the point
+      popup.style.display = "block";
+
+      return true; // Stop if we found a feature
+    } else {
+      document.getElementById("partner-popup").style.display = "none";
+    }
+  });
+});
+
+// Close the popup when the map is clicked elsewhere
+map.on("click", function () {
+  document.getElementById("partner-popup").style.display = "none";
 });
 
 var partnerLayerVisible = true;

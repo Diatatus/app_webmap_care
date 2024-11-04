@@ -891,15 +891,45 @@ html {
   color: black;
 }
 
-.ol-popup {
+.popup {
   position: absolute;
-  background-color: white;
-  padding: 10px;
-  border-radius: 8px;
-  box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
   display: none;
-  z-index: 1000;
-}
-.ol-popup-content {
+  background: white;
+  box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2);
+  border-radius: 8px;
+  width: 250px;
+  overflow: hidden;
+  font-family: Arial, sans-serif;
   font-size: 14px;
+}
+
+.popup-content {
+  display: flex;
+  padding: 10px;
+}
+
+.popup-logo {
+  width: 50px;
+  height: 50px;
+  border-radius: 4px;
+  margin-right: 10px;
+}
+
+.popup-details {
+  flex: 1;
+}
+
+.popup h3 {
+  margin: 0;
+  font-size: 16px;
+  color: #333;
+}
+
+.popup-rating {
+  color: #ffbc00;
+}
+
+.popup p {
+  margin: 5px 0;
+  color: #666;
 }

@@ -901,6 +901,7 @@ html {
   overflow: hidden;
   font-family: Arial, sans-serif;
   font-size: 14px;
+  pointer-events: none; /* Prevents interference with map clicks */
 }
 
 .popup-content {
@@ -932,4 +933,11 @@ html {
 .popup p {
   margin: 5px 0;
   color: #666;
+}
+
+#partner-activity {
+  max-height: 50px; /* Limit height for scrolling */
+  overflow-y: auto;
+  margin: 5px 0;
+  padding-right: 5px;
 }

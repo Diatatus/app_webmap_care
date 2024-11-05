@@ -306,7 +306,7 @@ map.addInteraction(selectPartner);
 
 map.on("pointermove", function (evt) {
   // Define the minimum zoom level for the popup to appear
-  const minZoomLevel = 10; // Adjust this to your desired zoom level
+  const minZoomLevel = 12; // Adjust this to your desired zoom level
   const currentZoom = map.getView().getZoom();
 
   // Only proceed if the current zoom level is greater than or equal to the minZoomLevel

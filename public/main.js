@@ -305,34 +305,45 @@ var selectPartner = new ol.interaction.Select({
 map.addInteraction(selectPartner);
 
 map.on("pointermove", function (evt) {
-  map.forEachFeatureAtPixel(evt.pixel, function (feature, layer) {
-    if (layer === partnerLayer) {
-      // Set the popup content
-      document.getElementById("partner-name").textContent = feature.get("nom");
-      document.getElementById("partner-rating").textContent =
-        feature.get("rating") || "4.0"; // Replace with actual rating if available
-      document.getElementById("partner-type").textContent =
-        feature.get("type") || "Business Type"; // Example
-      document.getElementById("partner-status").textContent =
-        feature.get("status") || "Closed - Opens at 8:30";
-      document.getElementById("partner-activity").textContent =
-        feature.get("activity") || "Service Offered";
+  // Define the minimum zoom level for the popup to appear
+  const minZoomLevel = 10; // Adjust this to your desired zoom level
+  const currentZoom = map.getView().getZoom();
 
-      // Set the logo
-      document.getElementById("partner-logo").src =
-        feature.get("logoUrl") || "./path/to/default/logo.png"; // Update to actual property
+  // Only proceed if the current zoom level is greater than or equal to the minZoomLevel
+  if (currentZoom >= minZoomLevel) {
+    map.forEachFeatureAtPixel(evt.pixel, function (feature, layer) {
+      if (layer === partnerLayer) {
+        // Set the popup content
+        document.getElementById("partner-name").textContent =
+          feature.get("nom");
+        document.getElementById("partner-rating").textContent =
+          feature.get("rating") || "4.0"; // Replace with actual rating if available
+        document.getElementById("partner-type").textContent =
+          feature.get("type") || "Business Type"; // Example
+        document.getElementById("partner-status").textContent =
+          feature.get("status") || "Closed - Opens at 8:30";
+        document.getElementById("partner-activity").textContent =
+          feature.get("act_srvc_o") || "Service Offered";
 
-      // Position and display the popup
-      const popup = document.getElementById("partner-popup");
-      popup.style.left = evt.pixel[0] + "px";
-      popup.style.top = evt.pixel[1] - 150 + "px"; // Adjust position above the point
-      popup.style.display = "block";
+        // Set the logo
+        document.getElementById("partner-logo").src =
+          feature.get("logoUrl") || "./path/to/default/logo.png"; // Update to actual property
 
-      return true; // Stop if we found a feature
-    } else {
-      document.getElementById("partner-popup").style.display = "none";
-    }
-  });
+        // Position and display the popup
+        const popup = document.getElementById("partner-popup");
+        popup.style.left = evt.pixel[0] + "px";
+        popup.style.top = evt.pixel[1] - 150 + "px"; // Adjust position above the point
+        popup.style.display = "block";
+
+        return true; // Stop if we found a feature
+      } else {
+        document.getElementById("partner-popup").style.display = "none";
+      }
+    });
+  } else {
+    // Hide the popup if the zoom level is below the minimum required level
+    document.getElementById("partner-popup").style.display = "none";
+  }
 });
 
 // Close the popup when the map is clicked elsewhere

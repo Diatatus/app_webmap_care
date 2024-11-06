@@ -313,16 +313,13 @@ map.on("pointermove", function (evt) {
       if (layer === partnerLayer) {
         document.getElementById("partner-name").textContent =
           feature.get("nom");
-        document.getElementById("partner-rating").textContent =
-          feature.get("rating") || "4.0";
+
         document.getElementById("partner-type").textContent =
-          feature.get("type") || "Business Type";
-        document.getElementById("partner-status").textContent =
-          feature.get("status") || "Closed - Opens at 8:30";
+          feature.get("sigle");
+
         document.getElementById("partner-activity").textContent =
-          feature.get("act_srvc_o") || "Service Offered";
-        document.getElementById("partner-logo").src =
-          feature.get("logoUrl") || "./path/to/default/logo.png";
+          feature.get("act_srvc_o");
+        document.getElementById("partner-logo").src = feature.get("img_logo");
 
         // Position the popup slightly offset from the point
         const popup = document.getElementById("partner-popup");

@@ -319,6 +319,9 @@ map.on("pointermove", function (evt) {
 
         document.getElementById("partner-activity").textContent =
           feature.get("act_srvc_o");
+
+        document.getElementById("partner-info").textContent =
+          feature.get("info");
         document.getElementById("partner-logo").src = feature.get("img_logo");
 
         // Position the popup slightly offset from the point

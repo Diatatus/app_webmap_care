@@ -5,6 +5,7 @@ const path = require("path");
 const pool = require("./db.js"); // Importation du module de connexion à la base de données
 require("dotenv").config();
 
+//Port d'acces
 const PORT = process.env.PORT || 3000;
 
 app.use(cors());
@@ -45,6 +46,7 @@ app.post("/api/liveSearch", async (req, res) => {
   }
 });
 
+// Endpoint pour le zoom sur les données
 app.post("/api/zoomFeature", async (req, res) => {
   const { layerName, attributeName, value } = req.body;
 
@@ -68,7 +70,7 @@ app.post("/api/zoomFeature", async (req, res) => {
   }
 });
 
-// Endpoint pour récupérer les données GeoJSON de PostGIS
+// Endpoint pour les regions et villes du cameroun
 app.get("/api/regions_villes", async (req, res) => {
   try {
     const result = await pool.query(
@@ -88,6 +90,7 @@ app.get("/api/regions_villes", async (req, res) => {
   }
 });
 
+//Endpoint pour le cameroun
 app.get("/api/cameroun", async (req, res) => {
   try {
     const result = await pool.query(
@@ -107,6 +110,7 @@ app.get("/api/cameroun", async (req, res) => {
   }
 });
 
+//Endpoint pour la carte du monde assombri
 app.get("/api/world_map", async (req, res) => {
   try {
     const result = await pool.query(
@@ -126,6 +130,7 @@ app.get("/api/world_map", async (req, res) => {
   }
 });
 
+//Endpoint pour la couche des partenaires
 app.get("/api/care_partner", async (req, res) => {
   try {
     const result = await pool.query(
@@ -145,12 +150,12 @@ app.get("/api/care_partner", async (req, res) => {
   }
 });
 
-// Serve loading.html as the default page
+//Ouverture sur la page
 app.get("/", (req, res) => {
   res.sendFile(path.join(__dirname, "public", "index.html"));
 });
 
-// Démarrer le serveur
+// Démarrage du serveur
 app.listen(PORT, () => {
   console.log(`Server is running on http://localhost:${PORT}`);
 });

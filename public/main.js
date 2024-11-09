@@ -1,59 +1,57 @@
+// Chargement de la page de loading
 $(document).ready(function () {
   setTimeout(function () {
     $("#loading").fadeOut(); // Masquer le div de chargement après 3 secondes
   }, 2000); // Délai de 3000 millisecondes (3 secondes)
 });
 
-// Get elements
+// Définition du projection et  de la vue sur la carte
 
 const customproj = ol.proj.get("EPSG:4326");
 
-// The Map
 var mapView = new ol.View({
   center: ol.proj.fromLonLat([12.2, 7.5]),
   zoom: 6,
-  minZoom: 6, // Prevent zooming out below this zoom level
-  rotation: 0, // Disable initial rotation
-  constrainRotation: true, // Prevent accidental rotation
+  minZoom: 6, // Zoom  arrière minimal
+  rotation: 0, // Désactivation de la rotation
+  constrainRotation: true,
 });
 
-// Create a list of interactions without rotation interactions
+// Liste d'interaction sans rotation
 var interactions = [
-  new ol.interaction.DragPan(), // Allows panning of the map
-  new ol.interaction.PinchZoom(), // Allows pinch zooming (for touch devices)
-  new ol.interaction.MouseWheelZoom(), // Allows zooming with the mouse wheel
-  new ol.interaction.DragZoom(), // Allows zooming by selecting a region
+  new ol.interaction.DragPan(),
+  new ol.interaction.PinchZoom(),
+  new ol.interaction.MouseWheelZoom(),
+  new ol.interaction.DragZoom(),
 ];
 
-// Initialize the map with the defined interactions
+// Initialisation de la carte avec les interactions définies
 var map = new ol.Map({
-  target: "map", // Target the 'map' div element
+  target: "map",
   view: mapView,
-  interactions: new ol.Collection(interactions), // Use customized interactions
-  controls: [], // Customize or keep default controls as desired
+  interactions: new ol.Collection(interactions),
+  controls: [], // Controles par defaut
 });
 
-// Attribution control
+// Vue initiale
+var initialCenter = [12.2, 7.5];
+var initialZoom = 6;
 
-// Assume 'map' is your OpenLayers map instance
-// Enregistrer la vue initiale
-var initialCenter = [12.2, 7.5]; // Remplacez par les coordonnées initiales de votre carte
-var initialZoom = 6; // Remplacez par le zoom initial de votre carte
+// Zoom avant, arriere, retour sur la vue initiale
 document.getElementById("zoom-in").addEventListener("click", function () {
   var view = map.getView();
   var zoom = view.getZoom();
   view.animate({
     zoom: zoom + 1,
-    duration: 250, // Duration in milliseconds
+    duration: 250,
   });
 });
-
 document.getElementById("zoom-out").addEventListener("click", function () {
   var view = map.getView();
   var zoom = view.getZoom();
   view.animate({
     zoom: zoom - 1,
-    duration: 250, // Duration in milliseconds
+    duration: 250,
   });
 });
 document.getElementById("zoom-initial").addEventListener("click", function () {
@@ -61,14 +59,15 @@ document.getElementById("zoom-initial").addEventListener("click", function () {
   view.animate({
     center: ol.proj.fromLonLat(initialCenter),
     zoom: initialZoom,
-    duration: 250, // Duration in milliseconds
+    duration: 250,
   });
 });
 
+// Changement des fonds de carte
 function switchLayer(layerName) {
   var layers = map.getLayers().getArray();
   layers.forEach(function (layer) {
-    // Vérifie si la couche est une couche de base (fond de carte)
+    // Vérifie si la couche est une coouche de fond de carte
     if (layer.get("isBaseLayer")) {
       if (layer.get("name") === layerName) {
         layer.setVisible(true);
@@ -79,8 +78,7 @@ function switchLayer(layerName) {
   });
 }
 
-//Bing map Tile
-
+//Fonds de carte Bingmapas et OSM
 var bingMapsAerial = new ol.layer.Tile({
   title: "Aerial",
   visible: false,
@@ -106,12 +104,10 @@ var osm = new ol.layer.Tile({
 
 map.addLayer(osm);
 map.addLayer(bingMapsAerial);
-
-// Initially, set only one layer visible
 osm.setVisible(true);
 bingMapsAerial.setVisible(false);
 
-// Créez la couche "Régions" avec les styles définis
+// Definition de couche des limites national du cameroun
 var CamerounLayer = new ol.layer.Vector({
   name: "Cameroun",
   source: new ol.source.Vector({
@@ -139,7 +135,7 @@ var CamerounLayer = new ol.layer.Vector({
 
 map.addLayer(CamerounLayer);
 
-// Créez la couche "Régions" avec les styles définis
+// Définition de la couche des limites des Régions et Villes (Yaounde, Douala uniquement) du cameroun
 var regionLayer = new ol.layer.Vector({
   name: "Régions",
   source: new ol.source.Vector({
@@ -167,10 +163,9 @@ var regionLayer = new ol.layer.Vector({
 
 map.addLayer(regionLayer);
 
-// Variable pour savoir si la couche est actuellement visible ou non
-var regionLayerVisible = true;
+var regionLayerVisible = true; // Variable pour savoir si la couche est actuellement visible ou non
 
-// Créez la couche "Régions" avec les styles définis
+// Definition la couche des pays du monde (excepte le Cameroun) avec un style assombri
 var worldMapLayer = new ol.layer.Vector({
   name: "WorldMap",
   source: new ol.source.Vector({

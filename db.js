@@ -2,10 +2,10 @@ const { Pool } = require("pg");
 
 // Configuration de la connexion
 const pool = new Pool({
-  user: "postgres", // Remplacez par votre nom d'utilisateur PostgreSQL
-  host: "localhost", // Remplacez par l'hôte de votre base de données
-  database: "bd_care_app", // Remplacez par le nom de votre base de données
-  password: "geopass", // Remplacez par votre mot de passe PostgreSQL
+  user: "postgres", // Nom d'utilisateur PostgreSQL
+  host: "localhost", // Hôte de votre base de données
+  database: "bd_care_app", // Nom de votre base de données
+  password: "geopass", // Mot de passe PostgreSQL
   port: 5432, // Port par défaut pour PostgreSQL
 });
 

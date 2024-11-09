@@ -44,7 +44,7 @@
       async
       defer></script>
   </head>
-
+  <!-- Page de loading -->
   <div id="loading" class="loading">
     <div class="loader">
       <img
@@ -59,11 +59,11 @@
   </div>
 
   <body>
+    <!-- Carte -->
     <div id="map" class="map2"></div>
 
+    <!-- Buttons couche de données -->
     <div id="layer-slider-container">
-      <!-- Flèche gauche -->
-
       <div id="layer-slider" class="custom-layer-slider-horizontal">
         <button class="btn" id="toggleBases">
           <i class="fas fa-house"></i>Bases
@@ -75,11 +75,10 @@
         <button id="toggleRegions" class="btn">
           <i class="fas fa-chart-line"></i>Regions et Villes
         </button>
-        <!-- Ajoutez d'autres options de couche ici -->
       </div>
-
-      <!-- Flèche droite -->
     </div>
+
+    <!-- Barre de recherche -->
     <div id="care-search-bar" class="care-search-bar">
       <img src="./resources/images/care_.png" alt="CARE Logo" id="care-logo" />
       <div class="search-container">
@@ -93,6 +92,7 @@
       </div>
     </div>
 
+    <!-- Story Map -->
     <div id="story" style="display: block">
       <div
         class="chapter"
@@ -203,6 +203,8 @@
         <div class="ol-scroll-top"><span></span></div>
       </div>
     </div>
+
+    <!-- Popup Indicateurs socio-economiques Regions et Villes-->
     <div id="popup-container" class="popup-container">
       <div id="popup-close-btn-wrapper" class="popup-header">
         <i class="fas fa-chart-line"></i
@@ -211,7 +213,7 @@
       </div>
 
       <div id="popup-info" class="popup-info">
-        <!-- Demography Section -->
+        <!-- Démographie -->
         <h3><strong>Démographie</strong></h3>
         <br />
         <div id="demography-icons">
@@ -228,7 +230,7 @@
           <canvas id="demography-chart"></canvas>
         </div>
 
-        <!-- Health Section -->
+        <!-- Santé -->
         <h3><strong>Santé</strong></h3>
         <div id="health-icons">
           <div id="access-sanity-icon">
@@ -253,8 +255,6 @@
             </p>
           </div>
         </div>
-
-        <!-- HIV Prevalence Section -->
         <div id="hiv-icons">
           <div id="hiv-ribbon" class="icon-center">
             <i class="fas fa-ribbon fa-3x"></i>
@@ -276,7 +276,7 @@
           </div>
         </div>
 
-        <!-- Economy and Employment Section -->
+        <!-- Economie -->
         <h3><strong>Economie et Emploi</strong></h3>
         <div id="economy-icons">
           <div id="poverty-rate-icon">
@@ -302,9 +302,8 @@
           </div>
         </div>
 
+        <!-- Foyer et Planning famillial -->
         <h3><strong>Foyer et Planning Familial</strong></h3>
-
-        <!-- Family Planning Section -->
         <div id="family-planning-icons">
           <div id="unmet-need-icon">
             <i class="fas fa-person-breastfeeding fa-2x"></i>
@@ -322,8 +321,6 @@
             </p>
           </div>
         </div>
-
-        <!-- Domestic Violence Section with Pie Chart -->
         <div id="domestic-violence-section">
           <div id="domestic-violence-icon">
             <i class="fas fa-person-harassing fa-beat fa-2x"></i>
@@ -331,14 +328,13 @@
               <strong>Personnes justifiant la violence conjugale</strong>
             </p>
           </div>
-          <!-- Pie Chart for Gender Proportion -->
           <div id="domestic-violence-pie-chart-container">
             <canvas id="domestic-violence-pie-chart"></canvas>
           </div>
         </div>
       </div>
 
-      <!-- Footer with Sources -->
+      <!-- Sources indicateurs socio-économique -->
       <div id="popup-footer" class="popup-footer">
         <h6>Sources</h6>
         <div class="source-logos">
@@ -361,6 +357,8 @@
         </div>
       </div>
     </div>
+
+    <!-- Popup informations partenaires-->
     <div id="partner-popup" class="popup">
       <div class="popup-content">
         <img id="partner-logo" src="" alt="Logo" class="popup-logo" />
@@ -375,15 +373,12 @@
       </div>
     </div>
 
+    <!-- Fonds de carte -->
     <div id="custom-layer-switcher" class="layer-switcher collapsed">
-      <!-- Placeholder or icon for collapsed state -->
       <div id="switcher-icon">
         <img src="./resources/images/fonds.png" />
       </div>
-
-      <!-- Layer options (initially hidden) -->
       <div id="layer-options" class="layer-options">
-        <!-- Example layers preview -->
         <div class="layer-option" onclick="switchLayer('OSM')">
           <img src="./resources/images/Openstreetmap_logo.svg.png" />
           <span>OSM</span>
@@ -395,6 +390,7 @@
       </div>
     </div>
 
+    <!-- Zoom controls -->
     <div id="zoom-controls">
       <button id="zoom-initial" class="zoom-btn">
         <i class="fas fa-house"></i>

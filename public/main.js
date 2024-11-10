@@ -165,7 +165,7 @@ map.addLayer(regionLayer);
 
 var regionLayerVisible = true; // Variable pour savoir si la couche est actuellement visible ou non
 
-// Definition la couche des pays du monde (excepte le Cameroun) avec un style assombri
+// Définition la couche des pays du monde (excepte le Cameroun) avec un style assombri
 var worldMapLayer = new ol.layer.Vector({
   name: "WorldMap",
   source: new ol.source.Vector({
@@ -193,7 +193,7 @@ var worldMapLayer = new ol.layer.Vector({
 
 map.addLayer(worldMapLayer);
 
-// Gestion du clic sur le bouton pour afficher/masquer la couche
+// Afficher/masquer la couche regions et villes du Cameroun
 document.getElementById("toggleRegions").addEventListener("click", function () {
   if (!regionLayerVisible) {
     // Si la couche n'est pas visible, l'ajouter à la carte
@@ -206,23 +206,24 @@ document.getElementById("toggleRegions").addEventListener("click", function () {
   }
 });
 
-// Select interaction
+// Interaction de selection des couches
 var select = new ol.interaction.Select({
   hitTolerance: 5,
   multi: false,
   condition: ol.events.condition.singleClick,
-  // Filtrer les couches sélectionnables (exclure partnerLayer)
   filter: function (feature, layer) {
-    // Retourner vrai uniquement si ce n'est pas la couche partnerLayer
-    return layer !== partnerLayer && layer !== worldMapLayer;
+    // Retourner vrai uniquement si ce n'est pas la couche partnerLayer et worldMap
+    return (
+      layer !== partnerLayer &&
+      layer !== worldMapLayer &&
+      layer !== CamerounLayer
+    );
   },
 });
 
-// Ajouter l'interaction à la carte
 map.addInteraction(select);
 
-// Charger les données GeoJSON des partenaires
-// Charger les données GeoJSON des partenaires avec style par défaut
+// Définition de la couche des partenaires
 var partnerLayer = new ol.layer.Vector({
   source: new ol.source.Vector({
     url: "/api/care_partner",
@@ -233,10 +234,8 @@ var partnerLayer = new ol.layer.Vector({
   },
 });
 
-// Ajouter la couche des partenaires à la carte
 map.addLayer(partnerLayer);
 
-// Fonction pour créer le style par défaut
 function createDefaultStyle(feature) {
   return new ol.style.Style({
     image: new ol.style.Icon({
@@ -249,12 +248,11 @@ function createDefaultStyle(feature) {
       font: "bold 12px Arial",
       fill: new ol.style.Fill({ color: "#ffffff" }),
       stroke: new ol.style.Stroke({ color: "#000000", width: 3 }),
-      offsetY: -15, // Place l'étiquette au-dessus de l'icône
+      offsetY: -15,
     }),
   });
 }
 
-// Fonction de style pour la sélection et le survol
 function createHighlightStyle(feature) {
   return new ol.style.Style({
     image: new ol.style.Icon({
@@ -267,7 +265,7 @@ function createHighlightStyle(feature) {
       font: "bold 12px Arial",
       fill: new ol.style.Fill({ color: "#0000FF" }),
       stroke: new ol.style.Stroke({ color: "#ffffff", width: 4 }),
-      offsetY: -15, // Assure une position constante de l'étiquette
+      offsetY: -15,
     }),
   });
 }
@@ -319,10 +317,9 @@ map.on("pointermove", function (evt) {
           feature.get("info");
         document.getElementById("partner-logo").src = feature.get("img_logo");
 
-        // Position the popup slightly offset from the point
         const popup = document.getElementById("partner-popup");
-        popup.style.left = evt.pixel[0] + 15 + "px"; // Offset to the right
-        popup.style.top = evt.pixel[1] - 100 + "px"; // Offset above the point
+        popup.style.left = evt.pixel[0] + 15 + "px";
+        popup.style.top = evt.pixel[1] - 100 + "px";
         popup.style.display = "block";
 
         return true;
@@ -335,13 +332,14 @@ map.on("pointermove", function (evt) {
   }
 });
 
+// Affichage du popup partenaire
 map.on("click", function () {
   document.getElementById("partner-popup").style.display = "none";
 });
 
 var partnerLayerVisible = true;
 
-// Gestion du clic sur le bouton pour afficher/masquer la couche
+// Gestion du clic sur le bouton pour afficher/masquer la couche des partenaires
 document
   .getElementById("togglePartenaires")
   .addEventListener("click", function () {
@@ -356,16 +354,15 @@ document
     }
   });
 
-// Définir la source des clusters
+// Définition du cluster sur la visualisation des partenaire
 var clusterSource = new ol.source.Cluster({
   distance: 25, // La distance entre les points pour être regroupés en clusters
   source: new ol.source.Vector({
-    url: "/api/care_partner", // Votre endpoint GeoJSON
+    url: "/api/care_partner", // Endpoint couche partenaires
     format: new ol.format.GeoJSON(),
   }),
 });
 
-// Style des clusters
 var clusterStyle = function (feature) {
   var size = feature.get("features").length; // Obtenir la taille du cluster
   if (size > 1) {
@@ -396,7 +393,7 @@ var clusterStyle = function (feature) {
   }
 };
 
-// Définir la couche des clusters avec le style
+// Définition de la couche des clusters avec le style
 var clusterLayer = new ol.layer.Vector({
   source: clusterSource,
   style: clusterStyle, // Appliquer le style aux clusters
@@ -407,19 +404,23 @@ map.on("click", function (evt) {
   map.forEachFeatureAtPixel(evt.pixel, function (feature, layer) {
     if (layer === clusterLayer) {
       var clusteredFeatures = feature.get("features");
+
       if (clusteredFeatures.length > 1) {
-        // Plusieurs entités dans le cluster : zoomer sur l'étendue
+        // Si plusieurs entités dans le cluster : zoomer sur l'étendue de toutes les entités
         var extent = ol.extent.createEmpty();
         clusteredFeatures.forEach(function (f) {
           ol.extent.extend(extent, f.getGeometry().getExtent());
         });
+
+        // Ajuste la vue pour englober l'étendue du cluster avec une animation
         map.getView().fit(extent, { duration: 1000 });
       } else if (clusteredFeatures.length === 1) {
-        // Une seule entité : zoomer directement dessus
+        // Si une seule entité : zoomer et centrer sur cette entité
         var coordinates = clusteredFeatures[0].getGeometry().getCoordinates();
+
         map.getView().animate({
           center: coordinates,
-          zoom: Math.max(map.getView().getZoom() + 2, 15), // Zoomer légèrement
+          zoom: Math.max(map.getView().getZoom() + 2, 15), // Zoom maximum de 15
           duration: 1000,
         });
       }

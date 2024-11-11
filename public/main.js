@@ -428,8 +428,6 @@ map.on("click", function (evt) {
   });
 });
 
-// Ajout des deux couches mais on alterne en fonction du zoom
-
 // Seuil de zoom pour basculer entre les couches
 var zoomThreshold = 12;
 
@@ -456,7 +454,7 @@ map.getView().on("change:resolution", function () {
 // Appeler la fonction lors du chargement initial pour ajuster l'opacité selon le zoom par défaut
 adjustLayerOpacity();
 
-// Ajouter les deux couches à la carte
+// Ajout de la couche cluster à la carte
 map.addLayer(clusterLayer);
 
 var clusterLayerVisible = true;
@@ -476,72 +474,62 @@ document
     }
   });
 
-// Global variables to store chart instances
-var demographyChart, familyChart;
+// Fonction de representation des graphes
+
+var demographyChart, familyChart; // Declaration des variables
 
 function createCharts(feature) {
-  // Destroy existing charts if they exist
   if (demographyChart) demographyChart.destroy();
 
   if (familyChart) familyChart.destroy();
 
   // Demography data
   var demographyData = {
-    labels: [
-      "Hommes", // Icon for Male
-      "Femmes", // Icon for Female
-    ],
+    labels: ["Hommes", "Femmes"],
     datasets: [
       {
         label: "Population",
-        data: [
-          feature.get("popsexmasc"), // Male Population
-          feature.get("popsexfem"), // Female Population
-        ],
-        backgroundColor: ["#36A2EB", "#FF6384"], // Blue for Male, Pink for Female
+        data: [feature.get("popsexmasc"), feature.get("popsexfem")],
+        backgroundColor: ["#36A2EB", "#FF6384"],
       },
     ],
   };
-  // Set the total population and population density values under the icons
-  document.getElementById("total-population-info").textContent =
+
+  document.getElementById("total-population-info").textContent = // Total population
     feature.get("total_pop").toLocaleString() + " habitants";
-  document.getElementById("population-density-info").textContent =
+  document.getElementById("population-density-info").textContent = // Densite population
     feature.get("denspopreg") + " hab/km²";
 
-  // Assuming 'feature' contains the data for the selected region
-  document.getElementById("access-sanity").textContent = feature.get("asa"); // Access to improved water
-  document.getElementById("access-water").textContent = feature.get("aea"); // Access to improved water
-  document.getElementById("handwashing").textContent = feature.get("ill"); // Handwashing facilities
+  document.getElementById("access-sanity").textContent = feature.get("asa"); // Acces aux installations sanitaire
+  document.getElementById("access-water").textContent = feature.get("aea"); // Acces a une source d'eau ameliore
+  document.getElementById("handwashing").textContent = feature.get("ill"); // Installation de lave main
 
-  // HIV Prevalence
-  document.getElementById("hiv-males").textContent = feature.get("pvihhom"); // HIV Prevalence (Males)
-  document.getElementById("hiv-females").textContent = feature.get("pvihfem"); // HIV Prevalence (Females)
+  document.getElementById("hiv-males").textContent = feature.get("pvihhom"); // Prevalence VIH (Hommes)
+  document.getElementById("hiv-females").textContent = feature.get("pvihfem"); // Prevalence VIH (Femmes)
 
-  // Assuming 'feature' contains the data for the selected region
-  document.getElementById("poverty-rate").textContent = feature.get("tauxpvrt");
+  document.getElementById("poverty-rate").textContent = feature.get("tauxpvrt"); // Taux de pauvrete
   document.getElementById("unemployment-rate").textContent =
-    feature.get("chom");
+    feature.get("chom"); // Taux de chomage
   document.getElementById("financial-inclusion").textContent =
-    feature.get("ife");
+    feature.get("ife"); // Taux d'inclusion financiere
 
-  // Assuming 'feature' contains the data for the selected region
-  document.getElementById("unmet-need").textContent = feature.get("pf"); // Family planning unmet need
+  document.getElementById("unmet-need").textContent = feature.get("pf"); // Planning familliale
   document.getElementById("contraceptive-use").textContent =
-    feature.get("fcpm"); // Women using contraceptives
+    feature.get("fcpm"); // Femmes utilisant des methodes de contraceptions
 
-  // Family Planning data
   var familyData = {
     labels: ["Hommes", "Femmes"],
     datasets: [
       {
-        data: [feature.get("vch"), feature.get("vcf")], // Men and Women who justify domestic violence
-        backgroundColor: ["#36A2EB", "#FF6384"], // Blue for Men, Red for Women
+        data: [feature.get("vch"), feature.get("vcf")], // Hommes et femmes justifiant la violence conjugale
+        backgroundColor: ["#36A2EB", "#FF6384"], //
       },
     ],
   };
-  // Create Demography chart
+
+  // Graphique demographie population Hommes / Femmes
   demographyChart = new Chart(document.getElementById("demography-chart"), {
-    type: "pie", // Change chart type to pie
+    type: "pie", // Type camambert
     data: demographyData,
     options: {
       responsive: true,
@@ -553,7 +541,7 @@ function createCharts(feature) {
     },
   });
 
-  // Create Family Planning chart
+  // Graphique taux justification des violences conjugales Hommes / Femmes
   familyChart = new Chart(
     document.getElementById("domestic-violence-pie-chart"),
     {
@@ -563,36 +551,34 @@ function createCharts(feature) {
   );
 }
 
-// Function to open the popup with a smooth transition and insert the zone name
+// Fonction d'affichege du popup d'informations sur les indicateurs socio-economiques
 function showPopup(feature) {
   const popupContainer = document.getElementById("popup-container");
 
-  // Get the zone name (assuming the feature has a 'zoneName' property)
-  const zoneName = feature.get("nom");
+  const zoneName = feature.get("nom"); // Nom region ou ville
 
-  // Insert the zone name in the left span element
   document.getElementById(
     "zone-name"
   ).innerHTML = `<strong>${zoneName}</strong>`;
 
-  popupContainer.style.display = "block"; // Make the container visible
+  popupContainer.style.display = "block"; // Popup vible a l'acceuil
 
   setTimeout(() => {
-    popupContainer.style.opacity = 1; // Fade-in effect
-  }, 10); // Short delay for smooth transition
+    popupContainer.style.opacity = 1;
+  }, 10);
 
-  // Call the function to create charts, passing the feature data
+  // Fonction de creation des graphiques
   createCharts(feature);
 }
 
-// Function to close the popup
+// Fonction de fermeture de la fenetre popup
 function closePopup() {
   const popupContainer = document.getElementById("popup-container");
-  popupContainer.style.opacity = 0; // Fade-out effect
+  popupContainer.style.opacity = 0;
 
   setTimeout(() => {
-    popupContainer.style.display = "none"; // Hide after fade-out
-  }, 500); // Matches the fade-out transition duration
+    popupContainer.style.display = "none";
+  }, 500);
 }
 
 // Re-bind the close button event listener
@@ -600,14 +586,11 @@ document
   .getElementById("popup-close-btn")
   .addEventListener("click", closePopup);
 
-// Interaction : afficher un popup uniquement pour la couche regions
-
-// Utilisation de forEachLayerAtPixel pour vérifier les couches
-// Interaction : afficher un popup uniquement pour la couche regions
+// Interaction : afficher un popup uniquement pour la couche regions et territoire national
 map.on("click", function (evt) {
   var feature = map.forEachFeatureAtPixel(evt.pixel, function (feature, layer) {
     if (layer === regionLayer || layer === CamerounLayer) {
-      // Vérifie si la couche est la couche regions
+      // Vérifie si la couche est la couche regions et Cameroun
       return feature;
     }
   });
@@ -616,12 +599,12 @@ map.on("click", function (evt) {
     // Afficher le popup avec les données de la feature sélectionnée
     showPopup(feature); // Fonction pour afficher le popup
   } else {
-    // Ne rien afficher si aucune entité de la couche regions n'est cliquée
+    // Ne rien afficher si aucune entité de la couche regions ou Cameroun n'est cliquée
     return;
   }
 });
 
-// Function to show the popup with feature data at the application load
+// Fonction d'affichage du popup lors du chargement de l'application
 function showInitialPopup() {
   // Vérifier que CamerounLayer a bien été ajoutée à la carte
   CamerounLayer.getSource().once("change", function (e) {
@@ -650,28 +633,26 @@ function toggleLayer(eve) {
   });
 }
 
-// Récupérer les éléments
-// Get the toggle button and the story div
 const toggleButton = document.getElementById("toggleBases");
 const storyDiv = document.getElementById("story");
 
-// Function to toggle the display of the story div
+// Fonction d'affichage de la story-map
 function toggleStoryDiv() {
   if (storyDiv.style.display === "none" || storyDiv.style.display === "") {
-    storyDiv.style.display = "block"; // Show the story div
+    storyDiv.style.display = "block"; // Afficher
   } else {
-    storyDiv.style.display = "none"; // Hide the story div
+    storyDiv.style.display = "none"; // Masquer
   }
 }
 
-// Add click event listener to the toggle button
+// Ajouter / masquer lors du click sur le button
 toggleButton.addEventListener("click", toggleStoryDiv);
 
-// Add placemark
+// Ajout d'une icone de localisation
 var placemark = new ol.Overlay.Placemark();
 map.addOverlay(placemark);
 
-// The storymap
+// La story-map
 var story = new ol.control.Storymap({
   html: document.getElementById("story"),
   //target: document.getElementById("story"),
@@ -679,7 +660,7 @@ var story = new ol.control.Storymap({
   //className: 'scrollBox'
 });
 
-// Show image fullscreen on click
+// Affichage plein ecran de l'image lors du click
 var fullscreen = new ol.control.Overlay({
   hideOnClick: true,
   className: "zoom",
@@ -690,7 +671,7 @@ story.on("clickimage", function (e) {
   fullscreen.showImage(e.img.src, e);
 });
 
-// Fly to the chapter on the map
+// Survol sur la carte lors du scroll sur la story-map
 story.on("scrollto", function (e) {
   if (e.name === "start") {
     placemark.hide();
@@ -709,7 +690,7 @@ function setClassName(c) {
 
 map.addControl(story);
 
-// Main search function to handle user input
+// Fonction principal de la barre de recherche
 var txtVal = "";
 var inputBox = document.getElementById("inpt_search");
 var liveDataDivEle = document.getElementById("liveDataDiv");
@@ -723,6 +704,7 @@ inputBox.onkeyup = function () {
       clearResults();
       createLiveSearchTable();
 
+      // Recherche selon les mots cles des couches
       const layers = [
         { name: "partenaire", attribute: "nom" },
         { name: "partenaire", attribute: "sigle" },
@@ -730,7 +712,7 @@ inputBox.onkeyup = function () {
 
       layers.forEach((layer) => {
         $.ajax({
-          url: "http://localhost:3000/api/liveSearch", // Node.js server endpoint
+          url: "http://localhost:3000/api/liveSearch", // Endpoint requete sql du serveur Node.js dans la base de donné
           type: "POST",
           data: JSON.stringify({
             request: "liveSearch",
@@ -751,7 +733,7 @@ inputBox.onkeyup = function () {
   }
 };
 
-// Function to create the search table
+// Fonction de creation du tableau de la liste des resulats de la recherche
 function createLiveSearchTable() {
   searchTable.setAttribute("class", "assetSearchTableClass");
   searchTable.setAttribute("id", "assetSearchTableID");
@@ -766,11 +748,9 @@ function createLiveSearchTable() {
   tableHeaderRow.appendChild(tableHeader2);
   searchTable.appendChild(tableHeaderRow);
 
-  // Append the table to the liveDataDiv
   liveDataDivEle.appendChild(searchTable);
 }
 
-// Function to create table rows
 function createRows(data, layerName) {
   data.forEach((item) => {
     const tableRow = document.createElement("tr");
@@ -782,7 +762,7 @@ function createRows(data, layerName) {
     td2.innerHTML = item[attribute];
     td2.addEventListener("click", function () {
       zoomToFeature(td2, layerName, attribute);
-      clearResults(); // Hide table after selection
+      clearResults(); // Masquer la table apres la selection d'un resultat
     });
 
     tableRow.appendChild(td1);
@@ -791,9 +771,9 @@ function createRows(data, layerName) {
   });
 }
 
-var queryGeoJSON = null; // Initialize to hold GeoJSON layer if needed
+var queryGeoJSON = null;
 
-// Clear previous search results
+// Nettoyage des resultats de la recherche precendente
 function clearResults() {
   liveDataDivEle.innerHTML = "";
   searchTable.innerHTML = "";
@@ -808,7 +788,7 @@ function zoomToFeature(featureElement, layerName, attributeName) {
 
   // Requête pour récupérer les coordonnées du point dans la base de données
   $.ajax({
-    url: "http://localhost:3000/api/zoomFeature",
+    url: "http://localhost:3000/api/zoomFeature", // Endpoint requete sql du serveur Node.js dans la base de donné
     type: "POST",
     contentType: "application/json",
     data: JSON.stringify({

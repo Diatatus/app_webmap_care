@@ -78,6 +78,25 @@ function switchLayer(layerName) {
   });
 }
 
+// Function to initialize the layer switcher
+document.querySelectorAll(".layer-option").forEach((option) => {
+  option.addEventListener("click", function () {
+    // Get the image source of the clicked layer option
+    const imgSrc = option.querySelector("img").src;
+    // Set this image source as the switcher icon's image
+    document.querySelector("#switcher-icon img").src = imgSrc;
+
+    // Optionally, hide the layer options after a selection
+    document.querySelector(".layer-switcher").classList.add("collapsed");
+  });
+});
+
+// Toggle layer options on hover or click
+document.querySelector("#switcher-icon").addEventListener("click", function () {
+  const layerSwitcher = document.querySelector(".layer-switcher");
+  layerSwitcher.classList.toggle("collapsed");
+});
+
 //Fonds de carte Bingmapas et OSM
 var bingMapsAerial = new ol.layer.Tile({
   title: "Aerial",
@@ -589,7 +608,7 @@ document
 // Interaction : afficher un popup uniquement pour la couche regions et territoire national
 map.on("click", function (evt) {
   var feature = map.forEachFeatureAtPixel(evt.pixel, function (feature, layer) {
-    if (layer === regionLayer || layer === CamerounLayer) {
+    if (layer === regionLayer) {
       // Vérifie si la couche est la couche regions et Cameroun
       return feature;
     }

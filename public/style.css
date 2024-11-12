@@ -504,10 +504,12 @@ html {
   bottom: 10px;
   right: 10px;
   background-color: rgba(255, 255, 255, 0.9);
-  border-radius: 8px;
+  border-radius: 25%;
   border: 2px solid rgba(0, 0, 0, 0.3); /* Contour sombre */
   overflow: hidden;
-  transition: border-color 0.3s ease; /* Transition pour le changement de couleur du contour */
+  width: 60px;
+  height: 60px;
+  transition: border-color 0.3s ease, width 0.3s ease;
 }
 
 /* Initial collapsed state */
@@ -533,29 +535,29 @@ html {
   width: 100%;
   height: 100%;
   display: flex;
-  flex-direction: column;
   justify-content: center;
   align-items: center;
   cursor: pointer;
   overflow: hidden;
+  border-radius: 50%; /* Make the icon circular */
 }
 
 /* Ensure the PNG fits well within the div */
 #switcher-icon img {
-  max-width: 110%; /* Slightly reduce the image size */
-  max-height: 110%;
+  max-width: 100%;
+  max-height: 100%;
   width: auto;
   height: auto;
   object-fit: contain;
-  margin-bottom: 5px;
 }
 
 /* Hide the layer options by default */
 .layer-options {
   display: none;
   flex-direction: column;
-  gap: 5px; /* Reduce space between options */
-  padding: 5px;
+  align-items: center;
+  gap: 10px; /* Space between options */
+  padding: 10px;
 }
 
 /* Show the layer options when the switcher is hovered */
@@ -563,7 +565,7 @@ html {
   display: flex;
 }
 
-/* Styling for each layer option */
+/* Styling for each layer option (circular buttons) */
 .layer-option {
   position: relative;
   display: flex;
@@ -571,15 +573,17 @@ html {
   align-items: center;
   cursor: pointer;
   transition: background-color 0.5s ease;
-  width: 100px; /* Set a fixed width */
-  height: 60px; /* Set a fixed height */
+  width: 60px; /* Circle size */
+  height: 60px; /* Circle size */
+  border-radius: 50%; /* Make it circular */
+  overflow: hidden;
 }
 
 /* Styling for the images within layer options */
 .layer-option img {
-  width: 80px; /* Reduce the image size */
-  height: 50px; /* Adjust the height */
-  border-radius: 4px;
+  width: 100%; /* Fill the circle */
+  height: auto;
+  object-fit: cover;
 }
 
 /* Styling for the spans (overlay text) */
@@ -588,12 +592,12 @@ html {
   bottom: 0;
   left: 0;
   right: 0;
-  padding: 2px; /* Reduce padding */
+  padding: 2px;
   background-color: rgba(0, 0, 0, 0.5);
   color: white;
   text-align: center;
-  font-size: 10px; /* Reduce font size */
-  border-radius: 0 0 4px 4px;
+  font-size: 10px;
+  border-radius: 0 0 50% 50%; /* Bottom part of the circle */
 }
 
 /* Hover effect on the entire option */
@@ -608,7 +612,7 @@ html {
   display: none; /* Initially hidden */
   position: absolute;
   top: 15%;
-  right: 5%;
+  right: 7%;
   width: 400px;
   height: 630px; /* Define height */
   background-color: rgba(255, 255, 255, 0.9);

@@ -626,8 +626,8 @@ html {
 
 @media (max-width: 390px) {
   .popup-container {
-    top: 13%;
-    right: 4%;
+    top: 3.5%;
+    right: 5.5%;
     width: 350px;
     height: 630px; /* Define height */
   }
@@ -635,8 +635,8 @@ html {
 
 @media (max-width: 360px) {
   .popup-container {
-    top: 13%;
-    right: 1.5%;
+    top: 2.5%;
+    right: 1%;
     width: 350px;
     height: 630px; /* Define height */
     z-index: 3000;
@@ -654,6 +654,7 @@ html {
 
 .zone-name {
   font-weight: bold;
+  font-size: 18px;
 }
 
 .popup-close-btn {
@@ -894,6 +895,26 @@ html {
 #family-planning-icons p,
 #domestic-violence-icon p {
   color: black;
+}
+
+@media (max-width: 390px) {
+  .popup-info h3 {
+    text-align: center;
+    margin-top: 10px;
+    margin-bottom: 10px;
+    font-family: Arial, sans-serif;
+    font-size: 18px;
+  }
+}
+
+@media (max-width: 360px) {
+  .popup-info h3 {
+    text-align: center;
+    margin-top: 10px;
+    margin-bottom: 10px;
+    font-family: Arial, sans-serif;
+    font-size: 18px;
+  }
 }
 
 .popup {

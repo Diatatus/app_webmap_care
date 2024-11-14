@@ -537,7 +537,7 @@ function createCharts(feature) {
     feature.get("fcpm"); // Femmes utilisant des methodes de contraceptions
 
   var familyData = {
-    labels: ["Hommes", "Femmes"],
+    labels: ["%Hommes", "%Femmes"],
     datasets: [
       {
         data: [feature.get("vch"), feature.get("vcf")], // Hommes et femmes justifiant la violence conjugale

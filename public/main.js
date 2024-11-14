@@ -625,18 +625,27 @@ map.on("click", function (evt) {
 
 // Fonction d'affichage du popup lors du chargement de l'application
 function showInitialPopup() {
-  // Vérifier que CamerounLayer a bien été ajoutée à la carte
-  CamerounLayer.getSource().once("change", function (e) {
-    if (CamerounLayer.getSource().getState() === "ready") {
-      // Obtenir la première entité de la couche Cameroun
-      const features = CamerounLayer.getSource().getFeatures();
-      if (features.length > 0) {
-        // Afficher le popup pour la première entité
-        showPopup(features[0]);
+  // Vérifier si l'écran est de taille smartphone
+  const isSmartphone = window.innerWidth <= 600;
+
+  // Si ce n'est pas un smartphone, afficher le popup
+  if (!isSmartphone) {
+    // Vérifier que CamerounLayer a bien été ajoutée à la carte
+    CamerounLayer.getSource().once("change", function (e) {
+      if (CamerounLayer.getSource().getState() === "ready") {
+        // Obtenir la première entité de la couche Cameroun
+        const features = CamerounLayer.getSource().getFeatures();
+        if (features.length > 0) {
+          // Afficher le popup pour la première entité
+          showPopup(features[0]);
+        }
       }
-    }
-  });
+    });
+  }
 }
+
+// Appeler la fonction lors du chargement de l'application
+document.addEventListener("DOMContentLoaded", showInitialPopup);
 
 showInitialPopup();
 

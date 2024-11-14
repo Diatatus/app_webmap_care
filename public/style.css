@@ -170,12 +170,12 @@ html {
 /* Hide story div for smartphones with a resolution of 390x844 */
 @media (max-width: 390px) {
   .ol-control.ol-storymap {
-    top: 450px;
+    top: 350px;
     left: 20px;
     bottom: 0.5em;
     max-width: 100%;
     border-radius: 0.5em;
-    height: 370px;
+    height: 350px;
     background-color: rgba(255, 255, 255, 0.5);
     z-index: 3000;
   }
@@ -195,12 +195,12 @@ html {
 
 @media (max-width: 360px) {
   .ol-control.ol-storymap {
-    top: 420px;
+    top: 350px;
     left: 20px;
     bottom: 0.5em;
     max-width: 100%;
     border-radius: 0.5em;
-    height: 360px;
+    height: 340px;
     background-color: rgba(255, 255, 255, 0.5);
     z-index: 3000;
   }
@@ -510,12 +510,14 @@ html {
   width: 60px;
   height: 60px;
   transition: border-color 0.3s ease, width 0.3s ease;
+  z-index: 0;
 }
 
 /* Initial collapsed state */
 .layer-switcher.collapsed {
   width: 60px;
   height: 60px;
+  z-index: 0;
 }
 
 /* Expanded state on hover */

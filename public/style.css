@@ -626,11 +626,29 @@ html {
   overflow: hidden; /* Hide overflow of internal elements */
 }
 
+@media (max-width: 1366px) {
+  .popup-container {
+    top: 15%;
+    right: 6%;
+    width: 380px;
+    height: 630px; /* Define height */
+  }
+}
+
+@media (max-width: 1280px) {
+  .popup-container {
+    top: 15%;
+    right: 6%;
+    width: 380px;
+    height: 630px; /* Define height */
+  }
+}
+
 @media (max-width: 390px) {
   .popup-container {
     top: 3.5%;
-    right: 5.5%;
-    width: 350px;
+    right: 1.5%;
+    width: 380px;
     height: 630px; /* Define height */
   }
 }
@@ -638,8 +656,8 @@ html {
 @media (max-width: 360px) {
   .popup-container {
     top: 2.5%;
-    right: 1%;
-    width: 350px;
+    right: 1.5%;
+    width: 375px;
     height: 630px; /* Define height */
     z-index: 3000;
   }
@@ -930,6 +948,7 @@ html {
   font-family: Arial, sans-serif;
   font-size: 14px;
   pointer-events: none; /* Prevents interference with map clicks */
+  z-index: 5000;
 }
 
 .popup-content {

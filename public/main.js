@@ -664,28 +664,29 @@ function toggleLayer(eve) {
 const toggleButton = document.getElementById("toggleBases");
 const storyDiv = document.getElementById("story");
 
-// Fonction d'affichage de la story-map
+// Fonction d'affichage et masquage de la story-map
 function toggleStoryDiv() {
-  const isSmartphone = window.innerWidth <= 600;
-
-  if (isSmartphone) {
-    storyDiv.style.display = "none"; // Ensure it's hidden on smartphones
-    return;
-  }
-
-  // Toggle visibility for larger screens
-  if (storyDiv.style.display === "block" || storyDiv.style.display === "") {
-    storyDiv.style.display = "block"; // Show
+  // Si la div est masquée, afficher
+  if (storyDiv.style.display === "none" || storyDiv.style.display === "") {
+    storyDiv.style.display = "block"; // Afficher la div
   } else {
-    storyDiv.style.display = "none"; // Hide
+    storyDiv.style.display = "none"; // Masquer la div
   }
 }
 
-// Call the function on load to ensure the initial state is correct
-document.addEventListener("DOMContentLoaded", toggleStoryDiv);
+// Initialiser l'état de la div story-map en fonction de la taille de l'écran
+function initializeStoryDiv() {
+  const isSmartphone = window.innerWidth <= 600;
 
-// Ajouter / masquer lors du click sur le button
+  // Toujours masqué par défaut sur smartphone lors du chargement
+  storyDiv.style.display = isSmartphone ? "none" : "block";
+}
+
+// Ajouter un listener au bouton pour afficher/masquer la div
 toggleButton.addEventListener("click", toggleStoryDiv);
+
+// Assurez-vous que la story-map démarre dans le bon état lors du chargement
+document.addEventListener("DOMContentLoaded", initializeStoryDiv);
 
 // Ajout d'une icone de localisation
 var placemark = new ol.Overlay.Placemark();

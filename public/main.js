@@ -666,12 +666,23 @@ const storyDiv = document.getElementById("story");
 
 // Fonction d'affichage de la story-map
 function toggleStoryDiv() {
-  if (storyDiv.style.display === "none" || storyDiv.style.display === "") {
-    storyDiv.style.display = "block"; // Afficher
+  const isSmartphone = window.innerWidth <= 600;
+
+  if (isSmartphone) {
+    storyDiv.style.display = "none"; // Ensure it's hidden on smartphones
+    return;
+  }
+
+  // Toggle visibility for larger screens
+  if (storyDiv.style.display === "block" || storyDiv.style.display === "") {
+    storyDiv.style.display = "block"; // Show
   } else {
-    storyDiv.style.display = "none"; // Masquer
+    storyDiv.style.display = "none"; // Hide
   }
 }
+
+// Call the function on load to ensure the initial state is correct
+document.addEventListener("DOMContentLoaded", toggleStoryDiv);
 
 // Ajouter / masquer lors du click sur le button
 toggleButton.addEventListener("click", toggleStoryDiv);
@@ -717,6 +728,14 @@ function setClassName(c) {
 }
 
 map.addControl(story);
+
+function setClassName(c) {
+  console.log(c);
+  story.element.classList.remove("scrollLine");
+  story.element.classList.remove("scrollBox");
+  if (c) story.element.classList.add(c);
+  window.dispatchEvent(new Event("resize"));
+}
 
 // Fonction principal de la barre de recherche
 var txtVal = "";

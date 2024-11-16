@@ -118,7 +118,7 @@ html {
   top: 150%;
   left: 150%;
   padding: 10px;
-  z-index: 5000;
+  z-index: 7000;
 }
 
 .ol-control.ol-storymap {
@@ -129,20 +129,46 @@ html {
   border-radius: 0.5em;
   height: 650px;
   background-color: rgba(255, 255, 255, 0.5);
-  z-index: 5000;
+  z-index: 7000;
 }
 
 #story img {
   display: block;
   margin: auto;
   max-width: 100%;
-  z-index: 5000;
+  z-index: 7000;
 }
 #story .chapter.ol-select {
   background-color: rgba(255, 255, 255, 0.8);
 }
 
 /* Hide story div for tablets with a resolution of 768x1024 */
+
+@media (max-width: 1280px) {
+  .ol-control.ol-storymap {
+    top: 120px;
+    left: 20px;
+    bottom: 0.5em;
+    max-width: 100%;
+    border-radius: 0.5em;
+    height: 620px;
+    background-color: rgba(255, 255, 255, 0.5);
+    z-index: 5000;
+  }
+  #story {
+    height: 200px;
+    width: 350px;
+    top: 150%;
+    left: 150%;
+    padding: 10px;
+  }
+  #story img {
+    display: block;
+    margin: auto;
+    max-width: 90%;
+    z-index: 7000;
+  }
+}
 @media (max-width: 768px) {
   .ol-control.ol-storymap {
     top: 670px;
@@ -242,6 +268,7 @@ html {
   width: 80%;
   max-width: 500px;
   transition: all 0.3s ease;
+  z-index: 0;
 }
 
 #care-logo {
@@ -780,7 +807,7 @@ html {
 #handwashing-icon,
 #access-sanity-icon {
   text-align: center;
-  width: 48%;
+  width: 32%;
 }
 
 /* Ribbon Centered */
@@ -798,7 +825,7 @@ html {
 #hiv-male,
 #hiv-female {
   text-align: center;
-  width: 48%;
+  width: 32%;
 }
 
 /* Distinct Colors for Each Section */
@@ -880,7 +907,7 @@ html {
 
 #family-planning-icons div {
   text-align: center;
-  width: 48%;
+  width: 45%;
 }
 
 /* Distinct Icon Colors */
@@ -924,6 +951,28 @@ html {
     margin-bottom: 10px;
     font-family: Arial, sans-serif;
     font-size: 18px;
+  }
+  #access-water-icon,
+  #handwashing-icon,
+  #access-sanity-icon {
+    text-align: center;
+    width: 35%;
+  }
+}
+
+@media (max-width: 390px) {
+  .popup-info h3 {
+    text-align: center;
+    margin-top: 10px;
+    margin-bottom: 10px;
+    font-family: Arial, sans-serif;
+    font-size: 18px;
+  }
+  #access-water-icon,
+  #handwashing-icon,
+  #access-sanity-icon {
+    text-align: center;
+    width: 35%;
   }
 }
 

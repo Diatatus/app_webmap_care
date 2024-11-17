@@ -154,6 +154,8 @@ var CamerounLayer = new ol.layer.Vector({
 
 map.addLayer(CamerounLayer);
 
+var camerounLayerVisible = true; // Variable pour savoir si la couche est actuellement visible ou non
+
 // Définition de la couche des limites des Régions et Villes (Yaounde, Douala uniquement) du cameroun
 var regionLayer = new ol.layer.Vector({
   name: "Régions",
@@ -212,16 +214,29 @@ var worldMapLayer = new ol.layer.Vector({
 
 map.addLayer(worldMapLayer);
 
-// Afficher/masquer la couche regions et villes du Cameroun
+// Gestion de l'affichage/masquage des couches et du popup
 document.getElementById("toggleRegions").addEventListener("click", function () {
+  const popupContainer = document.getElementById("popup-container");
+
   if (!regionLayerVisible) {
-    // Si la couche n'est pas visible, l'ajouter à la carte
+    // Si les couches ne sont pas visibles, les ajouter à la carte
     map.addLayer(regionLayer);
+    map.addLayer(CamerounLayer);
     regionLayerVisible = true;
+
+    // Afficher le popup initial uniquement pour CamerounLayer
+    showInitialPopup();
   } else {
-    // Si la couche est visible, la retirer de la carte
+    // Si les couches sont visibles, les retirer de la carte
     map.removeLayer(regionLayer);
+    map.removeLayer(CamerounLayer);
     regionLayerVisible = false;
+
+    // Masquer le popup initial
+    popupContainer.style.opacity = 0;
+    setTimeout(() => {
+      popupContainer.style.display = "none";
+    }, 300); // Durée de la transition pour masquer
   }
 });
 

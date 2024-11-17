@@ -122,13 +122,13 @@ html {
   z-index: 10000;
 }
 
-.ol-storymap {
-  top: 100px;
+.ol-control.ol-storymap {
+  top: 120px;
   left: 20px;
   bottom: 0.5em;
   max-width: 100%;
   border-radius: 0.5em;
-  height: 650px;
+  height: 630px;
   background-color: rgba(255, 255, 255, 0.5);
 }
 
@@ -143,6 +143,30 @@ html {
 }
 
 /* Hide story div for tablets with a resolution of 768x1024 */
+
+@media (max-width: 1366px) {
+  .ol-control.ol-storymap {
+    top: 120px;
+    left: 20px;
+    bottom: 0.5em;
+    max-width: 100%;
+    border-radius: 0.5em;
+    height: 630px;
+    background-color: rgba(255, 255, 255, 0.5);
+  }
+  #story {
+    height: 200px;
+    width: 430px;
+    top: 150%;
+    left: 150%;
+    padding: 10px;
+  }
+  #story img {
+    display: block;
+    margin: auto;
+    max-width: 100%;
+  }
+}
 
 @media (max-width: 1280px) {
   .ol-control.ol-storymap {

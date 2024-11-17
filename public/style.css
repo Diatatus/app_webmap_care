@@ -110,6 +110,7 @@ html {
 .ol-zoom {
   left: auto;
   right: 0.5em;
+  z-index: 0;
 }
 
 #story {
@@ -118,10 +119,10 @@ html {
   top: 150%;
   left: 150%;
   padding: 10px;
-  z-index: 7000;
+  z-index: 10000;
 }
 
-.ol-control.ol-storymap {
+.ol-storymap {
   top: 100px;
   left: 20px;
   bottom: 0.5em;
@@ -129,14 +130,13 @@ html {
   border-radius: 0.5em;
   height: 650px;
   background-color: rgba(255, 255, 255, 0.5);
-  z-index: 7000;
 }
 
 #story img {
   display: block;
   margin: auto;
   max-width: 100%;
-  z-index: 7000;
+  z-index: 10000;
 }
 #story .chapter.ol-select {
   background-color: rgba(255, 255, 255, 0.8);
@@ -153,7 +153,6 @@ html {
     border-radius: 0.5em;
     height: 620px;
     background-color: rgba(255, 255, 255, 0.5);
-    z-index: 5000;
   }
   #story {
     height: 200px;
@@ -166,7 +165,6 @@ html {
     display: block;
     margin: auto;
     max-width: 90%;
-    z-index: 7000;
   }
 }
 @media (max-width: 768px) {
@@ -203,7 +201,6 @@ html {
     border-radius: 0.5em;
     height: 350px;
     background-color: rgba(255, 255, 255, 0.5);
-    z-index: 3000;
   }
   #story {
     height: 200px;
@@ -228,7 +225,6 @@ html {
     border-radius: 0.5em;
     height: 340px;
     background-color: rgba(255, 255, 255, 0.5);
-    z-index: 3000;
   }
   #story {
     height: 200px;
@@ -534,17 +530,15 @@ html {
   border-radius: 25%;
   border: 2px solid rgba(0, 0, 0, 0.3); /* Contour sombre */
   overflow: hidden;
-  width: 60px;
-  height: 60px;
+  width: 40px;
+  height: 40px;
   transition: border-color 0.3s ease, width 0.3s ease;
-  z-index: 0;
 }
 
 /* Initial collapsed state */
 .layer-switcher.collapsed {
-  width: 60px;
-  height: 60px;
-  z-index: 0;
+  width: 40px;
+  height: 40px;
 }
 
 /* Expanded state on hover */
@@ -602,8 +596,8 @@ html {
   align-items: center;
   cursor: pointer;
   transition: background-color 0.5s ease;
-  width: 60px; /* Circle size */
-  height: 60px; /* Circle size */
+  width: 40px; /* Circle size */
+  height: 40px; /* Circle size */
   border-radius: 50%; /* Make it circular */
   overflow: hidden;
 }

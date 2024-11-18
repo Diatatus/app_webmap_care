@@ -214,32 +214,6 @@ var worldMapLayer = new ol.layer.Vector({
 
 map.addLayer(worldMapLayer);
 
-// Gestion de l'affichage/masquage des couches et du popup
-document.getElementById("toggleRegions").addEventListener("click", function () {
-  const popupContainer = document.getElementById("popup-container");
-
-  if (!regionLayerVisible) {
-    // Si les couches ne sont pas visibles, les ajouter à la carte
-    map.addLayer(regionLayer);
-    map.addLayer(CamerounLayer);
-    regionLayerVisible = true;
-
-    // Afficher le popup initial uniquement pour CamerounLayer
-    showInitialPopup();
-  } else {
-    // Si les couches sont visibles, les retirer de la carte
-    map.removeLayer(regionLayer);
-    map.removeLayer(CamerounLayer);
-    regionLayerVisible = false;
-
-    // Masquer le popup initial
-    popupContainer.style.opacity = 0;
-    setTimeout(() => {
-      popupContainer.style.display = "none";
-    }, 300); // Durée de la transition pour masquer
-  }
-});
-
 // Interaction de selection des couches
 var select = new ol.interaction.Select({
   hitTolerance: 5,
@@ -662,7 +636,29 @@ function showInitialPopup() {
 // Appeler la fonction lors du chargement de l'application
 document.addEventListener("DOMContentLoaded", showInitialPopup);
 
-showInitialPopup();
+// Gestion de l'affichage/masquage des couches et du popup
+document.getElementById("toggleRegions").addEventListener("click", function () {
+  const popupContainer = document.getElementById("popup-container");
+
+  if (!regionLayerVisible) {
+    // Ajouter les couches à la carte
+    map.addLayer(regionLayer);
+    regionLayerVisible = true;
+
+    // Afficher le popup initial après avoir ajouté la couche
+    showInitialPopup();
+  } else {
+    // Retirer les couches de la carte
+    map.removeLayer(regionLayer);
+    regionLayerVisible = false;
+
+    // Masquer le popup initial
+    popupContainer.style.opacity = 0;
+    setTimeout(() => {
+      popupContainer.style.display = "none";
+    }, 30); // Durée de la transition
+  }
+});
 
 function toggleLayer(eve) {
   var lyrname = eve.target.value;

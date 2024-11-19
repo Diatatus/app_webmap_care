@@ -143,6 +143,29 @@ html {
 }
 
 /* Hide story div for tablets with a resolution of 768x1024 */
+@media (max-width: 1440px) {
+  .ol-control.ol-storymap {
+    top: 120px;
+    left: 20px;
+    bottom: 0.5em;
+    max-width: 100%;
+    border-radius: 0.5em;
+    height: 650px;
+    background-color: rgba(255, 255, 255, 0.5);
+  }
+  #story {
+    height: 200px;
+    width: 425px;
+    top: 150%;
+    left: 150%;
+    padding: 10px;
+  }
+  #story img {
+    display: block;
+    margin: auto;
+    max-width: 100%;
+  }
+}
 
 @media (max-width: 1366px) {
   .ol-control.ol-storymap {
@@ -671,6 +694,15 @@ html {
   overflow: hidden; /* Hide overflow of internal elements */
 }
 
+@media (max-width: 1440px) {
+  .popup-container {
+    top: 15%;
+    right: 7%;
+    width: 380px;
+    height: 630px; /* Define height */
+  }
+}
+
 @media (max-width: 1366px) {
   .popup-container {
     top: 15%;
@@ -684,7 +716,7 @@ html {
   .popup-container {
     top: 15%;
     right: 6%;
-    width: 380px;
+    width: 330px;
     height: 630px; /* Define height */
   }
 }
@@ -962,19 +994,24 @@ html {
   color: black;
 }
 
-@media (max-width: 390px) {
+@media (max-width: 1280px) {
   .popup-info h3 {
     text-align: center;
     margin-top: 10px;
     margin-bottom: 10px;
     font-family: Arial, sans-serif;
-    font-size: 18px;
+    font-size: 15px;
   }
   #access-water-icon,
   #handwashing-icon,
   #access-sanity-icon {
     text-align: center;
-    width: 35%;
+    width: 30%;
+  }
+  #water-access,
+  #handwashing-acess,
+  #sanity-access {
+    font-size: 12px;
   }
 }
 

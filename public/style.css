@@ -1006,11 +1006,22 @@ html {
   #handwashing-icon,
   #access-sanity-icon {
     text-align: center;
-    width: 29%;
+    width: 30%;
   }
   #water-access,
   #handwashing-acess,
   #sanity-access {
+    font-size: 12px;
+  }
+
+  #rate-poverty,
+  #rate-unemployment,
+  #Inclusion-financial {
+    font-size: 15px;
+  }
+
+  #need-unmet,
+  #use-contraceptive {
     font-size: 12px;
   }
 }

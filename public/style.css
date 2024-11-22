@@ -211,7 +211,7 @@ html {
   #story img {
     display: block;
     margin: auto;
-    max-width: 90%;
+    max-width: 100%;
   }
 }
 @media (max-width: 768px) {
@@ -234,7 +234,7 @@ html {
   #story img {
     display: block;
     margin: auto;
-    max-width: 80%;
+    max-width: 100%;
   }
 }
 
@@ -259,7 +259,7 @@ html {
   #story img {
     display: block;
     margin: auto;
-    max-width: 80%;
+    max-width: 100%;
   }
 }
 
@@ -283,7 +283,7 @@ html {
   #story img {
     display: block;
     margin: auto;
-    max-width: 80%;
+    max-width: 100%;
   }
 }
 
@@ -1023,6 +1023,20 @@ html {
   #need-unmet,
   #use-contraceptive {
     font-size: 12px;
+  }
+
+  #demography-bar-chart-container {
+    width: 45%;
+    height: auto;
+    margin-left: 90px; /* Add some spacing on the left */
+  }
+  #domestic-violence-pie-chart-container {
+    width: 45%;
+    height: auto;
+    margin-left: 90px; /* Center the pie chart */
+  }
+  .chartjs-legend i {
+    font-size: 15px; /* Adjust this size if necessary */
   }
 }
 

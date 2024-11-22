@@ -724,8 +724,8 @@ html {
 @media (max-width: 390px) {
   .popup-container {
     top: 3.5%;
-    right: 1.5%;
-    width: 380px;
+    right: 7%;
+    width: 330px;
     height: 630px; /* Define height */
   }
 }
@@ -733,8 +733,8 @@ html {
 @media (max-width: 360px) {
   .popup-container {
     top: 2.5%;
-    right: 1.5%;
-    width: 375px;
+    right: 7%;
+    width: 330px;
     height: 630px; /* Define height */
     z-index: 3000;
   }
@@ -1046,13 +1046,48 @@ html {
     margin-top: 10px;
     margin-bottom: 10px;
     font-family: Arial, sans-serif;
-    font-size: 18px;
+    font-size: 15px;
+  }
+
+  #total-population-info,
+  #population-density-info {
+    font-size: 14px;
   }
   #access-water-icon,
   #handwashing-icon,
   #access-sanity-icon {
     text-align: center;
-    width: 35%;
+    width: 30%;
+  }
+  #water-access,
+  #handwashing-acess,
+  #sanity-access {
+    font-size: 12px;
+  }
+
+  #rate-poverty,
+  #rate-unemployment,
+  #Inclusion-financial {
+    font-size: 15px;
+  }
+
+  #need-unmet,
+  #use-contraceptive {
+    font-size: 12px;
+  }
+
+  #demography-bar-chart-container {
+    width: 45%;
+    height: auto;
+    margin-left: 90px; /* Add some spacing on the left */
+  }
+  #domestic-violence-pie-chart-container {
+    width: 45%;
+    height: auto;
+    margin-left: 90px; /* Center the pie chart */
+  }
+  .chartjs-legend i {
+    font-size: 15px; /* Adjust this size if necessary */
   }
 }
 
@@ -1062,7 +1097,43 @@ html {
     margin-top: 10px;
     margin-bottom: 10px;
     font-family: Arial, sans-serif;
-    font-size: 18px;
+    font-size: 15px;
+  }
+  #access-water-icon,
+  #handwashing-icon,
+  #access-sanity-icon {
+    text-align: center;
+    width: 30%;
+  }
+  #water-access,
+  #handwashing-acess,
+  #sanity-access {
+    font-size: 12px;
+  }
+
+  #rate-poverty,
+  #rate-unemployment,
+  #Inclusion-financial {
+    font-size: 15px;
+  }
+
+  #need-unmet,
+  #use-contraceptive {
+    font-size: 12px;
+  }
+
+  #demography-bar-chart-container {
+    width: 45%;
+    height: auto;
+    margin-left: 90px; /* Add some spacing on the left */
+  }
+  #domestic-violence-pie-chart-container {
+    width: 45%;
+    height: auto;
+    margin-left: 90px; /* Center the pie chart */
+  }
+  .chartjs-legend i {
+    font-size: 15px; /* Adjust this size if necessary */
   }
 }
 

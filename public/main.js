@@ -617,41 +617,55 @@ function showInitialPopup() {
   // Vérifier si l'écran est de taille smartphone
   const isSmartphone = window.innerWidth <= 600;
 
-  // Si ce n'est pas un smartphone, afficher le popup
   if (!isSmartphone) {
-    // Vérifier que CamerounLayer a bien été ajoutée à la carte
-    CamerounLayer.getSource().once("change", function (e) {
-      if (CamerounLayer.getSource().getState() === "ready") {
-        // Obtenir la première entité de la couche Cameroun
-        const features = CamerounLayer.getSource().getFeatures();
-        if (features.length > 0) {
-          // Afficher le popup pour la première entité
-          showPopup(features[0]);
-        }
+    // Vérifier que la source de CamerounLayer est prête
+    const source = CamerounLayer.getSource();
+
+    if (source.getState() === "ready") {
+      // Obtenir la première entité de la couche Cameroun
+      const features = source.getFeatures();
+      if (features.length > 0) {
+        // Afficher le popup pour la première entité
+        showPopup(features[0]);
       }
-    });
+    } else {
+      // Réattacher l'écouteur une seule fois si la source n'est pas encore prête
+      source.once("change", function () {
+        if (source.getState() === "ready") {
+          const features = source.getFeatures();
+          if (features.length > 0) {
+            showPopup(features[0]);
+          }
+        }
+      });
+    }
   }
 }
 
 // Appeler la fonction lors du chargement de l'application
+showInitialPopup();
 document.addEventListener("DOMContentLoaded", showInitialPopup);
 
 // Gestion de l'affichage/masquage des couches et du popup
 document.getElementById("toggleRegions").addEventListener("click", function () {
+  const popupContainer = document.getElementById("popup-container");
+
   if (!regionLayerVisible) {
     // Ajouter la couche région
     map.addLayer(regionLayer);
     regionLayerVisible = true;
-
-    // Afficher le popup initial
+    // Afficher le popup initial après avoir ajouté la couche
     showInitialPopup();
   } else {
     // Retirer la couche région
     map.removeLayer(regionLayer);
     regionLayerVisible = false;
 
-    // Afficher le popup initial même après avoir retiré la couche région
-    showInitialPopup();
+    // Masquer le popup initial
+    popupContainer.style.opacity = 0;
+    setTimeout(() => {
+      popupContainer.style.display = "none";
+    }, 300); // Durée de la transition
   }
 });
 

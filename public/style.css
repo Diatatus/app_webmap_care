@@ -737,6 +737,7 @@ html {
     width: 330px;
     height: 630px; /* Define height */
     z-index: 3000;
+    transition: opacity 0.3s ease;
   }
 }
 

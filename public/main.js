@@ -638,25 +638,20 @@ document.addEventListener("DOMContentLoaded", showInitialPopup);
 
 // Gestion de l'affichage/masquage des couches et du popup
 document.getElementById("toggleRegions").addEventListener("click", function () {
-  const popupContainer = document.getElementById("popup-container");
-
   if (!regionLayerVisible) {
-    // Ajouter les couches à la carte
+    // Ajouter la couche région
     map.addLayer(regionLayer);
     regionLayerVisible = true;
 
-    // Afficher le popup initial après avoir ajouté la couche
+    // Afficher le popup initial
     showInitialPopup();
   } else {
-    // Retirer les couches de la carte
+    // Retirer la couche région
     map.removeLayer(regionLayer);
     regionLayerVisible = false;
 
-    // Masquer le popup initial
-    popupContainer.style.opacity = 0;
-    setTimeout(() => {
-      popupContainer.style.display = "none";
-    }, 30); // Durée de la transition
+    // Afficher le popup initial même après avoir retiré la couche région
+    showInitialPopup();
   }
 });
 

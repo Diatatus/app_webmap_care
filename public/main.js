@@ -330,8 +330,16 @@ map.on("pointermove", function (evt) {
           feature.get("nom");
         document.getElementById("partner-type").textContent =
           feature.get("sigle");
-        document.getElementById("partner-activity").textContent =
-          feature.get("act_srvc_o");
+
+        const activity = feature.get("act_srvc_o");
+        document.getElementById("partner-activity").textContent = activity;
+
+        // Si l'activité est vide, affichez un message par défaut
+        if (!activity || activity.trim() === "") {
+          document.getElementById("partner-activity").textContent =
+            "Aucune activité spécifiée.";
+        }
+
         document.getElementById("partner-info").textContent =
           feature.get("info");
         document.getElementById("partner-logo").src = feature.get("img_logo");

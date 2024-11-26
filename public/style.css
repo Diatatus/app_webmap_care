@@ -1180,10 +1180,15 @@ html {
 }
 
 #partner-activity {
-  max-height: 50px;
-  overflow-y: auto;
-  margin: 5px 0;
-  padding-right: 5px;
+  background-color: #f9f9f9; /* Couleur de fond pour démarquer */
+  border-left: 4px solid #007bff; /* Une bordure pour attirer l'attention */
+  padding: 8px; /* Espacement interne */
+  font-size: 14px; /* Taille légèrement plus grande */
+  color: #333; /* Couleur du texte */
+  font-weight: bold; /* Texte en gras */
+  max-height: 100px; /* Limite de hauteur */
+  overflow-y: auto; /* Barre de défilement si contenu trop long */
+  margin: 8px 0; /* Espacement autour de l'élément */
 }
 
 .popup i {

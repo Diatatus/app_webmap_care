@@ -296,6 +296,17 @@ map.on("pointermove", function (evt) {
   });
 });
 
+// Garde le popup affiché lorsqu'il est survolé
+const popup = document.getElementById("partner-popup");
+
+popup.addEventListener("mouseenter", () => {
+  popup.style.display = "block"; // Garde le popup visible
+});
+
+popup.addEventListener("mouseleave", () => {
+  popup.style.display = "none"; // Cache le popup
+});
+
 // Interaction de sélection pour la couche des partenaires
 var selectPartner = new ol.interaction.Select({
   layers: [partnerLayer],
@@ -305,7 +316,10 @@ var selectPartner = new ol.interaction.Select({
 });
 map.addInteraction(selectPartner);
 
+// Modifiez la fonction pointermove pour éviter de masquer le popup lorsqu'il est survolé
 map.on("pointermove", function (evt) {
+  if (popup.matches(":hover")) return; // Ne rien faire si le popup est survolé
+
   const minZoomLevel = 12;
   const currentZoom = map.getView().getZoom();
 
@@ -314,29 +328,22 @@ map.on("pointermove", function (evt) {
       if (layer === partnerLayer) {
         document.getElementById("partner-name").textContent =
           feature.get("nom");
-
         document.getElementById("partner-type").textContent =
           feature.get("sigle");
-
         document.getElementById("partner-activity").textContent =
           feature.get("act_srvc_o");
-
         document.getElementById("partner-info").textContent =
           feature.get("info");
         document.getElementById("partner-logo").src = feature.get("img_logo");
 
-        const popup = document.getElementById("partner-popup");
         popup.style.left = evt.pixel[0] + 15 + "px";
         popup.style.top = evt.pixel[1] - 100 + "px";
         popup.style.display = "block";
-
         return true;
-      } else {
-        document.getElementById("partner-popup").style.display = "none";
       }
     });
   } else {
-    document.getElementById("partner-popup").style.display = "none";
+    popup.style.display = "none";
   }
 });
 

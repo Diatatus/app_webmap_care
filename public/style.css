@@ -1141,14 +1141,13 @@ html {
 .popup {
   position: absolute;
   display: none;
-  background: white;
+  background: #ffffff;
   box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2);
   border-radius: 8px;
   width: 250px;
-  overflow: hidden;
   font-family: Arial, sans-serif;
   font-size: 14px;
-  pointer-events: none; /* Prevents interference with map clicks */
+  pointer-events: auto; /* Active l'interaction sur le popup */
   z-index: 5000;
 }
 
@@ -1168,14 +1167,11 @@ html {
   flex: 1;
 }
 
-.popup h3 {
+.popup h3,
+.popup h4 {
   margin: 0;
   font-size: 16px;
   color: #333;
-}
-
-.popup-rating {
-  color: #ffbc00;
 }
 
 .popup p {
@@ -1184,8 +1180,13 @@ html {
 }
 
 #partner-activity {
-  max-height: 50px; /* Limit height for scrolling */
+  max-height: 50px;
   overflow-y: auto;
   margin: 5px 0;
   padding-right: 5px;
+}
+
+.popup i {
+  margin-right: 5px;
+  color: #007bff;
 }

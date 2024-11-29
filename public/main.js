@@ -326,26 +326,46 @@ map.on("pointermove", function (evt) {
   if (currentZoom >= minZoomLevel) {
     map.forEachFeatureAtPixel(evt.pixel, function (feature, layer) {
       if (layer === partnerLayer) {
+        // Mettre à jour le contenu du popup
         document.getElementById("partner-name").textContent =
           feature.get("nom");
         document.getElementById("partner-type").textContent =
           feature.get("sigle");
 
         const activity = feature.get("act_srvc_o");
-        document.getElementById("partner-activity").textContent = activity;
-
-        // Si l'activité est vide, affichez un message par défaut
-        if (!activity || activity.trim() === "") {
-          document.getElementById("partner-activity").textContent =
-            "Aucune activité spécifiée.";
-        }
+        document.getElementById("partner-activity").textContent =
+          activity || "Aucune activité spécifiée.";
 
         document.getElementById("partner-info").textContent =
           feature.get("info");
         document.getElementById("partner-logo").src = feature.get("img_logo");
 
-        popup.style.left = evt.pixel[0] + 15 + "px";
-        popup.style.top = evt.pixel[1] - 100 + "px";
+        // Calculer la position initiale du popup
+        let popupLeft = evt.pixel[0] + 15;
+        let popupTop = evt.pixel[1] - 100;
+
+        // Obtenir les dimensions de l'écran et du popup
+        const popupRect = popup.getBoundingClientRect();
+        const mapRect = map.getTargetElement().getBoundingClientRect();
+
+        // Ajuster si le popup dépasse les bords de l'écran
+        if (popupLeft + popupRect.width > mapRect.width) {
+          popupLeft = mapRect.width - popupRect.width - 10; // Décalage à gauche
+        }
+        if (popupLeft < 0) {
+          popupLeft = 10; // Éviter de dépasser à gauche
+        }
+
+        if (popupTop + popupRect.height > mapRect.height) {
+          popupTop = mapRect.height - popupRect.height - 10; // Décalage vers le haut
+        }
+        if (popupTop < 0) {
+          popupTop = 10; // Éviter de dépasser en haut
+        }
+
+        // Appliquer la position finale
+        popup.style.left = `${popupLeft}px`;
+        popup.style.top = `${popupTop}px`;
         popup.style.display = "block";
         return true;
       }

@@ -1148,6 +1148,8 @@ html {
   font-family: Arial, sans-serif;
   font-size: 14px;
   z-index: 5000;
+  overflow: hidden;
+  transition: transform 0.2s ease, opacity 0.2s ease;
 }
 
 .popup-content {

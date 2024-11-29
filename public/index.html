@@ -27,7 +27,6 @@
       type="text/javascript"
       src="https://code.jquery.com/jquery-1.11.0.min.js"></script>
     <!-- FontAwesome -->
-    <link rel="stylesheet" href="/node_modules/font-awesome/css/all.min.css" />
     <link
       rel="stylesheet"
       href="/node_modules/@fortawesome/fontawesome-free/css/all.min.css" />
@@ -329,13 +328,30 @@
     <!-- Popup informations partenaires -->
     <div id="partner-popup" class="popup">
       <div class="popup-content">
-        <img id="partner-logo" src="" alt="Logo" class="popup-logo" />
-        <div class="popup-details">
+        <!-- Logo Section -->
+        <div class="popup-section logo-section">
+          <img id="partner-logo" src="" alt="Logo" class="popup-logo" />
+        </div>
+
+        <!-- Name Section -->
+        <div class="popup-section name-section">
           <h3 id="partner-name"><i class="fas fa-building"></i> Nom</h3>
+        </div>
+
+        <!-- Type Section -->
+        <div class="popup-section type-section">
           <h4 id="partner-type"><i class="fas fa-tag"></i> Sigle</h4>
+        </div>
+
+        <!-- Activity Section -->
+        <div class="popup-section activity-section">
           <p id="partner-activity">
             <i class="fas fa-briefcase"></i> Activity or Service Offered
           </p>
+        </div>
+
+        <!-- Additional Info Section -->
+        <div class="popup-section info-section">
           <p id="partner-info"><i class="fas fa-info-circle"></i> Info</p>
         </div>
       </div>

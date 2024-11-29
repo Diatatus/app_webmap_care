@@ -1144,54 +1144,45 @@ html {
   background: #ffffff;
   box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2);
   border-radius: 8px;
-  width: 250px;
+  width: 300px;
   font-family: Arial, sans-serif;
   font-size: 14px;
-  pointer-events: auto; /* Active l'interaction sur le popup */
   z-index: 5000;
 }
 
 .popup-content {
-  display: flex;
-  padding: 10px;
+  padding: 15px;
 }
 
-.popup-logo {
-  width: 50px;
-  height: 50px;
-  border-radius: 4px;
-  margin-right: 10px;
+.popup-section {
+  margin-bottom: 15px; /* Espacement entre les sections */
 }
 
-.popup-details {
-  flex: 1;
+.logo-section img {
+  width: 60px;
+  height: 60px;
+  border-radius: 8px;
+  display: block;
+  margin: 0 auto;
 }
 
-.popup h3,
-.popup h4 {
+.name-section h3,
+.type-section h4 {
   margin: 0;
   font-size: 16px;
+  text-align: center; /* Centrer le texte */
   color: #333;
 }
 
-.popup p {
+.activity-section p,
+.info-section p {
   margin: 5px 0;
-  color: #666;
-}
-
-#partner-activity {
-  background-color: #f9f9f9; /* Couleur de fond pour démarquer */
-  border-left: 4px solid #007bff; /* Une bordure pour attirer l'attention */
-  padding: 8px; /* Espacement interne */
-  font-size: 14px; /* Taille légèrement plus grande */
-  color: #333; /* Couleur du texte */
-  font-weight: bold; /* Texte en gras */
-  max-height: 100px; /* Limite de hauteur */
-  overflow-y: auto; /* Barre de défilement si contenu trop long */
-  margin: 8px 0; /* Espacement autour de l'élément */
-}
-
-.popup i {
-  margin-right: 5px;
-  color: #007bff;
+  padding: 10px;
+  background: #f9f9f9; /* Fond léger */
+  border-left: 4px solid #007bff; /* Bordure latérale */
+  font-size: 14px;
+  color: #333;
+  font-weight: bold;
+  overflow-y: auto; /* Barre de défilement si le contenu est trop long */
+  max-height: 120px; /* Limite de hauteur */
 }

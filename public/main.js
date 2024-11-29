@@ -318,8 +318,6 @@ map.addInteraction(selectPartner);
 
 // Modifiez la fonction pointermove pour éviter de masquer le popup lorsqu'il est survolé
 map.on("pointermove", function (evt) {
-  if (popup.matches(":hover")) return; // Ne rien faire si le popup est survolé
-
   const minZoomLevel = 12;
   const currentZoom = map.getView().getZoom();
 
@@ -330,28 +328,56 @@ map.on("pointermove", function (evt) {
           feature.get("nom");
         document.getElementById("partner-type").textContent =
           feature.get("sigle");
-
-        const activity = feature.get("act_srvc_o");
-        document.getElementById("partner-activity").textContent = activity;
-
-        // Si l'activité est vide, affichez un message par défaut
-        if (!activity || activity.trim() === "") {
-          document.getElementById("partner-activity").textContent =
-            "Aucune activité spécifiée.";
-        }
-
+        document.getElementById("partner-activity").textContent =
+          feature.get("act_srvc_o");
         document.getElementById("partner-info").textContent =
           feature.get("info");
         document.getElementById("partner-logo").src = feature.get("img_logo");
 
-        popup.style.left = evt.pixel[0] + 15 + "px";
-        popup.style.top = evt.pixel[1] - 100 + "px";
+        const popup = document.getElementById("partner-popup");
+
+        // Obtenir la taille de la fenêtre
+        const windowWidth = window.innerWidth;
+        const windowHeight = window.innerHeight;
+
+        // Obtenir les coordonnées du curseur sur la carte
+        const [mouseX, mouseY] = evt.pixel;
+
+        // Calculer les dimensions du popup
+        const popupWidth = popup.offsetWidth || 250; // Default width if not rendered yet
+        const popupHeight = popup.offsetHeight || 200; // Default height if not rendered yet
+
+        // Ajuster la position pour éviter que le popup ne dépasse l'écran
+        let popupLeft = mouseX + 15; // Décalage à droite
+        let popupTop = mouseY - popupHeight - 15; // Afficher au-dessus de l'icône
+
+        // Si le popup dépasse le bord droit
+        if (popupLeft + popupWidth > windowWidth) {
+          popupLeft = mouseX - popupWidth - 15; // Déplacer à gauche
+        }
+
+        // Si le popup dépasse le bord gauche
+        if (popupLeft < 0) {
+          popupLeft = 10; // S'assurer qu'il reste visible
+        }
+
+        // Si le popup dépasse le bord supérieur
+        if (popupTop < 0) {
+          popupTop = mouseY + 15; // Afficher en dessous
+        }
+
+        // Appliquer les styles calculés
+        popup.style.left = popupLeft + "px";
+        popup.style.top = popupTop + "px";
         popup.style.display = "block";
-        return true;
+
+        return true; // Terminer la boucle après avoir trouvé la feature
+      } else {
+        document.getElementById("partner-popup").style.display = "none";
       }
     });
   } else {
-    popup.style.display = "none";
+    document.getElementById("partner-popup").style.display = "none";
   }
 });
 

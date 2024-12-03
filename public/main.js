@@ -341,25 +341,25 @@ map.on("pointermove", function (evt) {
 
         // Gérer l'image ou l'icône par défaut
         const logoElement = document.getElementById("partner-logo");
+        const iconElement = document.getElementById("partner-logo-icon");
         const logoUrl = feature.get("img_logo");
 
         if (logoUrl) {
           // Vérifier si l'image est valide
           const img = new Image();
           img.onload = function () {
-            logoElement.src = logoUrl; // Charger l'image si valide
+            logoElement.src = logoUrl; // Charger l'image
             logoElement.style.display = "block"; // Afficher l'image
-            document.getElementById("partner-logo-icon").style.display = "none"; // Cacher l'icône
+            iconElement.style.display = "none"; // Cacher l'icône
           };
           img.onerror = function () {
             logoElement.style.display = "none"; // Cacher l'image
-            document.getElementById("partner-logo-icon").style.display =
-              "block"; // Afficher l'icône
+            iconElement.style.display = "flex"; // Afficher l'icône
           };
           img.src = logoUrl;
         } else {
           logoElement.style.display = "none"; // Cacher l'image
-          document.getElementById("partner-logo-icon").style.display = "block"; // Afficher l'icône
+          iconElement.style.display = "flex"; // Afficher l'icône
         }
 
         // Calculer la position initiale du popup

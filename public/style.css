@@ -1138,53 +1138,78 @@ html {
   }
 }
 
+/* Style général du popup */
 .popup {
   position: absolute;
   display: none;
   background: #ffffff;
   box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2);
   border-radius: 8px;
-  width: 300px;
+  width: 280px;
   font-family: Arial, sans-serif;
   font-size: 14px;
   z-index: 5000;
-  overflow: hidden;
-  transition: transform 0.2s ease, opacity 0.2s ease;
+  pointer-events: auto; /* Permet l'interaction avec le popup */
 }
 
+/* Contenu principal du popup */
 .popup-content {
-  padding: 15px;
+  display: flex;
+  flex-direction: column;
+  padding: 10px;
+  gap: 10px; /* Espacement entre les sections */
 }
 
+/* Section pour le logo ou l'icône */
+.logo-section {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100%; /* S'adapte à la largeur */
+  height: 60px; /* Hauteur fixe pour le conteneur */
+  position: relative;
+}
+
+/* Image du logo */
+.popup-logo {
+  max-width: 50px;
+  max-height: 50px;
+  border-radius: 4px;
+  display: none; /* Cachée par défaut */
+}
+
+/* Icône par défaut (FontAwesome) */
+#partner-logo-icon {
+  display: none; /* Cachée par défaut */
+  font-size: 50px;
+  color: #007bff;
+}
+
+/* Sections des informations générales */
 .popup-section {
-  margin-bottom: 15px; /* Espacement entre les sections */
-}
-
-.logo-section img {
-  width: 60px;
-  height: 60px;
-  border-radius: 8px;
-  display: block;
-  margin: 0 auto;
+  padding: 8px;
+  border-left: 4px solid #007bff; /* Bordure pour démarquer */
+  background-color: #f9f9f9; /* Couleur de fond légère */
+  border-radius: 4px; /* Coins arrondis */
 }
 
 .name-section h3,
-.type-section h4 {
-  margin: 0;
-  font-size: 16px;
-  text-align: center; /* Centrer le texte */
-  color: #333;
-}
-
+.type-section h4,
 .activity-section p,
 .info-section p {
-  margin: 5px 0;
-  padding: 10px;
-  background: #f9f9f9; /* Fond léger */
-  border-left: 4px solid #007bff; /* Bordure latérale */
+  margin: 0;
   font-size: 14px;
   color: #333;
   font-weight: bold;
+}
+
+.activity-section {
+  max-height: 100px;
   overflow-y: auto; /* Barre de défilement si le contenu est trop long */
-  max-height: 120px; /* Limite de hauteur */
+}
+
+/* Icônes dans les sections */
+.popup-section i {
+  margin-right: 8px;
+  color: #007bff; /* Couleur des icônes */
 }

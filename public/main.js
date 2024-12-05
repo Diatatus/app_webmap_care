@@ -326,66 +326,74 @@ map.on("pointermove", function (evt) {
   if (currentZoom >= minZoomLevel) {
     map.forEachFeatureAtPixel(evt.pixel, function (feature, layer) {
       if (layer === partnerLayer) {
-        // Mettre à jour le contenu du popup
+        // Mettre à jour le contenu des champs du popup
         document.getElementById("partner-name").textContent =
           feature.get("nom");
         document.getElementById("partner-type").textContent =
           feature.get("sigle");
-
-        const activity = feature.get("act_srvc_o");
-        document.getElementById("partner-activity").textContent =
-          activity || "Aucune activité spécifiée.";
-
         document.getElementById("partner-info").textContent =
           feature.get("info");
 
-        // Gérer l'image ou l'icône par défaut
+        // Gestion des services offerts
+        const activity =
+          feature.get("services_o") || "Aucune activité spécifiée.";
+        const services = activity.split(";").map((service) => service.trim()); // Diviser par point-virgule
+
+        // Créer une liste HTML
+        const activityContainer = document.getElementById("partner-activity");
+        activityContainer.innerHTML =
+          "<i class='fas fa-briefcase'></i> <strong>Services offerts :</strong>";
+        const ul = document.createElement("ul");
+        ul.classList.add("activity-list");
+        services.forEach((service) => {
+          const li = document.createElement("li");
+          li.textContent = service;
+          ul.appendChild(li);
+        });
+        activityContainer.appendChild(ul);
+
+        // Gérer le logo
         const logoElement = document.getElementById("partner-logo");
+        const iconElement = document.getElementById("partner-logo-icon");
         const logoUrl = feature.get("img_logo");
 
         if (logoUrl) {
-          // Vérifier si l'image est valide
           const img = new Image();
           img.onload = function () {
-            logoElement.src = logoUrl; // Charger l'image si valide
-            logoElement.style.display = "block"; // Afficher l'image
-            document.getElementById("partner-logo-icon").style.display = "none"; // Cacher l'icône
+            logoElement.src = logoUrl;
+            logoElement.style.display = "block";
+            iconElement.style.display = "none";
           };
           img.onerror = function () {
-            logoElement.style.display = "none"; // Cacher l'image
-            document.getElementById("partner-logo-icon").style.display =
-              "block"; // Afficher l'icône
+            logoElement.style.display = "none";
+            iconElement.style.display = "flex";
           };
           img.src = logoUrl;
         } else {
-          logoElement.style.display = "none"; // Cacher l'image
-          document.getElementById("partner-logo-icon").style.display = "block"; // Afficher l'icône
+          logoElement.style.display = "none";
+          iconElement.style.display = "flex";
         }
 
-        // Calculer la position initiale du popup
+        // Calculer la position du popup
         let popupLeft = evt.pixel[0] + 15;
         let popupTop = evt.pixel[1] - 100;
-
-        // Obtenir les dimensions de l'écran et du popup
         const popupRect = popup.getBoundingClientRect();
         const mapRect = map.getTargetElement().getBoundingClientRect();
 
-        // Ajuster si le popup dépasse les bords de l'écran
         if (popupLeft + popupRect.width > mapRect.width) {
-          popupLeft = mapRect.width - popupRect.width - 10; // Décalage à gauche
+          popupLeft = mapRect.width - popupRect.width - 10;
         }
         if (popupLeft < 0) {
-          popupLeft = 10; // Éviter de dépasser à gauche
+          popupLeft = 10;
         }
 
         if (popupTop + popupRect.height > mapRect.height) {
-          popupTop = mapRect.height - popupRect.height - 10; // Décalage vers le haut
+          popupTop = mapRect.height - popupRect.height - 10;
         }
         if (popupTop < 0) {
-          popupTop = 10; // Éviter de dépasser en haut
+          popupTop = 10;
         }
 
-        // Appliquer la position finale
         popup.style.left = `${popupLeft}px`;
         popup.style.top = `${popupTop}px`;
         popup.style.display = "block";

@@ -339,19 +339,6 @@ map.on("pointermove", function (evt) {
           feature.get("services_o") || "Aucune activité spécifiée.";
         const services = activity.split(";").map((service) => service.trim()); // Diviser par point-virgule
 
-        // Créer une liste HTML
-        const activityContainer = document.getElementById("partner-activity");
-        activityContainer.innerHTML =
-          "<i class='fas fa-briefcase'></i> <strong>Services offerts :</strong>";
-        const ul = document.createElement("ul");
-        ul.classList.add("activity-list");
-        services.forEach((service) => {
-          const li = document.createElement("li");
-          li.textContent = service;
-          ul.appendChild(li);
-        });
-        activityContainer.appendChild(ul);
-
         // Gérer le logo
         const logoElement = document.getElementById("partner-logo");
         const iconElement = document.getElementById("partner-logo-icon");

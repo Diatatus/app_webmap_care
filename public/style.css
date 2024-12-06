@@ -1213,30 +1213,3 @@ html {
   margin-right: 8px;
   color: #007bff; /* Couleur des icônes */
 }
-
-/* Style pour la section des services */
-#partner-activity {
-  background-color: #f9f9f9;
-  border-left: 4px solid #007bff;
-  padding: 8px;
-  font-size: 14px;
-  color: #333;
-  font-weight: bold;
-  max-height: 150px;
-  overflow-y: auto; /* Barre de défilement si contenu trop long */
-  margin: 8px 0;
-  border-radius: 4px;
-}
-
-/* Liste des activités */
-.activity-list {
-  padding-left: 20px; /* Décalage pour la liste */
-  margin-top: 5px;
-  font-weight: normal; /* Texte moins marqué que le titre */
-  color: #555;
-}
-
-.activity-list li {
-  margin-bottom: 5px;
-  line-height: 1.4; /* Espacement entre les lignes */
-}

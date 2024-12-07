@@ -326,64 +326,60 @@ map.on("pointermove", function (evt) {
   if (currentZoom >= minZoomLevel) {
     map.forEachFeatureAtPixel(evt.pixel, function (feature, layer) {
       if (layer === partnerLayer) {
-        // Mettre à jour le contenu des champs du popup
+        // Nom et sigle
         document.getElementById("partner-name").textContent =
           feature.get("nom");
         document.getElementById("partner-type").textContent =
           feature.get("sigle");
+
+        // Services offerts (convertir en liste)
+        const activityList = document.getElementById("partner-activity-list");
+        activityList.innerHTML = ""; // Nettoyer la liste existante
+        const activities = (
+          feature.get("act_srvc_o") || "Aucune activité spécifiée."
+        )
+          .split(";")
+          .map((item) => item.trim());
+        activities.forEach((activity) => {
+          const listItem = document.createElement("li");
+          listItem.textContent = activity;
+          activityList.appendChild(listItem);
+        });
+
+        // Informations générales
         document.getElementById("partner-info").textContent =
           feature.get("info");
 
-        // Gestion des services offerts
-        const activity =
-          feature.get("services_o") || "Aucune activité spécifiée.";
-        const services = activity.split(";").map((service) => service.trim()); // Diviser par point-virgule
-
-        // Gérer le logo
+        // Gestion du logo
         const logoElement = document.getElementById("partner-logo");
         const iconElement = document.getElementById("partner-logo-icon");
         const logoUrl = feature.get("img_logo");
-
         if (logoUrl) {
-          const img = new Image();
-          img.onload = function () {
-            logoElement.src = logoUrl;
-            logoElement.style.display = "block";
-            iconElement.style.display = "none";
-          };
-          img.onerror = function () {
-            logoElement.style.display = "none";
-            iconElement.style.display = "flex";
-          };
-          img.src = logoUrl;
+          logoElement.src = logoUrl;
+          logoElement.style.display = "block";
+          iconElement.style.display = "none";
         } else {
           logoElement.style.display = "none";
-          iconElement.style.display = "flex";
+          iconElement.style.display = "block";
         }
 
-        // Calculer la position du popup
+        // Positionner et afficher le popup
         let popupLeft = evt.pixel[0] + 15;
-        let popupTop = evt.pixel[1] - 100;
+        let popupTop = evt.pixel[1] - 150;
         const popupRect = popup.getBoundingClientRect();
         const mapRect = map.getTargetElement().getBoundingClientRect();
 
-        if (popupLeft + popupRect.width > mapRect.width) {
+        if (popupLeft + popupRect.width > mapRect.width)
           popupLeft = mapRect.width - popupRect.width - 10;
-        }
-        if (popupLeft < 0) {
-          popupLeft = 10;
-        }
-
-        if (popupTop + popupRect.height > mapRect.height) {
+        if (popupLeft < 0) popupLeft = 10;
+        if (popupTop + popupRect.height > mapRect.height)
           popupTop = mapRect.height - popupRect.height - 10;
-        }
-        if (popupTop < 0) {
-          popupTop = 10;
-        }
+        if (popupTop < 0) popupTop = 10;
 
         popup.style.left = `${popupLeft}px`;
         popup.style.top = `${popupTop}px`;
         popup.style.display = "block";
+
         return true;
       }
     });

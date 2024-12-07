@@ -1138,78 +1138,77 @@ html {
   }
 }
 
-/* Style général du popup */
 .popup {
   position: absolute;
   display: none;
-  background: #ffffff;
-  box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2);
+  background: #fff;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
   border-radius: 8px;
-  width: 280px;
+  width: 300px;
   font-family: Arial, sans-serif;
   font-size: 14px;
   z-index: 5000;
-  pointer-events: auto; /* Permet l'interaction avec le popup */
 }
 
-/* Contenu principal du popup */
 .popup-content {
   display: flex;
   flex-direction: column;
-  padding: 10px;
-  gap: 10px; /* Espacement entre les sections */
+  gap: 10px;
+  padding: 15px;
 }
 
-/* Section pour le logo ou l'icône */
+/* Logo or Icon */
 .logo-section {
   display: flex;
   justify-content: center;
   align-items: center;
-  width: 100%; /* S'adapte à la largeur */
-  height: 60px; /* Hauteur fixe pour le conteneur */
-  position: relative;
+  height: 60px;
 }
 
-/* Image du logo */
 .popup-logo {
   max-width: 50px;
   max-height: 50px;
   border-radius: 4px;
-  display: none; /* Cachée par défaut */
+  display: none; /* Hidden until valid image */
 }
 
-/* Icône par défaut (FontAwesome) */
 #partner-logo-icon {
-  display: none; /* Cachée par défaut */
+  display: none; /* Hidden unless no logo */
   font-size: 50px;
   color: #007bff;
 }
 
-/* Sections des informations générales */
+/* Section styles */
 .popup-section {
-  padding: 8px;
-  border-left: 4px solid #007bff; /* Bordure pour démarquer */
-  background-color: #f9f9f9; /* Couleur de fond légère */
-  border-radius: 4px; /* Coins arrondis */
+  background: #f9f9f9;
+  border-left: 4px solid #007bff;
+  padding: 10px;
+  border-radius: 4px;
 }
 
-.name-section h3,
-.type-section h4,
-.activity-section p,
-.info-section p {
+.popup-section h3,
+.popup-section h4,
+.popup-section p {
   margin: 0;
   font-size: 14px;
   color: #333;
-  font-weight: bold;
 }
 
-.activity-section {
+/* Activity List */
+.activity-list {
+  padding-left: 20px; /* Indentation */
   max-height: 100px;
-  overflow-y: auto; /* Barre de défilement si le contenu est trop long */
+  overflow-y: auto; /* Scrolling for long lists */
+  margin: 0;
 }
 
-/* Icônes dans les sections */
+.activity-list li {
+  margin-bottom: 5px;
+  color: #555;
+}
+
+/* FontAwesome Icons */
 .popup-section i {
   margin-right: 8px;
-  color: #007bff; /* Couleur des icônes */
+  color: #007bff;
 }

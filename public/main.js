@@ -336,7 +336,7 @@ map.on("pointermove", function (evt) {
         const activityList = document.getElementById("partner-activity-list");
         activityList.innerHTML = ""; // Nettoyer la liste existante
         const activities = (
-          feature.get("act_srvc_o") || "Aucune activité spécifiée."
+          feature.get("services_o") || "Aucune activité spécifiée."
         )
           .split(";")
           .map((item) => item.trim());

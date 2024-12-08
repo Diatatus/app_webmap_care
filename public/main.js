@@ -214,22 +214,35 @@ var worldMapLayer = new ol.layer.Vector({
 
 map.addLayer(worldMapLayer);
 
-// Interaction de selection des couches
+// Add the Select interaction
 var select = new ol.interaction.Select({
   hitTolerance: 5,
-  multi: false,
+  multi: false, // Allow only one feature to be selected
   condition: ol.events.condition.singleClick,
   filter: function (feature, layer) {
-    // Retourner vrai uniquement si ce n'est pas la couche partnerLayer et worldMap
-    return (
-      layer !== partnerLayer &&
-      layer !== worldMapLayer &&
-      layer !== CamerounLayer
-    );
+    return layer === regionLayer; // Only enable selection for the regionLayer
   },
 });
 
+// Add the interaction to the map
 map.addInteraction(select);
+
+// Event listener for when a feature is selected
+select.on("select", function (evt) {
+  const selectedFeature = evt.selected[0]; // Get the first selected feature
+  if (selectedFeature) {
+    // Get the geometry of the selected feature
+    const geometry = selectedFeature.getGeometry();
+    const extent = geometry.getExtent();
+
+    // Zoom the map to the extent of the selected feature
+    map.getView().fit(extent, {
+      size: map.getSize(),
+      maxZoom: 10, // Optional: Limit maximum zoom level
+      duration: 1000, // Optional: Add a smooth transition
+    });
+  }
+});
 
 // Définition de la couche des partenaires
 var partnerLayer = new ol.layer.Vector({

@@ -1138,6 +1138,7 @@ html {
   }
 }
 
+/* General popup styling */
 .popup {
   position: absolute;
   display: none;
@@ -1148,6 +1149,7 @@ html {
   font-family: Arial, sans-serif;
   font-size: 14px;
   z-index: 5000;
+  pointer-events: auto;
 }
 
 .popup-content {
@@ -1157,31 +1159,46 @@ html {
   padding: 15px;
 }
 
-/* Logo or Icon */
+/* Logo or icon styling */
 .logo-section {
   display: flex;
   justify-content: center;
   align-items: center;
-  height: 60px;
+  height: 70px;
 }
 
 .popup-logo {
-  max-width: 50px;
-  max-height: 50px;
-  border-radius: 4px;
-  display: none; /* Hidden until valid image */
+  max-width: 70px;
+  max-height: 70px;
+  border-radius: 50%;
+  display: none;
 }
 
 #partner-logo-icon {
-  display: none; /* Hidden unless no logo */
-  font-size: 50px;
-  color: #007bff;
+  display: none;
+  font-size: 60px;
+  color: #e55b00;
+  text-align: center;
 }
 
-/* Section styles */
+/* Activity list styling */
+.activity-list {
+  list-style-type: disc;
+  margin: 0;
+  padding-left: 20px; /* Indent for bullets */
+  max-height: 120px; /* Limited height for scrolling */
+  overflow-y: auto;
+}
+
+.activity-list li {
+  margin-bottom: 5px;
+  color: #555;
+}
+
+/* Section Styling */
 .popup-section {
   background: #f9f9f9;
-  border-left: 4px solid #007bff;
+  border-left: 4px solid #e55b00;
   padding: 10px;
   border-radius: 4px;
 }
@@ -1192,23 +1209,10 @@ html {
   margin: 0;
   font-size: 14px;
   color: #333;
+  font-weight: bold;
 }
 
-/* Activity List */
-.activity-list {
-  padding-left: 20px; /* Indentation */
-  max-height: 100px;
-  overflow-y: auto; /* Scrolling for long lists */
-  margin: 0;
-}
-
-.activity-list li {
-  margin-bottom: 5px;
-  color: #555;
-}
-
-/* FontAwesome Icons */
 .popup-section i {
   margin-right: 8px;
-  color: #007bff;
+  color: #e55b00;
 }

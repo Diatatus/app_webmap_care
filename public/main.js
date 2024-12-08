@@ -318,7 +318,7 @@ map.addInteraction(selectPartner);
 
 // Modifiez la fonction pointermove pour éviter de masquer le popup lorsqu'il est survolé
 map.on("pointermove", function (evt) {
-  if (popup.matches(":hover")) return; // Ne rien faire si le popup est survolé
+  if (popup.matches(":hover")) return; // Don't trigger popup behavior if it's being hovered over
 
   const minZoomLevel = 12;
   const currentZoom = map.getView().getZoom();
@@ -326,15 +326,15 @@ map.on("pointermove", function (evt) {
   if (currentZoom >= minZoomLevel) {
     map.forEachFeatureAtPixel(evt.pixel, function (feature, layer) {
       if (layer === partnerLayer) {
-        // Nom et sigle
+        // Update content
         document.getElementById("partner-name").textContent =
           feature.get("nom");
         document.getElementById("partner-type").textContent =
           feature.get("sigle");
 
-        // Services offerts (convertir en liste)
+        // Manage services offered
         const activityList = document.getElementById("partner-activity-list");
-        activityList.innerHTML = ""; // Nettoyer la liste existante
+        activityList.innerHTML = ""; // Clear the existing list
         const activities = (
           feature.get("services_o") || "Aucune activité spécifiée."
         )
@@ -346,24 +346,35 @@ map.on("pointermove", function (evt) {
           activityList.appendChild(listItem);
         });
 
-        // Informations générales
         document.getElementById("partner-info").textContent =
           feature.get("info");
 
-        // Gestion du logo
+        // Handle logo display with default fallback
         const logoElement = document.getElementById("partner-logo");
         const iconElement = document.getElementById("partner-logo-icon");
         const logoUrl = feature.get("img_logo");
+
         if (logoUrl) {
-          logoElement.src = logoUrl;
-          logoElement.style.display = "block";
-          iconElement.style.display = "none";
+          const img = new Image();
+          img.onload = function () {
+            // Ensure proper scaling for the image
+            logoElement.src = logoUrl;
+            logoElement.style.display = "block";
+            logoElement.style.objectFit = "cover"; // Ensures consistent fit
+            logoElement.style.width = "100%"; // Resizes image proportionally
+            iconElement.style.display = "none";
+          };
+          img.onerror = function () {
+            logoElement.style.display = "none";
+            iconElement.style.display = "block";
+          };
+          img.src = logoUrl;
         } else {
           logoElement.style.display = "none";
           iconElement.style.display = "block";
         }
 
-        // Positionner et afficher le popup
+        // Calculate and adjust popup position
         let popupLeft = evt.pixel[0] + 15;
         let popupTop = evt.pixel[1] - 150;
         const popupRect = popup.getBoundingClientRect();

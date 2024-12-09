@@ -642,7 +642,9 @@ html {
   justify-content: center;
   align-items: center;
   cursor: pointer;
-  transition: background-color 0.5s ease;
+  transition: all 0.3s ease-in-out;
+  border: 1px solid transparent;
+  border-radius: 6px;
   width: 40px; /* Circle size */
   height: 40px; /* Circle size */
   border-radius: 50%; /* Make it circular */
@@ -673,6 +675,27 @@ html {
 /* Hover effect on the entire option */
 .layer-option:hover {
   background-color: rgba(200, 200, 200, 0.5);
+  background: linear-gradient(135deg, #ffffff, #f7f7f7);
+  transform: translateY(-3px);
+  box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
+  border-color: #0078d7;
+}
+
+.layer-option:hover img {
+  transform: scale(1.05);
+}
+
+.layer-option::after {
+  content: "";
+  display: block;
+  width: 0;
+  height: 2px;
+  background: #0078d7;
+  transition: width 0.3s ease-in-out;
+}
+
+.layer-option:hover::after {
+  width: 100%;
 }
 
 /* General styles for the popup-info container */

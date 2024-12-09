@@ -719,15 +719,31 @@ function showInitialPopup() {
   }
 }
 
-// Appeler la fonction lors du chargement de l'application
-showInitialPopup();
-document.addEventListener("DOMContentLoaded", showInitialPopup);
+// Ajout d'un écouteur pour détecter les changements de couche via layer-switcher
+function attachLayerSwitcherHandler(map) {
+  map.getLayers().forEach(function (layer) {
+    if (layer instanceof ol.layer.Group) {
+      layer.getLayers().forEach(function (subLayer) {
+        // Réagir au changement de visibilité de la couche
+        subLayer.on("change:visible", function () {
+          if (subLayer.getVisible()) {
+            // Appeler la fonction après avoir vérifié la visibilité
+            const source = subLayer.getSource();
+            if (source && source.getState() === "ready") {
+              showInitialPopup();
+            }
+          }
+        });
+      });
+    }
+  });
+}
 
 // Initialiser la carte et ajouter la couche CamerounLayer
 function initializeMap() {
   const map = new ol.Map({
     target: "map",
-    layers: [osm],
+    layers: [osm], // Ajouter la couche de base
     view: new ol.View({
       center: ol.proj.fromLonLat([12.4922, 5.748]),
       zoom: 6,
@@ -737,12 +753,16 @@ function initializeMap() {
   // Ajouter la couche CamerounLayer
   map.addLayer(CamerounLayer);
 
+  // Attacher l'écouteur pour gérer le layer-switcher
+  attachLayerSwitcherHandler(map);
+
   // Afficher le popup initial après que la carte soit prête
   map.once("rendercomplete", function () {
     showInitialPopup(); // Afficher le popup initial
   });
 }
 
+// Appeler la fonction d'initialisation lors du chargement du DOM
 document.addEventListener("DOMContentLoaded", initializeMap);
 
 // Gestion de l'affichage/masquage des couches et du popup

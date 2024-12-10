@@ -678,7 +678,7 @@ html {
   background: linear-gradient(135deg, #ffffff, #f7f7f7);
   transform: translateY(-3px);
   box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
-  border-color: #0078d7;
+  border-color: #e55b00;
 }
 
 .layer-option:hover img {
@@ -690,7 +690,7 @@ html {
   display: block;
   width: 0;
   height: 2px;
-  background: #0078d7;
+  background: #e55b00;
   transition: width 0.3s ease-in-out;
 }
 

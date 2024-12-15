@@ -569,7 +569,7 @@ function createCharts(feature) {
     datasets: [
       {
         label: "Population",
-        data: [feature.get("popsexmasc"), feature.get("popsexfem")],
+        data: [feature.get("popsex_masc"), feature.get("popsex_fem")],
         backgroundColor: ["#36A2EB", "#FF6384"],
       },
     ],
@@ -578,30 +578,42 @@ function createCharts(feature) {
   document.getElementById("total-population-info").textContent = // Total population
     feature.get("total_pop").toLocaleString() + " habitants";
   document.getElementById("population-density-info").textContent = // Densite population
-    feature.get("denspopreg") + " hab/km²";
+    feature.get("denspop_reg") + " hab/km²";
 
-  document.getElementById("access-sanity").textContent = feature.get("asa"); // Acces aux installations sanitaire
-  document.getElementById("access-water").textContent = feature.get("aea"); // Acces a une source d'eau ameliore
-  document.getElementById("handwashing").textContent = feature.get("ill"); // Installation de lave main
+  document.getElementById("access-sanity").textContent =
+    feature.get("acces_sanit_amel"); // Acces aux installations sanitaire
+  document.getElementById("access-water").textContent =
+    feature.get("acces_eau_amel"); // Acces a une source d'eau ameliore
+  document.getElementById("handwashing").textContent =
+    feature.get("inst_lavmain_lim"); // Installation de lave main
 
-  document.getElementById("hiv-males").textContent = feature.get("pvihhom"); // Prevalence VIH (Hommes)
-  document.getElementById("hiv-females").textContent = feature.get("pvihfem"); // Prevalence VIH (Femmes)
+  document.getElementById("hiv-males").textContent =
+    feature.get("prev_vih_hom"); // Prevalence VIH (Hommes)
+  document.getElementById("hiv-females").textContent =
+    feature.get("prev_vih_fem"); // Prevalence VIH (Femmes)
 
-  document.getElementById("poverty-rate").textContent = feature.get("tauxpvrt"); // Taux de pauvrete
+  document.getElementById("poverty-rate").textContent =
+    feature.get("taux_pvrt"); // Taux de pauvrete
   document.getElementById("unemployment-rate").textContent =
-    feature.get("chom"); // Taux de chomage
+    feature.get("taux_chom"); // Taux de chomage
   document.getElementById("financial-inclusion").textContent =
-    feature.get("ife"); // Taux d'inclusion financiere
+    feature.get("incl_fin_emf"); // Taux d'inclusion financiere
 
-  document.getElementById("unmet-need").textContent = feature.get("pf"); // Planning familliale
-  document.getElementById("contraceptive-use").textContent =
-    feature.get("fcpm"); // Femmes utilisant des methodes de contraceptions
+  document.getElementById("unmet-need").textContent = feature.get(
+    "besoins_nonsatisf_pf"
+  ); // Planning familliale
+  document.getElementById("contraceptive-use").textContent = feature.get(
+    "fem_utilmethcontracep_mod"
+  ); // Femmes utilisant des methodes de contraceptions
 
   var familyData = {
     labels: ["%Hommes", "%Femmes"],
     datasets: [
       {
-        data: [feature.get("vch"), feature.get("vcf")], // Hommes et femmes justifiant la violence conjugale
+        data: [
+          feature.get("justif_violconj_hom"),
+          feature.get("justif_violconj_fem"),
+        ], // Hommes et femmes justifiant la violence conjugale
         backgroundColor: ["#36A2EB", "#FF6384"], //
       },
     ],

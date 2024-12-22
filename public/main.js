@@ -262,14 +262,14 @@ function createBasesStyle(feature) {
     image: new ol.style.Icon({
       anchor: [0.5, 1],
       src: "./resources/images/bases.svg",
-      scale: 0.12,
+      scale: 0.08,
     }),
     text: new ol.style.Text({
       text: feature.get("nom_base"),
       font: "bold 12px Arial",
       fill: new ol.style.Fill({ color: "#ffffff" }),
-      stroke: new ol.style.Stroke({ color: "#000000", width: 3 }),
-      offsetY: -3,
+      stroke: new ol.style.Stroke({ color: "#000000", width: 2 }),
+      offsetY: 10,
     }),
   });
 }

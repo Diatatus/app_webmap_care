@@ -259,22 +259,17 @@ map.addLayer(basesLayer);
 
 function createBasesStyle(feature) {
   return new ol.style.Style({
-    image: new ol.style.Circle({
-      radius: 8,
-      fill: new ol.style.Fill({
-        color: "#FF5733", // Couleur de remplissage
-      }),
-      stroke: new ol.style.Stroke({
-        color: "#C70039", // Couleur du contour
-        width: 2,
-      }),
+    image: new ol.style.Icon({
+      anchor: [0.5, 1],
+      src: "./resources/images/bases.svg",
+      scale: 0.12,
     }),
     text: new ol.style.Text({
-      text: feature.get("nom_base") || "", // Nom du bureau
+      text: feature.get("nom_base"),
       font: "bold 12px Arial",
       fill: new ol.style.Fill({ color: "#ffffff" }),
       stroke: new ol.style.Stroke({ color: "#000000", width: 3 }),
-      offsetY: -10, // Décalage pour le texte
+      offsetY: -3,
     }),
   });
 }
@@ -285,63 +280,46 @@ var partnerLayer = new ol.layer.Vector({
     url: "/api/care_partner",
     format: new ol.format.GeoJSON(),
   }),
+  style: function (feature) {
+    return createDefaultStyle(feature);
+  },
 });
 
 map.addLayer(partnerLayer);
 
-function createDefaultStyle(feature, layer) {
-  // Vérifiez si la couche est la couche spécifique (ex: partnerLayer)
-  if (layer === partnerLayer) {
-    return new ol.style.Style({
-      image: new ol.style.Icon({
-        anchor: [0.5, 1],
-        src: "./resources/images/partner_location.svg",
-        scale: 0.15,
-      }),
-      text: new ol.style.Text({
-        text: feature.get("sigle"),
-        font: "bold 12px Arial",
-        fill: new ol.style.Fill({ color: "#ffffff" }),
-        stroke: new ol.style.Stroke({ color: "#000000", width: 3 }),
-        offsetY: -15,
-      }),
-    });
-  }
-  // Retourne null si la couche ne correspond pas
-  return null;
-}
-
-function createHighlightStyle(feature, layer) {
-  // Vérifiez si la couche est la couche spécifique (ex: partnerLayer)
-  if (layer === partnerLayer) {
-    return new ol.style.Style({
-      image: new ol.style.Icon({
-        anchor: [0.5, 1],
-        src: "./resources/images/partner_location_y.svg",
-        scale: 0.2,
-      }),
-      text: new ol.style.Text({
-        text: feature.get("sigle"),
-        font: "bold 12px Arial",
-        fill: new ol.style.Fill({ color: "#0000FF" }),
-        stroke: new ol.style.Stroke({ color: "#ffffff", width: 4 }),
-        offsetY: -15,
-      }),
-    });
-  }
-  // Retourne null si la couche ne correspond pas
-  return null;
-}
-
-// Exemple d'utilisation
-map.on("pointermove", function (evt) {
-  map.forEachFeatureAtPixel(evt.pixel, function (feature, layer) {
-    const defaultStyle = createDefaultStyle(feature, layer);
-    if (defaultStyle) {
-      feature.setStyle(defaultStyle);
-    }
+function createDefaultStyle(feature) {
+  return new ol.style.Style({
+    image: new ol.style.Icon({
+      anchor: [0.5, 1],
+      src: "./resources/images/partner_location.svg",
+      scale: 0.15,
+    }),
+    text: new ol.style.Text({
+      text: feature.get("sigle"),
+      font: "bold 12px Arial",
+      fill: new ol.style.Fill({ color: "#ffffff" }),
+      stroke: new ol.style.Stroke({ color: "#000000", width: 3 }),
+      offsetY: -15,
+    }),
   });
-});
+}
+
+function createHighlightStyle(feature) {
+  return new ol.style.Style({
+    image: new ol.style.Icon({
+      anchor: [0.5, 1],
+      src: "./resources/images/partner_location_y.svg",
+      scale: 0.2,
+    }),
+    text: new ol.style.Text({
+      text: feature.get("sigle"),
+      font: "bold 12px Arial",
+      fill: new ol.style.Fill({ color: "#0000FF" }),
+      stroke: new ol.style.Stroke({ color: "#ffffff", width: 4 }),
+      offsetY: -15,
+    }),
+  });
+}
 
 // Gestion du survol de la couche partnerLayer
 let currentHoveredFeature = null;
@@ -469,7 +447,7 @@ map.on("click", function () {
   document.getElementById("partner-popup").style.display = "none";
 });
 
-var partnerLayerVisible = false;
+var partnerLayerVisible = true;
 
 // Gestion du clic sur le bouton pour afficher/masquer la couche des partenaires
 document
@@ -589,7 +567,7 @@ adjustLayerOpacity();
 // Ajout de la couche cluster à la carte
 map.addLayer(clusterLayer);
 
-var clusterLayerVisible = false;
+var clusterLayerVisible = true;
 
 // Gestion du clic sur le bouton pour afficher/masquer la couche
 document

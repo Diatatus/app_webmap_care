@@ -901,33 +901,52 @@ function toggleLayer(eve) {
 const toggleButton = document.getElementById("toggleBases");
 const storyDiv = document.getElementById("story");
 
-// Fonction d'affichage et masquage de la story-map
-function toggleStoryDiv() {
-  // Si la div est masquée, afficher
+// Variable to track the visibility of the BasesLayer
+let basesLayerVisible = true;
+
+// Function to toggle the story div and the BasesLayer visibility
+function toggleStoryAndBasesLayer() {
+  // Toggle the story div visibility
   if (storyDiv.style.display === "none" || storyDiv.style.display === "") {
-    storyDiv.style.display = "block"; // Afficher la div
+    storyDiv.style.display = "block"; // Show the div
   } else {
-    storyDiv.style.display = "none"; // Masquer la div
+    storyDiv.style.display = "none"; // Hide the div
+  }
+
+  // Toggle the BasesLayer visibility
+  if (basesLayerVisible) {
+    map.removeLayer(basesLayer); // Hide the layer
+    basesLayerVisible = false;
+  } else {
+    map.addLayer(basesLayer); // Show the layer
+    basesLayerVisible = true;
   }
 }
 
-// Initialiser l'état de la div story-map en fonction de la taille de l'écran
+// Function to initialize the story div visibility based on screen size
 function initializeStoryDiv() {
   const isSmartphone = window.innerWidth <= 600;
 
-  // Toujours masqué par défaut sur smartphone lors du chargement
+  // Always hidden by default on smartphones at load
   storyDiv.style.display = isSmartphone ? "none" : "block";
+
+  // Ensure the BasesLayer visibility matches the default state
+  if (isSmartphone) {
+    map.removeLayer(basesLayer);
+    basesLayerVisible = false;
+  } else {
+    map.addLayer(basesLayer);
+    basesLayerVisible = true;
+  }
 }
 
-// Ajouter un listener au bouton pour afficher/masquer la div
-toggleButton.addEventListener("click", toggleStoryDiv);
+// Attach the toggle function to the button click event
+toggleButton.addEventListener("click", toggleStoryAndBasesLayer);
 
-// Assurez-vous que la story-map démarre dans le bon état lors du chargement
+// Initialize the story div visibility and layer state on DOMContentLoaded
 document.addEventListener("DOMContentLoaded", initializeStoryDiv);
 
-// Ajout d'une icone de localisation
-var placemark = new ol.Overlay.Placemark();
-map.addOverlay(placemark);
+
 
 // La story-map
 var story = new ol.control.Storymap({
@@ -1133,3 +1152,4 @@ function zoomToFeature(featureElement, layerName, attributeName) {
     },
   });
 }
+

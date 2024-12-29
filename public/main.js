@@ -274,6 +274,69 @@ function createBasesStyle(feature) {
   });
 }
 
+function createHighlightBasesStyle(feature) {
+  return new ol.style.Style({
+    image: new ol.style.Icon({
+      anchor: [0.5, 1],
+      src: "./resources/images/bases_y.svg",
+      scale: 0.1,
+    }),
+    text: new ol.style.Text({
+      text: feature.get("sigle"),
+      font: "bold 12px Arial",
+      fill: new ol.style.Fill({ color: "#0000FF" }),
+      stroke: new ol.style.Stroke({ color: "#ffffff", width: 4 }),
+      offsetY: -15,
+    }),
+  });
+}
+
+// Variable to store the currently clicked feature
+let currentlyClickedFeature = null;
+
+// Add a click event listener to the map
+map.on("click", function (evt) {
+  // Clear the style of the previously clicked feature
+  if (currentlyClickedFeature) {
+    currentlyClickedFeature.setStyle(createBasesStyle(currentlyClickedFeature));
+    currentlyClickedFeature = null;
+  }
+
+  // Highlight the clicked feature
+  map.forEachFeatureAtPixel(evt.pixel, function (feature, layer) {
+    if (layer === basesLayer) {
+      feature.setStyle(createHighlightBasesStyle(feature));
+      currentlyClickedFeature = feature; // Save the current clicked feature
+      return true; // Stop further processing
+    }
+  });
+});
+
+// Add a pointermove event to temporarily highlight features
+map.on("pointermove", function (evt) {
+  let hoveredFeature = null;
+
+  map.forEachFeatureAtPixel(evt.pixel, function (feature, layer) {
+    if (layer === basesLayer) {
+      if (currentlyClickedFeature !== feature) {
+        // Temporarily highlight features on hover
+        feature.setStyle(createHighlightBasesStyle(feature));
+        hoveredFeature = feature;
+      }
+      return true;
+    }
+  });
+
+  // Restore style for features not hovered or clicked
+  basesLayer.getSource().getFeatures().forEach((feature) => {
+    if (feature !== currentlyClickedFeature && feature !== hoveredFeature) {
+      feature.setStyle(createBasesStyle(feature));
+    }
+  });
+});
+
+
+
 // Définition de la couche des partenaires
 var partnerLayer = new ol.layer.Vector({
   source: new ol.source.Vector({

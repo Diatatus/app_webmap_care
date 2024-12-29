@@ -285,7 +285,7 @@ var partnerLayer = new ol.layer.Vector({
   },
 });
 
-map.addLayer(partnerLayer);
+
 
 function createDefaultStyle(feature) {
   return new ol.style.Style({
@@ -447,22 +447,6 @@ map.on("click", function () {
   document.getElementById("partner-popup").style.display = "none";
 });
 
-var partnerLayerVisible = true;
-
-// Gestion du clic sur le bouton pour afficher/masquer la couche des partenaires
-document
-  .getElementById("togglePartenaires")
-  .addEventListener("click", function () {
-    if (!partnerLayerVisible) {
-      // Si la couche n'est pas visible, l'ajouter à la carte
-      map.addLayer(partnerLayer);
-      partnerLayerVisible = true;
-    } else {
-      // Si la couche est visible, la retirer de la carte
-      map.removeLayer(partnerLayer);
-      partnerLayerVisible = false;
-    }
-  });
 
 // Définition du cluster sur la visualisation des partenaire
 var clusterSource = new ol.source.Cluster({
@@ -564,25 +548,28 @@ map.getView().on("change:resolution", function () {
 // Appeler la fonction lors du chargement initial pour ajuster l'opacité selon le zoom par défaut
 adjustLayerOpacity();
 
-// Ajout de la couche cluster à la carte
-map.addLayer(clusterLayer);
 
-var clusterLayerVisible = true;
 
-// Gestion du clic sur le bouton pour afficher/masquer la couche
-document
-  .getElementById("togglePartenaires")
-  .addEventListener("click", function () {
-    if (!clusterLayerVisible) {
-      // Si la couche n'est pas visible, l'ajouter à la carte
-      map.addLayer(clusterLayer);
-      clusterLayerVisible = true;
-    } else {
-      // Si la couche est visible, la retirer de la carte
-      map.removeLayer(clusterLayer);
-      clusterLayerVisible = false;
-    }
-  });
+let clusterLayerVisible = false; // Visibility status for clusterLayer
+let partnerLayerVisible = false; // Visibility status for partnerLayer
+
+// Manage the click event for the toggle button
+document.getElementById("togglePartenaires").addEventListener("click", function () {
+  if (!clusterLayerVisible && !partnerLayerVisible) {
+    // Add both layers to the map if they are not visible
+    map.addLayer(clusterLayer);
+    map.addLayer(partnerLayer);
+    clusterLayerVisible = true;
+    partnerLayerVisible = true;
+  } else {
+    // Remove both layers from the map if they are visible
+    map.removeLayer(clusterLayer);
+    map.removeLayer(partnerLayer);
+    clusterLayerVisible = false;
+    partnerLayerVisible = false;
+  }
+});
+
 
 // Fonction de representation des graphes
 
@@ -941,8 +928,8 @@ inputBox.onkeyup = function () {
 
       // Recherche selon les mots cles des couches
       const layers = [
-        { name: "partenaire", attribute: "nom" },
-        { name: "partenaire", attribute: "sigle" },
+        { name: "partenaires", attribute: "nom" },
+        { name: "partenaires", attribute: "sigle" },
       ];
 
       layers.forEach((layer) => {

@@ -780,32 +780,38 @@ function attachLayerSwitcherHandler(map) {
     }
   });
 }
+// Attach layer switcher after DOM is ready
+document.addEventListener("DOMContentLoaded", attachLayerSwitcherHandler);
 
-// Initialiser la carte et ajouter la couche CamerounLayer
-function initializeMap() {
-  const map = new ol.Map({
-    target: "map",
-    layers: [osm], // Ajouter la couche de base
-    view: new ol.View({
-      center: ol.proj.fromLonLat([12.4922, 5.748]),
-      zoom: 6,
-    }),
-  });
 
-  // Ajouter la couche CamerounLayer
-  map.addLayer(CamerounLayer);
-
-  // Attacher l'écouteur pour gérer le layer-switcher
-  attachLayerSwitcherHandler(map);
-
-  // Afficher le popup initial après que la carte soit prête
-  map.once("rendercomplete", function () {
-    showInitialPopup(); // Afficher le popup initial
-  });
+// Display the initial popup
+function showInitialPopup() {
+  const isSmartphone = window.innerWidth <= 600;
+  if (!isSmartphone) {
+    const source = CamerounLayer.getSource();
+    if (source.getState() === "ready") {
+      const features = source.getFeatures();
+      if (features.length > 0) {
+        showPopup(features[0]); // Display popup for the first feature
+      }
+    } else {
+      source.once("change", function () {
+        if (source.getState() === "ready") {
+          const features = source.getFeatures();
+          if (features.length > 0) {
+            showPopup(features[0]);
+          }
+        }
+      });
+    }
+  }
 }
 
-// Appeler la fonction d'initialisation lors du chargement du DOM
-document.addEventListener("DOMContentLoaded", initializeMap);
+// Handle render complete for initial popup display
+map.once("rendercomplete", function () {
+  showInitialPopup(); // Display the initial popup
+});
+
 
 // Gestion de l'affichage/masquage des couches et du popup
 document.getElementById("toggleRegions").addEventListener("click", function () {

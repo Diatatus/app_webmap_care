@@ -1016,6 +1016,7 @@ inputBox.onkeyup = function () {
       const layers = [
         { name: "partenaires", attribute: "nom" },
         { name: "partenaires", attribute: "sigle" },
+        { name: "bureaux_base", attribute: "nom_base" },
       ];
 
       layers.forEach((layer) => {

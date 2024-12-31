@@ -830,8 +830,8 @@ function attachLayerSwitcherHandler(map) {
     }
   });
 }
-// Attach layer switcher after DOM is ready
-document.addEventListener("DOMContentLoaded", attachLayerSwitcherHandler);
+
+
 
 
 // Display the initial popup
@@ -943,8 +943,7 @@ function initializeStoryDiv() {
 // Attach the toggle function to the button click event
 toggleButton.addEventListener("click", toggleStoryAndBasesLayer);
 
-// Initialize the story div visibility and layer state on DOMContentLoaded
-document.addEventListener("DOMContentLoaded", initializeStoryDiv);
+
 
 
 

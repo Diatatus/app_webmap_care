@@ -1187,6 +1187,33 @@ function showBaseProjectsPopup(baseFeature) {
     });
 }
 
+// Function to display the popup for projects related to a Bureau de Base
+function showBaseProjectsPopup(baseFeature) {
+  const baseName = baseFeature.get("nom_base");
+  const baseId = baseFeature.get("id_base");
+
+  // Fetch projects related to the selected Bureau
+  fetch(`/api/bureaux_projets?id_base=${baseId}`)
+    .then((response) => response.json())
+    .then((data) => {
+      currentBaseProjects = data.features.map((feature) => feature.properties);
+
+      if (currentBaseProjects.length === 0) return; // No projects, no popup
+
+      // Set base name
+      document.getElementById("base-name").textContent = baseName;
+
+      // Display the first project
+      currentBaseProjectIndex = 0;
+      updateBaseProjectDetails();
+
+      // Show the popup
+      const basePopup = document.getElementById("base-projects-popup");
+      basePopup.style.display = "block";
+      setTimeout(() => (basePopup.style.opacity = 1), 10);
+    });
+}
+
 // Function to update project details in the popup
 function updateBaseProjectDetails() {
   const project = currentBaseProjects[currentBaseProjectIndex];
@@ -1214,7 +1241,7 @@ function updateBaseProjectDetails() {
   ).textContent = `${currentBaseProjectIndex + 1}/${currentBaseProjects.length}`;
 }
 
-// Navigation handlers
+// Handling navigation between projects
 document.getElementById("prev-project").addEventListener("click", () => {
   if (currentBaseProjectIndex > 0) {
     currentBaseProjectIndex--;

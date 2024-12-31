@@ -949,6 +949,10 @@ document.addEventListener("DOMContentLoaded", initializeStoryDiv);
 
 
 // La story-map
+// Add placemark
+var placemark = new ol.Overlay.Placemark();
+map.addOverlay (placemark);
+
 var story = new ol.control.Storymap({
   html: document.getElementById("story"),
   //target: document.getElementById("story"),
@@ -966,6 +970,7 @@ story.on("clickimage", function (e) {
   console.log(e);
   fullscreen.showImage(e.img.src, e);
 });
+
 
 // Survol sur la carte lors du scroll sur la story-map
 story.on("scrollto", function (e) {
@@ -1152,4 +1157,96 @@ function zoomToFeature(featureElement, layerName, attributeName) {
     },
   });
 }
+
+let currentBaseProjectIndex = 0;
+let currentBaseProjects = []; // Projects for the selected bureau
+
+// Function to display the popup for a base
+function showBaseProjectsPopup(baseFeature) {
+  const baseName = baseFeature.get("nom_base");
+  const baseId = baseFeature.get("id_base");
+
+  // Fetch projects related to the selected bureau
+  fetch(`/api/bureaux_projets?bureau_id=${baseId}`)
+    .then((response) => response.json())
+    .then((data) => {
+      currentBaseProjects = data.features.map((feature) => feature.properties);
+
+      if (currentBaseProjects.length === 0) return; // No projects, no popup
+
+      // Set base name
+      document.getElementById("base-name").textContent = baseName;
+
+      // Display the first project
+      currentBaseProjectIndex = 0;
+      updateBaseProjectDetails();
+
+      // Show the popup
+      const basePopup = document.getElementById("base-projects-popup");
+      basePopup.style.display = "block";
+      setTimeout(() => (basePopup.style.opacity = 1), 10);
+    });
+}
+
+// Function to update project details in the popup
+function updateBaseProjectDetails() {
+  const project = currentBaseProjects[currentBaseProjectIndex];
+  if (!project) return;
+
+  document.getElementById("project-name").textContent = project.nom_projet;
+  document.getElementById("project-sigle").textContent = project.sigle_projet;
+  document.getElementById("project-start-date").textContent =
+    project.date_debut;
+  document.getElementById("project-end-date").textContent = project.date_fin;
+  document.getElementById("project-budget").textContent = project.budget_projet;
+  document.getElementById("project-bailleur").textContent = project.bailleur;
+  document.getElementById("project-objective").textContent =
+    project.objectif_global;
+  document.getElementById("project-target").textContent = project.cible;
+  document.getElementById("project-sites").textContent =
+    project.site_intervention;
+  document.getElementById("project-status").textContent = project.statut;
+  document.getElementById("project-achievements").textContent =
+    project.realisations;
+
+  // Update counter
+  document.getElementById(
+    "project-counter"
+  ).textContent = `${currentBaseProjectIndex + 1}/${currentBaseProjects.length}`;
+}
+
+// Navigation handlers
+document.getElementById("prev-project").addEventListener("click", () => {
+  if (currentBaseProjectIndex > 0) {
+    currentBaseProjectIndex--;
+    updateBaseProjectDetails();
+  }
+});
+
+document.getElementById("next-project").addEventListener("click", () => {
+  if (currentBaseProjectIndex < currentBaseProjects.length - 1) {
+    currentBaseProjectIndex++;
+    updateBaseProjectDetails();
+  }
+});
+
+// Close popup
+document
+  .getElementById("base-popup-close-btn")
+  .addEventListener("click", () => {
+    const basePopup = document.getElementById("base-projects-popup");
+    basePopup.style.opacity = 0;
+    setTimeout(() => (basePopup.style.display = "none"), 300);
+  });
+
+// Map click event for basesLayer
+map.on("click", function (evt) {
+  map.forEachFeatureAtPixel(evt.pixel, function (feature, layer) {
+    if (layer === basesLayer) {
+      showBaseProjectsPopup(feature);
+      return true;
+    }
+  });
+});
+
 

@@ -168,7 +168,27 @@ app.get("/api/bureaux_base", async (req, res) => {
       .status(500)
       .json({ error: "Erreur lors de la récupération des données GeoJSON" });
   }
+})
+
+// Endpoint pour les informations relatives aux projets des bureaux de base
+app.get("/api/bureaux_projets", async (req, res) => {
+  try {
+    const result = await pool.query(
+      "SELECT jsonb_build_object('type', 'FeatureCollection', 'features', jsonb_agg(feature)) " +
+        "FROM (SELECT jsonb_build_object('type', 'Feature', 'properties', to_jsonb(row)) AS feature FROM (SELECT * FROM bureaux_projets_view) row) features;"
+    );
+    res.json(result.rows[0].jsonb_build_object);
+  } catch (err) {
+    console.error(
+      "Erreur lors de la récupération des données",
+      err.stack
+    );
+    res
+      .status(500)
+      .json({ error: "Erreur lors de la récupération des données" });
+  }
 });
+
 
 //Ouverture sur la page
 app.get("/", (req, res) => {

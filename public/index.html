@@ -325,6 +325,41 @@
       </div>
     </div>
 
+<!-- Popup for Bureaux de Base Projects -->
+<div id="base-projects-popup" class="popup-container">
+  <div id="base-popup-header" class="popup-header">
+    <i class="fas fa-project-diagram"></i>
+    <span id="base-name" class="zone-name"></span>
+    <button id="base-popup-close-btn" class="popup-close-btn">&times;</button>
+  </div>
+
+  <div id="base-popup-info" class="popup-info">
+    <!-- Project Details -->
+    <div id="project-details">
+      <h4><strong>Nom du Projet :</strong> <span id="project-name"></span></h4>
+      <p><strong>Sigle :</strong> <span id="project-sigle"></span></p>
+      <p><strong>Date de Début :</strong> <span id="project-start-date"></span></p>
+      <p><strong>Date de Fin :</strong> <span id="project-end-date"></span></p>
+      <p><strong>Budget :</strong> <span id="project-budget"></span></p>
+      <p><strong>Bailleur :</strong> <span id="project-bailleur"></span></p>
+      <p><strong>Objectif Global :</strong> <span id="project-objective"></span></p>
+      <p><strong>Cible :</strong> <span id="project-target"></span></p>
+      <p><strong>Sites d'Intervention :</strong> <span id="project-sites"></span></p>
+      <p><strong>Statut :</strong> <span id="project-status"></span></p>
+      <p><strong>Réalisations :</strong> <span id="project-achievements"></span></p>
+    </div>
+
+    <!-- Navigation for Multiple Projects -->
+    <div id="project-navigation">
+      <button id="prev-project" class="nav-arrow"><i class="fas fa-chevron-left"></i></button>
+      <span id="project-counter">1/n</span>
+      <button id="next-project" class="nav-arrow"><i class="fas fa-chevron-right"></i></button>
+    </div>
+  </div>
+</div>
+
+
+
     <!-- Popup Information Partenaire -->
     <div id="partner-popup" class="popup">
       <div class="popup-content">
@@ -391,10 +426,11 @@
 
     <!-- Zoom controls -->
     <div id="zoom-controls">
-      <button id="zoom-initial" class="zoom-btn">
-        <i class="fas fa-house"></i>
+      
       </button>
       <button id="zoom-in" class="zoom-btn"><i class="fas fa-plus"></i></button>
+      <button id="zoom-initial" class="zoom-btn">
+        <i class="fas fa-house"></i>
       <button id="zoom-out" class="zoom-btn">
         <i class="fas fa-minus"></i>
       </button>

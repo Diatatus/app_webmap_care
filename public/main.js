@@ -1240,9 +1240,25 @@ function updateBaseProjectDetails() {
   document.getElementById(
     "project-counter"
   ).textContent = `${currentBaseProjectIndex + 1}/${currentBaseProjects.length}`;
+
+  // Toggle visibility of navigation buttons
+  const prevButton = document.getElementById("prev-project");
+  const nextButton = document.getElementById("next-project");
+
+  if (currentBaseProjectIndex === 0) {
+    prevButton.style.display = "none";
+  } else {
+    prevButton.style.display = "block";
+  }
+
+  if (currentBaseProjectIndex === currentBaseProjects.length - 1) {
+    nextButton.style.display = "none";
+  } else {
+    nextButton.style.display = "block";
+  }
 }
 
-// Handling navigation between projects
+// Event listeners for navigation
 document.getElementById("prev-project").addEventListener("click", () => {
   if (currentBaseProjectIndex > 0) {
     currentBaseProjectIndex--;
@@ -1256,6 +1272,7 @@ document.getElementById("next-project").addEventListener("click", () => {
     updateBaseProjectDetails();
   }
 });
+
 
 // Close popup
 document

@@ -1248,7 +1248,7 @@ html {
   box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2);
   border-radius: 8px;
   max-width: 350px;
-  padding: 10px;
+  padding: 15px;
   font-family: Arial, sans-serif;
   font-size: 14px;
   opacity: 0;
@@ -1262,6 +1262,7 @@ html {
   align-items: center;
   padding-bottom: 10px;
   border-bottom: 1px solid #ccc;
+  font-weight: bold;
 }
 
 #base-popup-info {
@@ -1270,24 +1271,42 @@ html {
 
 #project-navigation {
   display: flex;
-  justify-content: space-between;
+  justify-content: center;
   align-items: center;
-  margin-top: 10px;
+  gap: 15px;
+  margin: 10px 0;
 }
 
 .nav-arrow {
-  background: none;
+  background: #007bff; /* Bright blue for better visibility */
+  color: white;
   border: none;
+  width: 25px; /* Minimum width */
+  height: 25px; /* Minimum height */
+  border-radius: 50%;
+  font-size: 10px; /* Bigger font size for better readability */
+  display: flex;
+  justify-content: center;
+  align-items: center;
   cursor: pointer;
-  font-size: 18px;
-  color: #007bff;
+  transition: background-color 0.3s ease, transform 0.2s ease;
+}
+
+.nav-arrow:hover {
+  background: #0056b3; /* Darker blue on hover */
+  transform: scale(1.1); /* Slight zoom effect on hover */
 }
 
 .nav-arrow:disabled {
-  color: #ccc;
+  background: #cccccc;
   cursor: not-allowed;
+  transform: none; /* No hover effect for disabled buttons */
 }
 
 #project-counter {
+  font-size: 16px;
   font-weight: bold;
+  color: #333;
 }
+
+

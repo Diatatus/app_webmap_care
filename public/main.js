@@ -1215,48 +1215,45 @@ function showBaseProjectsPopup(baseFeature) {
     });
 }
 
-// Function to update project details in the popup
 function updateBaseProjectDetails() {
   const project = currentBaseProjects[currentBaseProjectIndex];
   if (!project) return;
 
+  // Update project details in the popup
   document.getElementById("project-name").textContent = project.nom_projet;
   document.getElementById("project-sigle").textContent = project.sigle_projet;
-  document.getElementById("project-start-date").textContent =
-    project.date_debut;
+  document.getElementById("project-start-date").textContent = project.date_debut;
   document.getElementById("project-end-date").textContent = project.date_fin;
   document.getElementById("project-budget").textContent = project.budget_projet;
   document.getElementById("project-bailleur").textContent = project.bailleur;
-  document.getElementById("project-objective").textContent =
-    project.objectif_global;
+  document.getElementById("project-objective").textContent = project.objectif_global;
   document.getElementById("project-target").textContent = project.cible;
-  document.getElementById("project-sites").textContent =
-    project.site_intervention;
+  document.getElementById("project-sites").textContent = project.site_intervention;
   document.getElementById("project-status").textContent = project.statut;
-  document.getElementById("project-achievements").textContent =
-    project.realisations;
+  document.getElementById("project-achievements").textContent = project.realisations;
 
-  // Update counter
-  document.getElementById(
-    "project-counter"
-  ).textContent = `${currentBaseProjectIndex + 1}/${currentBaseProjects.length}`;
+  // Update project counter
+  document.getElementById("project-counter").textContent = 
+    `${currentBaseProjectIndex + 1}/${currentBaseProjects.length}`;
 
-  // Toggle visibility of navigation buttons
   const prevButton = document.getElementById("prev-project");
   const nextButton = document.getElementById("next-project");
+  const navigation = document.getElementById("project-navigation");
 
-  if (currentBaseProjectIndex === 0) {
-    prevButton.style.display = "none";
+  if (currentBaseProjects.length === 1) {
+    // Hide navigation if only one project
+    navigation.style.display = "none";
   } else {
-    prevButton.style.display = "block";
-  }
-
-  if (currentBaseProjectIndex === currentBaseProjects.length - 1) {
-    nextButton.style.display = "none";
-  } else {
-    nextButton.style.display = "block";
+    // Show navigation and manage button states
+    navigation.style.display = "flex";
+    prevButton.style.display = currentBaseProjectIndex === 0 ? "none" : "block";
+    nextButton.style.display =
+      currentBaseProjectIndex === currentBaseProjects.length - 1
+        ? "none"
+        : "block";
   }
 }
+
 
 // Event listeners for navigation
 document.getElementById("prev-project").addEventListener("click", () => {
@@ -1292,5 +1289,4 @@ map.on("click", function (evt) {
     }
   });
 });
-
 

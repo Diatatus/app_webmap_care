@@ -1241,10 +1241,11 @@ html {
   color: #e55b00;
 }
 
+/* General Popup Styling */
 #base-projects-popup {
   position: absolute;
   display: none;
-  background: white;
+  background: rgba(255, 255, 255, 0.750);
   box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2);
   border-radius: 8px;
   max-width: 400px;
@@ -1265,10 +1266,54 @@ html {
   font-weight: bold;
 }
 
-#base-popup-info {
-  padding: 10px 0;
+/* Project Details Styling */
+.project-section {
+  padding: 10px;
+  border-radius: 5px;
+  margin-bottom: 8px;
 }
 
+.project-name {
+  background-color: #eaf8e6; /* Green for project name */
+}
+
+.project-sigle {
+  background-color: #fbe7c6; /* Light orange for sigle */
+}
+
+.project-dates {
+  background-color: #e6effb; /* Light blue for dates */
+}
+
+.project-budget {
+  background-color: #ffe4e4; /* Light red for budget */
+}
+
+.project-bailleur {
+  background-color: #f3e5f5; /* Lavender for bailleur */
+}
+
+.project-objective {
+  background-color: #e8f5e9; /* Light green for objective */
+}
+
+.project-target {
+  background-color: #fefae0; /* Beige for target */
+}
+
+.project-sites {
+  background-color: #e0f7fa; /* Cyan for sites */
+}
+
+.project-status {
+  background-color: #ffecb3; /* Yellow for status */
+}
+
+.project-achievements {
+  background-color: #d7ffd9; /* Pale green for achievements */
+}
+
+/* Navigation Styling */
 #project-navigation {
   display: flex;
   justify-content: center;
@@ -1278,13 +1323,13 @@ html {
 }
 
 .nav-arrow {
-  background: #007bff; /* Bright blue for better visibility */
+  background: #007bff;
   color: white;
   border: none;
-  width: 25px; /* Minimum width */
-  height: 25px; /* Minimum height */
+  width: 30px;
+  height: 30px;
   border-radius: 50%;
-  font-size: 10px; /* Bigger font size for better readability */
+  font-size: 14px;
   display: flex;
   justify-content: center;
   align-items: center;
@@ -1293,20 +1338,25 @@ html {
 }
 
 .nav-arrow:hover {
-  background: #0056b3; /* Darker blue on hover */
-  transform: scale(1.1); /* Slight zoom effect on hover */
+  background: #0056b3;
+  transform: scale(1.1);
 }
 
 .nav-arrow:disabled {
   background: #cccccc;
   cursor: not-allowed;
-  transform: none; /* No hover effect for disabled buttons */
+  transform: none;
 }
 
 #project-counter {
   font-size: 16px;
   font-weight: bold;
   color: #333;
+}
+
+#base-projects-popup #popup-footer {
+  display: none;
+
 }
 
 

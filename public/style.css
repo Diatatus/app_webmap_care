@@ -709,7 +709,7 @@ html {
   right: 7%;
   width: 400px;
   height: 630px; /* Define height */
-  background-color: rgba(255, 255, 255, 0.9);
+  background-color: rgba(255, 255, 255, 0.700);
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
   border-radius: 10px;
   z-index: 1000;
@@ -814,7 +814,7 @@ html {
   margin-top: 20px;
   text-align: center;
   padding: 10px;
-  background-color: #f1f1f1;
+  background-color: #f1f1f1ae;
   border-top: 1px solid #000000;
 }
 

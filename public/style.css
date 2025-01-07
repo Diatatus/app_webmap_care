@@ -1245,8 +1245,8 @@ html {
 #base-projects-popup {
   position: absolute;
   display: none;
-  background: rgba(255, 255, 255, 0.750);
-  box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2);
+  background: rgba(255, 255, 255, 0.9);
+  box-shadow: 0px 4px 8px rgba(0, 0, 0, 1);
   border-radius: 8px;
   max-width: 400px;
   padding: 15px;

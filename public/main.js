@@ -63,54 +63,8 @@ document.getElementById("zoom-initial").addEventListener("click", function () {
   });
 });
 
-// Changement des fonds de carte
-function switchLayer(layerName) {
-  var layers = map.getLayers().getArray();
-  layers.forEach(function (layer) {
-    // Vérifie si la couche est une coouche de fond de carte
-    if (layer.get("isBaseLayer")) {
-      if (layer.get("name") === layerName) {
-        layer.setVisible(true);
-      } else {
-        layer.setVisible(false);
-      }
-    }
-  });
-}
 
-// Function to initialize the layer switcher
-document.querySelectorAll(".layer-option").forEach((option) => {
-  option.addEventListener("click", function () {
-    // Get the image source of the clicked layer option
-    const imgSrc = option.querySelector("img").src;
-    // Set this image source as the switcher icon's image
-    document.querySelector("#switcher-icon img").src = imgSrc;
 
-    // Optionally, hide the layer options after a selection
-    document.querySelector(".layer-switcher").classList.add("collapsed");
-  });
-});
-
-// Toggle layer options on hover or click
-document.querySelector("#switcher-icon").addEventListener("click", function () {
-  const layerSwitcher = document.querySelector(".layer-switcher");
-  layerSwitcher.classList.toggle("collapsed");
-});
-
-//Fonds de carte Bingmapas et OSM
-var bingMapsAerial = new ol.layer.Tile({
-  title: "Aerial",
-  visible: false,
-  baseLayer: true,
-  type: "base",
-  isBaseLayer: true,
-  preload: Infinity,
-  source: new ol.source.BingMaps({
-    key: "AuOKP0N2ww907dY398Ci9ZKg38AqF2jc7q1QchUixWw30TpwdCt4T36ip-OyE49R",
-    imagerySet: "AerialWithLabelsOnDemand",
-  }),
-  name: "Aerial",
-});
 
 var osm = new ol.layer.Tile({
   title: "OSM",
@@ -122,9 +76,8 @@ var osm = new ol.layer.Tile({
 });
 
 map.addLayer(osm);
-map.addLayer(bingMapsAerial);
 osm.setVisible(true);
-bingMapsAerial.setVisible(false);
+
 
 // Definition de couche des limites national du cameroun
 var CamerounLayer = new ol.layer.Vector({

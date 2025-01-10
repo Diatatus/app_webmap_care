@@ -1187,7 +1187,7 @@ function updateBaseProjectDetails() {
 
   // Update project counter
   document.getElementById("project-counter").textContent = 
-    `${currentBaseProjectIndex + 1}/${currentBaseProjects.length}`;
+    `Projet N°${currentBaseProjectIndex + 1}/${currentBaseProjects.length}`;
 
   const prevButton = document.getElementById("prev-project");
   const nextButton = document.getElementById("next-project");

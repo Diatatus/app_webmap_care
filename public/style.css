@@ -501,6 +501,25 @@ html {
   box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
   background-color: #e46217b4;
 }
+
+/* Style for the checkboxes within buttons */
+.layer-checkbox {
+  margin-right: 8px;
+  width: 16px;
+  height: 16px;
+  cursor: pointer;
+}
+
+
+/* Checkbox positioning and interaction */
+.layer-checkbox:checked + i {
+  color: #007bff; /* Highlight icon when checkbox is checked */
+}
+
+.layer-checkbox:hover {
+  background: #f0f0f0; /* Subtle background highlight */
+}
+
 /* Media query for smaller screens */
 @media (max-width: 768px) {
   #layer-slider-container {

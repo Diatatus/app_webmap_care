@@ -63,19 +63,32 @@
     <div id="map" class="map2"></div>
 
    <!-- Buttons couche de données -->
+<!-- Buttons couche de données -->
 <div id="layer-slider-container">
   <div id="layer-slider" class="custom-layer-slider-horizontal">
-    <button class="btn" id="toggleBases" aria-pressed="false">
+    <label class="btn">
+      <input type="checkbox" id="toggleBasesCheckbox" class="layer-checkbox" />
       <i class="fas fa-house"></i>Bases et Projets
-    </button>
-    <button id="togglePartenaires" class="btn" aria-pressed="false">
+    </label>
+    <label class="btn">
+      <input
+        type="checkbox"
+        id="togglePartenairesCheckbox"
+        class="layer-checkbox"
+      />
       <i class="fas fa-people-group"></i>Partenaires
-    </button>
-    <button id="toggleRegions" class="btn" aria-pressed="false">
+    </label>
+    <label class="btn">
+      <input
+        type="checkbox"
+        id="toggleRegionsCheckbox"
+        class="layer-checkbox"
+      />
       <i class="fas fa-chart-line"></i> Régions et Indicateurs
-    </button>
+    </label>
   </div>
 </div>
+
 
     <!-- Barre de recherche -->
     <div id="care-search-bar" class="care-search-bar">

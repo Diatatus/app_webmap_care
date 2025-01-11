@@ -221,7 +221,7 @@ function createBasesStyle(feature) {
     text: new ol.style.Text({
       text: feature.get("nom_base"),
       font: "bold 12px Arial",
-      fill: new ol.style.Fill({ color: "#FF2B2B" }),
+      fill: new ol.style.Fill({ color: "#FF0000" }),
       stroke: new ol.style.Stroke({ color: "#000000", width: 2 }),
       offsetY: 10,
     }),
@@ -570,22 +570,19 @@ adjustLayerOpacity();
 let clusterLayerVisible = false; // Visibility status for clusterLayer
 let partnerLayerVisible = false; // Visibility status for partnerLayer
 
-// Manage the click event for the toggle button
-document.getElementById("togglePartenaires").addEventListener("click", function () {
-  if (!clusterLayerVisible && !partnerLayerVisible) {
-    // Add both layers to the map if they are not visible
-    map.addLayer(clusterLayer);
-    map.addLayer(partnerLayer);
-    clusterLayerVisible = true;
-    partnerLayerVisible = true;
-  } else {
-    // Remove both layers from the map if they are visible
-    map.removeLayer(clusterLayer);
-    map.removeLayer(partnerLayer);
-    clusterLayerVisible = false;
-    partnerLayerVisible = false;
-  }
-});
+document
+  .getElementById("togglePartenairesCheckbox")
+  .addEventListener("change", function (event) {
+    if (event.target.checked) {
+      map.addLayer(partnerLayer);
+      map.addLayer(clusterLayer);
+      partnerLayerVisible = true;
+    } else {
+      map.removeLayer(partnerLayer);
+      map.removeLayer(clusterLayer);
+      partnerLayerVisible = false;
+    }
+  });
 
 
 // Fonction de representation des graphes
@@ -818,27 +815,26 @@ map.once("rendercomplete", function () {
 
 
 // Gestion de l'affichage/masquage des couches et du popup
-document.getElementById("toggleRegions").addEventListener("click", function () {
-  if (!regionLayerVisible) {
-    // Ajouter la couche région et afficher le popup
-    map.addLayer(regionLayer);
-    regionLayerVisible = true;
-
-    // Forcer le réaffichage du popup
-    const source = CamerounLayer.getSource();
-    if (source.getState() === "ready") {
-      const features = source.getFeatures();
-      if (features.length > 0) {
-        showPopup(features[0]); // Réafficher le popup
+document
+  .getElementById("toggleRegionsCheckbox")
+  .addEventListener("change", function (event) {
+    if (event.target.checked) {
+      map.addLayer(regionLayer);
+      regionLayerVisible = true;
+      // Show popup when layer is toggled on
+      const source = CamerounLayer.getSource();
+      if (source.getState() === "ready") {
+        const features = source.getFeatures();
+        if (features.length > 0) {
+          showPopup(features[0]); // Display popup
+        }
       }
+    } else {
+      map.removeLayer(regionLayer);
+      regionLayerVisible = false;
+      hidePopup(); // Hide popup when layer is toggled off
     }
-  } else {
-    // Retirer la couche région et masquer le popup
-    map.removeLayer(regionLayer);
-    regionLayerVisible = false;
-    hidePopup(); // Appeler la fonction pour masquer
-  }
-});
+  });
 
 function toggleLayer(eve) {
   var lyrname = eve.target.value;
@@ -852,7 +848,7 @@ function toggleLayer(eve) {
   });
 }
 
-const toggleButton = document.getElementById("toggleBases");
+const toggleButton = document.getElementById("toggleBasesCheckbox");
 const storyDiv = document.getElementById("story");
 
 // Variable to track the visibility of the BasesLayer
@@ -897,7 +893,14 @@ function initializeStoryDiv() {
 // Attach the toggle function to the button click event
 toggleButton.addEventListener("click", toggleStoryAndBasesLayer);
 
-
+// Initialize the checkboxes' default state
+document.addEventListener("DOMContentLoaded", function () {
+  document.getElementById("toggleBasesCheckbox").checked = basesLayerVisible;
+  document.getElementById("togglePartenairesCheckbox").checked =
+    partnerLayerVisible;
+  document.getElementById("toggleRegionsCheckbox").checked =
+    regionLayerVisible;
+});
 
 
 

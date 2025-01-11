@@ -220,8 +220,8 @@ function createBasesStyle(feature) {
     text: new ol.style.Text({
       text: feature.get("nom_base"),
       font: "bold 12px Arial",
-      fill: new ol.style.Fill({ color: "#ffffff" }),
-      stroke: new ol.style.Stroke({ color: "#000000", width: 2 }),
+      fill: new ol.style.Fill({ color: "#FF2B2B" }),
+      stroke: new ol.style.Stroke({ color: "#ffffff", width: 2 }),
       offsetY: 10,
     }),
   });
@@ -235,11 +235,10 @@ function createHighlightBasesStyle(feature) {
       scale: 0.1,
     }),
     text: new ol.style.Text({
-      text: feature.get("sigle"),
+      text: feature.get("nom_base"),
       font: "bold 12px Arial",
       fill: new ol.style.Fill({ color: "#0000FF" }),
       stroke: new ol.style.Stroke({ color: "#ffffff", width: 4 }),
-      offsetY: -15,
     }),
   });
 }

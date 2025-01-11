@@ -580,7 +580,7 @@ html {
   right: 7%;
   width: 400px;
   height: 630px; /* Define height */
-  background-color: rgba(255, 255, 255, 0.700);
+  background-color: rgba(255, 255, 255, 1);
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
   border-radius: 10px;
   z-index: 1000;
@@ -1116,7 +1116,7 @@ html {
 #base-projects-popup {
   position: absolute;
   display: none;
-  background: rgba(255, 255, 255, 0.9);
+  background: rgba(255, 255, 255, 1);
   box-shadow: 0px 4px 8px rgba(0, 0, 0, 1);
   border-radius: 8px;
   max-width: 400px;

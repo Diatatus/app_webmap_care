@@ -73,6 +73,7 @@ var osm = new ol.layer.Tile({
   source: new ol.source.OSM(),
   visible: true,
   name: "OSM",
+  opacity: 0.5,
 });
 
 map.addLayer(osm);
@@ -221,7 +222,7 @@ function createBasesStyle(feature) {
       text: feature.get("nom_base"),
       font: "bold 12px Arial",
       fill: new ol.style.Fill({ color: "#FF2B2B" }),
-      stroke: new ol.style.Stroke({ color: "#ffffff", width: 2 }),
+      stroke: new ol.style.Stroke({ color: "#000000", width: 2 }),
       offsetY: 10,
     }),
   });
@@ -237,8 +238,9 @@ function createHighlightBasesStyle(feature) {
     text: new ol.style.Text({
       text: feature.get("nom_base"),
       font: "bold 12px Arial",
-      fill: new ol.style.Fill({ color: "#0000FF" }),
+      fill: new ol.style.Fill({ color: "#0000ff" }),
       stroke: new ol.style.Stroke({ color: "#ffffff", width: 4 }),
+      offsetY: 10,
     }),
   });
 }

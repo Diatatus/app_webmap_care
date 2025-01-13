@@ -115,7 +115,7 @@ html {
 
 #story {
   height: 200px;
-  width: 500px;
+  width: 450px;
   top: 150%;
   left: 150%;
   padding: 10px;
@@ -129,7 +129,7 @@ html {
   max-width: 100%;
   border-radius: 0.5em;
   height: 630px;
-  background-color: rgba(255, 255, 255, 0.5);
+  background-color: rgba(255, 255, 255, 0.8);
 }
 
 #story img {
@@ -308,7 +308,7 @@ html {
   ); /* CARE's primary color in semi-transparent */
   border-radius: 8px;
   box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
-  width: 80%;
+  width: 120%;
   max-width: 500px;
   transition: all 0.3s ease;
   z-index: 0;
@@ -455,14 +455,14 @@ html {
   justify-content: center;
   position: absolute;
   top: 110px; /* Adjusted to place below the search bar */
-  left: 50%;
+  left: 49%;
   transform: translateX(-50%); /* Centers the slider horizontally */
   padding: 10px;
   background-color: rgba(255, 255, 255, 0);
   border-radius: 8px;
   box-shadow: 0 2px 5px rgba(0, 0, 0, 0);
   width: 90%; /* Makes it responsive */
-  max-width: 600px; /* Maximum width for larger screens */
+  max-width: 550px; /* Maximum width for larger screens */
   z-index: 0;
 }
 
@@ -611,7 +611,7 @@ html {
 @media (max-width: 1440px) {
   .popup-container {
     top: 15%;
-    right: 7%;
+    right: 5%;
     width: 380px;
     height: 630px; /* Define height */
   }
@@ -620,7 +620,7 @@ html {
 @media (max-width: 1366px) {
   .popup-container {
     top: 15%;
-    right: 6%;
+    right: 5%;
     width: 380px;
     height: 630px; /* Define height */
   }
@@ -629,7 +629,7 @@ html {
 @media (max-width: 1280px) {
   .popup-container {
     top: 15%;
-    right: 6%;
+    right: 5%;
     width: 330px;
     height: 630px; /* Define height */
   }

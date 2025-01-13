@@ -222,7 +222,7 @@ function createBasesStyle(feature) {
       text: feature.get("nom_base"),
       font: "bold 12px Arial",
       fill: new ol.style.Fill({ color: "#FF0000" }),
-      stroke: new ol.style.Stroke({ color: "#000000", width: 2 }),
+      stroke: new ol.style.Stroke({ color: "#ffffff", width: 4 }),
       offsetY: 10,
     }),
   });
@@ -396,7 +396,7 @@ map.on("pointermove", function (evt) {
         const activityList = document.getElementById("partner-activity-list");
         activityList.innerHTML = ""; // Clear the existing list
         const activities = (
-          feature.get("services_o") || "Aucune activité spécifiée."
+          feature.get("act_srvc_offert") || "Aucune activité spécifiée."
         )
           .split(";")
           .map((item) => item.trim());
@@ -906,13 +906,12 @@ document.addEventListener("DOMContentLoaded", function () {
 
 // La story-map
 // Add placemark
-var placemark = new ol.Overlay.Placemark();
-map.addOverlay (placemark);
+
 
 var story = new ol.control.Storymap({
   html: document.getElementById("story"),
   //target: document.getElementById("story"),
-  minibar: true,
+  minibar: false,
   //className: 'scrollBox'
 });
 
@@ -928,14 +927,7 @@ story.on("clickimage", function (e) {
 });
 
 
-// Survol sur la carte lors du scroll sur la story-map
-story.on("scrollto", function (e) {
-  if (e.name === "start") {
-    placemark.hide();
-  } else {
-    placemark.show(e.coordinate);
-  }
-});
+
 
 function setClassName(c) {
   console.log(c);
@@ -947,13 +939,35 @@ function setClassName(c) {
 
 map.addControl(story);
 
-function setClassName(c) {
-  console.log(c);
-  story.element.classList.remove("scrollLine");
-  story.element.classList.remove("scrollBox");
-  if (c) story.element.classList.add(c);
-  window.dispatchEvent(new Event("resize"));
-}
+
+document.addEventListener("DOMContentLoaded", function () {
+  const searchBar = document.getElementById("care-search-bar");
+  const searchIcon = document.getElementById("search-icon");
+  const searchInput = document.getElementById("inpt_search");
+
+  // Toggle the collapsed state when the search icon is clicked
+  searchIcon.addEventListener("click", function () {
+    if (searchBar.classList.contains("collapsed")) {
+      searchBar.classList.remove("collapsed"); // Expand the search bar
+      setTimeout(() => searchInput.focus(), 400); // Focus input after animation
+    } else {
+      searchBar.classList.add("collapsed"); // Collapse the search bar
+    }
+  });
+
+  // Optional: Close the search bar if the user clicks outside
+  document.addEventListener("click", function (event) {
+    if (
+      !searchBar.contains(event.target) &&
+      !searchIcon.contains(event.target) &&
+      !searchInput.contains(event.target)
+    ) {
+      searchBar.classList.add("collapsed");
+    }
+  });
+});
+
+
 
 // Fonction principal de la barre de recherche
 var txtVal = "";
@@ -974,6 +988,8 @@ inputBox.onkeyup = function () {
         { name: "partenaires", attribute: "nom" },
         { name: "partenaires", attribute: "sigle" },
         { name: "bureaux_base", attribute: "nom_base" },
+        {name: "regions", attribute: "nom" },
+
       ];
 
       layers.forEach((layer) => {

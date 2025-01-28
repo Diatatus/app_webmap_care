@@ -130,7 +130,7 @@ var regionLayer = new ol.layer.Vector({
         color: [255, 128, 0],
       }),
       fill: new ol.style.Fill({
-        color: [255, 128, 0, 0.2],
+        color: [255, 128, 0, 0],
       }),
     });
   },
@@ -912,6 +912,7 @@ var story = new ol.control.Storymap({
   html: document.getElementById("story"),
   //target: document.getElementById("story"),
   minibar: false,
+  duration: 200,
   //className: 'scrollBox'
 });
 
@@ -1140,33 +1141,6 @@ function showBaseProjectsPopup(baseFeature) {
   const baseId = baseFeature.get("id_base");
 
   // Fetch projects related to the selected bureau
-  fetch(`/api/bureaux_projets?bureau_id=${baseId}`)
-    .then((response) => response.json())
-    .then((data) => {
-      currentBaseProjects = data.features.map((feature) => feature.properties);
-
-      if (currentBaseProjects.length === 0) return; // No projects, no popup
-
-      // Set base name
-      document.getElementById("base-name").textContent = baseName;
-
-      // Display the first project
-      currentBaseProjectIndex = 0;
-      updateBaseProjectDetails();
-
-      // Show the popup
-      const basePopup = document.getElementById("base-projects-popup");
-      basePopup.style.display = "block";
-      setTimeout(() => (basePopup.style.opacity = 1), 10);
-    });
-}
-
-// Function to display the popup for projects related to a Bureau de Base
-function showBaseProjectsPopup(baseFeature) {
-  const baseName = baseFeature.get("nom_base");
-  const baseId = baseFeature.get("id_base");
-
-  // Fetch projects related to the selected Bureau
   fetch(`/api/bureaux_projets?id_base=${baseId}`)
     .then((response) => response.json())
     .then((data) => {
@@ -1187,6 +1161,42 @@ function showBaseProjectsPopup(baseFeature) {
       setTimeout(() => (basePopup.style.opacity = 1), 10);
     });
 }
+
+const baseProjectsCache = {}; // Cache to store fetched data
+
+function showBaseProjectsPopup(baseFeature) {
+  const baseId = baseFeature.get("id_base");
+  const baseName = baseFeature.get("nom_base");
+
+  if (baseProjectsCache[baseId]) {
+    // Use cached data if available
+    currentBaseProjects = baseProjectsCache[baseId];
+    displayPopup(baseName);
+  } else {
+    // Fetch data only if not cached
+    fetch(`/api/bureaux_projets?id_base=${baseId}`)
+      .then((response) => response.json())
+      .then((data) => {
+        currentBaseProjects = data.features.map((feature) => feature.properties);
+        baseProjectsCache[baseId] = currentBaseProjects; // Cache the data
+        displayPopup(baseName);
+      })
+      .catch((error) => console.error("Error fetching project data:", error));
+  }
+}
+
+function displayPopup(baseName) {
+  if (currentBaseProjects.length === 0) return; // No projects, no popup
+
+  document.getElementById("base-name").textContent = baseName;
+  currentBaseProjectIndex = 0;
+  updateBaseProjectDetails();
+
+  const basePopup = document.getElementById("base-projects-popup");
+  basePopup.style.display = "block";
+  setTimeout(() => (basePopup.style.opacity = 1), 10);
+}
+
 
 function updateBaseProjectDetails() {
   const project = currentBaseProjects[currentBaseProjectIndex];
@@ -1252,14 +1262,112 @@ document
     basePopup.style.opacity = 0;
     setTimeout(() => (basePopup.style.display = "none"), 300);
   });
+// Variable to store the currently clicked feature
+let currentlyClickedBase = null;
+
+// Optimize the click event
+map.on("click", function (evt) {
+  let clickedBaseFeature = null;
+
+  // Restrict the click event strictly to basesLayer
+  map.forEachFeatureAtPixel(
+    evt.pixel,
+    function (feature, layer) {
+      if (layer === basesLayer) {
+        clickedBaseFeature = feature; // Capture the clicked feature
+        return true; // Stop further iteration
+      }
+    },
+    {
+      layerFilter: function (layer) {
+        return layer === basesLayer; // Apply filtering to basesLayer only
+      },
+    }
+  );
+
+  // If no feature is clicked, reset the currently clicked feature and hide the popup
+  if (!clickedBaseFeature) {
+    if (currentlyClickedBase) {
+      currentlyClickedBase.setStyle(createBasesStyle(currentlyClickedBase));
+    }
+    currentlyClickedBase = null;
+    document.getElementById("base-projects-popup").style.display = "none"; // Hide popup
+    return;
+  }
+
+  // Handle clicked base feature
+  if (clickedBaseFeature !== currentlyClickedBase) {
+    // Reset previous feature style
+    if (currentlyClickedBase) {
+      currentlyClickedBase.setStyle(createBasesStyle(currentlyClickedBase));
+    }
+
+    // Highlight the clicked feature
+    clickedBaseFeature.setStyle(createHighlightBasesStyle(clickedBaseFeature));
+    currentlyClickedBase = clickedBaseFeature;
+
+    // Show the popup for the clicked base
+    showBaseProjectsPopup(clickedBaseFeature);
+  }
+});
 
 // Map click event for basesLayer
 map.on("click", function (evt) {
   map.forEachFeatureAtPixel(evt.pixel, function (feature, layer) {
     if (layer === basesLayer) {
+      // Show the base projects popup
       showBaseProjectsPopup(feature);
-      return true;
+
+      // Get the name of the base from the feature properties
+      const baseName = feature.get("nom_base");
+
+      // Scroll to the corresponding chapter in the storyDiv
+      scrollToChapter(baseName);
+
+      return true; // Stop further processing
     }
   });
 });
+
+/**
+ * Scroll to the corresponding chapter in the storyDiv
+ * @param {string} baseName - The name of the base clicked
+ */
+function scrollToChapter(baseName) {
+  const storyDiv = document.getElementById("story");
+  const chapters = storyDiv.getElementsByClassName("chapter");
+
+  // Loop through the chapters to find the matching one
+  for (let i = 0; i < chapters.length; i++) {
+    const chapter = chapters[i];
+    const chapterName = chapter.getAttribute("name");
+
+    if (chapterName === baseName) {
+      // Scroll to the matching chapter
+      chapter.scrollIntoView({
+        behavior: "smooth", // Smooth scrolling
+        block: "start", // Scroll to the top of the chapter
+      });
+
+      // Optionally, highlight the active chapter
+      highlightChapter(chapter);
+
+      break;
+    }
+  }
+}
+
+/**
+ * Highlight the active chapter
+ * @param {HTMLElement} chapter - The active chapter element
+ */
+function highlightChapter(chapter) {
+  const chapters = document.querySelectorAll(".chapter");
+
+  // Remove the active class from all chapters
+  chapters.forEach((chap) => chap.classList.remove("active-chapter"));
+
+  // Add the active class to the clicked chapter
+  chapter.classList.add("active-chapter");
+}
 

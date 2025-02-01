@@ -4,6 +4,7 @@ const cors = require("cors");
 const path = require("path");
 const pool = require("./db.js"); // Importation du module de connexion à la base de données
 require("dotenv").config();
+const session = require("express-session");
 
 //Port d'acces
 const PORT = process.env.PORT || 3000;
@@ -16,6 +17,21 @@ app.use(express.static(path.join(__dirname, "public")));
 
 // Configurer le dossier 'node_modules' pour être accessible publiquement
 app.use("/node_modules", express.static(path.join(__dirname, "node_modules")));
+
+// Middleware pour les sessions
+app.use(session({
+  secret: "careadminpass2025", // utilisez une clé complexe en production
+  resave: false,
+  saveUninitialized: false
+}));
+
+// Middleware pour vérifier l'authentification
+function isAuthenticated(req, res, next) {
+  if (req.session && req.session.user) {
+    return next();
+  }
+  res.status(401).json({ error: "Accès refusé" });
+}
 
 // Search endpoint
 app.post("/api/liveSearch", async (req, res) => {

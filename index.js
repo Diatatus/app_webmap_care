@@ -3,11 +3,20 @@ const app = express();
 const cors = require("cors");
 const path = require("path");
 const pool = require("./db.js"); // Importation du module de connexion à la base de données
-require("dotenv").config();
 const session = require("express-session");
+require("dotenv").config();
+
 
 //Port d'acces
 const PORT = process.env.PORT || 3000;
+
+// Middleware pour les sessions
+app.use(session({
+  secret: "careprojectpass2025",  // Remplacez par une clé sécurisée en production
+  resave: false,
+  saveUninitialized: false,
+  cookie: { secure: false }     // En production, activez HTTPS et mettez secure: true
+}));
 
 app.use(cors());
 app.use(express.json());
@@ -18,20 +27,14 @@ app.use(express.static(path.join(__dirname, "public")));
 // Configurer le dossier 'node_modules' pour être accessible publiquement
 app.use("/node_modules", express.static(path.join(__dirname, "node_modules")));
 
-// Middleware pour les sessions
-app.use(session({
-  secret: "careadminpass2025", // utilisez une clé complexe en production
-  resave: false,
-  saveUninitialized: false
-}));
+// Route publique : page d'administration
+app.get("/admin", (req, res) => {
+  res.sendFile(path.join(__dirname, "public", "admin.html"));
+});
 
-// Middleware pour vérifier l'authentification
-function isAuthenticated(req, res, next) {
-  if (req.session && req.session.user) {
-    return next();
-  }
-  res.status(401).json({ error: "Accès refusé" });
-}
+// Importer et utiliser les routes d'API d'administration (protégées par authentification)
+const adminRoutes = require("./routes/adminRoutes");
+app.use("/admin/api", adminRoutes);
 
 // Search endpoint
 app.post("/api/liveSearch", async (req, res) => {
@@ -209,6 +212,7 @@ app.get("/api/bureaux_projets", async (req, res) => {
 app.get("/", (req, res) => {
   res.sendFile(path.join(__dirname, "public", "index.html"));
 });
+
 
 // Démarrage du serveur
 app.listen(PORT, () => {

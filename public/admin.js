@@ -74,7 +74,7 @@ document.addEventListener("DOMContentLoaded", () => {
                     <th>Homme justifiant la violence conjugale</th>
                     <th>Femme justifiant la violence conjugale</th>
 
-                    <th class="fixed-row">Actions</th>
+                    <th class="fixed-column">Actions</th>
                   </tr>
                 </thead>
                 <tbody>`;

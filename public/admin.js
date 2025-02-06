@@ -101,7 +101,6 @@ document.addEventListener("DOMContentLoaded", () => {
 
            <td class="fixed-column">
             <button class="editBtn" data-id="${region.id_region}"><i class="fas fa-pen-to-square"></i></button>
-            <button class="deleteBtn" data-id="${region.id_region}"><i class="fas fa-trash"></i></button>
           </td>
               </tr>`;
     });
@@ -294,7 +293,7 @@ document.addEventListener("DOMContentLoaded", () => {
   }
 
 
-  btnListRegions.addEventListener("click", loadPartners);
+  btnListPartners.addEventListener("click", loadPartners);
 
 
   async function loadPartners() {
@@ -311,7 +310,7 @@ document.addEventListener("DOMContentLoaded", () => {
   }
 
   function displayPartner(partners) {
-    let html = `<h2>Régions</h2>
+    let html = `<h2>Partenaires</h2>
     <div class="table-wrapper">
      <table>
                 <thead>

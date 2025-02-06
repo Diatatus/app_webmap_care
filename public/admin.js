@@ -293,6 +293,72 @@ document.addEventListener("DOMContentLoaded", () => {
     });
   }
 
+
+  btnListRegions.addEventListener("click", loadPartners);
+
+
+  async function loadPartners() {
+    const response = await fetch("/admin/api/care_partner", {
+      method: "GET",
+      headers: { "Content-Type": "application/json" }
+    });
+    if (response.ok) {
+      const partners = await response.json();
+      displayPartner(partners);
+    } else {
+      alert("Erreur lors du chargement des partenaires.");
+    }
+  }
+
+  function displayPartner(partners) {
+    let html = `<h2>Régions</h2>
+    <div class="table-wrapper">
+     <table>
+                <thead>
+                  <tr>
+                    <th>ID</th>
+                    <th>Nom</th>
+                    <th>Sigle</th>
+                    <th>Activité et services offerts</th>
+                    <th>Statut de la prestation</th>
+                    <th>Image logo</th>
+                    <th>Informations</th>
+
+                    <th class="fixed-column">Actions</th>
+                  </tr>
+                </thead>
+                <tbody>`;
+    partners.forEach(partner => {
+      html += `<tr>
+                <td>${partner.id_partenaire}</td>
+                <td>${partner.nom}</td>
+                <td>${partner.sigle}</td>
+                <td>${partner.act_srvc_offert}</td>
+                <td>${partner.statut_prest}</td>
+                <td>${partner.img_logo || ""}</td>
+                <td>${partner.info}</td>
+
+           <td class="fixed-column">
+            <button class="editBtn" data-id="${partner.id_partenaire}"><i class="fas fa-pen-to-square"></i></button>
+            <button class="deleteBtn" data-id="${partner.id_partenaire}"><i class="fas fa-trash"></i></button>
+          </td>
+              </tr>`;
+    });
+    html += `</tbody></table></div>`;
+    contentArea.innerHTML = html;
+
+    // Ajout des événements pour les boutons de modification et de suppression
+    document.querySelectorAll(".deleteBtn").forEach(btn => {
+      btn.addEventListener("click", deletePartners);
+    });
+    document.querySelectorAll(".editBtn").forEach(btn => {
+      btn.addEventListener("click", () => {
+        const id = btn.getAttribute("data-id");
+        loadPartnersForEdit(id);
+      });
+    });
+  }
+
   // Gestion de la déconnexion
   btnLogout.addEventListener("click", async () => {
     const response = await fetch("/admin/api/logout", {

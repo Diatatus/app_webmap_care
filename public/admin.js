@@ -303,13 +303,13 @@ document.addEventListener("DOMContentLoaded", () => {
     });
     if (response.ok) {
       const partners = await response.json();
-      displayPartner(partners);
+      displayPartners(partners);
     } else {
       alert("Erreur lors du chargement des partenaires.");
     }
   }
 
-  function displayPartner(partners) {
+  function displayPartners(partners) {
     let html = `<h2>Partenaires</h2>
     <div class="table-wrapper">
      <table>

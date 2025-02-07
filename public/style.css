@@ -562,18 +562,14 @@ html {
 
 /* Styling the custom zoom buttons */
 .zoom-btn {
-  background-color: rgba(
-    102,
-    102,
-    102,
-    0.7
-  ); /* Semi-transparent white background */
+  background-color: rgba(255, 255, 255); /* Semi-transparent white background */
   border: none;
   border-radius: 50%; /* Make the buttons round */
+  border-color: #ccc;
   width: 40px;
   height: 40px;
   font-size: 20px;
-  color: white; /* Button text color */
+  color: rgb(0, 0, 0); /* Button text color */
   cursor: pointer;
   display: flex;
   justify-content: center;
@@ -584,7 +580,7 @@ html {
 }
 
 .zoom-btn:hover {
-  background-color: rgba(0, 0, 0, 0.6); /* Less transparency on hover */
+  background-color: rgba(125, 125, 125, 0.6); /* Less transparency on hover */
 }
 
 

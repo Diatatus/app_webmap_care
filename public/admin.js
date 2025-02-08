@@ -135,11 +135,8 @@ document.addEventListener("DOMContentLoaded", () => {
     }
   }
 
-  // Bouton pour afficher le formulaire d'ajout de région
-  btnAddRegion.addEventListener("click", displayAddRegionForm);
-  btnListPartners.addEventListener("click", loadPartners);
-  btnListOffices.addEventListener("click", loadOffices);
-  btnListProjects.addEventListener("click", loadProjects);
+  
+
 
   function displayAddRegionForm() {
     let html = `<h2>Ajouter une Région</h2>

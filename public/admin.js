@@ -50,7 +50,7 @@ document.addEventListener("DOMContentLoaded", () => {
   }
 
   function displayRegions(regions) {
-    let html = `<h2>Régions</h2>
+    let html = `<h2>Régions (Indicateurs socio-économiques)</h2>
     <div class="table-wrapper">
      <table>
                 <thead>

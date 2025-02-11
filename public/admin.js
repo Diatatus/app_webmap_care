@@ -350,10 +350,100 @@ document.addEventListener("DOMContentLoaded", () => {
     document.querySelectorAll(".editBtn").forEach(btn => {
       btn.addEventListener("click", () => {
         const id = btn.getAttribute("data-id");
-        loadPartnersForEdit(id);
+        loadPartnerForEdit(id);
       });
     });
   }
+
+
+  async function deletePartners(e) {
+    const id = e.target.getAttribute("data-id");
+    if (confirm("Êtes-vous sûr de vouloir supprimer ce partenaire ?")) {
+      const response = await fetch(`/admin/api/care_partner/delete/${id}`, {
+        method: "DELETE",
+        headers: { "Content-Type": "application/json" }
+      });
+      if (response.ok) {
+        alert("Partenaire supprimé.");
+        loadPartners();
+      } else {
+        alert("Erreur lors de la suppression du partenaire.");
+      }
+    }
+  }
+
+
+  async function loadPartnerForEdit(id) {
+    const response = await fetch(`/admin/api/care_partner/${id}`, {
+      method: "GET",
+      headers: { "Content-Type": "application/json" }
+    });
+    if (response.ok) {
+      const partner = await response.json();
+      displayEditPartnerForm(partner);
+    } else {
+      alert("Erreur lors du chargement du partenaire.");
+    }
+  }
+
+  function displayEditPartnerForm(partner) {
+    let html = `<h2>Modifier le partenaire</h2>
+      <form id="editPartnerForm">
+        <input type="hidden" name="id_partenaire" value="${partner.id_partenaire}">
+        <div class="form-group">
+          <label for="nom">Nom :</label>
+          <input type="text" id="nom" name="nom" value="${partner.nom}" required>
+        </div>
+        <div class="form-group">
+          <label for="sigle">Sigle :</label>
+          <input type="text" id="sigle" name="sigle" value="${partner.sigle}" required>
+        </div>
+        <div class="form-group">
+          <label for="act_srvc_offert">Activité et services offerts :</label>
+          <input type="text" id="act_srvc_offert" name="act_srvc_offert" value="${partner.act_srvc_offert}" required>
+        </div>
+        <div class="form-group">
+          <label for="statut_prest">Statut de la prestation :</label>
+          <input type="text" id="statut_prest" name="statut_prest" value="${partner.statut_prest}" required>
+        </div>
+        <div class="form-group">
+          <label for="img_logo">Image logo :</label>
+          <input type="text" id="img_logo" name="img_logo" value="${partner.img_logo || ''}">
+        </div>
+        <div class="form-group">
+          <label for="info">Info :</label>
+          <input type="text" id="info" name="info" value="${partner.info}" required>
+        </div>
+
+        
+        <!-- Ajoutez ici d'autres champs à modifier -->
+        <button type="submit">Enregistrer les modifications</button>
+      </form>`;
+    contentArea.innerHTML = html;
+
+    const editPartnerForm = document.getElementById("editPartnerForm");
+    editPartnerForm.addEventListener("submit", async (e) => {
+      e.preventDefault();
+      const formData = new FormData(editPartnerForm);
+      const data = {};
+      formData.forEach((value, key) => { data[key] = value; });
+      const partnerId = data.id_partenaire;
+
+      const response = await fetch(`/admin/api/care_partner/update/${partnerId}`, {
+        method: "PUT",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(data)
+      });
+      if (response.ok) {
+        alert("Partemaire mise à jour avec succès.");
+        loadPartners();
+      } else {
+        alert("Erreur lors de la mise à jour du partenaire.");
+      }
+    });
+  }
+
+  
 
   // Gestion de la déconnexion
   btnLogout.addEventListener("click", async () => {

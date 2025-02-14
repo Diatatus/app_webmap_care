@@ -1,6 +1,8 @@
 const express = require("express");
 const router = express.Router();
 const pool = require("../db.js");
+const multer = require("multer");
+const path = require("path");
 
 // Middleware d'authentification
 function isAuthenticated(req, res, next) {
@@ -209,17 +211,34 @@ router.put("/regions/update/:id", async (req, res) => {
 /**
  * Route : Ajouter un nouveau partenaire
  */
-router.post("/care_partner/add", async (req, res) => {
+// Configuration du stockage des images
+const storage = multer.diskStorage({
+  destination: function (req, file, cb) {
+    cb(null, path.join(__dirname, "../public/resources/images/partner"));
+  },
+  filename: function (req, file, cb) {
+    const uniqueSuffix = Date.now() + "-" + file.originalname;
+    cb(null, uniqueSuffix);
+  }
+});
+
+const upload = multer({ storage: storage });
+
+router.post("/care_partner/add", upload.single("img_logo"), async (req, res) => {
   try {
     const {
       nom,
       sigle,
       act_srvc_offert,
       statut_prest,
-      img_logo,
       info,
-      geom
+      longitude,
+      latitude
     } = req.body;
+
+    const img_logo = req.file ? req.file.filename : null;
+
+    const geom = longitude && latitude ? `{"type":"Point","coordinates":[${longitude},${latitude}]}` : null;
 
     const query = `
       INSERT INTO partenaires 
@@ -242,13 +261,26 @@ router.post("/care_partner/add", async (req, res) => {
  */
 router.get("/care_partner", async (req, res) => {
   try {
-    const result = await pool.query("SELECT * FROM partenaires");
+    const result = await pool.query(`
+      SELECT 
+        id_partenaire, 
+        nom, 
+        sigle, 
+        act_srvc_offert, 
+        statut_prest, 
+        img_logo, 
+        info, 
+        ST_AsGeoJSON(geom) AS geom 
+      FROM partenaires
+    `);
+
     res.json(result.rows);
   } catch (err) {
     console.error("Erreur lors de la récupération des partenaires", err.stack);
     res.status(500).json({ error: "Erreur lors de la récupération des partenaires" });
   }
 });
+
 
 /**
  * Route : Récupérer un partenaire par son ID
@@ -272,7 +304,7 @@ router.get("/care_partner/:id", async (req, res) => {
 /**
  * Route : Mettre à jour un partenaire
  */
-router.put("/care_partner/update/:id", async (req, res) => {
+router.put("/care_partner/update/:id",upload.single("img_logo"), async (req, res) => {
   try {
     const { id } = req.params;
     const {
@@ -280,10 +312,21 @@ router.put("/care_partner/update/:id", async (req, res) => {
       sigle,
       act_srvc_offert,
       statut_prest,
-      img_logo,
       info,
-      geom
+      
     } = req.body;
+
+    const img_logo = req.file ? req.file.filename : null;
+
+    // Extraire les coordonnées
+    const partner = result.rows[0];
+    const geom = partner.geom ? JSON.parse(partner.geom) : null; // Assurez-vous que geom est au format JSON
+    const longitude = geom && geom.coordinates ? geom.coordinates[0] : null;
+    const latitude = geom && geom.coordinates ? geom.coordinates[1] : null;
+
+    // Ajoutez les coordonnées au partenaire
+    partner.longitude = longitude;
+    partner.latitude = latitude;
 
     const query = `
       UPDATE partenaires 

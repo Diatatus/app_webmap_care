@@ -21,6 +21,7 @@
     "express": "^4.19.2",
     "express-session": "^1.18.1",
     "font-awesome": "^4.7.0",
+    "multer": "^1.4.5-lts.1",
     "nodemon": "^3.1.4",
     "ol": "^10.1.0",
     "ol-ext": "^4.0.23",

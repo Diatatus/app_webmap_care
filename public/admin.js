@@ -16,7 +16,7 @@ document.addEventListener("DOMContentLoaded", () => {
     const response = await fetch("/admin/api/login", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ username, password })
+      body: JSON.stringify({ username, password }),
     });
 
     if (response.ok) {
@@ -28,8 +28,6 @@ document.addEventListener("DOMContentLoaded", () => {
     }
   });
 
-  
-
   // Bouton pour afficher la liste des régions
   btnListRegions.addEventListener("click", loadRegions);
   const btnListPartners = document.getElementById("btnListPartners");
@@ -39,7 +37,7 @@ document.addEventListener("DOMContentLoaded", () => {
   async function loadRegions() {
     const response = await fetch("/admin/api/regions", {
       method: "GET",
-      headers: { "Content-Type": "application/json" }
+      headers: { "Content-Type": "application/json" },
     });
     if (response.ok) {
       const regions = await response.json();
@@ -78,7 +76,7 @@ document.addEventListener("DOMContentLoaded", () => {
                   </tr>
                 </thead>
                 <tbody>`;
-    regions.forEach(region => {
+    regions.forEach((region) => {
       html += `<tr>
                 <td>${region.id_region}</td>
                 <td>${region.nom}</td>
@@ -100,7 +98,9 @@ document.addEventListener("DOMContentLoaded", () => {
                 <td>${region.justif_violconj_fem}</td>
 
            <td class="fixed-column">
-            <button class="editBtn" data-id="${region.id_region}"><i class="fas fa-pen-to-square"></i></button>
+            <button class="editBtn" data-id="${
+              region.id_region
+            }"><i class="fas fa-pen-to-square"></i></button>
           </td>
               </tr>`;
     });
@@ -108,10 +108,10 @@ document.addEventListener("DOMContentLoaded", () => {
     contentArea.innerHTML = html;
 
     // Ajout des événements pour les boutons de modification et de suppression
-    document.querySelectorAll(".deleteBtn").forEach(btn => {
+    document.querySelectorAll(".deleteBtn").forEach((btn) => {
       btn.addEventListener("click", deleteRegion);
     });
-    document.querySelectorAll(".editBtn").forEach(btn => {
+    document.querySelectorAll(".editBtn").forEach((btn) => {
       btn.addEventListener("click", () => {
         const id = btn.getAttribute("data-id");
         loadRegionForEdit(id);
@@ -124,7 +124,7 @@ document.addEventListener("DOMContentLoaded", () => {
     if (confirm("Êtes-vous sûr de vouloir supprimer cette région ?")) {
       const response = await fetch(`/admin/api/regions/delete/${id}`, {
         method: "DELETE",
-        headers: { "Content-Type": "application/json" }
+        headers: { "Content-Type": "application/json" },
       });
       if (response.ok) {
         alert("Région supprimée.");
@@ -134,9 +134,6 @@ document.addEventListener("DOMContentLoaded", () => {
       }
     }
   }
-
-  
-
 
   function displayAddRegionForm() {
     let html = `<h2>Ajouter une Région</h2>
@@ -159,12 +156,14 @@ document.addEventListener("DOMContentLoaded", () => {
       e.preventDefault();
       const formData = new FormData(addRegionForm);
       const data = {};
-      formData.forEach((value, key) => { data[key] = value; });
+      formData.forEach((value, key) => {
+        data[key] = value;
+      });
 
       const response = await fetch("/admin/api/regions/add", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(data)
+        body: JSON.stringify(data),
       });
       if (response.ok) {
         alert("Région ajoutée avec succès.");
@@ -178,7 +177,7 @@ document.addEventListener("DOMContentLoaded", () => {
   async function loadRegionForEdit(id) {
     const response = await fetch(`/admin/api/regions/${id}`, {
       method: "GET",
-      headers: { "Content-Type": "application/json" }
+      headers: { "Content-Type": "application/json" },
     });
     if (response.ok) {
       const region = await response.json();
@@ -198,67 +197,99 @@ document.addEventListener("DOMContentLoaded", () => {
         </div>
         <div class="form-group">
           <label for="popsex_masc">Population Homme :</label>
-          <input type="number" id="popsex_masc" name="popsex_masc" value="${region.popsex_masc}" required>
+          <input type="number" id="popsex_masc" name="popsex_masc" value="${
+            region.popsex_masc
+          }" required>
         </div>
         <div class="form-group">
           <label for="popsex_fem">Population Femme :</label>
-          <input type="number" id="popsex_fem" name="popsex_fem" value="${region.popsex_fem}" required>
+          <input type="number" id="popsex_fem" name="popsex_fem" value="${
+            region.popsex_fem
+          }" required>
         </div>
         <div class="form-group">
           <label for="denspop_reg">Densité Population :</label>
-          <input type="number" id="denspop_reg" name="denspop_reg" value="${region.denspop_reg}" required>
+          <input type="number" id="denspop_reg" name="denspop_reg" value="${
+            region.denspop_reg
+          }" required>
         </div>
         <div class="form-group">
           <label for="total_pop">Total Population :</label>
-          <input type="number" id="total_pop" name="total_pop" value="${region.total_pop || ''}">
+          <input type="number" id="total_pop" name="total_pop" value="${
+            region.total_pop || ""
+          }">
         </div>
         <div class="form-group">
           <label for="taux_pvrt">Taux de pauvreté :</label>
-          <input type="number" id="taux_pvrt" name="taux_pvrt" value="${region.taux_pvrt}" required>
+          <input type="number" id="taux_pvrt" name="taux_pvrt" value="${
+            region.taux_pvrt
+          }" required>
         </div>
         <div class="form-group">
           <label for="prev_vih_hom">Prevalence VIH Homme :</label>
-          <input type="number" id="prev_vih_hom" name="prev_vih_hom" value="${region.prev_vih_hom}" required>
+          <input type="number" id="prev_vih_hom" name="prev_vih_hom" value="${
+            region.prev_vih_hom
+          }" required>
         </div>
         <div class="form-group">
           <label for="prev_vih_fem">Prevalence VIH Femme :</label>
-          <input type="number" id="prev_vih_fem" name="prev_vih_fem" value="${region.prev_vih_fem}" required>
+          <input type="number" id="prev_vih_fem" name="prev_vih_fem" value="${
+            region.prev_vih_fem
+          }" required>
         </div>
         <div class="form-group">
           <label for="acces_eau_amel">Accès à une source améliorée d'eau de boisson :</label>
-          <input type="number" id="acces_eau_amel" name="acces_eau_amel" value="${region.acces_eau_amel}" required>
+          <input type="number" id="acces_eau_amel" name="acces_eau_amel" value="${
+            region.acces_eau_amel
+          }" required>
         </div>
         <div class="form-group">
           <label for="inst_lavmain_lim">Installation de lavage des mains dans les ménages :</label>
-          <input type="number" id="inst_lavmain_lim" name="inst_lavmain_lim" value="${region.inst_lavmain_lim}" required>
+          <input type="number" id="inst_lavmain_lim" name="inst_lavmain_lim" value="${
+            region.inst_lavmain_lim
+          }" required>
         </div>
         <div class="form-group">
           <label for="taux_chom">Taux de chômage :</label>
-          <input type="number" id="taux_chom" name="taux_chom" value="${region.taux_chom}" required>
+          <input type="number" id="taux_chom" name="taux_chom" value="${
+            region.taux_chom
+          }" required>
         </div>
         <div class="form-group">
           <label for="incl_fin_emf">Inclusion financière :</label>
-          <input type="number" id="incl_fin_emf" name="incl_fin_emf" value="${region.incl_fin_emf}" required>
+          <input type="number" id="incl_fin_emf" name="incl_fin_emf" value="${
+            region.incl_fin_emf
+          }" required>
         </div>
          <div class="form-group">
           <label for="acces_sanit_amel">Accès aux installations sanitaires améliorées :</label>
-          <input type="number" id="acces_sanit_amel" name="acces_sanit_amel" value="${region.acces_sanit_amel}" required>
+          <input type="number" id="acces_sanit_amel" name="acces_sanit_amel" value="${
+            region.acces_sanit_amel
+          }" required>
         </div>
          <div class="form-group">
           <label for="besoins_nonsatisf_pf">Besoins non satisfaits en matière des femmes de planification familiale :</label>
-          <input type="number" id="besoins_nonsatisf_pf" name="besoins_nonsatisf_pf" value="${region.besoins_nonsatisf_pf}" required>
+          <input type="number" id="besoins_nonsatisf_pf" name="besoins_nonsatisf_pf" value="${
+            region.besoins_nonsatisf_pf
+          }" required>
         </div>
          <div class="form-group">
           <label for="fem_utilmethcontracep_mod">Femmes de 15-49 ans utilisant des contraceptifs modernes :</label>
-          <input type="number" id="fem_utilmethcontracep_mod" name="fem_utilmethcontracep_mod" value="${region.fem_utilmethcontracep_mod}" required>
+          <input type="number" id="fem_utilmethcontracep_mod" name="fem_utilmethcontracep_mod" value="${
+            region.fem_utilmethcontracep_mod
+          }" required>
         </div>
          <div class="form-group">
           <label for="justif_violconj_hom">Homme justifiant la violence conjugale :</label>
-          <input type="number" id="justif_violconj_hom" name="justif_violconj_hom" value="${region.justif_violconj_hom}" required>
+          <input type="number" id="justif_violconj_hom" name="justif_violconj_hom" value="${
+            region.justif_violconj_hom
+          }" required>
         </div>
          <div class="form-group">
           <label for="justif_violconj_fem">Femme justifiant la violence conjugale :</label>
-          <input type="number" id="justif_violconj_fem" name="justif_violconj_fem" value="${region.justif_violconj_fem}" required>
+          <input type="number" id="justif_violconj_fem" name="justif_violconj_fem" value="${
+            region.justif_violconj_fem
+          }" required>
         </div>
 
         
@@ -272,13 +303,15 @@ document.addEventListener("DOMContentLoaded", () => {
       e.preventDefault();
       const formData = new FormData(editRegionForm);
       const data = {};
-      formData.forEach((value, key) => { data[key] = value; });
+      formData.forEach((value, key) => {
+        data[key] = value;
+      });
       const regionId = data.id_region;
 
       const response = await fetch(`/admin/api/regions/update/${regionId}`, {
         method: "PUT",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(data)
+        body: JSON.stringify(data),
       });
       if (response.ok) {
         alert("Région mise à jour avec succès.");
@@ -289,14 +322,14 @@ document.addEventListener("DOMContentLoaded", () => {
     });
   }
 
-
   btnListPartners.addEventListener("click", loadPartners);
-
+  const btnAddPartner = document.getElementById("btnAddPartner");
+  btnAddPartner.addEventListener("click", displayAddPartnerForm);
 
   async function loadPartners() {
     const response = await fetch("/admin/api/care_partner", {
       method: "GET",
-      headers: { "Content-Type": "application/json" }
+      headers: { "Content-Type": "application/json" },
     });
     if (response.ok) {
       const partners = await response.json();
@@ -307,24 +340,30 @@ document.addEventListener("DOMContentLoaded", () => {
   }
 
   function displayPartners(partners) {
-    let html = `<h2>Partenaires</h2>
-    <div class="table-wrapper">
-     <table>
-                <thead>
-                  <tr>
-                    <th>ID</th>
-                    <th>Nom</th>
-                    <th>Sigle</th>
-                    <th>Activité et services offerts</th>
-                    <th>Statut de la prestation</th>
-                    <th>Image logo</th>
-                    <th>Informations</th>
+    let html = `
+      <h2>Partenaires 
+        <button id="btnAddPartner" class="add-btn">
+          <i class="fas fa-plus"></i> Ajouter
+        </button>
+      </h2>
+      <div class="table-wrapper">
+        <table>
+          <thead>
+            <tr>
+              <th>ID</th>
+              <th>Nom</th>
+              <th>Sigle</th>
+              <th>Activités et services offerts</th>
+              <th>Statut de la prestation</th>
+              <th>Image logo</th>
+              <th>Informations</th>
+              <th>Coordonnées (Longitude, Latitude)</th>
+              <th class="fixed-column">Actions</th>
+            </tr>
+          </thead>
+          <tbody>`;
 
-                    <th class="fixed-column">Actions</th>
-                  </tr>
-                </thead>
-                <tbody>`;
-    partners.forEach(partner => {
+    partners.forEach((partner) => {
       html += `<tr>
                 <td>${partner.id_partenaire}</td>
                 <td>${partner.nom}</td>
@@ -333,21 +372,35 @@ document.addEventListener("DOMContentLoaded", () => {
                 <td>${partner.statut_prest}</td>
                 <td>${partner.img_logo || ""}</td>
                 <td>${partner.info}</td>
-
-           <td class="fixed-column">
-            <button class="editBtn" data-id="${partner.id_partenaire}"><i class="fas fa-pen-to-square"></i></button>
-            <button class="deleteBtn" data-id="${partner.id_partenaire}"><i class="fas fa-trash"></i></button>
-          </td>
+                <td>${
+                  partner.geom
+                    ? JSON.parse(partner.geom).coordinates.join(", ")
+                    : "-"
+                }</td>
+                <td class="fixed-column">
+                  <button class="editBtn" data-id="${
+                    partner.id_partenaire
+                  }"><i class="fas fa-pen-to-square"></i></button>
+                  <button class="deleteBtn" data-id="${
+                    partner.id_partenaire
+                  }"><i class="fas fa-trash"></i></button>
+                </td>
               </tr>`;
     });
+
     html += `</tbody></table></div>`;
     contentArea.innerHTML = html;
 
-    // Ajout des événements pour les boutons de modification et de suppression
-    document.querySelectorAll(".deleteBtn").forEach(btn => {
-      btn.addEventListener("click", deletePartners);
-    });
-    document.querySelectorAll(".editBtn").forEach(btn => {
+    // Ajouter l'événement après l'injection HTML
+    const btnAddPartner = document.getElementById("btnAddPartner");
+    if (btnAddPartner) {
+      btnAddPartner.addEventListener("click", displayAddPartnerForm);
+    }
+
+    document
+      .querySelectorAll(".deleteBtn")
+      .forEach((btn) => btn.addEventListener("click", deletePartners));
+    document.querySelectorAll(".editBtn").forEach((btn) => {
       btn.addEventListener("click", () => {
         const id = btn.getAttribute("data-id");
         loadPartnerForEdit(id);
@@ -355,13 +408,12 @@ document.addEventListener("DOMContentLoaded", () => {
     });
   }
 
-
   async function deletePartners(e) {
     const id = e.target.getAttribute("data-id");
     if (confirm("Êtes-vous sûr de vouloir supprimer ce partenaire ?")) {
       const response = await fetch(`/admin/api/care_partner/delete/${id}`, {
         method: "DELETE",
-        headers: { "Content-Type": "application/json" }
+        headers: { "Content-Type": "application/json" },
       });
       if (response.ok) {
         alert("Partenaire supprimé.");
@@ -372,11 +424,70 @@ document.addEventListener("DOMContentLoaded", () => {
     }
   }
 
+  function displayAddPartnerForm() {
+    let html = `
+      <h2>Ajouter un partenaire</h2>
+      <form id="addPartnerForm" enctype="multipart/form-data">
+        <div class="form-group">
+          <label for="nom">Nom :</label>
+          <input type="text" id="nom" name="nom" required>
+        </div>
+        <div class="form-group">
+          <label for="sigle">Sigle :</label>
+          <input type="text" id="sigle" name="sigle">
+        </div>
+        <div class="form-group">
+          <label for="act_srvc_offert">Activités et services offerts :</label>
+          <input type="text" id="act_srvc_offert" name="act_srvc_offert">
+        </div>
+        <div class="form-group">
+          <label for="statut_prest">Statut de la prestation :</label>
+          <input type="text" id="statut_prest" name="statut_prest">
+        </div>
+        <div class="form-group">
+          <label for="img_logo">Image logo :</label>
+          <input type="file" id="img_logo" name="img_logo" accept="image/png, image/jpeg, image/jpg, image/webp">
+        </div>
+        <div class="form-group">
+          <label for="longitude">Longitude :</label>
+          <input type="number" id="longitude" name="longitude" step="any">
+        </div>
+        <div class="form-group">
+          <label for="latitude">Latitude :</label>
+          <input type="number" id="latitude" name="latitude" step="any">
+        </div>
+        <div class="form-group">
+          <label for="info">Info :</label>
+          <input type="text" id="info" name="info">
+        </div>
+        <button type="submit">Ajouter</button>
+      </form>`;
+
+    contentArea.innerHTML = html;
+
+    const addPartnerForm = document.getElementById("addPartnerForm");
+    addPartnerForm.addEventListener("submit", async (e) => {
+      e.preventDefault();
+      const formData = new FormData(addPartnerForm);
+
+      const response = await fetch("/admin/api/care_partner/add", {
+        method: "POST",
+        body: formData,
+      });
+
+      if (response.ok) {
+        alert("Partenaire ajouté avec succès.");
+        loadPartners();
+      } else {
+        alert("Erreur lors de l'ajout du partenaire.");
+      }
+    });
+  }
 
   async function loadPartnerForEdit(id) {
     const response = await fetch(`/admin/api/care_partner/${id}`, {
       method: "GET",
-      headers: { "Content-Type": "application/json" }
+      headers: { "Content-Type": "application/json" },
     });
     if (response.ok) {
       const partner = await response.json();
@@ -387,33 +498,63 @@ document.addEventListener("DOMContentLoaded", () => {
   }
 
   function displayEditPartnerForm(partner) {
+    // Supposons que partner.geom est un tableau avec [longitude, latitude]
+      const longitude = partner.longitude; // Valeur par défaut si longitude est indéfini
+      const latitude = partner.latitude; // Valeur par défaut si latitude est indéfini
     let html = `<h2>Modifier le partenaire</h2>
       <form id="editPartnerForm">
-        <input type="hidden" name="id_partenaire" value="${partner.id_partenaire}">
+        <input type="hidden" name="id_partenaire" value="${
+          partner.id_partenaire
+        }">
         <div class="form-group">
           <label for="nom">Nom :</label>
-          <input type="text" id="nom" name="nom" value="${partner.nom}" required>
+          <input type="text" id="nom" name="nom" value="${
+            partner.nom
+          }" required>
         </div>
         <div class="form-group">
           <label for="sigle">Sigle :</label>
-          <input type="text" id="sigle" name="sigle" value="${partner.sigle}" required>
+          <input type="text" id="sigle" name="sigle" value="${
+            partner.sigle
+          }" required>
         </div>
         <div class="form-group">
           <label for="act_srvc_offert">Activité et services offerts :</label>
-          <input type="text" id="act_srvc_offert" name="act_srvc_offert" value="${partner.act_srvc_offert}" required>
+          <input type="text" id="act_srvc_offert" name="act_srvc_offert" value="${
+            partner.act_srvc_offert
+          }" required>
         </div>
         <div class="form-group">
           <label for="statut_prest">Statut de la prestation :</label>
-          <input type="text" id="statut_prest" name="statut_prest" value="${partner.statut_prest}" required>
+          <input type="text" id="statut_prest" name="statut_prest" value="${
+            partner.statut_prest
+          }" required>
         </div>
         <div class="form-group">
           <label for="img_logo">Image logo :</label>
-          <input type="text" id="img_logo" name="img_logo" value="${partner.img_logo || ''}">
+          <input type="file" id="img_logo" name="img_logo" accept="image/png, image/jpeg, image/jpg, image/webp value="${
+            partner.img_logo || ""
+          }">
         </div>
         <div class="form-group">
           <label for="info">Info :</label>
-          <input type="text" id="info" name="info" value="${partner.info}" required>
+          <input type="text" id="info" name="info" value="${
+            partner.info
+          }" required>
         </div>
+        <div class="form-group">
+          <label for="longitude">Longitude :</label>
+          <input type="number" id="longitude" name="longitude" value="${
+            longitude 
+          }" required>
+        </div>
+        <div class="form-group">
+          <label for="latitude">Latidude :</label>
+          <input type="number" id="latitude" name="latitude" value="${
+            latitude 
+          }" required>
+        </div>
+        
 
         
         <!-- Ajoutez ici d'autres champs à modifier -->
@@ -426,14 +567,19 @@ document.addEventListener("DOMContentLoaded", () => {
       e.preventDefault();
       const formData = new FormData(editPartnerForm);
       const data = {};
-      formData.forEach((value, key) => { data[key] = value; });
+      formData.forEach((value, key) => {
+        data[key] = value;
+      });
       const partnerId = data.id_partenaire;
 
-      const response = await fetch(`/admin/api/care_partner/update/${partnerId}`, {
-        method: "PUT",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(data)
-      });
+      const response = await fetch(
+        `/admin/api/care_partner/update/${partnerId}`,
+        {
+          method: "PUT",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(data),
+        }
+      );
       if (response.ok) {
         alert("Partemaire mise à jour avec succès.");
         loadPartners();
@@ -443,13 +589,11 @@ document.addEventListener("DOMContentLoaded", () => {
     });
   }
 
-  
-
   // Gestion de la déconnexion
   btnLogout.addEventListener("click", async () => {
     const response = await fetch("/admin/api/logout", {
       method: "POST",
-      headers: { "Content-Type": "application/json" }
+      headers: { "Content-Type": "application/json" },
     });
     if (response.ok) {
       location.reload();

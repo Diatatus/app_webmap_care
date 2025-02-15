@@ -56,7 +56,7 @@ document.addEventListener("DOMContentLoaded", () => {
                     <th>ID</th>
                     <th>Nom</th>
                     <th>Population Homme</th>
-                    <th>PopuLation Femme</th>
+                    <th>Population Femme</th>
                     <th>Densité Population</th>
                     <th>Total Population</th>
                     <th>Taux de pauvreté</th>
@@ -323,8 +323,7 @@ document.addEventListener("DOMContentLoaded", () => {
   }
 
   btnListPartners.addEventListener("click", loadPartners);
-  const btnAddPartner = document.getElementById("btnAddPartner");
-  btnAddPartner.addEventListener("click", displayAddPartnerForm);
+
 
   async function loadPartners() {
     const response = await fetch("/admin/api/care_partner", {
@@ -499,8 +498,8 @@ document.addEventListener("DOMContentLoaded", () => {
 
   function displayEditPartnerForm(partner) {
     // Supposons que partner.geom est un tableau avec [longitude, latitude]
-      const longitude = partner.longitude; // Valeur par défaut si longitude est indéfini
-      const latitude = partner.latitude; // Valeur par défaut si latitude est indéfini
+    const longitude = partner.longitude; // Valeur par défaut si longitude est indéfini
+    const latitude = partner.latitude; // Valeur par défaut si latitude est indéfini
     let html = `<h2>Modifier le partenaire</h2>
       <form id="editPartnerForm">
         <input type="hidden" name="id_partenaire" value="${
@@ -549,7 +548,7 @@ document.addEventListener("DOMContentLoaded", () => {
           }" required>
         </div>
         <div class="form-group">
-          <label for="latitude">Latidude :</label>
+          <label for="latitude">Latitude :</label>
           <input type="number" id="latitude" name="latitude" value="${
             latitude 
           }" required>

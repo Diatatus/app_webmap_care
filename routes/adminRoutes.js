@@ -38,67 +38,7 @@ router.post("/logout", (req, res) => {
 // Appliquer le middleware aux routes protégées
 router.use(isAuthenticated);
 
-/**
- * Route protégée : Création d'une nouvelle région
- */
-router.post("/regions/add", async (req, res) => {
-  try {
-    const {
-      nom,
-      popsex_masc,
-      popsex_fem,
-      denspop_reg,
-      taux_pvrt,
-      prev_vih_hom,
-      acces_eau_amel,
-      inst_lavmain_lim,
-      incl_fin_emf,
-      taux_chom,
-      acces_sanit_amel,
-      besoins_nonsatisf_pf,
-      fem_utilmethcontracep_mod,
-      justif_violconj_hom,
-      justif_violconj_fem,
-      geom,
-      total_pop,
-      prev_vih_fem,
-    } = req.body;
 
-    const query = `
-      INSERT INTO regions 
-      (nom, popsex_masc, popsex_fem, denspop_reg, taux_pvrt, prev_vih_hom, acces_eau_amel, inst_lavmain_lim, incl_fin_emf, taux_chom, acces_sanit_amel, besoins_nonsatisf_pf, fem_utilmethcontracep_mod, justif_violconj_hom, justif_violconj_fem, geom, total_pop, prev_vih_fem)
-      VALUES 
-      ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13, $14, $15, ST_GeomFromGeoJSON($16), $17, $18)
-      RETURNING *
-    `;
-    const values = [
-      nom,
-      popsex_masc,
-      popsex_fem,
-      denspop_reg,
-      taux_pvrt,
-      prev_vih_hom,
-      acces_eau_amel,
-      inst_lavmain_lim,
-      incl_fin_emf,
-      taux_chom,
-      acces_sanit_amel,
-      besoins_nonsatisf_pf,
-      fem_utilmethcontracep_mod,
-      justif_violconj_hom,
-      justif_violconj_fem,
-      geom,
-      total_pop,
-      prev_vih_fem,
-    ];
-
-    const result = await pool.query(query, values);
-    res.json({ success: true, region: result.rows[0] });
-  } catch (err) {
-    console.error("Erreur lors de l'ajout de la région", err.stack);
-    res.status(500).json({ error: "Erreur lors de l'ajout de la région" });
-  }
-});
 
 // Autres routes protégées
 router.get("/regions", async (req, res) => {
@@ -144,7 +84,6 @@ router.put("/regions/update/:id", async (req, res) => {
       fem_utilmethcontracep_mod,
       justif_violconj_hom,
       justif_violconj_fem,
-      geom,
       total_pop,
       prev_vih_fem,
     } = req.body;
@@ -167,10 +106,9 @@ router.put("/regions/update/:id", async (req, res) => {
         fem_utilmethcontracep_mod = $13, 
         justif_violconj_hom = $14, 
         justif_violconj_fem = $15, 
-        geom = ST_GeomFromGeoJSON($16), 
-        total_pop = $17, 
-        prev_vih_fem = $18
-      WHERE id_region = $19
+        total_pop = $16, 
+        prev_vih_fem = $17
+      WHERE id_region = $18
       RETURNING *
     `;
     const values = [
@@ -189,7 +127,6 @@ router.put("/regions/update/:id", async (req, res) => {
       fem_utilmethcontracep_mod,
       justif_violconj_hom,
       justif_violconj_fem,
-      geom,
       total_pop,
       prev_vih_fem,
       id,
@@ -227,6 +164,7 @@ const upload = multer({ storage: storage });
 router.post("/care_partner/add", upload.single("img_logo"), async (req, res) => {
   try {
     const {
+      id_partenaire,
       nom,
       sigle,
       act_srvc_offert,
@@ -238,17 +176,23 @@ router.post("/care_partner/add", upload.single("img_logo"), async (req, res) => 
 
     const img_logo = req.file ? req.file.filename : null;
 
-    const geom = longitude && latitude ? `{"type":"Point","coordinates":[${longitude},${latitude}]}` : null;
+    const geom = longitude && latitude 
+  ? `{"type":"Point","coordinates":[${longitude},${latitude}]}`
+  : null;
 
-    const query = `
-      INSERT INTO partenaires 
-      (nom, sigle, act_srvc_offert, statut_prest, img_logo, info, geom) 
-      VALUES ($1, $2, $3, $4, $5, $6, ST_GeomFromGeoJSON($7))
-      RETURNING *;
-    `;
-    const values = [nom, sigle, act_srvc_offert, statut_prest, img_logo, info, geom];
+const values = [nom, sigle, act_srvc_offert, statut_prest, img_logo, info];
 
-    const result = await pool.query(query, values);
+if (geom) values.push(geom); // Ajoute `geom` uniquement s'il existe
+
+const query = `
+    INSERT INTO partenaires (nom, sigle, act_srvc_offert, statut_prest, img_logo, info, geom)
+    VALUES ($1, $2, $3, $4, $5, $6, ST_GeomFromGeoJSON($7))
+    ON CONFLICT (nom, sigle) 
+    DO UPDATE SET act_srvc_offert = EXCLUDED.act_srvc_offert, statut_prest = EXCLUDED.statut_prest
+    RETURNING *;
+`;
+const result = await pool.query(query, values);
+
     res.json({ success: true, partner: result.rows[0] });
   } catch (err) {
     console.error("Erreur lors de l'ajout du partenaire", err.stack);
@@ -313,20 +257,12 @@ router.put("/care_partner/update/:id",upload.single("img_logo"), async (req, res
       act_srvc_offert,
       statut_prest,
       info,
-      
+      longitude,
     } = req.body;
 
     const img_logo = req.file ? req.file.filename : null;
 
-    // Extraire les coordonnées
-    const partner = result.rows[0];
-    const geom = partner.geom ? JSON.parse(partner.geom) : null; // Assurez-vous que geom est au format JSON
-    const longitude = geom && geom.coordinates ? geom.coordinates[0] : null;
-    const latitude = geom && geom.coordinates ? geom.coordinates[1] : null;
-
-    // Ajoutez les coordonnées au partenaire
-    partner.longitude = longitude;
-    partner.latitude = latitude;
+    const geom = longitude && latitude ? `{"type":"Point","coordinates":[${longitude},${latitude}]}` : null;
 
     const query = `
       UPDATE partenaires 

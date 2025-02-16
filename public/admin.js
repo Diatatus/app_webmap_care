@@ -427,6 +427,10 @@ document.addEventListener("DOMContentLoaded", () => {
     let html = `
       <h2>Ajouter un partenaire</h2>
       <form id="addPartnerForm" enctype="multipart/form-data">
+      <div class="form-group">
+          <label for="id_partenaire">ID_partenaire :</label>
+          <input type="number" id="id_partenaire" name="id_partenaire" required>
+        </div>
         <div class="form-group">
           <label for="nom">Nom :</label>
           <input type="text" id="nom" name="nom" required>
@@ -497,96 +501,79 @@ document.addEventListener("DOMContentLoaded", () => {
   }
 
   function displayEditPartnerForm(partner) {
-    // Supposons que partner.geom est un tableau avec [longitude, latitude]
-    const longitude = partner.longitude; // Valeur par défaut si longitude est indéfini
-    const latitude = partner.latitude; // Valeur par défaut si latitude est indéfini
+    const longitude = partner.longitude || ""; // Gérer les valeurs null/undefined
+    const latitude = partner.latitude || ""; 
+
     let html = `<h2>Modifier le partenaire</h2>
-      <form id="editPartnerForm">
-        <input type="hidden" name="id_partenaire" value="${
-          partner.id_partenaire
-        }">
+      <form id="editPartnerForm" enctype="multipart/form-data">
+        <input type="hidden" name="id_partenaire" value="${partner.id_partenaire}">
+
         <div class="form-group">
           <label for="nom">Nom :</label>
-          <input type="text" id="nom" name="nom" value="${
-            partner.nom
-          }" required>
+          <input type="text" id="nom" name="nom" value="${partner.nom}" required>
         </div>
+
         <div class="form-group">
           <label for="sigle">Sigle :</label>
-          <input type="text" id="sigle" name="sigle" value="${
-            partner.sigle
-          }" required>
+          <input type="text" id="sigle" name="sigle" value="${partner.sigle}" required>
         </div>
+
         <div class="form-group">
           <label for="act_srvc_offert">Activité et services offerts :</label>
-          <input type="text" id="act_srvc_offert" name="act_srvc_offert" value="${
-            partner.act_srvc_offert
-          }" required>
+          <textarea id="act_srvc_offert" name="act_srvc_offert" rows="4" required>${partner.act_srvc_offert}</textarea>
         </div>
+
         <div class="form-group">
           <label for="statut_prest">Statut de la prestation :</label>
-          <input type="text" id="statut_prest" name="statut_prest" value="${
-            partner.statut_prest
-          }" required>
+          <input type="text" id="statut_prest" name="statut_prest" value="${partner.statut_prest}" required>
         </div>
+
         <div class="form-group">
           <label for="img_logo">Image logo :</label>
-          <input type="file" id="img_logo" name="img_logo" accept="image/png, image/jpeg, image/jpg, image/webp value="${
-            partner.img_logo || ""
-          }">
+          <input type="file" id="img_logo" name="img_logo" accept="image/png, image/jpeg, image/jpg, image/webp">
         </div>
+
         <div class="form-group">
           <label for="info">Info :</label>
-          <input type="text" id="info" name="info" value="${
-            partner.info
-          }" required>
+          <input type="text" id="info" name="info" value="${partner.info}" required>
         </div>
+
         <div class="form-group">
           <label for="longitude">Longitude :</label>
-          <input type="number" id="longitude" name="longitude" value="${
-            longitude 
-          }" required>
+          <input type="number" id="longitude" name="longitude" value="${longitude}" step="any" required>
         </div>
+
         <div class="form-group">
           <label for="latitude">Latitude :</label>
-          <input type="number" id="latitude" name="latitude" value="${
-            latitude 
-          }" required>
+          <input type="number" id="latitude" name="latitude" value="${latitude}" step="any" required>
         </div>
-        
 
-        
-        <!-- Ajoutez ici d'autres champs à modifier -->
         <button type="submit">Enregistrer les modifications</button>
       </form>`;
+
     contentArea.innerHTML = html;
 
     const editPartnerForm = document.getElementById("editPartnerForm");
     editPartnerForm.addEventListener("submit", async (e) => {
       e.preventDefault();
-      const formData = new FormData(editPartnerForm);
-      const data = {};
-      formData.forEach((value, key) => {
-        data[key] = value;
-      });
-      const partnerId = data.id_partenaire;
 
-      const response = await fetch(
-        `/admin/api/care_partner/update/${partnerId}`,
-        {
-          method: "PUT",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify(data),
-        }
-      );
+      const formData = new FormData(editPartnerForm);
+      const partnerId = formData.get("id_partenaire");
+
+      const response = await fetch(`/admin/api/care_partner/update/${partnerId}`, {
+        method: "PUT",
+        body: formData,  // Envoi correct du fichier et des autres données
+      });
+
       if (response.ok) {
-        alert("Partemaire mise à jour avec succès.");
+        alert("Partenaire mis à jour avec succès.");
         loadPartners();
       } else {
         alert("Erreur lors de la mise à jour du partenaire.");
       }
     });
-  }
+}
+
 
   // Gestion de la déconnexion
   btnLogout.addEventListener("click", async () => {

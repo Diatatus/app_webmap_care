@@ -161,37 +161,45 @@ const storage = multer.diskStorage({
 
 const upload = multer({ storage: storage });
 
-router.post("/care_partner/add", upload.single("img_logo"), async (req, res) => {
+router.post("/care_partner/add", upload.fields([{ name: "img_logo", maxCount: 1 }]), async (req, res) => {
   try {
-    const {
-      id_partenaire,
-      nom,
-      sigle,
-      act_srvc_offert,
-      statut_prest,
-      info,
-      longitude,
-      latitude
-    } = req.body;
+    console.log("Valeurs reçues :", JSON.stringify(req.body, null, 2));
 
-    const img_logo = req.file ? req.file.filename : null;
+    let { id_partenaire, nom, sigle, act_srvc_offert, statut_prest, info, longitude, latitude } = req.body;
 
-    const geom = longitude && latitude 
-  ? `{"type":"Point","coordinates":[${longitude},${latitude}]}`
-  : null;
+    id_partenaire = parseInt(id_partenaire, 10);
+    if (isNaN(id_partenaire)) {
+      return res.status(400).json({ error: "L'ID du partenaire doit être un nombre valide !" });
+    }
 
-const values = [nom, sigle, act_srvc_offert, statut_prest, img_logo, info];
+    // Construction du chemin relatif pour img_logo
+    const img_logo = req.files["img_logo"] ? `./resources/images/partner/${req.files["img_logo"][0].filename}` : null;
 
-if (geom) values.push(geom); // Ajoute `geom` uniquement s'il existe
+    const longitudeNum = parseFloat(longitude);
+    const latitudeNum = parseFloat(latitude);
 
-const query = `
-    INSERT INTO partenaires (nom, sigle, act_srvc_offert, statut_prest, img_logo, info, geom)
-    VALUES ($1, $2, $3, $4, $5, $6, ST_GeomFromGeoJSON($7))
-    ON CONFLICT (nom, sigle) 
-    DO UPDATE SET act_srvc_offert = EXCLUDED.act_srvc_offert, statut_prest = EXCLUDED.statut_prest
-    RETURNING *;
-`;
-const result = await pool.query(query, values);
+    const geom = longitudeNum && latitudeNum
+      ? `{"type":"Point","coordinates":[${longitudeNum},${latitudeNum}]}` 
+      : null;
+
+    const values = [id_partenaire, nom, sigle, act_srvc_offert, statut_prest, img_logo, info, geom];
+
+    const query = `
+        INSERT INTO partenaires (id_partenaire, nom, sigle, act_srvc_offert, statut_prest, img_logo, info, geom)
+        VALUES ($1, $2, $3, $4, $5, $6, $7, ST_GeomFromGeoJSON($8))
+        ON CONFLICT (id_partenaire) 
+        DO UPDATE SET 
+            nom = EXCLUDED.nom, 
+            sigle = EXCLUDED.sigle, 
+            act_srvc_offert = EXCLUDED.act_srvc_offert, 
+            statut_prest = EXCLUDED.statut_prest, 
+            img_logo = EXCLUDED.img_logo, 
+            info = EXCLUDED.info, 
+            geom = EXCLUDED.geom
+        RETURNING *;
+    `;
+
+    const result = await pool.query(query, values);
 
     res.json({ success: true, partner: result.rows[0] });
   } catch (err) {
@@ -199,6 +207,9 @@ const result = await pool.query(query, values);
     res.status(500).json({ error: "Erreur lors de l'ajout du partenaire" });
   }
 });
+
+
+
 
 /**
  * Route : Récupérer la liste de tous les partenaires
@@ -214,7 +225,7 @@ router.get("/care_partner", async (req, res) => {
         statut_prest, 
         img_logo, 
         info, 
-        ST_AsGeoJSON(geom) AS geom 
+        ST_AsGeoJSON(geom) As geom 
       FROM partenaires
     `);
 
@@ -232,18 +243,35 @@ router.get("/care_partner", async (req, res) => {
 router.get("/care_partner/:id", async (req, res) => {
   try {
     const { id } = req.params;
-    const result = await pool.query("SELECT * FROM partenaires WHERE id_partenaire = $1", [id]);
 
-    if (result.rows.length === 0) {
+    const query = `
+      SELECT 
+        id_partenaire, 
+        nom, 
+        sigle, 
+        act_srvc_offert, 
+        statut_prest, 
+        img_logo, 
+        info, 
+        ST_X(geom) AS longitude, 
+        ST_Y(geom) AS latitude
+      FROM partenaires
+      WHERE id_partenaire = $1;
+    `;
+
+    const { rows } = await pool.query(query, [id]);
+
+    if (rows.length === 0) {
       return res.status(404).json({ error: "Partenaire non trouvé" });
     }
 
-    res.json(result.rows[0]);
+    res.json(rows[0]); // Retourne un seul partenaire
   } catch (err) {
-    console.error("Erreur lors de la récupération du partenaire", err.stack);
-    res.status(500).json({ error: "Erreur lors de la récupération du partenaire" });
+    console.error("Erreur lors de la récupération du partenaire", err);
+    res.status(500).json({ error: "Erreur serveur" });
   }
 });
+
 
 /**
  * Route : Mettre à jour un partenaire
@@ -258,6 +286,7 @@ router.put("/care_partner/update/:id",upload.single("img_logo"), async (req, res
       statut_prest,
       info,
       longitude,
+      latitude
     } = req.body;
 
     const img_logo = req.file ? req.file.filename : null;
@@ -273,7 +302,7 @@ router.put("/care_partner/update/:id",upload.single("img_logo"), async (req, res
         statut_prest = $4,
         img_logo = $5,
         info = $6,
-        geom = ST_GeomFromGeoJSON($7)
+        geom = ST_AsGeoJSON($7)
       WHERE id_partenaire = $8
       RETURNING *;
     `;

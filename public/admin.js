@@ -98,7 +98,7 @@ document.addEventListener("DOMContentLoaded", () => {
                 <td>${region.justif_violconj_fem}</td>
 
            <td class="fixed-column">
-            <button class="editBtn" data-id="${
+            <button class="editBtn fixed-btn" data-id="${
               region.id_region
             }"><i class="fas fa-pen-to-square"></i></button>
           </td>

@@ -4,7 +4,6 @@ document.addEventListener("DOMContentLoaded", () => {
   const adminInterface = document.getElementById("adminInterface");
   const contentArea = document.getElementById("contentArea");
   const btnListRegions = document.getElementById("btnListRegions");
-  const btnAddRegion = document.getElementById("btnAddRegion");
   const btnLogout = document.getElementById("btnLogout");
 
   // Gestion de la connexion
@@ -573,6 +572,23 @@ document.addEventListener("DOMContentLoaded", () => {
       }
     });
 }
+
+
+btnListOffices.addEventListener("click", loadOffices);
+
+
+  async function loadOffices() {
+    const response = await fetch("/admin/api/bureaux_base", {
+      method: "GET",
+      headers: { "Content-Type": "application/json" },
+    });
+    if (response.ok) {
+      const offices = await response.json();
+      displayPartners(offices);
+    } else {
+      alert("Erreur lors du chargement des bureaux de base.");
+    }
+  }
 
 
   // Gestion de la déconnexion

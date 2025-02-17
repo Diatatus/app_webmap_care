@@ -340,4 +340,124 @@ router.delete("/care_partner/delete/:id", async (req, res) => {
   }
 });
 
+
+/**
+ * Route : Récupérer la liste de tous les bureaux de base
+ */
+router.get("/bureaux_base", async (req, res) => {
+  try {
+    const result = await pool.query(`
+      SELECT 
+        id_base, 
+        id_region, 
+        nom_base, 
+        date_crea,  
+        ST_AsGeoJSON(geom) As geom 
+      FROM bureaux_base
+    `);
+
+    res.json(result.rows);
+  } catch (err) {
+    console.error("Erreur lors de la récupération des bureaux de base", err.stack);
+    res.status(500).json({ error: "Erreur lors de la récupération des bureaux de base" });
+  }
+});
+
+
+/**
+ * Route : Récupérer un bureau de base par son ID
+ */
+router.get("/bureaux_base/:id", async (req, res) => {
+  try {
+    const { id } = req.params;
+
+    const query = `
+      SELECT 
+        id_base, 
+        id_region, 
+        nom_base, 
+        date_crea,  
+        ST_X(geom) AS longitude, 
+        ST_Y(geom) AS latitude
+      FROM bureaux_base
+      WHERE id_base = $1;
+    `;
+
+    const { rows } = await pool.query(query, [id]);
+
+    if (rows.length === 0) {
+      return res.status(404).json({ error: "Bureau de base non trouvé" });
+    }
+
+    res.json(rows[0]); // Retourne un seul partenaire
+  } catch (err) {
+    console.error("Erreur lors de la récupération du bureau de base", err);
+    res.status(500).json({ error: "Erreur serveur" });
+  }
+});
+
+
+/**
+ * Route : Mettre à jour un bureaux de base
+ */
+router.put("/bureaux_base/update/:id",upload.single("img_logo"), async (req, res) => {
+  try {
+    const { id } = req.params;
+    const {
+      id_base,
+      id_region, 
+      nom_base, 
+      date_crea,
+      longitude,
+      latitude
+    } = req.body;
+
+    const img_logo = req.file ? req.file.filename : null;
+
+    const geom = longitude && latitude ? `{"type":"Point","coordinates":[${longitude},${latitude}]}` : null;
+
+    const query = `
+      UPDATE partenaires 
+      SET 
+        id_region = $1,
+        nom_base = $2,
+        date_crea = $3,
+        geom = ST_AsGeoJSON($4)
+      WHERE id_base = $5
+      RETURNING *;
+    `;
+    const values = [ id_region, nom_base, date_crea, geom,id_base];
+
+    const result = await pool.query(query, values);
+
+    if (result.rows.length === 0) {
+      return res.status(404).json({ error: " Bureau de base non trouvé" });
+    }
+
+    res.json({ success: true, partner: result.rows[0] });
+  } catch (err) {
+    console.error("Erreur lors de la mise à jour du bureau de base", err.stack);
+    res.status(500).json({ error: "Erreur lors de la mise à jour du bureau de base" });
+  }
+});
+
+/**
+ * Route : Supprimer un bureau de base
+ */
+router.delete("/bureaux_base/delete/:id", async (req, res) => {
+  try {
+    const { id } = req.params;
+    const result = await pool.query("DELETE FROM bureaux_base WHERE id_base = $1", [id]);
+
+    if (result.rowCount === 0) {
+      return res.status(404).json({ error: "Bureau de base non trouvé" });
+    }
+
+    res.json({ success: true });
+  } catch (err) {
+    console.error("Erreur lors de la suppression du bureau de base", err.stack);
+    res.status(500).json({ error: "Erreur lors de la suppression du bureau de base" });
+  }
+});
+
 module.exports = router;

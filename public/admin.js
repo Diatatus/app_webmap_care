@@ -584,11 +584,216 @@ btnListOffices.addEventListener("click", loadOffices);
     });
     if (response.ok) {
       const offices = await response.json();
-      displayPartners(offices);
+      displayOffices(offices);
     } else {
       alert("Erreur lors du chargement des bureaux de base.");
     }
   }
+
+
+  function displayOffices(offices) {
+    let html = `
+      <h2>Bureaux de base 
+        <button id="btnAddOffice" class="add-btn">
+          <i class="fas fa-plus"></i> Ajouter
+        </button>
+      </h2>
+      <div class="table-wrapper">
+        <table>
+          <thead>
+            <tr>
+              <th>Id_base</th>
+              <th>Id_region</th>
+              <th>Nom Base</th>
+              <th>Date de création</th>
+              <th>Coordonnées (Longitude, Latitude)</th>
+              <th class="fixed-column">Actions</th>
+            </tr>
+          </thead>
+          <tbody>`;
+
+    offices.forEach((office) => {
+      html += `<tr>
+                <td>${office.id_base}</td>
+                <td>${office.id_region}</td>
+                <td>${office.nom_base}</td>
+                <td>${office.date_crea}</td>     
+                <td>${
+                  office.geom
+                    ? JSON.parse(office.geom).coordinates.join(", ")
+                    : "-"
+                }</td>
+                <td class="fixed-column">
+                  <button class="editBtn" data-id="${
+                    office.id_base
+                  }"><i class="fas fa-pen-to-square"></i></button>
+                  <button class="deleteBtn" data-id="${
+                    office.id_base
+                  }"><i class="fas fa-trash"></i></button>
+                </td>
+              </tr>`;
+    });
+
+    html += `</tbody></table></div>`;
+    contentArea.innerHTML = html;
+
+    // Ajouter l'événement après l'injection HTML
+    const btnAddOffice = document.getElementById("btnAddOffice");
+    if (btnAddOffice) {
+      btnAddOffice.addEventListener("click", displayAddOfficeForm);
+    }
+
+    document
+      .querySelectorAll(".deleteBtn")
+      .forEach((btn) => btn.addEventListener("click", deleteOffices));
+    document.querySelectorAll(".editBtn").forEach((btn) => {
+      btn.addEventListener("click", () => {
+        const id = btn.getAttribute("data-id");
+        loadOfficeForEdit(id);
+      });
+    });
+  }
+
+  async function deleteOffices(e) {
+    const id = e.target.getAttribute("data-id");
+    if (confirm("Êtes-vous sûr de vouloir supprimer ce bureaux de base ?")) {
+      const response = await fetch(`/admin/api/bureaux_base/delete/${id}`, {
+        method: "DELETE",
+        headers: { "Content-Type": "application/json" },
+      });
+      if (response.ok) {
+        alert("Bureaux de base supprimé.");
+        loadPartners();
+      } else {
+        alert("Erreur lors de la suppression du bureaux de base.");
+      }
+    }
+  }
+
+  function displayAddOfficeForm() {
+    let html = `
+      <h2>Ajouter un bureaux de base</h2>
+      <form id="addOfficeForm" enctype="multipart/form-data">
+      <div class="form-group">
+          <label for="id_base">ID_bureau :</label>
+          <input type="number" id="id_base" name="id_base" required>
+        </div>
+        <div class="form-group">
+          <label for="id_region">ID_region :</label>
+          <input type="text" id="id_region" name="id_region" required>
+        </div>
+        <div class="form-group">
+          <label for="nom_base">Nom base :</label>
+          <input type="text" id="nom_base" name="nom_base">
+        </div>
+        <div class="form-group">
+          <label for="date_crea">Date de creation :</label>
+          <input type="text" id="date_crea" name="date_crea">
+        </div>
+        <div class="form-group">
+          <label for="longitude">Longitude :</label>
+          <input type="number" id="longitude" name="longitude" step="any">
+        </div>
+        <div class="form-group">
+          <label for="latitude">Latitude :</label>
+          <input type="number" id="latitude" name="latitude" step="any">
+        </div>
+        <button type="submit">Ajouter</button>
+      </form>`;
+
+    contentArea.innerHTML = html;
+
+    const addOfficeForm = document.getElementById("addOfficeForm");
+    addOfficeForm.addEventListener("submit", async (e) => {
+      e.preventDefault();
+      const formData = new FormData(addOfficeForm);
+
+      const response = await fetch("/admin/api/bureaux_base/add", {
+        method: "POST",
+        body: formData,
+      });
+
+      if (response.ok) {
+        alert("Bureau de base ajouté avec succès.");
+        loadPartners();
+      } else {
+        alert("Erreur lors de l'ajout du bureau de base.");
+      }
+    });
+  }
+
+  async function loadOfficeForEdit(id) {
+    const response = await fetch(`/admin/api/bureaux_base/${id}`, {
+      method: "GET",
+      headers: { "Content-Type": "application/json" },
+    });
+    if (response.ok) {
+      const offices = await response.json();
+      displayEditOfficeForm(offices);
+    } else {
+      alert("Erreur lors du chargement du bureau de base.");
+    }
+  }
+
+  function displayEditOfficeForm(office) {
+    const longitude = office.longitude || ""; // Gérer les valeurs null/undefined
+    const latitude = office.latitude || ""; 
+
+    let html = `<h2>Modifier le bureau de base</h2>
+      <form id="editPartnerForm" enctype="multipart/form-data">
+        <input type="hidden" name="id_base" value="${office.id_base}">
+
+        <div class="form-group">
+          <label for="id_region">ID_region :</label>
+          <input type="text" id="id_region" name="id_region" value="${office.id_region}" required>
+        </div>
+
+        <div class="form-group">
+          <label for="nom_base">Nom base :</label>
+          <input type="text" id="nom_base" name="nom_base" value="${office.nom_base}" required>
+        </div>
+
+        <div class="form-group">
+          <label for="date_crea">Date de création :</label>
+          <textarea id="date_crea" name="date_crea" rows="4" required>${office.date_crea}</textarea>
+        </div>
+
+
+        <div class="form-group">
+          <label for="longitude">Longitude :</label>
+          <input type="number" id="longitude" name="longitude" value="${longitude}" step="any" required>
+        </div>
+
+        <div class="form-group">
+          <label for="latitude">Latitude :</label>
+          <input type="number" id="latitude" name="latitude" value="${latitude}" step="any" required>
+        </div>
+
+        <button type="submit">Enregistrer les modifications</button>
+      </form>`;
+
+    contentArea.innerHTML = html;
+
+    const editOfficeForm = document.getElementById("editOfficeForm");
+    editOfficeForm.addEventListener("submit", async (e) => {
+      e.preventDefault();
+
+      const formData = new FormData(editOfficeForm);
+      const officeId = formData.get("id_base");
+
+      const response = await fetch(`/admin/api/bureaux_base/update/${officeId}`, {
+        method: "PUT",
+        body: formData,  // Envoi correct du fichier et des autres données
+      });
+
+      if (response.ok) {
+        alert("Partenaire mis à jour avec succès.");
+        loadPartners();
+      } else {
+        alert("Erreur lors de la mise à jour du partenaire.");
+      }
+    });
+}
 
 
   // Gestion de la déconnexion

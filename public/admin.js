@@ -32,6 +32,7 @@ document.addEventListener("DOMContentLoaded", () => {
   const btnListPartners = document.getElementById("btnListPartners");
   const btnListOffices = document.getElementById("btnListOffices");
   const btnListProjects = document.getElementById("btnListProjects");
+  const btnListOfficesProjects = document.getElementById("btnListOfficesProjects");
 
   async function loadRegions() {
     const response = await fetch("/admin/api/regions", {
@@ -134,44 +135,7 @@ document.addEventListener("DOMContentLoaded", () => {
     }
   }
 
-  function displayAddRegionForm() {
-    let html = `<h2>Ajouter une Région</h2>
-      <form id="addRegionForm">
-        <div class="form-group">
-          <label for="nom">Nom :</label>
-          <input type="text" id="nom" name="nom" required>
-        </div>
-        <div class="form-group">
-          <label for="total_pop">Total Population :</label>
-          <input type="number" id="total_pop" name="total_pop">
-        </div>
-        <!-- Ajoutez ici d'autres champs nécessaires -->
-        <button type="submit">Ajouter</button>
-      </form>`;
-    contentArea.innerHTML = html;
-
-    const addRegionForm = document.getElementById("addRegionForm");
-    addRegionForm.addEventListener("submit", async (e) => {
-      e.preventDefault();
-      const formData = new FormData(addRegionForm);
-      const data = {};
-      formData.forEach((value, key) => {
-        data[key] = value;
-      });
-
-      const response = await fetch("/admin/api/regions/add", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(data),
-      });
-      if (response.ok) {
-        alert("Région ajoutée avec succès.");
-        loadRegions();
-      } else {
-        alert("Erreur lors de l'ajout de la région.");
-      }
-    });
-  }
+  
 
   async function loadRegionForEdit(id) {
     const response = await fetch(`/admin/api/regions/${id}`, {
@@ -440,7 +404,7 @@ document.addEventListener("DOMContentLoaded", () => {
         </div>
         <div class="form-group">
           <label for="act_srvc_offert">Activités et services offerts :</label>
-          <input type="text" id="act_srvc_offert" name="act_srvc_offert">
+          <textarea type="text" id="act_srvc_offert" name="act_srvc_offert" rows="6"></textarea>
         </div>
         <div class="form-group">
           <label for="statut_prest">Statut de la prestation :</label>
@@ -519,7 +483,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
         <div class="form-group">
           <label for="act_srvc_offert">Activité et services offerts :</label>
-          <textarea id="act_srvc_offert" name="act_srvc_offert" rows="4" required>${partner.act_srvc_offert}</textarea>
+          <textarea id="act_srvc_offert" name="act_srvc_offert" rows="6" required>${partner.act_srvc_offert}</textarea>
         </div>
 
         <div class="form-group">
@@ -755,7 +719,240 @@ btnListOffices.addEventListener("click", loadOffices);
 
         <div class="form-group">
           <label for="date_crea">Date de création :</label>
-          <textarea id="date_crea" name="date_crea" rows="4" required>${office.date_crea}</textarea>
+          <input type="text" id="date_crea" name="date_crea" required>${office.date_crea}</input>
+        </div>
+
+
+        <div class="form-group">
+          <label for="longitude">Longitude :</label>
+          <input type="number" id="longitude" name="longitude" value="${longitude}" step="any" required>
+        </div>
+
+        <div class="form-group">
+          <label for="latitude">Latitude :</label>
+          <input type="number" id="latitude" name="latitude" value="${latitude}" step="any" required>
+        </div>
+
+        <button type="submit">Enregistrer les modifications</button>
+      </form>`;
+
+    contentArea.innerHTML = html;
+
+    const editOfficeForm = document.getElementById("editOfficeForm");
+    editOfficeForm.addEventListener("submit", async (e) => {
+      e.preventDefault();
+
+      const formData = new FormData(editOfficeForm);
+      const officeId = formData.get("id_base");
+
+      const response = await fetch(`/admin/api/bureaux_base/update/${officeId}`, {
+        method: "PUT",
+        body: formData,  // Envoi correct du fichier et des autres données
+      });
+
+      if (response.ok) {
+        alert("Partenaire mis à jour avec succès.");
+        loadPartners();
+      } else {
+        alert("Erreur lors de la mise à jour du partenaire.");
+      }
+    });
+}
+
+
+btnListProjects.addEventListener("click", loadProjects);
+
+
+  async function loadProjects() {
+    const response = await fetch("/admin/api/projets", {
+      method: "GET",
+      headers: { "Content-Type": "application/json" },
+    });
+    if (response.ok) {
+      const projects = await response.json();
+      displayProjects(projects);
+    } else {
+      alert("Erreur lors du chargement des projets.");
+    }
+  }
+
+
+  function displayProjects(projects) {
+    let html = `
+      <h2>Projets  
+        <button id="btnAddProject" class="add-btn">
+          <i class="fas fa-plus"></i> Ajouter
+        </button>
+      </h2>
+      <div class="table-wrapper">
+        <table>
+          <thead>
+            <tr>
+              <th>Id_projet</th>
+              <th>Nom projet</th>
+              <th>Sigle projet</th>
+              <th>Date debut</th>
+              <th>Date fin</th>
+              <th>Budget projet</th>
+              <th>Bailleur</th>
+              <th>Objectif global</th>
+              <th>Site d'intervention</th>
+              <th>Statut</th>
+              <th>Réalisations</th>
+              <th>Cible/th>
+              <th class="fixed-column">Actions</th>
+            </tr>
+          </thead>
+          <tbody>`;
+
+    projects.forEach((project) => {
+      html += `<tr>
+                <td>${project.id_projet}</td>
+                <td>${project.nom_projet}</td>
+                <td>${project.sigle_projet}</td>
+                <td>${project.date_debut}</td>
+                <td>${project.date_fin}</td> 
+                <td>${project.budget_projet}</td> 
+                <td>${project.bailleur}</td> 
+                <td>${project.objectif_global}</td> 
+                <td>${project.site_intervention}</td> 
+                <td>${project.statut}</td> 
+                <td>${project.realisations}</td> 
+                <td>${project.cible}</td>      
+              
+                <td class="fixed-column">
+                  <button class="editBtn" data-id="${
+                    office.id_projet
+                  }"><i class="fas fa-pen-to-square"></i></button>
+                  <button class="deleteBtn" data-id="${
+                    office.id_projet
+                  }"><i class="fas fa-trash"></i></button>
+                </td>
+              </tr>`;
+    });
+
+    html += `</tbody></table></div>`;
+    contentArea.innerHTML = html;
+
+    // Ajouter l'événement après l'injection HTML
+    const btnAddProject = document.getElementById("btnAddProject");
+    if (btnAddProject) {
+      btnAddProject.addEventListener("click", displayAddProjectForm);
+    }
+
+    document
+      .querySelectorAll(".deleteBtn")
+      .forEach((btn) => btn.addEventListener("click", deleteProjects));
+    document.querySelectorAll(".editBtn").forEach((btn) => {
+      btn.addEventListener("click", () => {
+        const id = btn.getAttribute("data-id");
+        loadProjectForEdit(id);
+      });
+    });
+  }
+
+  async function deleteProjects(e) {
+    const id = e.target.getAttribute("data-id");
+    if (confirm("Êtes-vous sûr de vouloir supprimer ce projet ?")) {
+      const response = await fetch(`/admin/api/projets/delete/${id}`, {
+        method: "DELETE",
+        headers: { "Content-Type": "application/json" },
+      });
+      if (response.ok) {
+        alert("Projet supprimé.");
+        loadPartners();
+      } else {
+        alert("Erreur lors de la suppression du projet.");
+      }
+    }
+  }
+
+  function displayAddProjectForm() {
+    let html = `
+      <h2>Ajouter un projet</h2>
+      <form id="addProjectForm" enctype="multipart/form-data">
+      <div class="form-group">
+          <label for="id_base">ID_bureau :</label>
+          <input type="number" id="id_base" name="id_base" required>
+        </div>
+        <div class="form-group">
+          <label for="id_region">ID_region :</label>
+          <input type="text" id="id_region" name="id_region" required>
+        </div>
+        <div class="form-group">
+          <label for="nom_base">Nom base :</label>
+          <input type="text" id="nom_base" name="nom_base">
+        </div>
+        <div class="form-group">
+          <label for="date_crea">Date de creation :</label>
+          <input type="text" id="date_crea" name="date_crea">
+        </div>
+        <div class="form-group">
+          <label for="longitude">Longitude :</label>
+          <input type="number" id="longitude" name="longitude" step="any">
+        </div>
+        <div class="form-group">
+          <label for="latitude">Latitude :</label>
+          <input type="number" id="latitude" name="latitude" step="any">
+        </div>
+        <button type="submit">Ajouter</button>
+      </form>`;
+
+    contentArea.innerHTML = html;
+
+    const addOfficeForm = document.getElementById("addOfficeForm");
+    addOfficeForm.addEventListener("submit", async (e) => {
+      e.preventDefault();
+      const formData = new FormData(addOfficeForm);
+
+      const response = await fetch("/admin/api/bureaux_base/add", {
+        method: "POST",
+        body: formData,
+      });
+
+      if (response.ok) {
+        alert("Bureau de base ajouté avec succès.");
+        loadPartners();
+      } else {
+        alert("Erreur lors de l'ajout du bureau de base.");
+      }
+    });
+  }
+
+  async function loadOfficeForEdit(id) {
+    const response = await fetch(`/admin/api/bureaux_base/${id}`, {
+      method: "GET",
+      headers: { "Content-Type": "application/json" },
+    });
+    if (response.ok) {
+      const offices = await response.json();
+      displayEditOfficeForm(offices);
+    } else {
+      alert("Erreur lors du chargement du bureau de base.");
+    }
+  }
+
+  function displayEditOfficeForm(office) {
+    const longitude = office.longitude || ""; // Gérer les valeurs null/undefined
+    const latitude = office.latitude || ""; 
+
+    let html = `<h2>Modifier le bureau de base</h2>
+      <form id="editPartnerForm" enctype="multipart/form-data">
+        <input type="hidden" name="id_base" value="${office.id_base}">
+
+        <div class="form-group">
+          <label for="id_region">ID_region :</label>
+          <input type="text" id="id_region" name="id_region" value="${office.id_region}" required>
+        </div>
+
+        <div class="form-group">
+          <label for="nom_base">Nom base :</label>
+          <input type="text" id="nom_base" name="nom_base" value="${office.nom_base}" required>
+        </div>
+
+        <div class="form-group">
+          <label for="date_crea">Date de création :</label>
+          <input type="text" id="date_crea" name="date_crea" required>${office.date_crea}</input>
         </div>
 
 

@@ -460,4 +460,160 @@ router.delete("/bureaux_base/delete/:id", async (req, res) => {
   }
 });
 
+
+/**
+ * Route : Récupérer la liste de tous les projets
+ */
+router.get("/projets", async (req, res) => {
+  try {
+    const result = await pool.query(`
+      SELECT 
+        id_projet,
+        nom_projet,
+        sigle_projet,
+        date_debut,
+        date_fin,
+        budget_projet,
+        bailleur,
+        objectif_global,
+        site_intervention, 
+        statut, 
+        realisations, 
+        cible  
+      FROM projets
+    `);
+
+    res.json(result.rows);
+  } catch (err) {
+    console.error("Erreur lors de la récupération des projets", err.stack);
+    res.status(500).json({ error: "Erreur lors de la récupération des projets" });
+  }
+});
+
+
+/**
+ * Route : Récupérer un projet par son ID
+ */
+router.get("/projets/:id", async (req, res) => {
+  try {
+    const { id } = req.params;
+
+    const query = `
+      SELECT 
+         id_projet,
+        nom_projet,
+        sigle_projet,
+        date_debut,
+        date_fin,
+        budget_projet,
+        bailleur,
+        objectif_global,
+        site_intervention, 
+        statut, 
+        realisations, 
+        cible
+      FROM projets
+      WHERE id_projet = $1;
+    `;
+
+    const { rows } = await pool.query(query, [id]);
+
+    if (rows.length === 0) {
+      return res.status(404).json({ error: "Projet non trouvé" });
+    }
+
+    res.json(rows[0]); // Retourne un seul partenaire
+  } catch (err) {
+    console.error("Erreur lors de la récupération du projet", err);
+    res.status(500).json({ error: "Erreur serveur" });
+  }
+});
+
+
+/**
+ * Route : Mettre à jour un projet
+ */
+router.put("/bureaux_base/update/:id", async (req, res) => {
+  try {
+    const { id } = req.params;
+    const {
+      id_projet,
+      nom_projet,
+      sigle_projet,
+      date_debut,
+      date_fin,
+      budget_projet,
+      bailleur,
+      objectif_global,
+      site_intervention, 
+      statut, 
+      realisations, 
+      cible
+    } = req.body;
+
+    
+
+    const query = `
+      UPDATE partenaires 
+      SET 
+        id_projet = $1,
+        nom_projet = $2,
+        sigle_projet = $3,
+        date_debut = $4,
+        date_fin = $5,
+        budget_projet = $6,
+        bailleur = $7,
+        objectif_global = $8,
+        site_intervention = $9,
+        statut = $10,
+        realisations = $11,
+        cible = $12
+      WHERE id_projet = $13
+      RETURNING *;
+    `;
+    const values = [ id_projet,
+      nom_projet,
+      sigle_projet,
+      date_debut,
+      date_fin,
+      budget_projet,
+      bailleur,
+      objectif_global,
+      site_intervention, 
+      statut, 
+      realisations, 
+      cible];
+
+    const result = await pool.query(query, values);
+
+    if (result.rows.length === 0) {
+      return res.status(404).json({ error: " Projet non trouvé" });
+    }
+
+    res.json({ success: true, partner: result.rows[0] });
+  } catch (err) {
+    console.error("Erreur lors de la mise à jour du projet", err.stack);
+    res.status(500).json({ error: "Erreur lors de la mise à jour du projet" });
+  }
+});
+
+/**
+ * Route : Supprimer un projet
+ */
+router.delete("/projets/delete/:id", async (req, res) => {
+  try {
+    const { id } = req.params;
+    const result = await pool.query("DELETE FROM projets WHERE id_projet = $1", [id]);
+
+    if (result.rowCount === 0) {
+      return res.status(404).json({ error: "Projet non trouvé" });
+    }
+
+    res.json({ success: true });
+  } catch (err) {
+    console.error("Erreur lors de la suppression du projet", err.stack);
+    res.status(500).json({ error: "Erreur lors de la suppression du projet" });
+  }
+});
+
 module.exports = router;

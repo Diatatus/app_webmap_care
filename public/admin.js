@@ -872,28 +872,52 @@ btnListProjects.addEventListener("click", loadProjects);
       <h2>Ajouter un projet</h2>
       <form id="addProjectForm" enctype="multipart/form-data">
       <div class="form-group">
-          <label for="id_base">ID_bureau :</label>
-          <input type="number" id="id_base" name="id_base" required>
+          <label for="id_projet">ID_projet :</label>
+          <input type="number" id="id_projet" name="id_projet" required>
         </div>
         <div class="form-group">
-          <label for="id_region">ID_region :</label>
-          <input type="text" id="id_region" name="id_region" required>
+          <label for="nom_projet">Nom projet :</label>
+          <textarea  id="nom_projet" name="nom_projet" rows="3"  required></textarea>
         </div>
         <div class="form-group">
-          <label for="nom_base">Nom base :</label>
-          <input type="text" id="nom_base" name="nom_base">
+          <label for="sigle_projet">Sigle projet :</label>
+          <input type="text" id="sigle_projet" name="sigle_projet">
         </div>
         <div class="form-group">
-          <label for="date_crea">Date de creation :</label>
-          <input type="text" id="date_crea" name="date_crea">
+          <label for="date_debut">Date de debut :</label>
+          <input type="text" id="date_debut" name="date_debut">
         </div>
         <div class="form-group">
-          <label for="longitude">Longitude :</label>
-          <input type="number" id="longitude" name="longitude" step="any">
+          <label for="date_fin">Date de fin :</label>
+          <input type="text" id="date_fin" name="date_fin" step="any">
         </div>
         <div class="form-group">
-          <label for="latitude">Latitude :</label>
-          <input type="number" id="latitude" name="latitude" step="any">
+          <label for="budget_projet">Budget :</label>
+          <input type="text" id="budget_projet" name="budget_projet" step="any">
+        </div>
+        <div class="form-group">
+          <label for="bailleur">Bailleur :</label>
+          <input type="text" id="bailleur" name="bailleur" step="any">
+        </div>
+        <div class="form-group">
+          <label for="objectif_global">Objectif global :</label>
+          <textarea  id="objectif_global" name="objectif_global" step="any"></textarea>
+        </div>
+        <div class="form-group">
+          <label for="site_intervention">Site d'intervention :</label>
+          <input type="text" id="site_intervention" name="site_intervention" step="any">
+        </div>
+        <div class="form-group">
+          <label for="statut">Statut :</label>
+          <input type="text" id="statut" name="statut" step="any">
+        </div>
+        <div class="form-group">
+          <label for="realisations">Realisation :</label>
+          <input type="text" id="realisations" name="realisations" step="any">
+        </div>
+        <div class="form-group">
+          <label for="cible">Cible :</label>
+          <input type="text" id="cible" name="cible" step="any">
         </div>
         <button type="submit">Ajouter</button>
       </form>`;

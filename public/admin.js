@@ -822,10 +822,10 @@ btnListProjects.addEventListener("click", loadProjects);
               
                 <td class="fixed-column">
                   <button class="editBtn" data-id="${
-                    office.id_projet
+                    project.id_projet
                   }"><i class="fas fa-pen-to-square"></i></button>
                   <button class="deleteBtn" data-id="${
-                    office.id_projet
+                    project.id_projet
                   }"><i class="fas fa-trash"></i></button>
                 </td>
               </tr>`;
@@ -901,11 +901,11 @@ btnListProjects.addEventListener("click", loadProjects);
         </div>
         <div class="form-group">
           <label for="objectif_global">Objectif global :</label>
-          <textarea  id="objectif_global" name="objectif_global" step="any"></textarea>
+          <textarea  id="objectif_global" name="objectif_global" rows="5"  required></textarea>
         </div>
         <div class="form-group">
           <label for="site_intervention">Site d'intervention :</label>
-          <input type="text" id="site_intervention" name="site_intervention" step="any">
+          <textarea id="site_intervention" name="site_intervention" rows="3"  required></textarea>
         </div>
         <div class="form-group">
           <label for="statut">Statut :</label>
@@ -913,105 +913,123 @@ btnListProjects.addEventListener("click", loadProjects);
         </div>
         <div class="form-group">
           <label for="realisations">Realisation :</label>
-          <input type="text" id="realisations" name="realisations" step="any">
+          <textarea id="realisations" name="realisations" rows="6"  required></textarea>
         </div>
         <div class="form-group">
           <label for="cible">Cible :</label>
-          <input type="text" id="cible" name="cible" step="any">
+          <textarea id="cible" name="cible" rows="3"  required></textarea>
         </div>
         <button type="submit">Ajouter</button>
       </form>`;
 
     contentArea.innerHTML = html;
 
-    const addOfficeForm = document.getElementById("addOfficeForm");
-    addOfficeForm.addEventListener("submit", async (e) => {
+    const addProjectForm = document.getElementById("addProjectForm");
+    addProjectForm.addEventListener("submit", async (e) => {
       e.preventDefault();
-      const formData = new FormData(addOfficeForm);
+      const formData = new FormData(addProjectForm);
 
-      const response = await fetch("/admin/api/bureaux_base/add", {
+      const response = await fetch("/admin/api/projets/add", {
         method: "POST",
         body: formData,
       });
 
       if (response.ok) {
-        alert("Bureau de base ajouté avec succès.");
+        alert("Projet ajouté avec succès.");
         loadPartners();
       } else {
-        alert("Erreur lors de l'ajout du bureau de base.");
+        alert("Erreur lors de l'ajout du projet.");
       }
     });
   }
 
-  async function loadOfficeForEdit(id) {
-    const response = await fetch(`/admin/api/bureaux_base/${id}`, {
+  async function loadProjectForEdit(id) {
+    const response = await fetch(`/admin/api/projets/${id}`, {
       method: "GET",
       headers: { "Content-Type": "application/json" },
     });
     if (response.ok) {
-      const offices = await response.json();
-      displayEditOfficeForm(offices);
+      const projects = await response.json();
+      displayEditProjectForm(projects);
     } else {
-      alert("Erreur lors du chargement du bureau de base.");
+      alert("Erreur lors du chargement du projet.");
     }
   }
 
-  function displayEditOfficeForm(office) {
-    const longitude = office.longitude || ""; // Gérer les valeurs null/undefined
-    const latitude = office.latitude || ""; 
+  function displayEditProjectForm(project) {
+    
 
-    let html = `<h2>Modifier le bureau de base</h2>
+    let html = `<h2>Modifier le projet</h2>
       <form id="editPartnerForm" enctype="multipart/form-data">
-        <input type="hidden" name="id_base" value="${office.id_base}">
+        <input type="hidden" name="id_projet" value="${project.id_projet}">
 
         <div class="form-group">
-          <label for="id_region">ID_region :</label>
-          <input type="text" id="id_region" name="id_region" value="${office.id_region}" required>
+          <label for="nom_projet">Nom projet :</label>
+          <textarea id="nom_projet" name="nom_projet" rows="3" required>${project.nom_projet}</textarea>
         </div>
 
         <div class="form-group">
-          <label for="nom_base">Nom base :</label>
-          <input type="text" id="nom_base" name="nom_base" value="${office.nom_base}" required>
+          <label for="sigle_projet">Sigle :</label>
+          <input type="text" id="sigle_projet" name="sigle_projet" value="${project.sigle_projet}" required>
         </div>
 
         <div class="form-group">
-          <label for="date_crea">Date de création :</label>
-          <input type="text" id="date_crea" name="date_crea" required>${office.date_crea}</input>
-        </div>
-
-
-        <div class="form-group">
-          <label for="longitude">Longitude :</label>
-          <input type="number" id="longitude" name="longitude" value="${longitude}" step="any" required>
+          <label for="date_debut">Date de début :</label>
+          <input type="text" id="date_debut" name="date_debut" value="${project.date_debut}"</input>
         </div>
 
         <div class="form-group">
-          <label for="latitude">Latitude :</label>
-          <input type="number" id="latitude" name="latitude" value="${latitude}" step="any" required>
+          <label for="date_fin">Date de fin :</label>
+          <input type="text" id="date_fin" name="date_fin" value="${project.date_fin}"</input>
         </div>
-
-        <button type="submit">Enregistrer les modifications</button>
-      </form>`;
+        <div class="form-group">
+          <label for="budget_projet">Budget :</label>
+          <input type="text" id="budget_projet" name="budget_projet" value="${project.budget_projet}"</input>
+        </div>
+        <div class="form-group">
+          <label for="bailleur">Bailleur :</label>
+          <input type="text" id="bailleur" name="bailleur" value="${project.bailleur}"</input>
+        </div>
+        <div class="form-group">
+          <label for="objectif_global">Objectif global :</label>
+          <textarea id="objectif_global" name="objectif_global"  rows="4" required>${project.objectif_global}</textarea>
+        </div>
+        <div class="form-group">
+          <label for="site_intervention">Site d'intervention :</label>
+          <textarea id="site_intervention" name="site_intervention" rows="4" required>${project.site_intervention}</textarea>
+        </div>
+        <div class="form-group">
+          <label for="statut">Statut :</label>
+          <input type="text" id="statut" name="statut" value="${project.statut}"</input>
+        </div>
+        <div class="form-group">
+          <label for="realisations">Réalisations :</label>
+          <textarea id="realisations" name="realisations" rows="6" >${project.realisations}</textarea>
+        </div>
+        <div class="form-group">
+          <label for="cible">Cible :</label>
+          <textarea id="cible" name="cible" rows="4" >${project.cible}</textarea>
+        </div>`;
 
     contentArea.innerHTML = html;
 
-    const editOfficeForm = document.getElementById("editOfficeForm");
-    editOfficeForm.addEventListener("submit", async (e) => {
+    const editProjectForm = document.getElementById("editProjectForm");
+    editProjectForm.addEventListener("submit", async (e) => {
       e.preventDefault();
 
-      const formData = new FormData(editOfficeForm);
-      const officeId = formData.get("id_base");
+      const formData = new FormData(editProjectForm);
+      const projectId = formData.get("id_projet");
 
-      const response = await fetch(`/admin/api/bureaux_base/update/${officeId}`, {
+      const response = await fetch(`/admin/api/projets/update/${projectId}`, {
         method: "PUT",
         body: formData,  // Envoi correct du fichier et des autres données
       });
 
       if (response.ok) {
-        alert("Partenaire mis à jour avec succès.");
-        loadPartners();
+        alert("Projet mis à jour avec succès.");
+        loadProjects();
       } else {
-        alert("Erreur lors de la mise à jour du partenaire.");
+        alert("Erreur lors de la mise à jour du projet.");
       }
     });
 }

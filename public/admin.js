@@ -1009,7 +1009,10 @@ btnListProjects.addEventListener("click", loadProjects);
         <div class="form-group">
           <label for="cible">Cible :</label>
           <textarea id="cible" name="cible" rows="4" >${project.cible}</textarea>
-        </div>`;
+        </div>
+        
+        <button type="submit">Enregistrer les modifications</button>
+      </form>`;
 
     contentArea.innerHTML = html;
 

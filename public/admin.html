@@ -121,12 +121,11 @@
     }
 
     .fixed-column {
-      position: sticky;
-  left: 0;
+  position: sticky;
+  right: 0;
   background-color: #f8f8f8;
-  color: black;
   box-shadow: -2px 0 5px rgba(0, 0, 0, 0.1);
-  z-index: 2;
+  color: black;
 }
 
 
@@ -138,6 +137,11 @@
     }
     .form-group {
       display: flex;
+      flex-direction: column;
+    }
+    .form-group i{
+      display: flex;
+      top:2px;
       flex-direction: column;
     }
     .form-group label {

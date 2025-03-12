@@ -1132,61 +1132,34 @@ function zoomToFeature(featureElement, layerName, attributeName) {
   });
 }
 
+const baseProjectsCache = {}; // Cache pour les données chargées
+let currentBaseProjects = [];
 let currentBaseProjectIndex = 0;
-let currentBaseProjects = []; // Projects for the selected bureau
-
-// Function to display the popup for a base
-function showBaseProjectsPopup(baseFeature) {
-  const baseName = baseFeature.get("nom_base");
-  const baseId = baseFeature.get("id_base");
-
-  // Fetch projects related to the selected bureau
-  fetch(`/api/bureaux_projets?id_base=${baseId}`)
-    .then((response) => response.json())
-    .then((data) => {
-      currentBaseProjects = data.features.map((feature) => feature.properties);
-
-      if (currentBaseProjects.length === 0) return; // No projects, no popup
-
-      // Set base name
-      document.getElementById("base-name").textContent = baseName;
-
-      // Display the first project
-      currentBaseProjectIndex = 0;
-      updateBaseProjectDetails();
-
-      // Show the popup
-      const basePopup = document.getElementById("base-projects-popup");
-      basePopup.style.display = "block";
-      setTimeout(() => (basePopup.style.opacity = 1), 10);
-    });
-}
-
-const baseProjectsCache = {}; // Cache to store fetched data
 
 function showBaseProjectsPopup(baseFeature) {
   const baseId = baseFeature.get("id_base");
   const baseName = baseFeature.get("nom_base");
 
   if (baseProjectsCache[baseId]) {
-    // Use cached data if available
-    currentBaseProjects = baseProjectsCache[baseId];
+    currentBaseProjects = baseProjectsCache[baseId].features.map((feature) => feature.properties);
     displayPopup(baseName);
   } else {
-    // Fetch data only if not cached
     fetch(`/api/bureaux_projets?id_base=${baseId}`)
-      .then((response) => response.json())
+      .then((response) => {
+        if (!response.ok) throw new Error("Erreur lors du chargement des données");
+        return response.json();
+      })
       .then((data) => {
+        baseProjectsCache[baseId] = data;
         currentBaseProjects = data.features.map((feature) => feature.properties);
-        baseProjectsCache[baseId] = currentBaseProjects; // Cache the data
         displayPopup(baseName);
       })
-      .catch((error) => console.error("Error fetching project data:", error));
+      .catch((error) => console.error("Erreur de chargement :", error));
   }
 }
 
 function displayPopup(baseName) {
-  if (currentBaseProjects.length === 0) return; // No projects, no popup
+  if (!currentBaseProjects.length) return;
 
   document.getElementById("base-name").textContent = baseName;
   currentBaseProjectIndex = 0;
@@ -1197,25 +1170,24 @@ function displayPopup(baseName) {
   setTimeout(() => (basePopup.style.opacity = 1), 10);
 }
 
-
 function updateBaseProjectDetails() {
+  if (!currentBaseProjects.length) return;
+
   const project = currentBaseProjects[currentBaseProjectIndex];
   if (!project) return;
 
-  // Update project details in the popup
-  document.getElementById("project-name").textContent = project.nom_projet;
-  document.getElementById("project-sigle").textContent = project.sigle_projet;
-  document.getElementById("project-start-date").textContent = project.date_debut;
-  document.getElementById("project-end-date").textContent = project.date_fin;
-  document.getElementById("project-budget").textContent = project.budget_projet;
-  document.getElementById("project-bailleur").textContent = project.bailleur;
-  document.getElementById("project-objective").textContent = project.objectif_global;
-  document.getElementById("project-target").textContent = project.cible;
-  document.getElementById("project-sites").textContent = project.site_intervention;
-  document.getElementById("project-status").textContent = project.statut;
-  document.getElementById("project-achievements").textContent = project.realisations;
+  document.getElementById("project-name").textContent = project.nom_projet || "Non spécifié";
+  document.getElementById("project-sigle").textContent = project.sigle_projet || "Non spécifié";
+  document.getElementById("project-start-date").textContent = project.date_debut || "Non spécifié";
+  document.getElementById("project-end-date").textContent = project.date_fin || "Non spécifié";
+  document.getElementById("project-budget").textContent = project.budget_projet || "Non spécifié";
+  document.getElementById("project-bailleur").textContent = project.bailleur || "Non spécifié";
+  document.getElementById("project-objective").textContent = project.objectif_global || "Non spécifié";
+  document.getElementById("project-target").textContent = project.cible || "Non spécifié";
+  document.getElementById("project-sites").textContent = project.site_intervention || "Non spécifié";
+  document.getElementById("project-status").textContent = project.statut || "Non spécifié";
+  document.getElementById("project-achievements").textContent = project.realisations || "Non spécifié";
 
-  // Update project counter
   document.getElementById("project-counter").textContent = 
     `Projet N°${currentBaseProjectIndex + 1}/${currentBaseProjects.length}`;
 
@@ -1224,21 +1196,14 @@ function updateBaseProjectDetails() {
   const navigation = document.getElementById("project-navigation");
 
   if (currentBaseProjects.length === 1) {
-    // Hide navigation if only one project
     navigation.style.display = "none";
   } else {
-    // Show navigation and manage button states
     navigation.style.display = "flex";
     prevButton.style.display = currentBaseProjectIndex === 0 ? "none" : "block";
-    nextButton.style.display =
-      currentBaseProjectIndex === currentBaseProjects.length - 1
-        ? "none"
-        : "block";
+    nextButton.style.display = currentBaseProjectIndex === currentBaseProjects.length - 1 ? "none" : "block";
   }
 }
 
-
-// Event listeners for navigation
 document.getElementById("prev-project").addEventListener("click", () => {
   if (currentBaseProjectIndex > 0) {
     currentBaseProjectIndex--;

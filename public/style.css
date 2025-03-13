@@ -123,19 +123,19 @@ html {
 }
 
 .ol-control.ol-storymap {
-  top: 120px;
+  top: 250px;
   left: 20px;
   bottom: 0.5em;
   max-width: 100%;
   border-radius: 0.5em;
-  height: 630px;
+  height: 275px;
   background-color: rgba(255, 255, 255, 0.8);
 }
 
 #story img {
   display: block;
   margin: auto;
-  max-width: 80%;
+  max-width: 70%;
   z-index: 10000;
 }
 #story .chapter.ol-select {
@@ -1158,14 +1158,16 @@ html {
   border-radius: 5px;
   margin-bottom: 8px;
   display: flex;
+  background-color: whitesmoke;
   align-items: center;
 }
 
+/* Style généraux pour les icônes */
 .project-section i {
-  width: 30px;
-  height: 30px;
+  width: 40px;
+  height: 40px;
   border-radius: 50%;
-  background-color: #007bff;
+  background-color: #007bff; /* Couleur par défaut pour les icônes */
   color: white;
   display: flex;
   justify-content: center;
@@ -1173,12 +1175,60 @@ html {
   margin-right: 10px;
 }
 
-/* Adjusting icon size */
+/* Ajustement de la taille des icônes */
 .project-section i.fas {
-  font-size: 16px;
+  font-size: 22px;
 }
 
-/* Layout adjustments */
+/* Couleurs spécifiques aux icônes en fonction de leur thème */
+
+/* Sigle */
+.project-sigle i {
+  background-color: #f39c12; /* Orange */
+}
+
+/* Dates */
+.project-dates i {
+  background-color: #2980b9; /* Bleu */
+}
+
+/* Budget */
+.project-budget i {
+  background-color: #e74c3c; /* Rouge */
+}
+
+/* Bailleur */
+.project-bailleur i {
+  background-color: #8e44ad; /* Violet */
+}
+
+/* Objectif global */
+.project-objective i {
+  background-color: #27ae60; /* Vert */
+}
+
+/* Cible */
+.project-target i {
+  background-color: #f1c40f; /* Jaune */
+}
+
+/* Sites d'intervention */
+.project-sites i {
+  background-color: #1abc9c; /* Cyan */
+}
+
+/* Statut */
+.project-status i {
+  background-color: #3498db; /* Bleu clair */
+}
+
+/* Réalisations */
+.project-achievements i {
+  background-color: #9b59b6; /* Pourpre */
+}
+
+/* Ajustements de la mise en page */
+
 .project-name, .project-sigle {
   font-weight: bold;
 }
@@ -1197,6 +1247,7 @@ html {
   margin-left: 20px;
   font-size: 13px;
 }
+
 
 /* Navigation Styling */
 #project-navigation {

@@ -135,7 +135,7 @@ html {
 #story img {
   display: block;
   margin: auto;
-  max-width: 100%;
+  max-width: 80%;
   z-index: 10000;
 }
 #story .chapter.ol-select {
@@ -1152,51 +1152,50 @@ html {
   font-weight: bold;
 }
 
-/* Project Details Styling */
+/* Removing section background colors */
 .project-section {
   padding: 10px;
   border-radius: 5px;
   margin-bottom: 8px;
+  display: flex;
+  align-items: center;
 }
 
-.project-name {
-  background-color: #eaf8e6; /* Green for project name */
+.project-section i {
+  width: 30px;
+  height: 30px;
+  border-radius: 50%;
+  background-color: #007bff;
+  color: white;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-right: 10px;
 }
 
-.project-sigle {
-  background-color: #fbe7c6; /* Light orange for sigle */
+/* Adjusting icon size */
+.project-section i.fas {
+  font-size: 16px;
+}
+
+/* Layout adjustments */
+.project-name, .project-sigle {
+  font-weight: bold;
 }
 
 .project-dates {
-  background-color: #e6effb; /* Light blue for dates */
+  display: flex;
+  justify-content: space-between;
 }
 
-.project-budget {
-  background-color: #ffe4e4; /* Light red for budget */
+.project-objective, .project-target, .project-sites, .project-achievements {
+  margin-top: 5px;
 }
 
-.project-bailleur {
-  background-color: #f3e5f5; /* Lavender for bailleur */
-}
-
-.project-objective {
-  background-color: #e8f5e9; /* Light green for objective */
-}
-
-.project-target {
-  background-color: #fefae0; /* Beige for target */
-}
-
-.project-sites {
-  background-color: #e0f7fa; /* Cyan for sites */
-}
-
-.project-status {
-  background-color: #ffecb3; /* Yellow for status */
-}
-
-.project-achievements {
-  background-color: #d7ffd9; /* Pale green for achievements */
+.project-achievements ul, .project-objective ul, .project-target ul, .project-sites ul {
+  list-style-type: disc;
+  margin-left: 20px;
+  font-size: 13px;
 }
 
 /* Navigation Styling */
@@ -1240,20 +1239,6 @@ html {
   color: #333;
 }
 
-#base-projects-popup #popup-footer {
-  display: none;
-
-}
-
-.chapter {
-  transition: background-color 0.3s ease, transform 0.3s ease;
-}
-
-.chapter.active-chapter {
-  background-color: rgba(255, 165, 0, 0.2); /* Light orange highlight */
-  transform: scale(1.02); /* Slight zoom effect */
-  border-left: 4px solid #ffa500; /* CARE's primary orange color */
-}
 
 
 

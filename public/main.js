@@ -1170,24 +1170,25 @@ function displayPopup(baseName) {
   setTimeout(() => (basePopup.style.opacity = 1), 10);
 }
 
+// Update project details in the popup
 function updateBaseProjectDetails() {
-  if (!currentBaseProjects.length) return;
-
   const project = currentBaseProjects[currentBaseProjectIndex];
   if (!project) return;
 
-  document.getElementById("project-name").textContent = project.nom_projet || "Non spécifié";
-  document.getElementById("project-sigle").textContent = project.sigle_projet || "Non spécifié";
-  document.getElementById("project-start-date").textContent = project.date_debut || "Non spécifié";
-  document.getElementById("project-end-date").textContent = project.date_fin || "Non spécifié";
-  document.getElementById("project-budget").textContent = project.budget_projet || "Non spécifié";
-  document.getElementById("project-bailleur").textContent = project.bailleur || "Non spécifié";
-  document.getElementById("project-objective").textContent = project.objectif_global || "Non spécifié";
-  document.getElementById("project-target").textContent = project.cible || "Non spécifié";
-  document.getElementById("project-sites").textContent = project.site_intervention || "Non spécifié";
-  document.getElementById("project-status").textContent = project.statut || "Non spécifié";
-  document.getElementById("project-achievements").textContent = project.realisations || "Non spécifié";
+  // Update project details in the popup
+  document.getElementById("project-name").textContent = project.nom_projet;
+  document.getElementById("project-sigle").textContent = project.sigle_projet;
+  document.getElementById("project-start-date").textContent = project.date_debut;
+  document.getElementById("project-end-date").textContent = project.date_fin;
+  document.getElementById("project-budget").textContent = project.budget_projet;
+  document.getElementById("project-bailleur").textContent = project.bailleur;
+  document.getElementById("project-objective").innerHTML = formatList(project.objectif_global);
+  document.getElementById("project-target").innerHTML = formatList(project.cible);
+  document.getElementById("project-sites").innerHTML = formatList(project.site_intervention);
+  document.getElementById("project-status").textContent = project.statut;
+  document.getElementById("project-achievements").innerHTML = formatList(project.realisations);
 
+  // Update project counter
   document.getElementById("project-counter").textContent = 
     `Projet N°${currentBaseProjectIndex + 1}/${currentBaseProjects.length}`;
 
@@ -1196,13 +1197,27 @@ function updateBaseProjectDetails() {
   const navigation = document.getElementById("project-navigation");
 
   if (currentBaseProjects.length === 1) {
+    // Hide navigation if only one project
     navigation.style.display = "none";
   } else {
+    // Show navigation and manage button states
     navigation.style.display = "flex";
     prevButton.style.display = currentBaseProjectIndex === 0 ? "none" : "block";
-    nextButton.style.display = currentBaseProjectIndex === currentBaseProjects.length - 1 ? "none" : "block";
+    nextButton.style.display =
+      currentBaseProjectIndex === currentBaseProjects.length - 1
+        ? "none"
+        : "block";
   }
 }
+
+// Function to format lists with bullet points
+function formatList(text) {
+  if (!text) return '';
+  // Split by comma or semicolon and return as bullet points
+  const items = text.split(/[;,]\s*/).map(item => `<li>${item}</li>`).join('');
+  return `<ul>${items}</ul>`;
+}
+
 
 document.getElementById("prev-project").addEventListener("click", () => {
   if (currentBaseProjectIndex > 0) {

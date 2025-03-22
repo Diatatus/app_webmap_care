@@ -1,0 +1,33 @@
+version: '3.8'
+
+services:
+  app:
+    build: .
+    ports:
+      - "3000:3000"
+    depends_on:
+      - db
+    environment:
+      PGHOST: db
+      PGUSER: postgres
+      PGPASSWORD: motdepasse
+      PGDATABASE: care_db
+      PGPORT: 5432
+    volumes:
+      - .:/app
+    restart: unless-stopped
+
+  db:
+    image: postgis/postgis:15-3.3  # PostgreSQL 15 + PostGIS 3.3
+    restart: always
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: motdepasse
+      POSTGRES_DB: care_db
+    ports:
+      - "5432:5432"
+    volumes:
+      - db-data:/var/lib/postgresql/data
+
+volumes:
+  db-data:

@@ -10,7 +10,7 @@ services:
     environment:
       PGHOST: db
       PGUSER: postgres
-      PGPASSWORD: motdepasse
+      PGPASSWORD: geopass
       PGDATABASE: care_db
       PGPORT: 5432
     volumes:
@@ -22,12 +22,13 @@ services:
     restart: always
     environment:
       POSTGRES_USER: postgres
-      POSTGRES_PASSWORD: motdepasse
+      POSTGRES_PASSWORD: geopass
       POSTGRES_DB: care_db
     ports:
       - "5432:5432"
     volumes:
       - db-data:/var/lib/postgresql/data
+      - ./public/resources/Backup_BD:/backup
 
 volumes:
   db-data:

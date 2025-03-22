@@ -5,7 +5,7 @@ const pool = new Pool({
   user: "postgres", // Nom d'utilisateur PostgreSQL
   host: "db", // Hôte de votre base de données
   database: "care_db", // Nom de votre base de données
-  password: "motdepasse", // Mot de passe PostgreSQL
+  password: "geopass", // Mot de passe PostgreSQL
   port: 5432, // Port par défaut pour PostgreSQL
 });
 

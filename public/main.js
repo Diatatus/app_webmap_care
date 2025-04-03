@@ -160,7 +160,7 @@ var worldMapLayer = new ol.layer.Vector({
         color: [255, 128, 0],
       }),
       fill: new ol.style.Fill({
-        color: [50, 50, 50, 0.8],
+        color: [50, 50, 50, 0.3],
       }),
     });
   },

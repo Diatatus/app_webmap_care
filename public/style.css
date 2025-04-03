@@ -129,6 +129,7 @@ html {
   max-width: 100%;
   border-radius: 0.5em;
   height: 275px;
+  text-size-adjust: 5;
   background-color: rgba(255, 255, 255, 0.8);
 }
 
@@ -141,6 +142,14 @@ html {
 #story .chapter.ol-select {
   background-color: rgba(255, 255, 255, 0.8);
 }
+
+#story h3 {
+  font-size: 1.6em;
+}
+#story p {
+  font-size: 1em;
+}
+
 
 /* Hide story div for tablets with a resolution of 768x1024 */
 @media (max-width: 1440px) {
@@ -159,6 +168,12 @@ html {
     top: 150%;
     left: 150%;
     padding: 10px;
+  }
+  #story h3 {
+    font-size: 1.4em;
+  }
+  #story p {
+    font-size: 0.95em;
   }
   #story img {
     display: block;
@@ -184,6 +199,12 @@ html {
     left: 150%;
     padding: 10px;
   }
+  #story h3 {
+    font-size: 1.3em;
+  }
+  #story p {
+    font-size: 0.9em;
+  }
   #story img {
     display: block;
     margin: auto;
@@ -208,6 +229,12 @@ html {
     left: 150%;
     padding: 10px;
   }
+  #story h3 {
+    font-size: 1.2em;
+  }
+  #story p {
+    font-size: 0.9em;
+  }
   #story img {
     display: block;
     margin: auto;
@@ -230,6 +257,12 @@ html {
     top: 150%;
     left: 150%;
     padding: 10px;
+  }
+  #story h3 {
+    font-size: 1.1em;
+  }
+  #story p {
+    font-size: 0.85em;
   }
   #story img {
     display: block;
@@ -256,6 +289,12 @@ html {
     left: auto;
     padding: 10px;
   }
+  #story h3 {
+    font-size: 1em;
+  }
+  #story p {
+    font-size: 0.8em;
+  }
   #story img {
     display: block;
     margin: auto;
@@ -266,11 +305,11 @@ html {
 @media (max-width: 360px) {
   .ol-control.ol-storymap {
     top: 350px;
-    left: 20px;
+    left: 18px;
     bottom: 0.5em;
     max-width: 100%;
     border-radius: 0.5em;
-    height: 340px;
+    height: 220px;
     background-color: rgba(255, 255, 255, 0.5);
   }
   #story {
@@ -279,6 +318,12 @@ html {
     top: auto;
     left: auto;
     padding: 10px;
+  }
+  #story h3 {
+    font-size: 0.95em;
+  }
+  #story p {
+    font-size: 0.75em;
   }
   #story img {
     display: block;

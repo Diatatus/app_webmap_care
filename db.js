@@ -2,11 +2,11 @@ const { Pool } = require("pg");
 
 // Configuration de la connexion
 const pool = new Pool({
-  user: "postgres", // Nom d'utilisateur PostgreSQL
-  host: "db", // Hôte de votre base de données
-  database: "care_db", // Nom de votre base de données
-  password: "geopass", // Mot de passe PostgreSQL
-  port: 5432, // Port par défaut pour PostgreSQL
+  user: "postgres", 
+  host: "localhost", 
+  database: "bd_care_app", 
+  password: "geopass", 
+  port: 5432, 
 });
 
 // Connexion à la base de données
@@ -16,7 +16,7 @@ pool.connect((err, client, release) => {
   }
   console.log("Connexion réussie à la base de données");
 
-  // Exemple de requête simple pour vérifier la connexion
+ 
   client.query("SELECT NOW()", (err, result) => {
     release();
     if (err) {

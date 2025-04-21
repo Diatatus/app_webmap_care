@@ -2,7 +2,7 @@ const express = require("express");
 const app = express();
 const cors = require("cors");
 const path = require("path");
-const pool = require("./db.js"); // Importation du module de connexion à la base de données
+const pool = require("./db.js"); 
 const session = require("express-session");
 require("dotenv").config();
 
@@ -12,10 +12,10 @@ const PORT = process.env.PORT || 3000;
 
 // Middleware pour les sessions
 app.use(session({
-  secret: "careprojectpass2025",  // Remplacez par une clé sécurisée en production
+  secret: "careprojectpass2025",  
   resave: false,
   saveUninitialized: false,
-  cookie: { secure: false }     // En production, activez HTTPS et mettez secure: true
+  cookie: { secure: false }     
 }));
 
 app.use(cors());

@@ -108,7 +108,7 @@ html {
 }
 
 .ol-zoom {
-  left: auto;
+  right: auto;
   right: 0.5em;
   z-index: 0;
 }
@@ -597,8 +597,8 @@ html {
 /* Positioning the custom zoom controls */
 #zoom-controls {
   position: absolute;
-  top: 300px; /* Distance from the top */
-  right: 20px; /* Distance from the right side */
+  top: 80px; /* Distance from the top */
+  left: 20px; /* Distance from the right side */
   display: flex;
   flex-direction: column;
   gap: 10px; /* Space between the zoom in and zoom out buttons */

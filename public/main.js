@@ -73,7 +73,7 @@ var osm = new ol.layer.Tile({
   source: new ol.source.OSM(),
   visible: true,
   name: "OSM",
-  opacity: 0.5,
+  opacity: 0.6,
 });
 
 map.addLayer(osm);

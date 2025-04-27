@@ -160,14 +160,14 @@
       <div
         class="chapter"
         name="YAOUNDE"
-        data-lon="11.55165"
-        data-lat="3.88487"
+        data-lon="11.50019"
+        data-lat="3.89854"
         data-zoom="10"
         data-animation="flyto">
         <h3>Yaoundé (Bureaux de coordination)</h3>
         <img
           data-title="Yaoundé"
-          src="./resources/images/bases/Centre-Sud-Est.png" />
+          src="./resources/images/bases/Yaounde.jpeg" />
         <p></p>
       </div>
       <div
@@ -345,89 +345,42 @@
     <button id="base-popup-close-btn" class="popup-close-btn">&times;</button>
   </div>
 
-  <!-- Navigation for Multiple Projects -->
-  <div id="project-navigation">
-    <button id="prev-project" class="nav-arrow">
-      <i class="fas fa-arrow-left"></i>
-    </button>
-    <span id="project-counter">1/n</span>
-    <button id="next-project" class="nav-arrow">
-      <i class="fas fa-arrow-right"></i>
-    </button>
+  <!-- --- VUE LISTE --- -->
+  <div id="project-list-view">
+    <!-- Filtre de statut -->
+    <div class="filter-container">
+      <label for="status-filter"><strong>Filtrer :</strong></label>
+      <select id="status-filter">
+        <option value="all">Tous</option>
+        <option value="En cours">En cours</option>
+        <option value="Cloturé">Clôturé</option>
+      </select>
+    </div>
+
+    <!-- Liste des projets -->
+    <ul id="project-list" class="project-list"></ul>
   </div>
 
-  <div id="base-popup-info" class="popup-info">
-    <!-- Project Details -->
+  <!-- --- VUE DÉTAIL --- -->
+  <div id="project-detail-view" class="hidden">
+    <button id="back-to-list" class="back-btn">← Retour à la liste</button>
     <div id="project-details">
-      <div class="project-section project-name">
-        <h3>
-          
-          <strong> <span id="project-name"></span></strong>
-        </h3>
-      </div>
-      <div class="project-section project-sigle">
-        <p>
-          <i class="fas fa-tag"></i>
-          <strong>Sigle :</strong> <span id="project-sigle"></span>
-        </p>
-      </div>
-      <div class="project-section project-dates">
-        <p>
-          <i class="fas fa-calendar-alt"></i>
-          <strong>Date de Début :</strong> <span id="project-start-date"></span>
-        </p>
-        <p>
-          <i class="fas fa-calendar-check"></i>
-          <strong>Date de Fin :</strong> <span id="project-end-date"></span>
-        </p>
-      </div>
-      <div class="project-section project-budget">
-        <p>
-          <i class="fas fa-money-bill-wave"></i>
-          <strong>Budget :</strong> <span id="project-budget"></span>
-        </p>
-      </div>
-      <div class="project-section project-bailleur">
-        <p>
-          <i class="fas fa-handshake"></i>
-          <strong>Bailleur :</strong> <span id="project-bailleur"></span>
-        </p>
-      </div>
-      <div class="project-section project-objective">
-        <p>
-          <i class="fas fa-bullseye"></i>
-          <strong>Objectif Global :</strong> <span id="project-objective"></span>
-        </p>
-      </div>
-      <div class="project-section project-target">
-        <p>
-          <i class="fas fa-users"></i>
-          <strong>Cible :</strong> <span id="project-target"></span>
-        </p>
-      </div>
-      <div class="project-section project-sites">
-        <p>
-          <i class="fas fa-map-marker-alt"></i>
-          <strong>Sites d'Intervention :</strong>
-          <span id="project-sites"></span>
-        </p>
-      </div>
-      <div class="project-section project-status">
-        <p>
-          <i class="fas fa-info-circle"></i>
-          <strong>Statut :</strong> <span id="project-status"></span>
-        </p>
-      </div>
-      <div class="project-section project-achievements">
-        <p>
-          <i class="fas fa-award"></i>
-          <strong>Réalisations :</strong>
-          <span id="project-achievements"></span>
-        </p>
-      </div>
+      <!-- On reprend ici ton contenu détail existant -->
+      <h3><strong><span id="detail-project-name"></span></strong></h3>
+      <p><i class="fas fa-tag"></i><strong>Sigle :</strong> <span id="detail-project-sigle"></span></p>
+      <p><i class="fas fa-calendar-alt"></i><strong>Date de Début :</strong> <span id="detail-project-start-date"></span></p>
+      <p><i class="fas fa-calendar-check"></i><strong>Date de Fin :</strong> <span id="detail-project-end-date"></span></p>
+      <p><i class="fas fa-money-bill-wave"></i><strong>Budget :</strong> <span id="detail-project-budget"></span></p>
+      <p><i class="fas fa-handshake"></i><strong>Bailleur :</strong> <span id="detail-project-bailleur"></span></p>
+      <p><i class="fas fa-bullseye"></i><strong>Objectif Global :</strong> <ul id="detail-project-objective"></ul></p>
+      <p><i class="fas fa-users"></i><strong>Cible :</strong> <ul id="detail-project-target"></ul></p>
+      <p><i class="fas fa-map-marker-alt"></i><strong>Sites :</strong> <ul id="detail-project-sites"></ul></p>
+      <p><i class="fas fa-info-circle"></i><strong>Statut :</strong> <span id="detail-project-status"></span></p>
+      <p><i class="fas fa-award"></i><strong>Réalisations :</strong> <ul id="detail-project-achievements"></ul></p>
     </div>
   </div>
 </div>
+
 
 
     <!-- Popup Information Partenaire -->

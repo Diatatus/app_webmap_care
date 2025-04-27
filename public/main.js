@@ -1136,6 +1136,7 @@ const baseProjectsCache = {}; // Cache pour les données chargées
 let currentBaseProjects = [];
 let currentBaseProjectIndex = 0;
 
+
 function showBaseProjectsPopup(baseFeature) {
   const baseId = baseFeature.get("id_base");
   const baseName = baseFeature.get("nom_base");
@@ -1158,57 +1159,120 @@ function showBaseProjectsPopup(baseFeature) {
   }
 }
 
+// Nouveaux états
+let filteredProjects = [];
+let viewMode = 'list'; // 'list' ou 'detail'
+
+// Récupération des éléments
+const statusFilter = document.getElementById('status-filter');
+const projectListEl = document.getElementById('project-list');
+const listView = document.getElementById('project-list-view');
+const detailView = document.getElementById('project-detail-view');
+const backBtn = document.getElementById('back-to-list');
+
+// Elements détail
+const detailName = document.getElementById('detail-project-name');
+// … pareil pour les autres : detail-project-sigle, etc.
+const detailSigle = document.getElementById('detail-project-sigle');
+const detailStart = document.getElementById('detail-project-start-date');
+const detailEnd = document.getElementById('detail-project-end-date');
+const detailBudget = document.getElementById('detail-project-budget');
+const detailBailleur = document.getElementById('detail-project-bailleur');
+const detailObjective = document.getElementById('detail-project-objective');
+const detailTarget = document.getElementById('detail-project-target');
+const detailSites = document.getElementById('detail-project-sites');
+const detailStatus = document.getElementById('detail-project-status');
+const detailAchievements = document.getElementById('detail-project-achievements');
+
+// Gestion du filtre
+statusFilter.addEventListener('change', () => {
+  applyFilter();
+  renderProjectList();
+});
+
+function applyFilter() {
+  const statut = statusFilter.value;
+  if (statut === 'all') {
+    filteredProjects = [...currentBaseProjects];
+  } else {
+    filteredProjects = currentBaseProjects.filter(p => p.statut === statut);
+  }
+}
+
+// Affiche la liste initiale
+function renderProjectList() {
+  projectListEl.innerHTML = '';
+  if (!filteredProjects.length) {
+    projectListEl.innerHTML = '<li>Aucun projet trouvé.</li>';
+    return;
+  }
+  filteredProjects.forEach((p, idx) => {
+    const li = document.createElement('li');
+    li.innerHTML = `
+      <span>${p.nom_projet}</span>
+      <span class="status-badge">${p.statut}</span>
+    `;
+    li.addEventListener('click', () => showProjectDetail(idx));
+    projectListEl.appendChild(li);
+  });
+}
+
+// Bascule vers la vue détail
+function showProjectDetail(index) {
+  viewMode = 'detail';
+  listView.classList.add('hidden');
+  detailView.classList.remove('hidden');
+
+  const p = filteredProjects[index];
+  detailName.textContent = p.nom_projet;
+  detailSigle.textContent = p.sigle_projet;
+  detailStart.textContent = p.date_debut;
+  detailEnd.textContent = p.date_fin;
+  detailBudget.textContent = p.budget_projet;
+  detailBailleur.textContent = p.bailleur;
+  detailStatus.textContent = p.statut;
+
+  // fonctions utilitaires pour remplir les UL
+  fillList(detailObjective, p.objectif_global);
+  fillList(detailTarget, p.cible);
+  fillList(detailSites, p.site_intervention);
+  fillList(detailAchievements, p.realisations);
+}
+
+// Remplit une <ul> à partir d’un texte séparé
+function fillList(ulEl, text) {
+  ulEl.innerHTML = '';
+  if (!text) return;
+  text.split(/[;,]\s*/).forEach(item => {
+    const li = document.createElement('li');
+    li.textContent = item;
+    ulEl.appendChild(li);
+  });
+}
+
+// Bouton Retour
+backBtn.addEventListener('click', () => {
+  viewMode = 'list';
+  detailView.classList.add('hidden');
+  listView.classList.remove('hidden');
+});
+
+// On intègre tout ça dans displayPopup()
 function displayPopup(baseName) {
   if (!currentBaseProjects.length) return;
 
   document.getElementById("base-name").textContent = baseName;
   currentBaseProjectIndex = 0;
-  updateBaseProjectDetails();
+ 
 
   const basePopup = document.getElementById("base-projects-popup");
   basePopup.style.display = "block";
   setTimeout(() => (basePopup.style.opacity = 1), 10);
+  applyFilter();          // initialise filteredProjects
+  renderProjectList();    // affiche la liste
 }
 
-// Update project details in the popup
-function updateBaseProjectDetails() {
-  const project = currentBaseProjects[currentBaseProjectIndex];
-  if (!project) return;
 
-  // Update project details in the popup
-  document.getElementById("project-name").textContent = project.nom_projet;
-  document.getElementById("project-sigle").textContent = project.sigle_projet;
-  document.getElementById("project-start-date").textContent = project.date_debut;
-  document.getElementById("project-end-date").textContent = project.date_fin;
-  document.getElementById("project-budget").textContent = project.budget_projet;
-  document.getElementById("project-bailleur").textContent = project.bailleur;
-  document.getElementById("project-objective").innerHTML = formatList(project.objectif_global);
-  document.getElementById("project-target").innerHTML = formatList(project.cible);
-  document.getElementById("project-sites").innerHTML = formatList(project.site_intervention);
-  document.getElementById("project-status").textContent = project.statut;
-  document.getElementById("project-achievements").innerHTML = formatList(project.realisations);
-
-  // Update project counter
-  document.getElementById("project-counter").textContent = 
-    `Projet N°${currentBaseProjectIndex + 1}/${currentBaseProjects.length}`;
-
-  const prevButton = document.getElementById("prev-project");
-  const nextButton = document.getElementById("next-project");
-  const navigation = document.getElementById("project-navigation");
-
-  if (currentBaseProjects.length === 1) {
-    // Hide navigation if only one project
-    navigation.style.display = "none";
-  } else {
-    // Show navigation and manage button states
-    navigation.style.display = "flex";
-    prevButton.style.display = currentBaseProjectIndex === 0 ? "none" : "block";
-    nextButton.style.display =
-      currentBaseProjectIndex === currentBaseProjects.length - 1
-        ? "none"
-        : "block";
-  }
-}
 
 // Function to format lists with bullet points
 function formatList(text) {
@@ -1219,19 +1283,6 @@ function formatList(text) {
 }
 
 
-document.getElementById("prev-project").addEventListener("click", () => {
-  if (currentBaseProjectIndex > 0) {
-    currentBaseProjectIndex--;
-    updateBaseProjectDetails();
-  }
-});
-
-document.getElementById("next-project").addEventListener("click", () => {
-  if (currentBaseProjectIndex < currentBaseProjects.length - 1) {
-    currentBaseProjectIndex++;
-    updateBaseProjectDetails();
-  }
-});
 
 
 // Close popup

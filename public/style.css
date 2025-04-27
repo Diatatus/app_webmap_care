@@ -1197,6 +1197,51 @@ html {
   font-weight: bold;
 }
 
+/* Masquer la vue détail par défaut */
+.hidden {
+  display: none;
+}
+
+/* Liste de projets */
+.project-list {
+  list-style: none;
+  padding: 0;
+  margin: 10px 0;
+}
+.project-list li {
+  padding: 8px;
+  border-bottom: 1px solid #ddd;
+  cursor: pointer;
+  display: flex;
+  justify-content: space-between;
+}
+.project-list li:hover {
+  background: #f0f0f0;
+}
+
+/* Filtre */
+.filter-container {
+  margin: 10px 0;
+}
+#status-filter {
+  margin-left: 5px;
+  padding: 4px;
+}
+
+/* Bouton retour */
+.back-btn {
+  background: transparent;
+  border: none;
+  font-size: 14px;
+  margin-bottom: 10px;
+  cursor: pointer;
+  color: #007bff;
+}
+.back-btn:hover {
+  text-decoration: underline;
+}
+
+
 /* Removing section background colors */
 .project-section {
   padding: 10px;

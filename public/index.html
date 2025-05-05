@@ -178,7 +178,7 @@
         data-zoom="10"
         data-animation="flyto">
         <h3>Douala</h3>
-        <img data-title="Douala" src="" />
+        <img data-title="Douala" src="./resources/images/bases/Douala.jpeg" />
         <p></p>
         <div class="ol-scroll-top"><span></span></div>
       </div>
@@ -349,13 +349,17 @@
   <div id="project-list-view">
     <!-- Filtre de statut -->
     <div class="filter-container">
-      <label for="status-filter"><strong>Filtrer :</strong></label>
+      <label for="status-filter">
+        <strong>Réalisations</strong>
+      </label>
       <select id="status-filter">
         <option value="all">Tous</option>
         <option value="En cours">En cours</option>
         <option value="Cloturé">Clôturé</option>
       </select>
+      <i class="fas fa-filter"></i>
     </div>
+    
 
     <!-- Liste des projets -->
     <ul id="project-list" class="project-list"></ul>
@@ -363,22 +367,42 @@
 
   <!-- --- VUE DÉTAIL --- -->
   <div id="project-detail-view" class="hidden">
-    <button id="back-to-list" class="back-btn">← Retour à la liste</button>
+    <button id="back-to-list" class="back-btn">
+      <i class="fas fa-arrow-left"></i> Retour à la liste
+    </button>
+  
     <div id="project-details">
-      <!-- On reprend ici ton contenu détail existant -->
-      <h3><strong><span id="detail-project-name"></span></strong></h3>
-      <p><i class="fas fa-tag"></i><strong>Sigle :</strong> <span id="detail-project-sigle"></span></p>
-      <p><i class="fas fa-calendar-alt"></i><strong>Date de Début :</strong> <span id="detail-project-start-date"></span></p>
-      <p><i class="fas fa-calendar-check"></i><strong>Date de Fin :</strong> <span id="detail-project-end-date"></span></p>
-      <p><i class="fas fa-money-bill-wave"></i><strong>Budget :</strong> <span id="detail-project-budget"></span></p>
-      <p><i class="fas fa-handshake"></i><strong>Bailleur :</strong> <span id="detail-project-bailleur"></span></p>
-      <p><i class="fas fa-bullseye"></i><strong>Objectif Global :</strong> <ul id="detail-project-objective"></ul></p>
-      <p><i class="fas fa-users"></i><strong>Cible :</strong> <ul id="detail-project-target"></ul></p>
-      <p><i class="fas fa-map-marker-alt"></i><strong>Sites :</strong> <ul id="detail-project-sites"></ul></p>
-      <p><i class="fas fa-info-circle"></i><strong>Statut :</strong> <span id="detail-project-status"></span></p>
-      <p><i class="fas fa-award"></i><strong>Réalisations :</strong> <ul id="detail-project-achievements"></ul></p>
+      <h3 id="detail-project-name" class="project-title"></h3>
+  
+      <div class="project-section"><i class="fas fa-tag"></i><span><strong>Sigle :</strong> <span id="detail-project-sigle"></span></span></div>
+      <div class="project-section project-dates">
+        <div class="project-section">
+          <i class="fas fa-calendar-alt"></i>
+          <span><strong>Date de Début :</strong> <span id="detail-project-start-date"></span></span>
+        </div>
+        <div class="project-section">
+          <i class="fas fa-calendar-check"></i>
+          <span><strong>Date de Fin :</strong> <span id="detail-project-end-date"></span></span>
+        </div>
+      </div>
+      
+      <div class="project-section"><i class="fas fa-money-bill-wave"></i><span><strong>Budget :</strong> <span id="detail-project-budget"></span></span></div>
+      <div class="project-section"><i class="fas fa-handshake"></i><span><strong>Bailleur :</strong> <span id="detail-project-bailleur"></span></span></div>
+      <div class="project-section"><i class="fas fa-bullseye"></i><span><strong>Objectif Global :</strong><ul id="detail-project-objective"></ul></span></div>
+      <div class="project-section"><i class="fas fa-users"></i><span><strong>Cible :</strong><ul id="detail-project-target"></ul></span></div>
+      <div class="project-section"><i class="fas fa-map-marker-alt"></i><span><strong>Sites :</strong><ul id="detail-project-sites"></ul></span></div>
+      <div class="project-section"><i class="fas fa-info-circle"></i><span><strong>Statut :</strong> <span id="detail-project-status"></span></span></div>
+      <div class="project-section"><i class="fas fa-award"></i><span><strong>Réalisations :</strong><ul id="detail-project-achievements"></ul></span></div>
+  
+      <div class="project-section">
+        <i class="fas fa-images"></i>
+        <span><strong>Photos :</strong>
+          <div id="project-photo-gallery" class="photo-gallery"></div>
+        </span>
+      </div>
     </div>
   </div>
+  
 </div>
 
 

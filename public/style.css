@@ -1172,7 +1172,6 @@ html {
   color: #e55b00;
 }
 
-/* General Popup Styling */
 #base-projects-popup {
   position: absolute;
   display: none;
@@ -1180,46 +1179,32 @@ html {
   box-shadow: 0px 4px 8px rgba(0, 0, 0, 1);
   border-radius: 8px;
   max-width: 400px;
+  max-height: 90vh;
   padding: 15px;
   font-family: Arial, sans-serif;
-  font-size: 14px;
+  font-size: 13px;
   opacity: 0;
   transition: opacity 0.3s ease-in-out;
   z-index: 10000;
+  overflow-y: auto;
 }
 
 #base-popup-header {
   display: flex;
   justify-content: space-between;
   align-items: center;
+  position: sticky;
+  z-index: 10;
+  top: 0;
   padding-bottom: 10px;
   border-bottom: 1px solid #ccc;
   font-weight: bold;
 }
 
-/* Masquer la vue détail par défaut */
 .hidden {
   display: none;
 }
 
-/* Liste de projets */
-.project-list {
-  list-style: none;
-  padding: 0;
-  margin: 10px 0;
-}
-.project-list li {
-  padding: 8px;
-  border-bottom: 1px solid #ddd;
-  cursor: pointer;
-  display: flex;
-  justify-content: space-between;
-}
-.project-list li:hover {
-  background: #f0f0f0;
-}
-
-/* Filtre */
 .filter-container {
   margin: 10px 0;
 }
@@ -1227,158 +1212,138 @@ html {
   margin-left: 5px;
   padding: 4px;
 }
+.filter-container i.fas.fa-filter {
+  margin-right: 5px;
+  color: #007bff;
+}
 
-/* Bouton retour */
+.project-list {
+  list-style: none;
+  padding: 0;
+  overflow-y: auto;
+  margin: 10px 0;
+}
+.project-list li {
+  padding: 6px 8px;
+  border-bottom: 1px solid #eee;
+  cursor: pointer;
+  display: flex;
+  align-items: flex-start;
+  transition: background-color 0.2s ease, box-shadow 0.2s ease;
+  font-size: 16px;
+}
+.project-list li:hover {
+  background-color: #f9f9f9;
+  box-shadow: 0px 1px 4px rgba(0, 0, 0, 0.1);
+}
+.status-icon-wrapper {
+  width: 24px;
+  margin-top: 3px;
+  margin-right: 8px;
+}
+.project-title {
+  font-weight: bold;
+  font-size: 13px;
+}
+
 .back-btn {
-  background: transparent;
+  background: none;
   border: none;
-  font-size: 14px;
+  font-size: 13px;
   margin-bottom: 10px;
   cursor: pointer;
   color: #007bff;
+  display: flex;
+  align-items: center;
+  gap: 5px;
 }
 .back-btn:hover {
   text-decoration: underline;
 }
 
-
-/* Removing section background colors */
-.project-section {
-  padding: 10px;
-  border-radius: 5px;
-  margin-bottom: 8px;
-  display: flex;
-  background-color: whitesmoke;
-  align-items: center;
+#project-detail-view {
+  max-height: 500px;
+  overflow-y: auto;
+  padding-right: 5px;
 }
 
-/* Style généraux pour les icônes */
+.project-section {
+  display: flex;
+  align-items: flex-start;
+  margin-bottom: 10px;
+  font-size: 13px;
+  gap: 10px;
+}
 .project-section i {
-  width: 40px;
-  height: 40px;
+  flex-shrink: 0;
+  width: 36px;
+  height: 36px;
   border-radius: 50%;
-  background-color: #007bff; /* Couleur par défaut pour les icônes */
+  font-size: 20px;
   color: white;
   display: flex;
   justify-content: center;
   align-items: center;
-  margin-right: 10px;
 }
 
-/* Ajustement de la taille des icônes */
-.project-section i.fas {
-  font-size: 22px;
+.project-section i.fa-tag { background-color: #f39c12; }
+.project-section i.fa-calendar-alt,
+.project-section i.fa-calendar-check { background-color: #2980b9; }
+.project-section i.fa-money-bill-wave { background-color: #e74c3c; }
+.project-section i.fa-handshake { background-color: #8e44ad; }
+.project-section i.fa-bullseye { background-color: #27ae60; }
+.project-section i.fa-users { background-color: #f1c40f; color: black; }
+.project-section i.fa-map-marker-alt { background-color: #1abc9c; }
+.project-section i.fa-info-circle { background-color: #3498db; }
+.project-section i.fa-award { background-color: #9b59b6; }
+.project-section i.fa-images { background-color: #34495e; }
+
+.project-section ul {
+  margin: 5px 0 0 15px;
+  padding: 0;
+  list-style-type: disc;
 }
 
-/* Couleurs spécifiques aux icônes en fonction de leur thème */
-
-/* Sigle */
-.project-sigle i {
-  background-color: #f39c12; /* Orange */
+.project-photos {
+  margin-top: 10px;
 }
 
-/* Dates */
-.project-dates i {
-  background-color: #2980b9; /* Bleu */
+.photo-gallery {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(100px, 1fr));
+  gap: 8px;
+  margin-top: 6px;
 }
-
-/* Budget */
-.project-budget i {
-  background-color: #e74c3c; /* Rouge */
+.project-photo {
+  width: 100%;
+  height: 80px;
+  object-fit: cover;
+  border-radius: 4px;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+  transition: transform 0.2s ease;
 }
-
-/* Bailleur */
-.project-bailleur i {
-  background-color: #8e44ad; /* Violet */
-}
-
-/* Objectif global */
-.project-objective i {
-  background-color: #27ae60; /* Vert */
-}
-
-/* Cible */
-.project-target i {
-  background-color: #f1c40f; /* Jaune */
-}
-
-/* Sites d'intervention */
-.project-sites i {
-  background-color: #1abc9c; /* Cyan */
-}
-
-/* Statut */
-.project-status i {
-  background-color: #3498db; /* Bleu clair */
-}
-
-/* Réalisations */
-.project-achievements i {
-  background-color: #9b59b6; /* Pourpre */
-}
-
-/* Ajustements de la mise en page */
-
-.project-name, .project-sigle {
-  font-weight: bold;
+.project-photo:hover {
+  transform: scale(1.05);
 }
 
 .project-dates {
   display: flex;
   justify-content: space-between;
-}
-
-.project-objective, .project-target, .project-sites, .project-achievements {
-  margin-top: 5px;
-}
-
-.project-achievements ul, .project-objective ul, .project-target ul, .project-sites ul {
-  list-style-type: disc;
-  margin-left: 20px;
-  font-size: 13px;
-}
-
-
-/* Navigation Styling */
-#project-navigation {
-  display: flex;
-  justify-content: center;
-  align-items: center;
   gap: 15px;
-  margin: 10px 0;
 }
 
-.nav-arrow {
-  background: #007bff;
-  color: white;
-  border: none;
-  width: 30px;
-  height: 30px;
-  border-radius: 50%;
-  font-size: 14px;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  cursor: pointer;
-  transition: background-color 0.3s ease, transform 0.2s ease;
+.project-dates .project-section {
+  flex: 1;
 }
 
-.nav-arrow:hover {
-  background: #0056b3;
-  transform: scale(1.1);
+.in-progress {
+  color: #f39c12; /* orange */
 }
 
-.nav-arrow:disabled {
-  background: #cccccc;
-  cursor: not-allowed;
-  transform: none;
+.completed {
+  color: #2ecc71; /* vert */
 }
 
-#project-counter {
-  font-size: 16px;
-  font-weight: bold;
-  color: #333;
-}
 
 
 

@@ -1172,7 +1172,7 @@ const backBtn = document.getElementById('back-to-list');
 
 // Elements détail
 const detailName = document.getElementById('detail-project-name');
-// … pareil pour les autres : detail-project-sigle, etc.
+
 const detailSigle = document.getElementById('detail-project-sigle');
 const detailStart = document.getElementById('detail-project-start-date');
 const detailEnd = document.getElementById('detail-project-end-date');
@@ -1208,10 +1208,22 @@ function renderProjectList() {
   }
   filteredProjects.forEach((p, idx) => {
     const li = document.createElement('li');
+    const iconClass = p.statut === 'En cours' ? 'fas fa-circle in-progress' : 'fas fa-circle completed';
+
     li.innerHTML = `
-      <span>${p.nom_projet}</span>
-      <span class="status-badge">${p.statut}</span>
+      <div class="project-info">
+        <span class="status-icon-wrapper">
+          <i class="${iconClass}"></i>
+        </span>
+        <span class="project-title"><strong>${p.nom_projet}</strong></span>
+      </div>
+      <span class="status-badge ${p.statut === 'En cours' ? 'badge-in-progress' : 'badge-completed'}">
+        ${p.statut}
+      </span>
     `;
+    
+
+
     li.addEventListener('click', () => showProjectDetail(idx));
     projectListEl.appendChild(li);
   });
@@ -1237,6 +1249,29 @@ function showProjectDetail(index) {
   fillList(detailTarget, p.cible);
   fillList(detailSites, p.site_intervention);
   fillList(detailAchievements, p.realisations);
+  fillPhotoGallery(p);
+
+  function fillPhotoGallery(p) {
+    const gallery = document.getElementById('project-photo-gallery');
+    gallery.innerHTML = ''; // vider l'existant
+  
+    const photos = [p.photo1, p.photo2, p.photo3, p.photo4].filter(url => url && url.trim() !== '');
+  
+    if (!photos.length) {
+      gallery.innerHTML = '<em>Aucune photo disponible.</em>';
+      return;
+    }
+  
+    photos.forEach(url => {
+      const img = document.createElement('img');
+      img.src = url;
+      img.alt = 'Photo du projet';
+      img.className = 'project-photo';
+      gallery.appendChild(img);
+    });
+  }
+  
+
 }
 
 // Remplit une <ul> à partir d’un texte séparé

@@ -209,12 +209,12 @@ app.get("/api/bureaux_projets", async (req, res) => {
 // Endpoint pour les informations relatives aux projets des bureaux de base
 app.get("/api/projets", async (req, res) => {
   try {
-    const id_base = req.query.id_base;  // Get the id_base from query parameters
+  
     const result = await pool.query(
       "SELECT jsonb_build_object('type', 'FeatureCollection', 'features', jsonb_agg(feature)) " +
         "FROM (SELECT jsonb_build_object('type', 'Feature', 'properties', to_jsonb(row)) AS feature " +
         "FROM (SELECT * FROM projets) row) features;",
-      [id_base]  // Use id_base as the parameter in the query
+
     );
     res.json(result.rows[0].jsonb_build_object);
   } catch (err) {

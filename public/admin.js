@@ -525,9 +525,9 @@ document.addEventListener("DOMContentLoaded", () => {
 
       const response = await fetch(`/admin/api/care_partner/update/${partnerId}`, {
         method: "PUT",
-        body: formData,  // Envoi correct du fichier et des autres données
+        body: formData,  
       });
-
+  
       if (response.ok) {
         alert("Partenaire mis à jour avec succès.");
         loadPartners();
@@ -799,7 +799,11 @@ btnListProjects.addEventListener("click", loadProjects);
               <th>Site d'intervention</th>
               <th>Statut</th>
               <th>Réalisations</th>
-              <th>Cible/th>
+              <th>Cible</th>
+              <th>Photo1</th>
+              <th>Photo2</th>
+              <th>Photo3</th>
+              <th>Photo4</th>
               <th class="fixed-column">Actions</th>
             </tr>
           </thead>
@@ -818,7 +822,11 @@ btnListProjects.addEventListener("click", loadProjects);
                 <td>${project.site_intervention}</td> 
                 <td>${project.statut}</td> 
                 <td>${project.realisations}</td> 
-                <td>${project.cible}</td>      
+                <td>${project.cible}</td>
+                <td>${project.photo1}</td>
+                <td>${project.photo2}</td>
+                <td>${project.photo3}</td>
+                <td>${project.photo4}</td>      
               
                 <td class="fixed-column">
                   <button class="editBtn" data-id="${
@@ -919,6 +927,22 @@ btnListProjects.addEventListener("click", loadProjects);
           <label for="cible">Cible :</label>
           <textarea id="cible" name="cible" rows="3"  required></textarea>
         </div>
+        <div class="form-group">
+          <label for="photo1">Photo 1 :</label>
+          <input type="file" id="photo1" name="photo1" accept="image/png, image/jpeg, image/jpg, image/webp">
+        </div>
+        <div class="form-group">
+          <label for="photo2">Photo 2 :</label>
+          <input type="file" id="photo1" name="photo2" accept="image/png, image/jpeg, image/jpg, image/webp">
+        </div>
+        <div class="form-group">
+          <label for="photo3">Photo 3 :</label>
+          <input type="file" id="photo1" name="photo3" accept="image/png, image/jpeg, image/jpg, image/webp">
+        </div>
+        <div class="form-group">
+          <label for="photo4">Photo 4 :</label>
+          <input type="file" id="photo1" name="photo4" accept="image/png, image/jpeg, image/jpg, image/webp">
+        </div>
         <button type="submit">Ajouter</button>
       </form>`;
 
@@ -960,7 +984,7 @@ btnListProjects.addEventListener("click", loadProjects);
     
 
     let html = `<h2>Modifier le projet</h2>
-      <form id="editPartnerForm" enctype="multipart/form-data">
+      <form id="editProjectForm" enctype="multipart/form-data">
         <input type="hidden" name="id_projet" value="${project.id_projet}">
 
         <div class="form-group">
@@ -975,20 +999,20 @@ btnListProjects.addEventListener("click", loadProjects);
 
         <div class="form-group">
           <label for="date_debut">Date de début :</label>
-          <input type="text" id="date_debut" name="date_debut" value="${project.date_debut}"</input>
+          <input type="text" id="date_debut" name="date_debut" value="${project.date_debut}"/>
         </div>
 
         <div class="form-group">
           <label for="date_fin">Date de fin :</label>
-          <input type="text" id="date_fin" name="date_fin" value="${project.date_fin}"</input>
+          <input type="text" id="date_fin" name="date_fin" value="${project.date_fin}"/>
         </div>
         <div class="form-group">
           <label for="budget_projet">Budget :</label>
-          <input type="text" id="budget_projet" name="budget_projet" value="${project.budget_projet}"</input>
+          <input type="text" id="budget_projet" name="budget_projet" value="${project.budget_projet}"/>
         </div>
         <div class="form-group">
           <label for="bailleur">Bailleur :</label>
-          <input type="text" id="bailleur" name="bailleur" value="${project.bailleur}"</input>
+          <input type="text" id="bailleur" name="bailleur" value="${project.bailleur}"/>
         </div>
         <div class="form-group">
           <label for="objectif_global">Objectif global :</label>
@@ -1000,7 +1024,7 @@ btnListProjects.addEventListener("click", loadProjects);
         </div>
         <div class="form-group">
           <label for="statut">Statut :</label>
-          <input type="text" id="statut" name="statut" value="${project.statut}"</input>
+          <input type="text" id="statut" name="statut" value="${project.statut}"/>
         </div>
         <div class="form-group">
           <label for="realisations">Réalisations :</label>
@@ -1009,6 +1033,22 @@ btnListProjects.addEventListener("click", loadProjects);
         <div class="form-group">
           <label for="cible">Cible :</label>
           <textarea id="cible" name="cible" rows="4" >${project.cible}</textarea>
+        </div>
+        <div class="form-group">
+          <label for="photo1">Photo 1 :</label>
+          <input type="file" id="photo1" name="photo1" accept="image/png, image/jpeg, image/jpg, image/webp" value="${project.photo1}"/>
+        </div>
+        <div class="form-group">
+          <label for="photo2">Photo 2 :</label>
+          <input type="file" id="photo1" name="photo2" accept="image/png, image/jpeg, image/jpg, image/webp" value="${project.photo2}"/>
+        </div>
+        <div class="form-group">
+          <label for="photo3">Photo 3 :</label>
+          <input type="file" id="photo1" name="photo3" accept="image/png, image/jpeg, image/jpg, image/webp" value="${project.photo3}"/>
+        </div>
+        <div class="form-group">
+          <label for="photo4">Photo 4 :</label>
+          <input type="file" id="photo1" name="photo4" accept="image/png, image/jpeg, image/jpg, image/webp" value="${project.photo4}"/>
         </div>
         
         <button type="submit">Enregistrer les modifications</button>
@@ -1025,7 +1065,7 @@ btnListProjects.addEventListener("click", loadProjects);
 
       const response = await fetch(`/admin/api/projets/update/${projectId}`, {
         method: "PUT",
-        body: formData,  // Envoi correct du fichier et des autres données
+        body: formData,  
       });
 
       if (response.ok) {

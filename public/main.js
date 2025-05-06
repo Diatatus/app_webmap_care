@@ -1218,7 +1218,6 @@ function renderProjectList() {
         <span class="project-title"><strong>${p.nom_projet}</strong></span>
       </div>
       <span class="status-badge ${p.statut === 'En cours' ? 'badge-in-progress' : 'badge-completed'}">
-        ${p.statut}
       </span>
     `;
     

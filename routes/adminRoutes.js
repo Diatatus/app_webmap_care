@@ -575,7 +575,7 @@ router.post(
           photo1 = EXCLUDED.photo1,
           photo2 = EXCLUDED.photo2,
           photo3 = EXCLUDED.photo3,
-          photo4 = EXCLUDED.photo4,
+          photo4 = EXCLUDED.photo4
         RETURNING *;
       `;
 
@@ -633,7 +633,7 @@ router.get("/projets/:id", async (req, res) => {
 
     const query = `
       SELECT 
-         id_projet,
+        id_projet,
         nom_projet,
         sigle_projet,
         date_debut,
@@ -670,7 +670,7 @@ router.get("/projets/:id", async (req, res) => {
 /**
  * Route : Mettre à jour un projet
  */
-router.put("/projets/update/:id", upload.fields([
+router.put("/projets/update/:id", upload1.fields([
   { name: "photo1", maxCount: 1 },
   { name: "photo2", maxCount: 1 },
   { name: "photo3", maxCount: 1 },
@@ -692,14 +692,24 @@ router.put("/projets/update/:id", upload.fields([
       cible
     } = req.body;
 
+    const photo1 = req.files["photo1"]
+  ? `/resources/images/project/${req.files["photo1"][0].filename}`
+  : undefined;
+const photo2 = req.files["photo2"]
+  ? `/resources/images/project/${req.files["photo2"][0].filename}`
+  : undefined;
+const photo3 = req.files["photo3"]
+  ? `/resources/images/project/${req.files["photo3"][0].filename}`
+  : undefined;
+const photo4 = req.files["photo4"]
+  ? `/resources/images/project/${req.files["photo4"][0].filename}`
+  : undefined;
+
+
     const files = req.files;
-
-    // Récupérer les chemins des images si fournies
-    const photo1 = files["photo1"] ? `/resources/images/project/${files["photo1"][0].filename}` : null;
-    const photo2 = files["photo2"] ? `/resources/images/project/${files["photo2"][0].filename}` : null;
-    const photo3 = files["photo3"] ? `/resources/images/project/${files["photo3"][0].filename}` : null;
-    const photo4 = files["photo4"] ? `/resources/images/project/${files["photo4"][0].filename}` : null;
-
+    
+    
+    
     // Construction dynamique de la requête SQL
     const fields = [
       { name: "nom_projet", value: nom_projet },

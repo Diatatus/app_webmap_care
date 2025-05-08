@@ -461,6 +461,135 @@ router.delete("/bureaux_base/delete/:id", async (req, res) => {
 });
 
 
+// Configuration du stockage
+const storage1 = multer.diskStorage({
+  destination: function (req, file, cb) {
+    cb(null, path.join(__dirname, "../public/resources/images/project"));
+  },
+  filename: function (req, file, cb) {
+    const uniqueSuffix = Date.now() + "-" + file.originalname;
+    cb(null, uniqueSuffix);
+  }
+});
+
+const upload1 = multer({ storage: storage1 });
+
+router.post(
+  "/projets/add",
+  upload1.fields([
+    { name: "photo1", maxCount: 1 },
+    { name: "photo2", maxCount: 1 },
+    { name: "photo3", maxCount: 1 },
+    { name: "photo4", maxCount: 1 }
+  ]),
+  async (req, res) => {
+    try {
+      console.log("Valeurs reçues :", JSON.stringify(req.body, null, 2));
+
+      let {
+        id_projet,
+        nom_projet,
+        sigle_projet,
+        date_debut,
+        date_fin,
+        budget_projet,
+        bailleur,
+        objectif_global,
+        site_intervention,
+        statut,
+        realisations,
+        cible,
+      
+      } = req.body;
+
+      const photo1 = req.files["photo1"]
+        ? `/resources/images/project/${req.files["photo1"][0].filename}`
+        : null;
+      const photo2 = req.files["photo2"]
+        ? `/resources/images/project/${req.files["photo2"][0].filename}`
+        : null;
+      const photo3 = req.files["photo3"]
+        ? `/resources/images/project/${req.files["photo3"][0].filename}`
+        : null;
+      const photo4 = req.files["photo4"]
+        ? `/resources/images/project/${req.files["photo4"][0].filename}`
+        : null;
+
+
+
+      const values = [
+        id_projet,
+        nom_projet,
+        sigle_projet,
+        date_debut,
+        date_fin,
+        budget_projet,
+        bailleur,
+        objectif_global,
+        site_intervention,
+        statut,
+        realisations,
+        cible,
+        photo1,
+        photo2,
+        photo3,
+        photo4,
+      ];
+
+      const query = `
+        INSERT INTO projets (
+          id_projet,
+          nom_projet,
+          sigle_projet,
+          date_debut,
+          date_fin,
+          budget_projet,
+          bailleur,
+          objectif_global,
+          site_intervention,
+          statut,
+          realisations,
+          cible,
+          photo1,
+          photo2,
+          photo3,
+          photo4,
+        )
+        VALUES (
+          $1, $2, $3, $4, $5, $6, $7, $8, $9, $10,
+          $11, $12, $13, $14, $15, $16
+        )
+        ON CONFLICT (id_projet)
+        DO UPDATE SET
+          nom_projet = EXCLUDED.nom_projet,
+          sigle_projet = EXCLUDED.sigle_projet,
+          date_debut = EXCLUDED.date_debut,
+          date_fin = EXCLUDED.date_fin,
+          budget_projet = EXCLUDED.budget_projet,
+          bailleur = EXCLUDED.bailleur,
+          objectif_global = EXCLUDED.objectif_global,
+          site_intervention = EXCLUDED.site_intervention,
+          statut = EXCLUDED.statut,
+          realisations = EXCLUDED.realisations,
+          cible = EXCLUDED.cible,
+          photo1 = EXCLUDED.photo1,
+          photo2 = EXCLUDED.photo2,
+          photo3 = EXCLUDED.photo3,
+          photo4 = EXCLUDED.photo4,
+        RETURNING *;
+      `;
+
+      const result = await pool.query(query, values);
+      res.json({ success: true, projets: result.rows[0] });
+    } catch (err) {
+      console.error("Erreur lors de l'ajout du projet", err.stack);
+      res.status(500).json({ error: "Erreur lors de l'ajout du projet" });
+    }
+  }
+);
+
+
+
 /**
  * Route : Récupérer la liste de tous les projets
  */
@@ -479,7 +608,11 @@ router.get("/projets", async (req, res) => {
         site_intervention, 
         statut, 
         realisations, 
-        cible  
+        cible,
+        photo1,
+        photo2,
+        photo3,
+        photo4  
       FROM projets
     `);
 
@@ -511,7 +644,11 @@ router.get("/projets/:id", async (req, res) => {
         site_intervention, 
         statut, 
         realisations, 
-        cible
+        cible,
+        photo1,
+        photo2,
+        photo3,
+        photo4 
       FROM projets
       WHERE id_projet = $1;
     `;
@@ -533,11 +670,15 @@ router.get("/projets/:id", async (req, res) => {
 /**
  * Route : Mettre à jour un projet
  */
-router.put("/bureaux_base/update/:id", async (req, res) => {
+router.put("/projets/update/:id", upload.fields([
+  { name: "photo1", maxCount: 1 },
+  { name: "photo2", maxCount: 1 },
+  { name: "photo3", maxCount: 1 },
+  { name: "photo4", maxCount: 1 }
+]), async (req, res) => {
   try {
     const { id } = req.params;
     const {
-      id_projet,
       nom_projet,
       sigle_projet,
       date_debut,
@@ -551,49 +692,59 @@ router.put("/bureaux_base/update/:id", async (req, res) => {
       cible
     } = req.body;
 
-    
+    const files = req.files;
+
+    // Récupérer les chemins des images si fournies
+    const photo1 = files["photo1"] ? `/resources/images/project/${files["photo1"][0].filename}` : null;
+    const photo2 = files["photo2"] ? `/resources/images/project/${files["photo2"][0].filename}` : null;
+    const photo3 = files["photo3"] ? `/resources/images/project/${files["photo3"][0].filename}` : null;
+    const photo4 = files["photo4"] ? `/resources/images/project/${files["photo4"][0].filename}` : null;
+
+    // Construction dynamique de la requête SQL
+    const fields = [
+      { name: "nom_projet", value: nom_projet },
+      { name: "sigle_projet", value: sigle_projet },
+      { name: "date_debut", value: date_debut },
+      { name: "date_fin", value: date_fin },
+      { name: "budget_projet", value: budget_projet },
+      { name: "bailleur", value: bailleur },
+      { name: "objectif_global", value: objectif_global },
+      { name: "site_intervention", value: site_intervention },
+      { name: "statut", value: statut },
+      { name: "realisations", value: realisations },
+      { name: "cible", value: cible },
+      { name: "photo1", value: photo1 },
+      { name: "photo2", value: photo2 },
+      { name: "photo3", value: photo3 },
+      { name: "photo4", value: photo4 },
+    ].filter(field => field.value !== undefined && field.value !== null && field.value !== "");
+
+    const setClauses = fields.map((field, idx) => `${field.name} = $${idx + 1}`);
+    const values = fields.map(field => field.value);
+
+    if (fields.length === 0) {
+      return res.status(400).json({ error: "Aucune donnée à mettre à jour." });
+    }
 
     const query = `
-      UPDATE partenaires 
-      SET 
-        id_projet = $1,
-        nom_projet = $2,
-        sigle_projet = $3,
-        date_debut = $4,
-        date_fin = $5,
-        budget_projet = $6,
-        bailleur = $7,
-        objectif_global = $8,
-        site_intervention = $9,
-        statut = $10,
-        realisations = $11,
-        cible = $12
-      WHERE id_projet = $13
+      UPDATE projets 
+      SET ${setClauses.join(", ")}
+      WHERE id_projet = $${fields.length + 1}
       RETURNING *;
     `;
-    const values = [ id_projet,
-      nom_projet,
-      sigle_projet,
-      date_debut,
-      date_fin,
-      budget_projet,
-      bailleur,
-      objectif_global,
-      site_intervention, 
-      statut, 
-      realisations, 
-      cible];
+
+    values.push(id); // ID du projet en dernière position
 
     const result = await pool.query(query, values);
 
     if (result.rows.length === 0) {
-      return res.status(404).json({ error: " Projet non trouvé" });
+      return res.status(404).json({ error: "Projet non trouvé." });
     }
 
-    res.json({ success: true, partner: result.rows[0] });
+    res.json({ success: true, projet: result.rows[0] });
   } catch (err) {
-    console.error("Erreur lors de la mise à jour du projet", err.stack);
-    res.status(500).json({ error: "Erreur lors de la mise à jour du projet" });
+    console.error("Erreur lors de la mise à jour du projet :", err.stack);
+    res.status(500).json({ error: "Erreur lors de la mise à jour du projet." });
   }
 });
 

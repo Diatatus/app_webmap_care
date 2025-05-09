@@ -1327,6 +1327,104 @@ document
     basePopup.style.opacity = 0;
     setTimeout(() => (basePopup.style.display = "none"), 300);
   });
+
+// Modal d'image
+const imageModal = document.getElementById("image-modal");
+const modalImg = document.getElementById("modal-img");
+const closeModalBtn = document.querySelector(".close-modal");
+
+// Quand on clique sur une image de projet
+document.getElementById("project-photo-gallery").addEventListener("click", (e) => {
+  if (e.target.tagName === "IMG") {
+    modalImg.src = e.target.src;
+    imageModal.classList.remove("hidden");
+  }
+});
+
+// Quand on clique sur le bouton de fermeture
+closeModalBtn.addEventListener("click", () => {
+  imageModal.classList.add("hidden");
+});
+
+
+let currentSlideIndex = 0;
+let currentPhotos = [];
+let autoSlideInterval;
+
+function fillPhotoGallery(p) {
+  const gallery = document.getElementById('project-photo-gallery');
+  gallery.innerHTML = '';
+
+  currentPhotos = [p.photo1, p.photo2, p.photo3, p.photo4].filter(url => url && url.trim() !== '');
+
+  if (!currentPhotos.length) {
+    gallery.innerHTML = '<em>Aucune photo disponible.</em>';
+    return;
+  }
+
+  currentPhotos.forEach((url, idx) => {
+    const img = document.createElement('img');
+    img.src = url;
+    img.alt = `Photo ${idx + 1}`;
+    img.className = 'project-photo';
+    img.addEventListener('click', () => openImageSlider(idx));
+    gallery.appendChild(img);
+  });
+}
+
+function openImageSlider(index) {
+  currentSlideIndex = index;
+  updateSliderImage();
+  document.getElementById("image-modal").classList.remove("hidden");
+  startAutoSlide();
+}
+
+function closeImageSlider() {
+  document.getElementById("image-modal").classList.add("hidden");
+  stopAutoSlide();
+}
+
+function updateSliderImage() {
+  const modalImg = document.getElementById("modal-img");
+  if (currentPhotos.length > 0) {
+    modalImg.src = currentPhotos[currentSlideIndex];
+  }
+}
+
+function nextSlide() {
+  currentSlideIndex = (currentSlideIndex + 1) % currentPhotos.length;
+  updateSliderImage();
+}
+
+function prevSlide() {
+  currentSlideIndex = (currentSlideIndex - 1 + currentPhotos.length) % currentPhotos.length;
+  updateSliderImage();
+}
+
+function startAutoSlide() {
+  stopAutoSlide(); // reset timer
+  autoSlideInterval = setInterval(nextSlide, 4000); // toutes les 4 secondes
+}
+
+function stopAutoSlide() {
+  if (autoSlideInterval) {
+    clearInterval(autoSlideInterval);
+    autoSlideInterval = null;
+  }
+}
+
+// Listeners
+document.querySelector(".close-modal").addEventListener("click", closeImageSlider);
+document.getElementById("next-slide").addEventListener("click", () => {
+  nextSlide();
+  startAutoSlide(); // reset timer on manual nav
+});
+document.getElementById("prev-slide").addEventListener("click", () => {
+  prevSlide();
+  startAutoSlide();
+});
+
+
 // Variable to store the currently clicked feature
 let currentlyClickedBase = null;
 

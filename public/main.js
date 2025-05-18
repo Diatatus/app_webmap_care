@@ -1251,24 +1251,25 @@ function showProjectDetail(index) {
   fillPhotoGallery(p);
 
   function fillPhotoGallery(p) {
-    const gallery = document.getElementById('project-photo-gallery');
-    gallery.innerHTML = ''; // vider l'existant
-  
-    const photos = [p.photo1, p.photo2, p.photo3, p.photo4].filter(url => url && url.trim() !== '');
-  
-    if (!photos.length) {
-      gallery.innerHTML = '<em>Aucune photo disponible.</em>';
-      return;
-    }
-  
-    photos.forEach(url => {
-      const img = document.createElement('img');
-      img.src = url;
-      img.alt = 'Photo du projet';
-      img.className = 'project-photo';
-      gallery.appendChild(img);
-    });
+  const gallery = document.getElementById('project-photo-gallery');
+  gallery.innerHTML = '';
+
+  currentPhotos = [p.photo1, p.photo2, p.photo3, p.photo4].filter(url => url && url.trim() !== '');
+
+  if (!currentPhotos.length) {
+    gallery.innerHTML = '<em>Aucune photo disponible.</em>';
+    return;
   }
+
+  currentPhotos.forEach((url, idx) => {
+    const img = document.createElement('img');
+    img.src = url;
+    img.alt = `Photo ${idx + 1}`;
+    img.className = 'project-photo';
+    img.addEventListener('click', () => openImageSlider(idx));
+    gallery.appendChild(img);
+  });
+}
   
 
 }
@@ -1332,6 +1333,7 @@ document
 const imageModal = document.getElementById("image-modal");
 const modalImg = document.getElementById("modal-img");
 const closeModalBtn = document.querySelector(".close-modal");
+
 
 // Quand on clique sur une image de projet
 document.getElementById("project-photo-gallery").addEventListener("click", (e) => {

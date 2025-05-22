@@ -502,6 +502,12 @@ router.post(
       
       } = req.body;
 
+      // Convertir les communes sélectionnées en string
+      const communesSelectionnees = Array.isArray(site_intervention) 
+        ? site_intervention.join(', ') 
+        : site_intervention;
+
+
       const photo1 = req.files["photo1"]
         ? `/resources/images/project/${req.files["photo1"][0].filename}`
         : null;
@@ -526,7 +532,7 @@ router.post(
         budget_projet,
         bailleur,
         objectif_global,
-        site_intervention,
+        communesSelectionnees,,
         statut,
         realisations,
         cible,
@@ -659,6 +665,13 @@ router.get("/projets/:id", async (req, res) => {
       return res.status(404).json({ error: "Projet non trouvé" });
     }
 
+     const projet = rows[0];
+    if (projet.site_intervention) {
+      projet.communesSelectionnees = projet.site_intervention.split(', ').filter(Boolean);
+    } else {
+      projet.communesSelectionnees = [];
+    }
+
     res.json(rows[0]); // Retourne un seul partenaire
   } catch (err) {
     console.error("Erreur lors de la récupération du projet", err);
@@ -691,6 +704,10 @@ router.put("/projets/update/:id", upload1.fields([
       realisations, 
       cible
     } = req.body;
+
+    const communesSelectionnees = Array.isArray(site_intervention) 
+      ? site_intervention.join(', ') 
+      : site_intervention;
 
     const photo1 = req.files["photo1"]
   ? `/resources/images/project/${req.files["photo1"][0].filename}`
@@ -776,5 +793,26 @@ router.delete("/projets/delete/:id", async (req, res) => {
     res.status(500).json({ error: "Erreur lors de la suppression du projet" });
   }
 });
+
+
+/**
+ * Route : Récupérer la liste de toutes les communes
+ */
+router.get("/communes", async (req, res) => {
+  try {
+    const result = await pool.query(`
+      SELECT id_commune, nom_commune, code_commune 
+      FROM communes
+      ORDER BY nom_commune
+    `);
+    res.json(result.rows);
+  } catch (err) {
+    console.error("Erreur lors de la récupération des communes", err.stack);
+    res.status(500).json({ error: "Erreur lors de la récupération des communes" });
+  }
+});
+
+
+
 
 module.exports = router;

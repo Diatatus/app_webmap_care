@@ -305,10 +305,19 @@ var partnerLayer = new ol.layer.Vector({
 
 
 function createDefaultStyle(feature) {
+  const statut = feature.get("statut_prest");
+
+  
+  let iconSrc = "./resources/images/partner_location.svg"; 
+
+  if (statut === "SSR/Clinique juridiques/DIC") {
+    iconSrc = "./resources/images/partner_location_clinique.svg"; 
+  }
+
   return new ol.style.Style({
     image: new ol.style.Icon({
       anchor: [0.5, 1],
-      src: "./resources/images/partner_location.svg",
+      src: iconSrc,
       scale: 0.15,
     }),
     text: new ol.style.Text({

@@ -98,9 +98,8 @@ document.addEventListener("DOMContentLoaded", () => {
                 <td>${region.justif_violconj_fem}</td>
 
            <td class="fixed-column">
-            <button class="editBtn fixed-btn" data-id="${
-              region.id_region
-            }"><i class="fas fa-pen-to-square"></i></button>
+            <button class="editBtn fixed-btn" data-id="${region.id_region
+        }"><i class="fas fa-pen-to-square"></i></button>
           </td>
               </tr>`;
     });
@@ -135,7 +134,7 @@ document.addEventListener("DOMContentLoaded", () => {
     }
   }
 
-  
+
 
   async function loadRegionForEdit(id) {
     const response = await fetch(`/admin/api/regions/${id}`, {
@@ -160,99 +159,83 @@ document.addEventListener("DOMContentLoaded", () => {
         </div>
         <div class="form-group">
           <label for="popsex_masc">Population Homme :</label>
-          <input type="number" id="popsex_masc" name="popsex_masc" value="${
-            region.popsex_masc
-          }" required>
+          <input type="number" id="popsex_masc" name="popsex_masc" value="${region.popsex_masc
+      }" required>
         </div>
         <div class="form-group">
           <label for="popsex_fem">Population Femme :</label>
-          <input type="number" id="popsex_fem" name="popsex_fem" value="${
-            region.popsex_fem
-          }" required>
+          <input type="number" id="popsex_fem" name="popsex_fem" value="${region.popsex_fem
+      }" required>
         </div>
         <div class="form-group">
           <label for="denspop_reg">Densité Population :</label>
-          <input type="number" id="denspop_reg" name="denspop_reg" value="${
-            region.denspop_reg
-          }" required>
+          <input type="number" id="denspop_reg" name="denspop_reg" value="${region.denspop_reg
+      }" required>
         </div>
         <div class="form-group">
           <label for="total_pop">Total Population :</label>
-          <input type="number" id="total_pop" name="total_pop" value="${
-            region.total_pop || ""
-          }">
+          <input type="number" id="total_pop" name="total_pop" value="${region.total_pop || ""
+      }">
         </div>
         <div class="form-group">
           <label for="taux_pvrt">Taux de pauvreté :</label>
-          <input type="number" id="taux_pvrt" name="taux_pvrt" value="${
-            region.taux_pvrt
-          }" required>
+          <input type="number" id="taux_pvrt" name="taux_pvrt" value="${region.taux_pvrt
+      }" required>
         </div>
         <div class="form-group">
           <label for="prev_vih_hom">Prevalence VIH Homme :</label>
-          <input type="number" id="prev_vih_hom" name="prev_vih_hom" value="${
-            region.prev_vih_hom
-          }" required>
+          <input type="number" id="prev_vih_hom" name="prev_vih_hom" value="${region.prev_vih_hom
+      }" required>
         </div>
         <div class="form-group">
           <label for="prev_vih_fem">Prevalence VIH Femme :</label>
-          <input type="number" id="prev_vih_fem" name="prev_vih_fem" value="${
-            region.prev_vih_fem
-          }" required>
+          <input type="number" id="prev_vih_fem" name="prev_vih_fem" value="${region.prev_vih_fem
+      }" required>
         </div>
         <div class="form-group">
           <label for="acces_eau_amel">Accès à une source améliorée d'eau de boisson :</label>
-          <input type="number" id="acces_eau_amel" name="acces_eau_amel" value="${
-            region.acces_eau_amel
-          }" required>
+          <input type="number" id="acces_eau_amel" name="acces_eau_amel" value="${region.acces_eau_amel
+      }" required>
         </div>
         <div class="form-group">
           <label for="inst_lavmain_lim">Installation de lavage des mains dans les ménages :</label>
-          <input type="number" id="inst_lavmain_lim" name="inst_lavmain_lim" value="${
-            region.inst_lavmain_lim
-          }" required>
+          <input type="number" id="inst_lavmain_lim" name="inst_lavmain_lim" value="${region.inst_lavmain_lim
+      }" required>
         </div>
         <div class="form-group">
           <label for="taux_chom">Taux de chômage :</label>
-          <input type="number" id="taux_chom" name="taux_chom" value="${
-            region.taux_chom
-          }" required>
+          <input type="number" id="taux_chom" name="taux_chom" value="${region.taux_chom
+      }" required>
         </div>
         <div class="form-group">
           <label for="incl_fin_emf">Inclusion financière :</label>
-          <input type="number" id="incl_fin_emf" name="incl_fin_emf" value="${
-            region.incl_fin_emf
-          }" required>
+          <input type="number" id="incl_fin_emf" name="incl_fin_emf" value="${region.incl_fin_emf
+      }" required>
         </div>
          <div class="form-group">
           <label for="acces_sanit_amel">Accès aux installations sanitaires améliorées :</label>
-          <input type="number" id="acces_sanit_amel" name="acces_sanit_amel" value="${
-            region.acces_sanit_amel
-          }" required>
+          <input type="number" id="acces_sanit_amel" name="acces_sanit_amel" value="${region.acces_sanit_amel
+      }" required>
         </div>
          <div class="form-group">
           <label for="besoins_nonsatisf_pf">Besoins non satisfaits en matière des femmes de planification familiale :</label>
-          <input type="number" id="besoins_nonsatisf_pf" name="besoins_nonsatisf_pf" value="${
-            region.besoins_nonsatisf_pf
-          }" required>
+          <input type="number" id="besoins_nonsatisf_pf" name="besoins_nonsatisf_pf" value="${region.besoins_nonsatisf_pf
+      }" required>
         </div>
          <div class="form-group">
           <label for="fem_utilmethcontracep_mod">Femmes de 15-49 ans utilisant des contraceptifs modernes :</label>
-          <input type="number" id="fem_utilmethcontracep_mod" name="fem_utilmethcontracep_mod" value="${
-            region.fem_utilmethcontracep_mod
-          }" required>
+          <input type="number" id="fem_utilmethcontracep_mod" name="fem_utilmethcontracep_mod" value="${region.fem_utilmethcontracep_mod
+      }" required>
         </div>
          <div class="form-group">
           <label for="justif_violconj_hom">Homme justifiant la violence conjugale :</label>
-          <input type="number" id="justif_violconj_hom" name="justif_violconj_hom" value="${
-            region.justif_violconj_hom
-          }" required>
+          <input type="number" id="justif_violconj_hom" name="justif_violconj_hom" value="${region.justif_violconj_hom
+      }" required>
         </div>
          <div class="form-group">
           <label for="justif_violconj_fem">Femme justifiant la violence conjugale :</label>
-          <input type="number" id="justif_violconj_fem" name="justif_violconj_fem" value="${
-            region.justif_violconj_fem
-          }" required>
+          <input type="number" id="justif_violconj_fem" name="justif_violconj_fem" value="${region.justif_violconj_fem
+      }" required>
         </div>
 
         
@@ -334,18 +317,15 @@ document.addEventListener("DOMContentLoaded", () => {
                 <td>${partner.statut_prest}</td>
                 <td>${partner.img_logo || ""}</td>
                 <td>${partner.info}</td>
-                <td>${
-                  partner.geom
-                    ? JSON.parse(partner.geom).coordinates.join(", ")
-                    : "-"
-                }</td>
+                <td>${partner.geom
+          ? JSON.parse(partner.geom).coordinates.join(", ")
+          : "-"
+        }</td>
                 <td class="fixed-column">
-                  <button class="editBtn" data-id="${
-                    partner.id_partenaire
-                  }"><i class="fas fa-pen-to-square"></i></button>
-                  <button class="deleteBtn" data-id="${
-                    partner.id_partenaire
-                  }"><i class="fas fa-trash"></i></button>
+                  <button class="editBtn" data-id="${partner.id_partenaire
+        }"><i class="fas fa-pen-to-square"></i></button>
+                  <button class="deleteBtn" data-id="${partner.id_partenaire
+        }"><i class="fas fa-trash"></i></button>
                 </td>
               </tr>`;
     });
@@ -407,6 +387,14 @@ document.addEventListener("DOMContentLoaded", () => {
           <textarea type="text" id="act_srvc_offert" name="act_srvc_offert" rows="6"></textarea>
         </div>
         <div class="form-group">
+  <label for="is_ssr">Est-ce un SSR/Clinique juridiques/DIC ?</label>
+  <select id="is_ssr" name="is_ssr">
+    <option value="non" selected>Non</option>
+    <option value="oui">Oui</option>
+  </select>
+</div>
+
+        <div class="form-group">
           <label for="statut_prest">Statut de la prestation :</label>
           <input type="text" id="statut_prest" name="statut_prest">
         </div>
@@ -430,6 +418,18 @@ document.addEventListener("DOMContentLoaded", () => {
       </form>`;
 
     contentArea.innerHTML = html;
+
+    document.getElementById("is_ssr").addEventListener("change", function () {
+      const statutInput = document.getElementById("statut_prest");
+      if (this.value === "oui") {
+        statutInput.value = "SSR/Clinique juridiques/DIC";
+        statutInput.disabled = true;
+      } else {
+        statutInput.value = "";
+        statutInput.disabled = false;
+      }
+    });
+
 
     const addPartnerForm = document.getElementById("addPartnerForm");
     addPartnerForm.addEventListener("submit", async (e) => {
@@ -465,7 +465,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
   function displayEditPartnerForm(partner) {
     const longitude = partner.longitude || ""; // Gérer les valeurs null/undefined
-    const latitude = partner.latitude || ""; 
+    const latitude = partner.latitude || "";
 
     let html = `<h2>Modifier le partenaire</h2>
       <form id="editPartnerForm" enctype="multipart/form-data">
@@ -485,6 +485,14 @@ document.addEventListener("DOMContentLoaded", () => {
           <label for="act_srvc_offert">Activité et services offerts :</label>
           <textarea id="act_srvc_offert" name="act_srvc_offert" rows="6" required>${partner.act_srvc_offert}</textarea>
         </div>
+        <div class="form-group">
+  <label for="is_ssr">Est-ce un SSR/Clinique juridiques/DIC ?</label>
+  <select id="is_ssr" name="is_ssr">
+    <option value="non">Non</option>
+    <option value="oui">Oui</option>
+  </select>
+</div>
+
 
         <div class="form-group">
           <label for="statut_prest">Statut de la prestation :</label>
@@ -516,6 +524,27 @@ document.addEventListener("DOMContentLoaded", () => {
 
     contentArea.innerHTML = html;
 
+    const isSSRSelect = document.getElementById("is_ssr");
+    const statutInput = document.getElementById("statut_prest");
+
+    if (partner.statut_prest === "SSR/Clinique juridiques/DIC") {
+      isSSRSelect.value = "oui";
+      statutInput.disabled = true;
+    } else {
+      isSSRSelect.value = "non";
+    }
+
+    isSSRSelect.addEventListener("change", function () {
+      if (this.value === "oui") {
+        statutInput.value = "SSR/Clinique juridiques/DIC";
+        statutInput.disabled = true;
+      } else {
+        statutInput.value = "";
+        statutInput.disabled = false;
+      }
+    });
+
+
     const editPartnerForm = document.getElementById("editPartnerForm");
     editPartnerForm.addEventListener("submit", async (e) => {
       e.preventDefault();
@@ -525,9 +554,9 @@ document.addEventListener("DOMContentLoaded", () => {
 
       const response = await fetch(`/admin/api/care_partner/update/${partnerId}`, {
         method: "PUT",
-        body: formData,  
+        body: formData,
       });
-  
+
       if (response.ok) {
         alert("Partenaire mis à jour avec succès.");
         loadPartners();
@@ -535,10 +564,10 @@ document.addEventListener("DOMContentLoaded", () => {
         alert("Erreur lors de la mise à jour du partenaire.");
       }
     });
-}
+  }
 
 
-btnListOffices.addEventListener("click", loadOffices);
+  btnListOffices.addEventListener("click", loadOffices);
 
 
   async function loadOffices() {
@@ -582,18 +611,15 @@ btnListOffices.addEventListener("click", loadOffices);
                 <td>${office.id_region}</td>
                 <td>${office.nom_base}</td>
                 <td>${office.date_crea}</td>     
-                <td>${
-                  office.geom
-                    ? JSON.parse(office.geom).coordinates.join(", ")
-                    : "-"
-                }</td>
+                <td>${office.geom
+          ? JSON.parse(office.geom).coordinates.join(", ")
+          : "-"
+        }</td>
                 <td class="fixed-column">
-                  <button class="editBtn" data-id="${
-                    office.id_base
-                  }"><i class="fas fa-pen-to-square"></i></button>
-                  <button class="deleteBtn" data-id="${
-                    office.id_base
-                  }"><i class="fas fa-trash"></i></button>
+                  <button class="editBtn" data-id="${office.id_base
+        }"><i class="fas fa-pen-to-square"></i></button>
+                  <button class="deleteBtn" data-id="${office.id_base
+        }"><i class="fas fa-trash"></i></button>
                 </td>
               </tr>`;
     });
@@ -701,7 +727,7 @@ btnListOffices.addEventListener("click", loadOffices);
 
   function displayEditOfficeForm(office) {
     const longitude = office.longitude || ""; // Gérer les valeurs null/undefined
-    const latitude = office.latitude || ""; 
+    const latitude = office.latitude || "";
 
     let html = `<h2>Modifier le bureau de base</h2>
       <form id="editPartnerForm" enctype="multipart/form-data">
@@ -757,10 +783,10 @@ btnListOffices.addEventListener("click", loadOffices);
         alert("Erreur lors de la mise à jour du partenaire.");
       }
     });
-}
+  }
 
 
-btnListProjects.addEventListener("click", loadProjects);
+  btnListProjects.addEventListener("click", loadProjects);
 
 
   async function loadProjects() {
@@ -775,6 +801,19 @@ btnListProjects.addEventListener("click", loadProjects);
       alert("Erreur lors du chargement des projets.");
     }
   }
+
+  async function loadCommunes() {
+  const response = await fetch("/admin/api/communes", {
+    method: "GET",
+    headers: { "Content-Type": "application/json" },
+  });
+  if (response.ok) {
+    return await response.json();
+  } else {
+    console.error("Erreur lors du chargement des communes.");
+    return [];
+  }
+}
 
 
   function displayProjects(projects) {
@@ -829,12 +868,10 @@ btnListProjects.addEventListener("click", loadProjects);
                 <td>${project.photo4}</td>      
               
                 <td class="fixed-column">
-                  <button class="editBtn" data-id="${
-                    project.id_projet
-                  }"><i class="fas fa-pen-to-square"></i></button>
-                  <button class="deleteBtn" data-id="${
-                    project.id_projet
-                  }"><i class="fas fa-trash"></i></button>
+                  <button class="editBtn" data-id="${project.id_projet
+        }"><i class="fas fa-pen-to-square"></i></button>
+                  <button class="deleteBtn" data-id="${project.id_projet
+        }"><i class="fas fa-trash"></i></button>
                 </td>
               </tr>`;
     });
@@ -875,7 +912,10 @@ btnListProjects.addEventListener("click", loadProjects);
     }
   }
 
-  function displayAddProjectForm() {
+  async function displayAddProjectForm() {
+
+    // Charger les communes
+  const communes = await loadCommunes();
     let html = `
       <h2>Ajouter un projet</h2>
       <form id="addProjectForm" enctype="multipart/form-data">
@@ -911,10 +951,15 @@ btnListProjects.addEventListener("click", loadProjects);
           <label for="objectif_global">Objectif global :</label>
           <textarea  id="objectif_global" name="objectif_global" rows="5"  required></textarea>
         </div>
-        <div class="form-group">
-          <label for="site_intervention">Site d'intervention :</label>
-          <textarea id="site_intervention" name="site_intervention" rows="3"  required></textarea>
-        </div>
+<div class="form-group">
+        <label for="site_intervention">Site d'intervention :</label>
+        <select id="site_intervention" name="site_intervention" multiple required>
+          ${communes.map(commune => 
+            `<option value="${commune.nom_commune}">${commune.nom_commune}</option>`
+          ).join('')}
+        </select>
+        <small>Maintenez Ctrl (Windows) ou Cmd (Mac) pour sélectionner plusieurs communes</small>
+      </div>
         <div class="form-group">
           <label for="statut">Statut :</label>
           <input type="text" id="statut" name="statut" step="any">
@@ -948,6 +993,12 @@ btnListProjects.addEventListener("click", loadProjects);
 
     contentArea.innerHTML = html;
 
+    // Initialiser le select multiple avec un plugin si nécessaire (ex: Select2)
+  $('#site_intervention').select2({
+    placeholder: "Sélectionnez une ou plusieurs communes",
+    allowClear: true
+  });
+
     const addProjectForm = document.getElementById("addProjectForm");
     addProjectForm.addEventListener("submit", async (e) => {
       e.preventDefault();
@@ -980,8 +1031,14 @@ btnListProjects.addEventListener("click", loadProjects);
     }
   }
 
-  function displayEditProjectForm(project) {
-    
+  async function displayEditProjectForm(project) {
+
+    const communes = await loadCommunes();
+  
+  // Convertir les sites d'intervention existants en tableau
+  const selectedSites = project.site_intervention ? 
+    project.site_intervention.split(',') : [];
+
 
     let html = `<h2>Modifier le projet</h2>
       <form id="editProjectForm" enctype="multipart/form-data">
@@ -1018,10 +1075,18 @@ btnListProjects.addEventListener("click", loadProjects);
           <label for="objectif_global">Objectif global :</label>
           <textarea id="objectif_global" name="objectif_global"  rows="4" required>${project.objectif_global}</textarea>
         </div>
-        <div class="form-group">
-          <label for="site_intervention">Site d'intervention :</label>
-          <textarea id="site_intervention" name="site_intervention" rows="4" required>${project.site_intervention}</textarea>
-        </div>
+      <div class="form-group">
+        <label for="site_intervention">Site d'intervention :</label>
+        <select id="site_intervention" name="site_intervention" multiple required>
+          ${communes.map(commune => 
+            `<option value="${commune.nom_commune}" 
+             ${selectedSites.includes(commune.nom_commune) ? 'selected' : ''}>
+             ${commune.nom_commune}
+            </option>`
+          ).join('')}
+        </select>
+        <small>Maintenez Ctrl (Windows) ou Cmd (Mac) pour sélectionner plusieurs communes</small>
+      </div>
         <div class="form-group">
           <label for="statut">Statut :</label>
           <input type="text" id="statut" name="statut" value="${project.statut}"/>
@@ -1056,6 +1121,12 @@ btnListProjects.addEventListener("click", loadProjects);
 
     contentArea.innerHTML = html;
 
+      // Initialiser le select multiple avec un plugin si nécessaire (ex: Select2)
+  $('#site_intervention').select2({
+    placeholder: "Sélectionnez une ou plusieurs communes",
+    allowClear: true
+  });
+
     const editProjectForm = document.getElementById("editProjectForm");
     editProjectForm.addEventListener("submit", async (e) => {
       e.preventDefault();
@@ -1065,7 +1136,7 @@ btnListProjects.addEventListener("click", loadProjects);
 
       const response = await fetch(`/admin/api/projets/update/${projectId}`, {
         method: "PUT",
-        body: formData,  
+        body: formData,
       });
 
       if (response.ok) {
@@ -1075,7 +1146,7 @@ btnListProjects.addEventListener("click", loadProjects);
         alert("Erreur lors de la mise à jour du projet.");
       }
     });
-}
+  }
 
 
   // Gestion de la déconnexion

@@ -1304,6 +1304,30 @@ html {
   list-style-type: disc;
 }
 
+.sites-container {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+}
+
+.zoom-checkbox {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  font-size: 12px;
+  cursor: pointer;
+  margin-top: 5px;
+  color: #555;
+}
+
+.zoom-checkbox input {
+  cursor: pointer;
+}
+
+.zoom-checkbox:hover {
+  color: #007bff;
+}
+
 .project-photos {
   margin-top: 10px;
 }

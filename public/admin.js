@@ -34,18 +34,37 @@ document.addEventListener("DOMContentLoaded", () => {
   const btnListProjects = document.getElementById("btnListProjects");
   const btnListOfficesProjects = document.getElementById("btnListOfficesProjects");
 
-  async function loadRegions() {
+async function loadRegions() {
+  try {
     const response = await fetch("/admin/api/regions", {
       method: "GET",
-      headers: { "Content-Type": "application/json" },
+      headers: { 
+        "Content-Type": "application/json",
+        "Accept": "application/json"
+      },
+      credentials: "include"
     });
-    if (response.ok) {
-      const regions = await response.json();
-      displayRegions(regions);
-    } else {
-      alert("Erreur lors du chargement des régions.");
+
+    if (!response.ok) {
+      const error = await response.json();
+      if (response.status === 401) {
+        window.location.href = '/admin.html?session=expired';
+        return;
+      }
+      throw new Error(error.message || "Erreur serveur");
     }
+
+    const geojsonData = await response.json();
+    
+    // Traitez les données GeoJSON ici
+    console.log(geojsonData);
+    displayRegions(geojsonData);
+    
+  } catch (error) {
+    console.error("Erreur:", error);
+    alert("Erreur lors du chargement des régions");
   }
+}
 
   function displayRegions(regions) {
     let html = `<h2>Régions (Indicateurs socio-économiques)</h2>
@@ -958,7 +977,7 @@ document.addEventListener("DOMContentLoaded", () => {
             `<option value="${commune.nom_commune}">${commune.nom_commune}</option>`
           ).join('')}
         </select>
-        <small>Maintenez Ctrl (Windows) ou Cmd (Mac) pour sélectionner plusieurs communes</small>
+        
       </div>
         <div class="form-group">
           <label for="statut">Statut :</label>
@@ -1085,7 +1104,6 @@ document.addEventListener("DOMContentLoaded", () => {
             </option>`
           ).join('')}
         </select>
-        <small>Maintenez Ctrl (Windows) ou Cmd (Mac) pour sélectionner plusieurs communes</small>
       </div>
         <div class="form-group">
           <label for="statut">Statut :</label>
@@ -1105,15 +1123,15 @@ document.addEventListener("DOMContentLoaded", () => {
         </div>
         <div class="form-group">
           <label for="photo2">Photo 2 :</label>
-          <input type="file" id="photo1" name="photo2" accept="image/png, image/jpeg, image/jpg, image/webp" value="${project.photo2}"/>
+          <input type="file" id="photo2" name="photo2" accept="image/png, image/jpeg, image/jpg, image/webp" value="${project.photo2}"/>
         </div>
         <div class="form-group">
           <label for="photo3">Photo 3 :</label>
-          <input type="file" id="photo1" name="photo3" accept="image/png, image/jpeg, image/jpg, image/webp" value="${project.photo3}"/>
+          <input type="file" id="photo3" name="photo3" accept="image/png, image/jpeg, image/jpg, image/webp" value="${project.photo3}"/>
         </div>
         <div class="form-group">
           <label for="photo4">Photo 4 :</label>
-          <input type="file" id="photo1" name="photo4" accept="image/png, image/jpeg, image/jpg, image/webp" value="${project.photo4}"/>
+          <input type="file" id="photo4" name="photo4" accept="image/png, image/jpeg, image/jpg, image/webp" value="${project.photo4}"/>
         </div>
         
         <button type="submit">Enregistrer les modifications</button>
@@ -1122,30 +1140,49 @@ document.addEventListener("DOMContentLoaded", () => {
     contentArea.innerHTML = html;
 
       // Initialiser le select multiple avec un plugin si nécessaire (ex: Select2)
+$(document).ready(function() {
   $('#site_intervention').select2({
     placeholder: "Sélectionnez une ou plusieurs communes",
     allowClear: true
   });
+});
 
-    const editProjectForm = document.getElementById("editProjectForm");
-    editProjectForm.addEventListener("submit", async (e) => {
-      e.preventDefault();
-
-      const formData = new FormData(editProjectForm);
-      const projectId = formData.get("id_projet");
-
-      const response = await fetch(`/admin/api/projets/update/${projectId}`, {
-        method: "PUT",
-        body: formData,
-      });
-
-      if (response.ok) {
-        alert("Projet mis à jour avec succès.");
-        loadProjects();
-      } else {
-        alert("Erreur lors de la mise à jour du projet.");
+    // Modifiez la partie submit handler :
+editProjectForm.addEventListener("submit", async (e) => {
+  e.preventDefault();
+  
+  const formData = new FormData(editProjectForm);
+  
+  // Récupération des communes sélectionnées
+  const selectedSites = Array.from(document.querySelectorAll('#site_intervention option:checked'))
+    .map(opt => opt.value);
+  formData.set('site_intervention', selectedSites.join(','));
+  
+  try {
+    const response = await fetch(`/admin/api/projets/update/${formData.get("id_projet")}`, {
+      method: "PUT",
+      body: formData,
+      headers: {
+        'Authorization': `Bearer ${localStorage.getItem('token')}` // Si vous utilisez JWT
       }
     });
+
+    if (response.ok) {
+      const result = await response.json();
+      alert("Projet mis à jour avec succès.");
+      loadProjects();
+    } else if (response.status === 401) {
+      // Redirection vers le login si non autorisé
+      window.location.href = '/admin.html';
+    } else {
+      const error = await response.json();
+      alert(`Erreur: ${error.error || "Une erreur est survenue"}`);
+    }
+  } catch (err) {
+    console.error("Erreur:", err);
+    alert("Erreur réseau ou serveur");
+  }
+});
   }
 
 

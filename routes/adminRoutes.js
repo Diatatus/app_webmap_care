@@ -4,44 +4,49 @@ const pool = require("../db.js");
 const multer = require("multer");
 const path = require("path");
 
-// Middleware d'authentification
-function isAuthenticated(req, res, next) {
-  if (req.session && req.session.user) {
+function requireAuth(req, res, next) {
+  if (req.session?.user) {
     return next();
   }
-  res.status(401).json({ error: "Accès refusé" });
+  res.status(401).json({ 
+    error: "Session expirée",
+    redirect: "/admin.html" 
+  });
 }
 
-// Route publique : Connexion
-router.post("/login", async (req, res) => {
+// Routes publiques (sans authentification)
+router.post("/api/login", async (req, res) => {
   const { username, password } = req.body;
 
-  // Remplacez cette logique par une authentification basée sur votre base de données
   if (username === "admin" && password === "careadmin2025") {
-    req.session.user = { username };  // Stockage de l'utilisateur dans la session
-    return res.json({ success: true, message: "Connexion réussie" });
+    req.session.user = { username };
+    return res.json({ 
+      success: true, 
+      message: "Connexion réussie",
+      user: { username }
+    });
   }
 
-  res.status(401).json({ error: "Nom d'utilisateur ou mot de passe incorrect" });
+  res.status(401).json({ error: "Identifiants incorrects" });
 });
 
-// Route publique : Déconnexion
-router.post("/logout", (req, res) => {
+router.post("/api/logout", (req, res) => {
   req.session.destroy(err => {
     if (err) {
-      return res.status(500).json({ error: "Erreur lors de la déconnexion" });
+      return res.status(500).json({ error: "Erreur de déconnexion" });
     }
-    res.json({ success: true, message: "Déconnexion réussie" });
+    res.clearCookie('connect.sid'); // Nom du cookie de session
+    res.json({ success: true });
   });
 });
 
-// Appliquer le middleware aux routes protégées
-router.use(isAuthenticated);
+// Routes protégées
+router.use("/api", requireAuth);
 
 
 
 // Autres routes protégées
-router.get("/regions", async (req, res) => {
+router.get("/api/regions", async (req, res) => {
   try {
     const result = await pool.query("SELECT * FROM regions");
     res.json(result.rows);
@@ -51,7 +56,7 @@ router.get("/regions", async (req, res) => {
   }
 });
 
-router.get("/regions/:id", async (req, res) => {
+router.get("/api/regions/:id", async (req, res) => {
   try {
     const { id } = req.params;
     const result = await pool.query("SELECT * FROM regions WHERE id_region = $1", [id]);
@@ -65,7 +70,7 @@ router.get("/regions/:id", async (req, res) => {
   }
 });
 
-router.put("/regions/update/:id", async (req, res) => {
+router.put("/api/regions/update/:id", async (req, res) => {
   try {
     const { id } = req.params;
     const {
@@ -161,7 +166,7 @@ const storage = multer.diskStorage({
 
 const upload = multer({ storage: storage });
 
-router.post("/care_partner/add", upload.fields([{ name: "img_logo", maxCount: 1 }]), async (req, res) => {
+router.post("/api/care_partner/add", upload.fields([{ name: "img_logo", maxCount: 1 }]), async (req, res) => {
   try {
     console.log("Valeurs reçues :", JSON.stringify(req.body, null, 2));
 
@@ -214,7 +219,7 @@ router.post("/care_partner/add", upload.fields([{ name: "img_logo", maxCount: 1 
 /**
  * Route : Récupérer la liste de tous les partenaires
  */
-router.get("/care_partner", async (req, res) => {
+router.get("/api/care_partner", async (req, res) => {
   try {
     const result = await pool.query(`
       SELECT 
@@ -240,7 +245,7 @@ router.get("/care_partner", async (req, res) => {
 /**
  * Route : Récupérer un partenaire par son ID
  */
-router.get("/care_partner/:id", async (req, res) => {
+router.get("/api/care_partner/:id", async (req, res) => {
   try {
     const { id } = req.params;
 
@@ -276,7 +281,7 @@ router.get("/care_partner/:id", async (req, res) => {
 /**
  * Route : Mettre à jour un partenaire
  */
-router.put("/care_partner/update/:id",upload.single("img_logo"), async (req, res) => {
+router.put("/api/care_partner/update/:id",upload.single("img_logo"), async (req, res) => {
   try {
     const { id } = req.params;
     const {
@@ -324,7 +329,7 @@ router.put("/care_partner/update/:id",upload.single("img_logo"), async (req, res
 /**
  * Route : Supprimer un partenaire
  */
-router.delete("/care_partner/delete/:id", async (req, res) => {
+router.delete("/api/care_partner/delete/:id", async (req, res) => {
   try {
     const { id } = req.params;
     const result = await pool.query("DELETE FROM partenaires WHERE id_partenaire = $1", [id]);
@@ -344,7 +349,7 @@ router.delete("/care_partner/delete/:id", async (req, res) => {
 /**
  * Route : Récupérer la liste de tous les bureaux de base
  */
-router.get("/bureaux_base", async (req, res) => {
+router.get("/api/bureaux_base", async (req, res) => {
   try {
     const result = await pool.query(`
       SELECT 
@@ -367,7 +372,7 @@ router.get("/bureaux_base", async (req, res) => {
 /**
  * Route : Récupérer un bureau de base par son ID
  */
-router.get("/bureaux_base/:id", async (req, res) => {
+router.get("/api/bureaux_base/:id", async (req, res) => {
   try {
     const { id } = req.params;
 
@@ -400,7 +405,7 @@ router.get("/bureaux_base/:id", async (req, res) => {
 /**
  * Route : Mettre à jour un bureaux de base
  */
-router.put("/bureaux_base/update/:id",upload.single("img_logo"), async (req, res) => {
+router.put("/api/bureaux_base/update/:id",upload.single("img_logo"), async (req, res) => {
   try {
     const { id } = req.params;
     const {
@@ -444,7 +449,7 @@ router.put("/bureaux_base/update/:id",upload.single("img_logo"), async (req, res
 /**
  * Route : Supprimer un bureau de base
  */
-router.delete("/bureaux_base/delete/:id", async (req, res) => {
+router.delete("/api/bureaux_base/delete/:id", async (req, res) => {
   try {
     const { id } = req.params;
     const result = await pool.query("DELETE FROM bureaux_base WHERE id_base = $1", [id]);
@@ -475,7 +480,7 @@ const storage1 = multer.diskStorage({
 const upload1 = multer({ storage: storage1 });
 
 router.post(
-  "/projets/add",
+  "/api/projets/add", requireAuth,
   upload1.fields([
     { name: "photo1", maxCount: 1 },
     { name: "photo2", maxCount: 1 },
@@ -599,7 +604,7 @@ router.post(
 /**
  * Route : Récupérer la liste de tous les projets
  */
-router.get("/projets", async (req, res) => {
+router.get("/api/projets", requireAuth, async (req, res) => {
   try {
     const result = await pool.query(`
       SELECT 
@@ -633,7 +638,7 @@ router.get("/projets", async (req, res) => {
 /**
  * Route : Récupérer un projet par son ID
  */
-router.get("/projets/:id", async (req, res) => {
+router.get("/api/projets/:id", requireAuth, async (req, res) => {
   try {
     const { id } = req.params;
 
@@ -683,7 +688,7 @@ router.get("/projets/:id", async (req, res) => {
 /**
  * Route : Mettre à jour un projet
  */
-router.put("/projets/update/:id", upload1.fields([
+router.put("/api/projets/update/:id", requireAuth, upload1.fields([
   { name: "photo1", maxCount: 1 },
   { name: "photo2", maxCount: 1 },
   { name: "photo3", maxCount: 1 },
@@ -709,18 +714,10 @@ router.put("/projets/update/:id", upload1.fields([
       ? site_intervention.join(', ') 
       : site_intervention;
 
-    const photo1 = req.files["photo1"]
-  ? `/resources/images/project/${req.files["photo1"][0].filename}`
-  : undefined;
-const photo2 = req.files["photo2"]
-  ? `/resources/images/project/${req.files["photo2"][0].filename}`
-  : undefined;
-const photo3 = req.files["photo3"]
-  ? `/resources/images/project/${req.files["photo3"][0].filename}`
-  : undefined;
-const photo4 = req.files["photo4"]
-  ? `/resources/images/project/${req.files["photo4"][0].filename}`
-  : undefined;
+const photo1 = req.files["photo1"] ? `/resources/images/project/${req.files["photo1"][0].filename}` : req.body.photo1;
+const photo2 = req.files["photo2"] ? `/resources/images/project/${req.files["photo2"][0].filename}` : req.body.photo2;
+const photo3 = req.files["photo3"] ? `/resources/images/project/${req.files["photo3"][0].filename}` : req.body.photo3;
+const photo4 = req.files["photo4"] ? `/resources/images/project/${req.files["photo4"][0].filename}` : req.body.photo4;
 
 
     const files = req.files;
@@ -778,7 +775,7 @@ const photo4 = req.files["photo4"]
 /**
  * Route : Supprimer un projet
  */
-router.delete("/projets/delete/:id", async (req, res) => {
+router.delete("/api/projets/delete/:id", requireAuth, async (req, res) => {
   try {
     const { id } = req.params;
     const result = await pool.query("DELETE FROM projets WHERE id_projet = $1", [id]);
@@ -798,7 +795,7 @@ router.delete("/projets/delete/:id", async (req, res) => {
 /**
  * Route : Récupérer la liste de toutes les communes
  */
-router.get("/communes", async (req, res) => {
+router.get("/api/communes", async (req, res) => {
   try {
     const result = await pool.query(`
       SELECT id_commune, nom_commune, code_commune 
@@ -809,6 +806,37 @@ router.get("/communes", async (req, res) => {
   } catch (err) {
     console.error("Erreur lors de la récupération des communes", err.stack);
     res.status(500).json({ error: "Erreur lors de la récupération des communes" });
+  }
+});
+
+// Dans index.js
+router.get('/api/projects/:id/sites', async (req, res) => {
+  try {
+    const projectId = req.params.id;
+    
+    const query = `
+      SELECT 
+        ST_Extent(c.geom) as bbox,
+        array_agg(c.nom_commune) as communes
+      FROM projets_communes pc
+      JOIN communes c ON pc.id_commune = c.id_commune
+      WHERE pc.id_projet = $1
+    `;
+    
+    const result = await pool.query(query, [projectId]);
+    
+    if (!result.rows[0].bbox) {
+      return res.status(404).json({ error: "Aucun site trouvé" });
+    }
+    
+    res.json({
+      bbox: result.rows[0].bbox,
+      communes: result.rows[0].communes || []
+    });
+    
+  } catch (err) {
+    console.error("Erreur:", err);
+    res.status(500).json({ error: "Erreur serveur" });
   }
 });
 

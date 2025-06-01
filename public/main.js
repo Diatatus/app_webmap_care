@@ -1237,13 +1237,143 @@ function renderProjectList() {
   });
 }
 
+// Variables globales
+let sitesHighlightLayer = new ol.layer.Vector({
+  source: new ol.source.Vector(),
+  style: function(feature) {
+    return new ol.style.Style({
+      fill: new ol.style.Fill({
+        color: [255, 255, 0, 0.4] // Jaune semi-transparent
+      }),
+      stroke: new ol.style.Stroke({
+        color: [255, 165, 0, 1], // Orange
+        width: 2
+      }),
+      text: new ol.style.Text({
+        text: feature.get('nom_commune'), // Récupère le nom de la commune
+        font: '14px Calibri,sans-serif',
+        fill: new ol.style.Fill({
+          color: '#000000' // Noir
+        }),
+        stroke: new ol.style.Stroke({
+          color: '#FFFFFF', // Contour blanc
+          width: 3
+        }),
+        offsetY: -15 // Position au-dessus du polygone
+      })
+    });
+  }
+});
+map.addLayer(sitesHighlightLayer);
+
+// Fonction principale
+async function setupZoomCheckbox(projectId) {
+  const zoomCheckbox = document.getElementById('zoom-to-sites');
+  
+  zoomCheckbox.addEventListener('change', async (e) => {
+    if (e.target.checked) {
+      try {
+        // Afficher un indicateur de chargement
+        zoomCheckbox.disabled = true;
+        document.getElementById('zoom-loading').style.display = 'inline-block';
+        
+        const response = await fetch('/api/projects/sites_extent', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ projectId })
+        });
+
+        if (!response.ok) throw new Error(await response.text());
+        
+        const data = await response.json();
+        
+        // 1. Zoom sur l'emprise
+        const extent = data.bbox.match(/\d+\.?\d*/g).map(Number);
+        map.getView().fit(extent, {
+          padding: [50, 50, 50, 50],
+          duration: 1000,
+          callback: () => {
+            // 2. Mise en surbrillance après le zoom
+            highlightSites(data.communes);
+          }
+        });
+        
+      } catch (error) {
+        console.error("Erreur:", error);
+        zoomCheckbox.checked = false;
+        showErrorToast("Erreur lors du chargement des sites");
+      } finally {
+        zoomCheckbox.disabled = false;
+        document.getElementById('zoom-loading').style.display = 'none';
+      }
+    } else {
+      // Réinitialisation
+      resetSitesHighlight();
+      map.getView().fit(camerounExtent, { duration: 500 });
+    }
+  });
+}
+
+// Fonctions utilitaires
+async function highlightSites(communes) {
+  try {
+    // Récupérer les géométries des communes
+    const response = await fetch('/api/communes/geometries', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ communes })
+    });
+
+    if (!response.ok) throw new Error(await response.text());
+    
+    const data = await response.json();
+    
+    // Vérification du format des données
+    if (!data || !data.features) {
+      throw new Error("Format de données invalide");
+    }
+
+    // Conversion en features OpenLayers
+    const format = new ol.format.GeoJSON();
+    const features = format.readFeatures(data, {
+      dataProjection: 'EPSG:4326',
+      featureProjection: 'EPSG:3857'
+    });
+
+        // Assignation explicite du nom
+    features.forEach(feature => {
+      feature.set('nom_commune', feature.getProperties().name || '');
+    });
+
+    // Affichage des features
+    sitesHighlightLayer.getSource().clear();
+    sitesHighlightLayer.getSource().addFeatures(features);
+    
+  } catch (error) {
+    console.error("Erreur de surbrillance:", error);
+    alert("Erreur lors de la mise en surbrillance des communes");
+  }
+}
+
+function resetSitesHighlight() {
+  sitesHighlightLayer.getSource().clear();
+}
+
+function showErrorToast(message) {
+  // Implémentez votre système de notification
+  console.error(message);
+  alert(message);
+}
 // Bascule vers la vue détail
 function showProjectDetail(index) {
   viewMode = 'detail';
   listView.classList.add('hidden');
   detailView.classList.remove('hidden');
 
+  
+
   const p = filteredProjects[index];
+  initZoomCheckbox(p.id_projet);
   detailName.textContent = p.nom_projet;
   detailSigle.textContent = p.sigle_projet;
   detailStart.textContent = p.date_debut;
@@ -1281,6 +1411,56 @@ function showProjectDetail(index) {
 }
   
 
+}
+
+// Nouvelle fonction d'initialisation
+async function initZoomCheckbox(projectId) {
+  const zoomCheckbox = document.getElementById('zoom-to-sites');
+  
+  zoomCheckbox.addEventListener('change', async (e) => {
+    if (e.target.checked) {
+      try {
+        // Activation du loader
+        document.getElementById('zoom-loading').style.display = 'inline-block';
+        zoomCheckbox.disabled = true;
+        
+        // Appel API avec le bon endpoint
+        const response = await fetch(`/api/projects/${projectId}/sites`);
+        
+        if (!response.ok) throw new Error(await response.text());
+        
+        const data = await response.json();
+        
+        // Conversion de la bbox PostGIS en format OpenLayers
+        const [minX, minY, maxX, maxY] = data.bbox.match(/\d+\.?\d*/g).map(Number);
+        const extent = ol.proj.transformExtent(
+          [minX, minY, maxX, maxY],
+          'EPSG:4326', 
+          'EPSG:3857'
+        );
+        
+        // Zoom sur l'emprise
+        map.getView().fit(extent, {
+          padding: [50, 50, 50, 50],
+          duration: 1000
+        });
+        
+        // Surbrillance des communes
+        highlightSites(data.communes);
+        
+      } catch (error) {
+        console.error("Erreur:", error);
+        zoomCheckbox.checked = false;
+        alert("Erreur lors du chargement des sites");
+      } finally {
+        document.getElementById('zoom-loading').style.display = 'none';
+        zoomCheckbox.disabled = false;
+      }
+    } else {
+      resetSitesHighlight();
+      map.getView().fit(camerounExtent, { duration: 500 });
+    }
+  });
 }
 
 // Remplit une <ul> à partir d’un texte séparé

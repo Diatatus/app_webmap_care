@@ -34,7 +34,7 @@ app.get("/admin", (req, res) => {
 
 // Importer et utiliser les routes d'API d'administration (protégées par authentification)
 const adminRoutes = require("./routes/adminRoutes");
-app.use("/admin/api", adminRoutes);
+app.use("/admin", adminRoutes);
 
 // Search endpoint
 app.post("/api/liveSearch", async (req, res) => {
@@ -222,6 +222,75 @@ app.get("/api/projets", async (req, res) => {
     res.status(500).json({ error: "Erreur lors de la récupération des données" });
   }
 });
+
+// Endpoint zoom sur les sites d'interventions
+app.post('/api/communes/geometries', async (req, res) => {
+  try {
+    const { communes } = req.body;
+    
+    // Requête optimisée avec vérification
+    const query = `
+      SELECT 
+        jsonb_build_object(
+          'type', 'FeatureCollection',
+          'features', jsonb_agg(
+            jsonb_build_object(
+              'type', 'Feature',
+              'geometry', ST_AsGeoJSON(geom)::jsonb,
+              'properties', jsonb_build_object('name', nom_commune)
+            )
+          )
+        ) as geojson
+      FROM communes
+      WHERE nom_commune = ANY($1)
+    `;
+    
+    const result = await pool.query(query, [communes]);
+    
+    if (!result.rows[0]?.geojson?.features) {
+      return res.status(404).json({ error: "Aucune commune trouvée" });
+    }
+    
+    res.json(result.rows[0].geojson);
+    
+  } catch (err) {
+    console.error("Erreur:", err);
+    res.status(500).json({ error: "Erreur serveur" });
+  }
+});
+
+app.get('/api/projects/:id/sites', async (req, res) => {
+  try {
+    const projectId = req.params.id;
+    
+    const query = `
+      SELECT 
+        ST_Extent(c.geom) as bbox,
+        array_agg(DISTINCT c.nom_commune) as communes
+      FROM projets_communes pc
+      JOIN communes c ON pc.id_commune = c.id_commune
+      WHERE pc.id_projet = $1
+      GROUP BY pc.id_projet
+    `;
+    
+    const result = await pool.query(query, [projectId]);
+    
+    if (!result.rows[0]?.bbox) {
+      return res.status(404).json({ error: "Aucun site trouvé pour ce projet" });
+    }
+    
+    res.json({
+      bbox: result.rows[0].bbox,
+      communes: result.rows[0].communes || []
+    });
+    
+  } catch (err) {
+    console.error("Erreur:", err);
+    res.status(500).json({ error: "Erreur serveur" });
+  }
+});
+
+
 
 
 

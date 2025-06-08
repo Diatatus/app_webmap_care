@@ -3,18 +3,14 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-
     <title>CARE CAMEROUN</title>
-
     <link
       rel="stylesheet"
       href="/node_modules/bootstrap/dist/css/bootstrap.css" />
-
     <link rel="stylesheet" href="/node_modules/ol/ol.css" />
     <script src="/node_modules/ol/dist/ol.js"></script>
     <script src="/node_modules/bootstrap/dist/js/bootstrap.js"></script>
     <script src="/node_modules/chart.js/dist/chart.umd.js"></script>
-
     <!-- ol-ext -->
     <link rel="stylesheet" href="/node_modules/ol-ext/dist/ol-ext.css" />
     <script
@@ -30,21 +26,18 @@
     <link
       rel="stylesheet"
       href="/node_modules/@fortawesome/fontawesome-free/css/all.min.css" />
-
     <!-- Add icon library -->
-
     <script src="https://unpkg.com/elm-pep"></script>
     <!-- Bingmap -->
-    <script
-      type="text/javascript"
-      src="https://www.bing.com/api/maps/mapcontrol?key=AuOKP0N2ww907dY398Ci9ZKg38AqF2jc7q1QchUixWw30TpwdCt4T36ip-OyE49R"></script>
     <script
       type="text/javascript"
       src="https://www.bing.com/api/maps/mapcontrol?key=AuOKP0N2ww907dY398Ci9ZKg38AqF2jc7q1QchUixWw30TpwdCt4T36ip-OyE49R&callback=loadMapScenario"
       async
       defer></script>
   </head>
-  <!-- Page de loading -->
+
+  <body>
+      <!-- Page de loading -->
   <div id="loading" class="loading">
     <div class="loader">
       <img
@@ -57,12 +50,8 @@
         class="static-logo" />
     </div>
   </div>
-
-  <body>
     <!-- Carte -->
     <div id="map" class="map2"></div>
-
-   <!-- Buttons couche de données -->
 <!-- Buttons couche de données -->
 <div id="layer-slider-container">
   <div id="layer-slider" class="custom-layer-slider-horizontal">
@@ -89,20 +78,40 @@
   </div>
 </div>
 
-
-    <!-- Barre de recherche -->
-    <div id="care-search-bar" class="care-search-bar">
-      <img src="./resources/images/care_.png" alt="CARE Logo" id="care-logo" />
+<header>
+  <div class="header-container">
+    <div class="header-left">
+      <img src="./resources/images/care_.png" alt="CARE Logo" class="header-logo">
       <div class="search-container">
-        <input
-          id="inpt_search"
-          type="text"
-          class="searchTerm"
-          placeholder="Chercher..." />
+        <i class="fas fa-search search-icon" id="search-toggle"></i>
+        <input id="inpt_search" type="text" class="searchTerm" placeholder="Chercher...">
         <div class="liveDataDiv" id="liveDataDiv"></div>
-        <i class="fas fa-search search-icon"></i>
       </div>
     </div>
+    <div class="header-right">
+      <div class="language-selector">
+        <button class="language-btn">
+          <span>Fr</span>
+          <i class="fas fa-chevron-down"></i>
+        </button>
+        <div class="language-dropdown">
+          <button class="language-option" data-lang="fr">Français</button>
+          <button class="language-option" data-lang="en">English</button>
+        </div>
+      </div>
+      
+      <button class="help-btn" id="help-btn">
+        <i class="fas fa-question-circle"></i>
+      </button>
+    </div>
+  </div>
+</header>
+
+<footer>
+  <div class="footer-content">
+    <div class="footer-copyright">© 2025 CARE Cameroun - Tous droits réservés</div>
+  </div>
+</footer>
 
     <!-- Story Map -->
     <div id="story" style="display: block">

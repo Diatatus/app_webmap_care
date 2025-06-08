@@ -970,7 +970,7 @@ async function loadRegions() {
           <label for="objectif_global">Objectif global :</label>
           <textarea  id="objectif_global" name="objectif_global" rows="5"  required></textarea>
         </div>
-<div class="form-group">
+<div class="form-group" style="height: 200px;>
         <label for="site_intervention">Site d'intervention :</label>
         <select id="site_intervention" name="site_intervention" multiple required>
           ${communes.map(commune => 

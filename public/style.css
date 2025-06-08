@@ -159,7 +159,7 @@ html {
     bottom: 0.5em;
     max-width: 100%;
     border-radius: 0.5em;
-    height: 285px;
+    height: 280px;
     background-color: rgba(255, 255, 255, 0.5);
   }
   #story {
@@ -185,18 +185,18 @@ html {
 @media (max-width: 1366px) {
   .ol-control.ol-storymap {
     top: 250px;
-    left: 20px;
+    left: 50px;
     bottom: 0.5em;
     max-width: 100%;
     border-radius: 0.5em;
-    height: 285px;
+    height: 280px;
     background-color: rgba(255, 255, 255, 0.5);
   }
   #story {
-    height: 200px;
+    height: 180px;
     width: 430px;
     top: 150%;
-    left: 150%;
+    left: 170%;
     padding: 10px;
   }
   #story h3 {
@@ -279,11 +279,11 @@ html {
     bottom: 0.5em;
     max-width: 100%;
     border-radius: 0.5em;
-    height: 350px;
+    height: 210px;
     background-color: rgba(255, 255, 255, 0.5);
   }
   #story {
-    height: 200px;
+    height: 210px;
     width: 350px;
     top: auto;
     left: auto;
@@ -309,7 +309,7 @@ html {
     bottom: 0.5em;
     max-width: 100%;
     border-radius: 0.5em;
-    height: 220px;
+    height: 200px;
     background-color: rgba(255, 255, 255, 0.5);
   }
   #story {
@@ -335,6 +335,195 @@ html {
 .options a {
   cursor: pointer;
 }
+
+/* Nouveau Header */
+header {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 70px;
+  background-color: #fff;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+  display: flex;
+  align-items: center;
+  padding: 0 20px;
+  z-index: 1000;
+  transition: all 0.3s ease;
+}
+
+/* Logo */
+.header-logo {
+  height: 50px;
+  margin-right: 30px;
+  transition: all 0.3s ease;
+}
+
+/* Conteneur principal */
+.header-container {
+  display: flex;
+  align-items: center;
+  width: 100%;
+  justify-content: space-between;
+}
+
+/* Partie gauche */
+.header-left {
+  display: flex;
+  align-items: center;
+}
+
+/* Partie centrale - Search */
+.search-container {
+  position: relative;
+  width: 300px;
+  transition: all 0.3s ease;
+}
+
+.search-container.collapsed {
+  width: 0;
+  opacity: 0;
+  overflow: hidden;
+}
+
+#inpt_search {
+  width: 100%;
+  border: 2px solid #e55b00;
+  padding: 8px 15px 8px 35px;
+  border-radius: 20px;
+  font-size: 14px;
+  background-color: #f9f9f9;
+  transition: all 0.3s ease;
+}
+
+.search-icon {
+  position: absolute;
+  left: 10px;
+  top: 50%;
+  transform: translateY(-50%);
+  color: #e55b00;
+  cursor: pointer;
+}
+
+/* Partie droite */
+.header-right {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+}
+
+/* Bouton langue */
+.language-selector {
+  position: relative;
+}
+
+.language-btn {
+  background: none;
+  border: none;
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  cursor: pointer;
+  padding: 5px 10px;
+  border-radius: 4px;
+  transition: background 0.3s;
+}
+
+.language-btn:hover {
+  background: #f0f0f0;
+}
+
+.language-dropdown {
+  position: absolute;
+  top: 100%;
+  right: 0;
+  background: white;
+  border-radius: 4px;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+  display: none;
+  min-width: 100px;
+}
+
+.language-dropdown.show {
+  display: block;
+}
+
+.language-option {
+  padding: 8px 15px;
+  cursor: pointer;
+  display: block;
+  text-align: left;
+  width: 100%;
+  border: none;
+  background: none;
+}
+
+.language-option:hover {
+  background: #f5f5f5;
+}
+
+/* Bouton aide */
+.help-btn {
+  background: none;
+  border: none;
+  font-size: 18px;
+  color: #e55b00;
+  cursor: pointer;
+  padding: 5px;
+  border-radius: 50%;
+  width: 36px;
+  height: 36px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: background 0.3s;
+}
+
+.help-btn:hover {
+  background: rgba(229, 91, 0, 0.1);
+}
+
+/* Footer */
+footer {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  background-color: rgba(255, 255, 255, 0.9);
+  padding: 10px 0;
+  text-align: center;
+  font-size: 12px;
+  color: #333;
+  border-top: 1px solid #e0e0e0;
+  z-index: 999;
+}
+
+.footer-content {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 15px;
+}
+
+@media (max-width: 480px) {
+  .search-container {
+    display: none !important;
+  }
+  
+  .header-left {
+    justify-content: center;
+    width: 100%;
+  }
+  
+  .header-logo {
+    margin-right: 0;
+  }
+  
+  .header-right {
+    position: absolute;
+    right: 15px;
+  }
+}
+
 
 /* Care Search Bar */
 .care-search-bar {
@@ -495,102 +684,131 @@ html {
 
 /* Adjusted style for responsive layout and proper positioning */
 #layer-slider-container {
-  display: flex;
-  align-items: center;
-  justify-content: center;
   position: absolute;
-  top: 110px; /* Adjusted to place below the search bar */
-  left: 49%;
-  transform: translateX(-50%); /* Centers the slider horizontally */
+  top: 70px;
+  left: 70px; /* Déplacé plus à gauche */
   padding: 10px;
-  background-color: rgba(255, 255, 255, 0);
-  border-radius: 8px;
-  box-shadow: 0 2px 5px rgba(0, 0, 0, 0);
-  width: 90%; /* Makes it responsive */
-  max-width: 550px; /* Maximum width for larger screens */
-  z-index: 0;
+  background-color: none;
+  border-radius: 12px;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+  width: auto;
+  max-width: none;
+  z-index: 1000;
+  border: 1px solid rgba(0, 0, 0, 0.08);
+  transition: all 0.3s ease;
 }
 
-/* Responsive layout for the buttons */
 .custom-layer-slider-horizontal {
   display: flex;
-  gap: 15px; /* Space between buttons */
-  flex-wrap: wrap; /* Wraps buttons to next line on small screens */
-  justify-content: center; /* Centers the buttons */
+  flex-direction: column; /* Changement en colonne pour un look vertical */
+  gap: 8px;
 }
 
-/* Style for smaller buttons */
 .btn {
-  display: inline-flex;
+  display: flex;
   align-items: center;
-  justify-content: center;
-  padding: 8px 12px; /* Reduced padding */
+  padding: 10px 15px;
   background-color: #fff;
   border-radius: 8px;
   cursor: pointer;
-  transition: transform 0.3s ease, opacity 0.3s ease, box-shadow 0.3s ease;
-  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.15);
+  transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
   border: none;
-  font-size: 12px; /* Reduced font size */
+  font-size: 13px;
+  font-weight: 500;
+  color: #333;
+  min-width: 180px;
+  text-align: left;
+}
+
+.btn:hover {
+  transform: translateX(5px);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  background-color: #f8f8f8;
 }
 
 .btn i {
-  margin-right: 6px; /* Reduced spacing between icon and text */
-  font-size: 16px; /* Reduced icon size */
+  margin-right: 10px;
+  font-size: 16px;
+  color: #e55b00;
+  transition: all 0.3s ease;
 }
 
-/* Effet au survol */
-.btn:hover {
-  transform: scale(1.05);
-  opacity: 0.9;
-  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
-  background-color: #e46217b4;
-}
-
-/* Style for the checkboxes within buttons */
 .layer-checkbox {
-  margin-right: 8px;
+  margin-right: 10px;
   width: 16px;
   height: 16px;
   cursor: pointer;
+  appearance: none;
+  -webkit-appearance: none;
+  border: 2px solid #ddd;
+  border-radius: 4px;
+  outline: none;
+  transition: all 0.2s ease;
 }
 
+.layer-checkbox:checked {
+  background-color: #e55b00;
+  border-color: #e55b00;
+  position: relative;
+}
 
-/* Checkbox positioning and interaction */
+.layer-checkbox:checked::after {
+  content: "✓";
+  position: absolute;
+  color: white;
+  font-size: 12px;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+}
+
 .layer-checkbox:checked + i {
-  color: #007bff; /* Highlight icon when checkbox is checked */
+  color: #e55b00;
+  transform: scale(1.1);
 }
 
-.layer-checkbox:hover {
-  background: #f0f0f0; /* Subtle background highlight */
+.layer-checkbox:focus {
+  box-shadow: 0 0 0 2px rgba(229, 91, 0, 0.2);
 }
 
-/* Media query for smaller screens */
+/* Effet quand la couche est active */
+.btn.active {
+  background-color: rgba(229, 91, 0, 0.1);
+  border-left: 3px solid #e55b00;
+}
+
+/* Responsive */
 @media (max-width: 768px) {
   #layer-slider-container {
-    width: 100%; /* Use full width on small screens */
-    max-width: none; /* Remove max-width limit */
+    left: 20px;
+    top: 90px;
     padding: 8px;
+    background-color: none;
   }
-
+  
   .btn {
-    font-size: 10px;
-    padding: 6px 10px; /* Further reduced padding on small screens */
-  }
-
-  .btn i {
-    font-size: 14px; /* Smaller icons on small screens */
+    min-width: 160px;
+    padding: 8px 12px;
+    font-size: 12px;
   }
 }
 
 @media (max-width: 480px) {
-  .btn {
-    font-size: 8px; /* Even smaller font size on very small screens */
-    padding: 5px 8px; /* Reduced padding on very small screens */
+  #layer-slider-container {
+    left: 50px;
+    top: 80px;
+    background-color: none;
   }
-
+  
+  .btn {
+    min-width: 140px;
+    padding: 6px 10px;
+    font-size: 11px;
+  }
+  
   .btn i {
-    font-size: 12px; /* Reduced icon size for very small screens */
+    font-size: 14px;
   }
 }
 
@@ -609,11 +827,11 @@ html {
 .zoom-btn {
   background-color: rgba(255, 255, 255); /* Semi-transparent white background */
   border: none;
-  border-radius: 50%; /* Make the buttons round */
+  border-radius: 10%; /* Make the buttons round */
   border-color: #ccc;
-  width: 40px;
-  height: 40px;
-  font-size: 20px;
+  width: 30px;
+  height: 30px;
+  font-size: 15px;
   color: rgb(0, 0, 0); /* Button text color */
   cursor: pointer;
   display: flex;
@@ -636,13 +854,13 @@ html {
 .popup-container {
   display: none; /* Initially hidden */
   position: absolute;
-  top: 15%;
+  top: 10.5%;
   right: 7%;
   width: 400px;
   height: 630px; /* Define height */
   background-color: rgba(255, 255, 255, 1);
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
-  border-radius: 10px;
+  border-radius: 5px;
   z-index: 1000;
   opacity: 0;
   transition: opacity 0.5s ease-in-out;
@@ -701,7 +919,7 @@ html {
   justify-content: space-between;
   align-items: center;
   padding: 10px;
-  background-color: #e46217b4;
+  background-color: #ee8845;
   border-bottom: 1px solid #ccc;
 }
 
@@ -1475,7 +1693,3 @@ html {
     opacity: 1;
   }
 }
-
-
-
-

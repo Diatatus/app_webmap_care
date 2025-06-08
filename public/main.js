@@ -5,6 +5,47 @@ $(document).ready(function () {
   }, 2000); // Délai de 3000 millisecondes (3 secondes)
 });
 
+// Toggle de la barre de recherche
+document.getElementById('search-toggle').addEventListener('click', function() {
+  const searchContainer = document.querySelector('.search-container');
+  searchContainer.classList.toggle('collapsed');
+  
+  if (!searchContainer.classList.contains('collapsed')) {
+    document.getElementById('inpt_search').focus();
+  }
+});
+
+// Sélecteur de langue
+const languageBtn = document.querySelector('.language-btn');
+const languageDropdown = document.querySelector('.language-dropdown');
+
+languageBtn.addEventListener('click', function() {
+  languageDropdown.classList.toggle('show');
+});
+
+// Fermer le dropdown quand on clique ailleurs
+window.addEventListener('click', function(e) {
+  if (!e.target.matches('.language-btn') && !e.target.closest('.language-selector')) {
+    languageDropdown.classList.remove('show');
+  }
+});
+
+// Gestion du changement de langue
+document.querySelectorAll('.language-option').forEach(option => {
+  option.addEventListener('click', function() {
+    const lang = this.getAttribute('data-lang');
+    // Ici vous ajouterez la logique de changement de langue
+    languageBtn.querySelector('span').textContent = lang === 'fr' ? 'Fr' : 'En';
+    languageDropdown.classList.remove('show');
+  });
+});
+
+// Modal d'aide
+document.getElementById('help-btn').addEventListener('click', function() {
+  // Créer et afficher votre modal d'aide ici
+  alert("Modal d'aide et guide utilisateur à implémenter");
+});
+
 // Définition du projection et  de la vue sur la carte
 
 const customproj = ol.proj.get("EPSG:4326");
@@ -1385,7 +1426,6 @@ function showProjectDetail(index) {
   // fonctions utilitaires pour remplir les UL
   fillList(detailObjective, p.objectif_global);
   fillList(detailTarget, p.cible);
-  fillList(detailSites, p.site_intervention);
   fillList(detailAchievements, p.realisations);
   fillPhotoGallery(p);
 

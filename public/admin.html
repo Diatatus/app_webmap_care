@@ -1,248 +1,433 @@
 <!DOCTYPE html>
 <html lang="fr">
 <head>
-  <meta charset="UTF-8">
-  <title>Espace Administrateur</title>
-  <link rel="shortcut icon " href="./resources/images/care_logo.png" />
-  <!-- FontAwesome -->
-  <link rel="stylesheet" href="/node_modules/@fortawesome/fontawesome-free/css/all.min.css" />
-  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
-<link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
-  <style>
-    body {
-      font-family: Arial, sans-serif;
-      background-color: #f2f2f2;
-      margin: 0;
-      padding: 0;
-      display: flex;
-      flex-direction: column;
-      min-height: 100vh;
-  padding-top: 0px; /* Ajuste en fonction de la hauteur du header */
-    }
+    <meta charset="UTF-8">
+    <title>Espace Administrateur</title>
+    <link rel="shortcut icon" href="./resources/images/care_logo.png" />
+    <link rel="stylesheet" href="/node_modules/@fortawesome/fontawesome-free/css/all.min.css" />
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700&family=Open+Sans:wght@400;600;700&display=swap" rel="stylesheet">
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
+    <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
+    <style>
+        :root {
+            --primary-color: #007bff; /* Bleu vibrant */
+            --secondary-color: #6c757d; /* Gris foncé */
+            --accent-color: #28a745; /* Vert pour succès/actions */
+            --background-light: #f8f9fa; /* Arrière-plan très clair */
+            --background-dark: #343a40; /* Arrière-plan sombre pour le header/footer */
+            --text-dark: #343a40; /* Texte foncé */
+            --text-light: #ffffff; /* Texte clair */
+            --border-color: #dee2e6; /* Couleur de bordure */
+            --shadow-light: rgba(0, 0, 0, 0.08); /* Ombre légère */
+            --border-radius: 8px;
+        }
 
-    header {
-      background-color: #2c3e50;
-      color: #fff;
-      padding: 5px;
-      text-align: center;
-      position: fixed; /* Fixe le header */
+        body {
+            font-family: 'Montserrat', sans-serif;
+            background-color: var(--background-light);
+            margin: 0;
+            padding: 0;
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+            padding-top: 60px; /* Espace pour le header fixe */
+            color: var(--text-dark);
+        }
 
-  width: 100%; /* Pour occuper toute la largeur */
-    }
+        header {
+            background-color: var(--background-dark);
+            color: var(--text-light);
+            padding: 10px 20px;
+            text-align: center;
+            position: fixed;
+            width: 100%;
+            top: 0;
+            left: 0;
+            z-index: 1000; /* Assure que le header est au-dessus */
+            box-shadow: 0 2px 4px var(--shadow-light);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
 
-    .logout-btn {
-      position: absolute;
-      top: 20px;
-      right: 20px;
-      background: none;
-      border: none;
-      color: #fff;
-      font-size: 20px;
-      cursor: pointer;
-    }
+        header h1 {
+            margin: 0;
+            font-size: 1.5em;
+            font-family: 'Open Sans', sans-serif;
+            font-weight: 600;
+            flex-grow: 1; /* Permet au titre de prendre de l'espace */
+            text-align: left; /* Alignement du titre à gauche */
+        }
 
-    .logout-btn:hover {
-      color: #e74c3c;
-    }
+        .logout-btn {
+            background: none;
+            border: none;
+            color: var(--text-light);
+            font-size: 1.1em; /* Légèrement réduit pour mieux s'intégrer */
+            cursor: pointer;
+            padding: 8px 15px; /* Augmenté légèrement pour un meilleur clic */
+            border-radius: var(--border-radius);
+            transition: background-color 0.3s ease;
+            display: flex; /* Permet d'aligner l'icône et le texte */
+            align-items: center;
+            gap: 8px; /* Espace entre l'icône et le texte */
+            margin-right: 10px; /* Ajoute une marge à droite pour qu'il ne soit pas collé au bord */
+        }
 
-    .container {
-      flex: 1;
-      width: 90%;
-      max-width: 1200px;
-      margin: 50px auto;
-      background: #fff;
-      padding: 50px;
-      border-radius: 8px;
-      box-shadow: 0 2px 4px rgba(0,0,0,0.1);
-    }
+        .logout-btn:hover {
+            background-color: rgba(255, 255, 255, 0.1);
+            color: #dc3545; /* Rouge pour le hover du logout */
+        }
 
-    nav {
-      margin: 20px 0;
-      text-align: center;
-    }
+        .container {
+            flex: 1;
+            width: 95%;
+            max-width: 1400px;
+            margin: 30px auto;
+            background: var(--text-light);
+            padding: 40px;
+            border-radius: var(--border-radius);
+            box-shadow: 0 4px 10px var(--shadow-light);
+        }
 
-    nav button {
-      padding: 10px 20px;
-      margin: 0 5px;
-      background-color: #3498db;
-      border: none;
-      color: #fff;
-      border-radius: 4px;
-      cursor: pointer;
-    }
+        section {
+            padding: 20px 0;
+        }
 
-    nav button:hover {
-      background-color: #2980b9;
-    }
+        h2 {
+            font-family: 'Open Sans', sans-serif;
+            font-weight: 700;
+            color: var(--primary-color);
+            text-align: center;
+            margin-bottom: 30px;
+        }
 
-    .hidden {
-      display: none;
-    }
+        nav {
+            margin: 20px 0 40px;
+            text-align: center;
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 10px; /* Espace entre les boutons */
+        }
 
-    /* Contenu avec table défilable */
-    #contentArea {
-      flex: 1;
-      overflow: hidden;
-      display: flex;
-      flex-direction: column;
-    }
+        nav button {
+            padding: 12px 25px;
+            background-color: var(--primary-color);
+            border: none;
+            color: var(--text-light);
+            border-radius: var(--border-radius);
+            cursor: pointer;
+            font-size: 1em;
+            font-weight: 500;
+            transition: background-color 0.3s ease, transform 0.2s ease;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+        }
 
-    .table-wrapper {
-      flex: 1;
-      overflow-x: auto;
-      overflow-y: auto;
-      max-height: 300px;
-      border: 1px solid #ddd;
-      border-radius: 8px;
-      box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
-      background-color: #fff;
-    }
+        nav button:hover {
+            background-color: #0056b3; /* Bleu plus foncé */
+            transform: translateY(-2px);
+        }
 
-    table {
-      width: 100%;
-      border-collapse: collapse;
-    }
+        nav button.active {
+            background-color: var(--accent-color); /* Bouton actif en vert */
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+        }
 
-    th{
-      padding: 10px;
-      border: 1px solid #ddd;
-      text-align: left;
-      white-space: nowrap;  /* Empêche le texte de passer à la ligne */
-      background-color: #2c3e50;
-      color: white;
-      position: sticky;
-  top: 0;
-  z-index: 2;
-    }
-    td {
-      padding: 10px;
-      border: 1px solid #ddd;
-      text-align: left;
-      white-space: nowrap;  /* Empêche le texte de passer à la ligne */
-      z-index: 0;
-    }
+        .hidden {
+            display: none;
+        }
 
-    .fixed-column {
-  position: sticky;
-  right: 0;
-  background-color: #f8f8f8;
-  box-shadow: -2px 0 5px rgba(0, 0, 0, 0.1);
-  color: black;
-}
+        /* Contenu avec table défilable */
+        #contentArea {
+            flex: 1;
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+        }
 
+        .table-wrapper {
+            flex: 1;
+            overflow-x: auto;
+            overflow-y: auto;
+            max-height: 500px; /* Hauteur maximale augmentée */
+            border: 1px solid var(--border-color);
+            border-radius: var(--border-radius);
+            box-shadow: 0 2px 5px var(--shadow-light);
+            background-color: var(--text-light);
+            padding: 10px; /* Espacement intérieur */
+        }
 
-    form {
-      width: 100%;
-      display: flex;
-      flex-direction: column;
-      gap: 15px;
-    }
-    .form-group {
-      display: flex;
-      flex-direction: column;
-    }
-    .form-group i{
-      display: flex;
-      top:2px;
-      flex-direction: column;
-    }
-    .form-group label {
-      margin-bottom: 5px;
-      font-weight: bold;
-    }
-    .form-group input {
-      padding: 10px;
-      border: 1px solid #ccc;
-      border-radius: 4px;
-    }
-    .password-wrapper {
-      position: relative;
-    }
-    .password-toggle {
-      position: absolute;
-      top: 50%;
-      right: 10px;
-      transform: translateY(-50%);
-      cursor: pointer;
-      color: #999;
-    }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            min-width: 1200px; /* Assure une largeur minimale pour le défilement */
+        }
 
-    
-  </style>
+        th, td {
+            padding: 12px 15px;
+            border: 1px solid var(--border-color);
+            text-align: left;
+            white-space: nowrap;
+            z-index: 0;
+            font-size: 0.9em;
+        }
+
+        th {
+            background-color: var(--background-dark);
+            color: var(--text-light);
+            position: sticky;
+            top: 0;
+            z-index: 2;
+            font-family: 'Open Sans', sans-serif;
+            font-weight: 600;
+        }
+
+        tr:nth-child(even) {
+            background-color: #f2f2f2; /* Lignes paires légèrement plus foncées */
+        }
+
+        td.fixed-column {
+            position: sticky;
+            right: 0;
+            background-color: var(--background-light); /* Couleur pour la colonne fixe */
+            box-shadow: -2px 0 5px rgba(0, 0, 0, 0.05);
+            color: var(--text-dark);
+            z-index: 1; /* Assure que la colonne fixe est au-dessus du contenu défilant */
+        }
+
+        .fixed-btn {
+            background-color: var(--primary-color);
+            color: var(--text-light);
+            border: none;
+            padding: 8px 12px;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 0.9em;
+            transition: background-color 0.3s ease;
+            margin: 0 2px; /* Ajout d'une petite marge pour séparer les boutons d'action */
+        }
+
+        .fixed-btn:hover {
+            background-color: #0056b3;
+        }
+
+        /* Formulaires */
+        form {
+            width: 100%;
+            max-width: 600px;
+            margin: 0 auto;
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+            padding: 20px;
+            border: 1px solid var(--border-color);
+            border-radius: var(--border-radius);
+            background-color: var(--text-light);
+            box-shadow: 0 2px 5px var(--shadow-light);
+        }
+
+        .form-group {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+
+        .form-group label {
+            font-weight: 600;
+            color: var(--text-dark);
+            font-size: 0.95em;
+        }
+
+        .form-group input[type="text"],
+        .form-group input[type="password"],
+        .form-group input[type="number"] {
+            padding: 12px;
+            border: 1px solid var(--border-color);
+            border-radius: 4px;
+            font-size: 1em;
+            transition: border-color 0.3s ease, box-shadow 0.3s ease;
+            width: calc(100% - 24px); /* Prend toute la largeur moins le padding */
+        }
+
+        .form-group input:focus {
+            border-color: var(--primary-color);
+            box-shadow: 0 0 0 3px rgba(0, 123, 255, 0.25);
+            outline: none;
+        }
+
+        .password-wrapper {
+            position: relative;
+        }
+
+        .password-wrapper input {
+            padding-right: 40px; /* Laisse de l'espace pour l'icône */
+        }
+
+        .password-toggle {
+            position: absolute;
+            top: 60%; /* Ajuste la position verticale */
+            right: 15px; /* Marge à droite pour qu'elle ne soit pas collée */
+            transform: translateY(-50%);
+            cursor: pointer;
+            color: var(--secondary-color);
+            transition: color 0.3s ease;
+            font-size: 1.1em;
+        }
+
+        .password-toggle:hover {
+            color: var(--primary-color);
+        }
+
+        form button[type="submit"] {
+            padding: 12px 25px;
+            background-color: var(--primary-color);
+            border: none;
+            color: var(--text-light);
+            border-radius: var(--border-radius);
+            cursor: pointer;
+            font-size: 1.1em;
+            font-weight: 600;
+            transition: background-color 0.3s ease, transform 0.2s ease;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+            margin-top: 20px;
+        }
+
+        form button[type="submit"]:hover {
+            background-color: #0056b3;
+            transform: translateY(-2px);
+        }
+
+        /* Styles pour Select2 */
+        .select2-container--default .select2-selection--single {
+            height: 44px; /* Ajuste la hauteur */
+            border: 1px solid var(--border-color);
+            border-radius: 4px;
+            display: flex;
+            align-items: center;
+        }
+
+        .select2-container--default .select2-selection--single .select2-selection__rendered {
+            line-height: 42px; /* Centre le texte verticalement */
+            padding-left: 12px;
+        }
+
+        .select2-container--default .select2-selection--single .select2-selection__arrow {
+            height: 42px;
+            right: 5px;
+        }
+
+        .select2-container--default.select2-container--focus .select2-selection--single {
+            border-color: var(--primary-color);
+            box-shadow: 0 0 0 3px rgba(0, 123, 255, 0.25);
+        }
+
+        .select2-dropdown {
+            border: 1px solid var(--border-color);
+            border-radius: 4px;
+            box-shadow: 0 2px 5px var(--shadow-light);
+        }
+
+        .select2-results__option {
+            padding: 10px 12px;
+        }
+
+        .select2-results__option--highlighted[aria-selected] {
+            background-color: var(--primary-color);
+            color: var(--text-light);
+        }
+    </style>
 </head>
 <body>
-  <header>
-    <h1>Espace Administrateur - Gestion des Données</h1>
-    <button class="logout-btn" id="btnLogout">
-      <i class="fas fa-power-off"></i>
-    </button>
-  </header>
+    <header>
+        <h1>Espace Administrateur - Gestion des Données</h1>
+        <button class="logout-btn" id="btnLogout">
+            <i class="fas fa-power-off"></i> Déconnexion
+        </button>
+    </header>
 
-  <div class="container">
-    <!-- Section de connexion -->
-    <section id="loginSection">
-      <h2 style="text-align: center;">Connexion</h2>
-      <form id="loginForm">
-        <div class="form-group">
-          <label for="username">Nom d'utilisateur :</label>
-          <input type="text" id="username" name="username" required>
-        </div>
-        <div class="form-group password-wrapper">
-          <label for="password">Mot de passe :</label>
-          <input type="password" id="password" name="password" required>
-          <i class="fas fa-eye password-toggle" id="togglePassword"></i>
-        </div>
-        <button type="submit">Se connecter</button>
-      </form>
-    </section>
+    <div class="container">
+        <section id="loginSection">
+            <h2>Connexion</h2>
+            <form id="loginForm">
+                <div class="form-group">
+                    <label for="username">Nom d'utilisateur :</label>
+                    <input type="text" id="username" name="username" required>
+                </div>
+                <div class="form-group password-wrapper">
+                    <label for="password">Mot de passe :</label>
+                    <input type="password" id="password" name="password" required>
+                    <i class="fas fa-eye password-toggle" id="togglePassword"></i>
+                </div>
+                <button type="submit">Se connecter</button>
+            </form>
+        </section>
 
-    <!-- Interface d'administration (affichée après authentification) -->
-    <section id="adminInterface" class="hidden">
-      <nav>
-        <button id="btnListRegions">Régions</button>
-        <button id="btnListPartners">Partenaires</button>
-        <button id="btnListOffices">Bureaux de Base</button>
-        <button id="btnListProjects">Projets</button>
-   
-      </nav>
-      <div id="contentArea">
-        <div class="table-wrapper">
-          <!-- Le contenu dynamique (tableau, etc.) sera injecté ici -->
-        </div>
-      </div>
-    </section>
-  </div>
+        <section id="adminInterface" class="hidden">
+            <nav>
+                <button id="btnListRegions">Régions</button>
+                <button id="btnListPartners">Partenaires</button>
+                <button id="btnListOffices">Bureaux de Base</button>
+                <button id="btnListProjects">Projets</button>
+            </nav>
+            <div id="contentArea">
+                <div class="table-wrapper">
+                    </div>
+            </div>
+        </section>
+    </div>
 
-  <script>
-    document.addEventListener('DOMContentLoaded', () => {
-      const togglePassword = document.getElementById('togglePassword');
-      const passwordField = document.getElementById('password');
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const togglePassword = document.getElementById('togglePassword');
+            const passwordField = document.getElementById('password');
 
-      togglePassword.addEventListener('click', () => {
-        const type = passwordField.getAttribute('type') === 'password' ? 'text' : 'password';
-        passwordField.setAttribute('type', type);
-        togglePassword.classList.toggle('fa-eye');
-        togglePassword.classList.toggle('fa-eye-slash');
-      });
+            togglePassword.addEventListener('click', () => {
+                const type = passwordField.getAttribute('type') === 'password' ? 'text' : 'password';
+                passwordField.setAttribute('type', type);
+                togglePassword.classList.toggle('fa-eye');
+                togglePassword.classList.toggle('fa-eye-slash');
+            });
 
-      // Gestion de la déconnexion
-      const btnLogout = document.getElementById('btnLogout');
-      btnLogout.addEventListener('click', async () => {
-        const response = await fetch('/admin/api/logout', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' }
+            // Gestion de la déconnexion
+            const btnLogout = document.getElementById('btnLogout');
+            btnLogout.addEventListener('click', async () => {
+                const response = await fetch('/admin/api/logout', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' }
+                });
+                if (response.ok) {
+                    window.location.href = 'localhost:3000/';
+                } else {
+                    alert('Erreur lors de la déconnexion.');
+                }
+            });
+
+            // Gérer les boutons de navigation actifs
+            const navButtons = document.querySelectorAll('nav button');
+            navButtons.forEach(button => {
+                button.addEventListener('click', () => {
+                    navButtons.forEach(btn => btn.classList.remove('active'));
+                    button.classList.add('active');
+                });
+            });
+
+            // Définir le bouton "Régions" comme actif par défaut au chargement de l'interface admin
+            const adminInterface = document.getElementById('adminInterface');
+            const observer = new MutationObserver((mutationsList, observer) => {
+                for (const mutation of mutationsList) {
+                    if (mutation.type === 'attributes' && mutation.attributeName === 'class') {
+                        if (!adminInterface.classList.contains('hidden')) {
+                            document.getElementById('btnListRegions').classList.add('active');
+                            observer.disconnect(); // Arrête d'observer une fois l'action effectuée
+                        }
+                    }
+                }
+            });
+            observer.observe(adminInterface, { attributes: true });
         });
-        if (response.ok) {
-          window.location.href = 'localhost:3000/';
-        } else {
-          alert('Erreur lors de la déconnexion.');
-        }
-      });
-    });
-  </script>
-  
-
-  <script src="/admin.js"></script>
+    </script>
+    <script src="/admin.js"></script>
 </body>
 </html>

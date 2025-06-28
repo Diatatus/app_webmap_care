@@ -15,30 +15,7 @@ document.getElementById('search-toggle').addEventListener('click', function() {
   }
 });
 
-// Sélecteur de langue
-const languageBtn = document.querySelector('.language-btn');
-const languageDropdown = document.querySelector('.language-dropdown');
 
-languageBtn.addEventListener('click', function() {
-  languageDropdown.classList.toggle('show');
-});
-
-// Fermer le dropdown quand on clique ailleurs
-window.addEventListener('click', function(e) {
-  if (!e.target.matches('.language-btn') && !e.target.closest('.language-selector')) {
-    languageDropdown.classList.remove('show');
-  }
-});
-
-// Gestion du changement de langue
-document.querySelectorAll('.language-option').forEach(option => {
-  option.addEventListener('click', function() {
-    const lang = this.getAttribute('data-lang');
-    // Ici vous ajouterez la logique de changement de langue
-    languageBtn.querySelector('span').textContent = lang === 'fr' ? 'Fr' : 'En';
-    languageDropdown.classList.remove('show');
-  });
-});
 
 // Modal d'aide
 document.getElementById('help-btn').addEventListener('click', function() {

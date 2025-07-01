@@ -101,6 +101,7 @@ osm.setVisible(true);
 // Definition de couche des limites national du cameroun
 var CamerounLayer = new ol.layer.Vector({
   name: "Cameroun",
+  zIndex: 10,
   source: new ol.source.Vector({
     url: "/api/cameroun", // URL de l'endpoint Node.js pour récupérer les données GeoJSON
     format: new ol.format.GeoJSON(),
@@ -124,13 +125,12 @@ var CamerounLayer = new ol.layer.Vector({
   },
 });
 
-map.addLayer(CamerounLayer);
 
-var camerounLayerVisible = true; // Variable pour savoir si la couche est actuellement visible ou non
 
 // Définition de la couche des limites des Régions et Villes (Yaounde, Douala uniquement) du cameroun
 var regionLayer = new ol.layer.Vector({
   name: "Régions",
+  zIndex: 20,
   source: new ol.source.Vector({
     url: "/api/regions", // URL de l'endpoint Node.js pour récupérer les données GeoJSON
     format: new ol.format.GeoJSON(),
@@ -154,13 +154,13 @@ var regionLayer = new ol.layer.Vector({
   },
 });
 
-map.addLayer(regionLayer);
 
-var regionLayerVisible = true; // Variable pour savoir si la couche est actuellement visible ou non
+var regionLayerVisible = false; // Variable pour savoir si la couche est actuellement visible ou non
 
 // Définition la couche des pays du monde (excepte le Cameroun) avec un style assombri
 var worldMapLayer = new ol.layer.Vector({
   name: "WorldMap",
+  zIndex: 0,
   source: new ol.source.Vector({
     url: "/api/world_map", // URL de l'endpoint Node.js pour récupérer les données GeoJSON
     format: new ol.format.GeoJSON(),
@@ -218,6 +218,7 @@ select.on("select", function (evt) {
 
 // Définition de la couche des bureaux de base
 var basesLayer = new ol.layer.Vector({
+  zIndex: 50,
   source: new ol.source.Vector({
     url: "/api/bureaux_base",
     format: new ol.format.GeoJSON(),
@@ -311,6 +312,7 @@ map.on("pointermove", function (evt) {
 
 // Définition de la couche des partenaires
 var partnerLayer = new ol.layer.Vector({
+  zIndex: 40,
   source: new ol.source.Vector({
     url: "/api/care_partner",
     format: new ol.format.GeoJSON(),
@@ -762,6 +764,33 @@ map.on("click", function (evt) {
   }
 });
 
+
+// Gestion de l'affichage/masquage des couches et du popup
+document
+  .getElementById("toggleRegionsCheckbox")
+  .addEventListener("change", function (event) {
+    if (event.target.checked) {
+      map.addLayer(regionLayer);
+      regionLayerVisible = true;
+      map.addLayer(CamerounLayer);
+      camerounLayerVisible = false;
+      // Show popup when layer is toggled on
+      const source = CamerounLayer.getSource();
+      if (source.getState() === "ready") {
+        const features = source.getFeatures();
+        if (features.length > 0) {
+          showPopup(features[0]); // Display popup
+        }
+      }
+    } else {
+      map.removeLayer(regionLayer);
+      regionLayerVisible = false;
+      map.removeLayer(CamerounLayer);
+      camerounLayerVisible = false;
+      hidePopup(); // Hide popup when layer is toggled off
+    }
+  });
+
 // Fonction d'affichage du popup lors du chargement de l'application
 function showInitialPopup() {
   const isSmartphone = window.innerWidth <= 600; // Vérifier si on est sur un smartphone
@@ -841,27 +870,8 @@ map.once("rendercomplete", function () {
 });
 
 
-// Gestion de l'affichage/masquage des couches et du popup
-document
-  .getElementById("toggleRegionsCheckbox")
-  .addEventListener("change", function (event) {
-    if (event.target.checked) {
-      map.addLayer(regionLayer);
-      regionLayerVisible = true;
-      // Show popup when layer is toggled on
-      const source = CamerounLayer.getSource();
-      if (source.getState() === "ready") {
-        const features = source.getFeatures();
-        if (features.length > 0) {
-          showPopup(features[0]); // Display popup
-        }
-      }
-    } else {
-      map.removeLayer(regionLayer);
-      regionLayerVisible = false;
-      hidePopup(); // Hide popup when layer is toggled off
-    }
-  });
+
+
 
 function toggleLayer(eve) {
   var lyrname = eve.target.value;
@@ -927,6 +937,9 @@ document.addEventListener("DOMContentLoaded", function () {
     partnerLayerVisible;
   document.getElementById("toggleRegionsCheckbox").checked =
     regionLayerVisible;
+    document.getElementById("toggleRegionsCheckbox").checked =
+    camerounLayerVisible;
+
 });
 
 
@@ -1227,32 +1240,31 @@ function applyFilter() {
 }
 
 // Affiche la liste initiale
+// Affiche la liste initiale
 function renderProjectList() {
-  projectListEl.innerHTML = '';
-  if (!filteredProjects.length) {
-    projectListEl.innerHTML = '<li>Aucun projet trouvé.</li>';
-    return;
-  }
-  filteredProjects.forEach((p, idx) => {
-    const li = document.createElement('li');
-    const iconClass = p.statut === 'En cours' ? 'fas fa-circle in-progress' : 'fas fa-circle completed';
+    projectListEl.innerHTML = '';
+    if (!filteredProjects.length) {
+        projectListEl.innerHTML = '<li class="no-projects-found">Aucun projet trouvé pour ce filtre.</li>';
+        return;
+    }
+    filteredProjects.forEach((p, idx) => {
+        const li = document.createElement('li');
+        // !! IMPORTANT : Ne plus utiliser l'icône ici, le badge gère le statut visuel
+        // Si vous avez encore cette ligne, supprimez-la ou mettez-la en commentaire
+        // const iconClass = p.statut === 'En cours' ? 'fas fa-circle in-progress' : 'fas fa-circle completed';
 
-    li.innerHTML = `
-      <div class="project-info">
-        <span class="status-icon-wrapper">
-          <i class="${iconClass}"></i>
-        </span>
-        <span class="project-title"><strong>${p.nom_projet}</strong></span>
-      </div>
-      <span class="status-badge ${p.statut === 'En cours' ? 'badge-in-progress' : 'badge-completed'}">
-      </span>
-    `;
-    
+        const statusText = p.statut === 'En cours' ? 'En cours' : 'Clôturé'; // <-- IMPORTANT : Texte du badge
+        const badgeClass = p.statut === 'En cours' ? 'badge-in-progress' : 'badge-completed';
 
-
-    li.addEventListener('click', () => showProjectDetail(idx));
-    projectListEl.appendChild(li);
-  });
+        li.innerHTML = `
+            <div class="project-info">
+                <span class="project-title">${p.nom_projet}</span>
+            </div>
+            <span class="status-badge ${badgeClass}">${statusText}</span>  `;
+        
+        li.addEventListener('click', () => showProjectDetail(idx));
+        projectListEl.appendChild(li);
+    });
 }
 
 // Variables globales
@@ -1527,12 +1539,27 @@ function formatList(text) {
 
 
 // Close popup
+// Close popup
+// Close popup
 document
   .getElementById("base-popup-close-btn")
   .addEventListener("click", () => {
     const basePopup = document.getElementById("base-projects-popup");
     basePopup.style.opacity = 0;
-    setTimeout(() => (basePopup.style.display = "none"), 300);
+    setTimeout(() => {
+      basePopup.style.display = "none";
+      // Assurez-vous que la vue liste est visible et que la vue détail est cachée
+      listView.classList.remove('hidden');
+      detailView.classList.add('hidden');
+      
+      // --- AJOUTEZ CES LIGNES POUR RÉINITIALISER LA CHECKBOX ET LA COUCHE DE MISE EN SURBRILLANCE ---
+      const zoomCheckbox = document.getElementById('zoom-to-sites');
+      if (zoomCheckbox) { // Vérifie que la checkbox existe
+        zoomCheckbox.checked = false; // Décocher la checkbox
+        resetSitesHighlight(); // Supprimer la surbrillance des sites sur la carte
+      }
+      // --- FIN DE L'AJOUT ---
+    }, 300);
   });
 
 // Modal d'image

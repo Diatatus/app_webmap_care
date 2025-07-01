@@ -1,4 +1,3 @@
-
 const { Pool } = require("pg");
 
 // Configuration de la connexion

@@ -1396,9 +1396,11 @@ footer {
   background: rgba(255, 255, 255, 1);
   box-shadow: 0px 4px 8px rgba(0, 0, 0, 1);
   border-radius: 8px;
-  max-width: 400px;
+  /* Ancienne max-width: 400px; */
+  max-width: 450px; /* <--- MODIFIÉ : Un peu plus large pour le nouveau design */
   max-height: 90vh;
-  padding: 15px;
+  /* Ancien padding: 15px; */
+  padding: 20px; /* <--- MODIFIÉ : Plus de padding général */
   font-family: Arial, sans-serif;
   font-size: 13px;
   opacity: 0;
@@ -1414,25 +1416,75 @@ footer {
   position: sticky;
   z-index: 10;
   top: 0;
-  padding-bottom: 10px;
+  /* Ancien padding-bottom: 10px; */
+  padding-bottom: 15px; /* <--- MODIFIÉ : Plus d'espace sous l'en-tête */
   border-bottom: 1px solid #ccc;
   font-weight: bold;
+  margin-bottom: 10px; /* <--- AJOUTÉ : Plus d'espace entre l'en-tête et le contenu */
 }
+
+
 
 .hidden {
   display: none;
 }
 
 .filter-container {
-  margin: 10px 0;
+  /* Ancien margin: 10px 0; */
+  margin: 15px 0 10px; /* <--- MODIFIÉ : Ajuster les marges */
+  display: flex; /* <--- AJOUTÉ : Pour aligner les éléments */
+  align-items: center; /* <--- AJOUTÉ : Pour aligner les éléments */
+  gap: 10px; /* <--- AJOUTÉ : Espacement entre label, select et icône */
+  position: sticky;
 }
 #status-filter {
-  margin-left: 5px;
-  padding: 4px;
+  /* Ancien margin-left: 5px; */
+  /* Ancien padding: 4px; */
+  flex-grow: 1; /* <--- AJOUTÉ : Permet au sélecteur de prendre plus d'espace */
+  padding: 8px 10px; /* <--- MODIFIÉ : Plus de padding pour le sélecteur */
+  border-radius: 5px; /* <--- AJOUTÉ : Bords légèrement arrondis */
+  border: 1px solid #ccc; /* <--- AJOUTÉ : Bordure */
+  background-color: #f9f9f9; /* <--- AJOUTÉ : Fond léger */
+}
+.filter-container label strong { /* <--- AJOUTÉ : Style pour le texte "Réalisations" */
+    color: #555;
 }
 .filter-container i.fas.fa-filter {
-  margin-right: 5px;
+  margin-right: 5px; /* Garder, mais le 'gap' du parent le gérera mieux */
   color: #007bff;
+}
+
+/* Nouveaux styles pour la légende */
+.legend-container {
+    display: flex;
+    justify-content: flex-end; /* Aligne la légende à droite */
+    gap: 15px; /* Espacement entre les éléments de la légende */
+    margin-top: 10px;
+    margin-bottom: 15px;
+    font-size: 12px;
+    padding-right: 10px; /* Petit padding pour l'esthétique */
+}
+
+.legend-item {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+}
+
+.legend-color {
+    width: 12px;
+    height: 12px;
+    border-radius: 50%; /* Pour un cercle */
+    display: inline-block;
+    border: 1px solid rgba(0, 0, 0, 0.1); /* Petite bordure pour la définition */
+}
+
+.in-progress-color {
+    background-color: #f39c12; /* Orange - couleur pour "En cours" */
+}
+
+.completed-color {
+    background-color: #2ecc71; /* Vert - couleur pour "Clôturé" */
 }
 
 .project-list {
@@ -1440,20 +1492,92 @@ footer {
   padding: 0;
   overflow-y: auto;
   margin: 10px 0;
+  /* Optionnel : vous pouvez définir une hauteur maximale si la popup est trop grande
+     max-height: calc(90vh - 200px); */
 }
 .project-list li {
-  padding: 6px 8px;
-  border-bottom: 1px solid #eee;
+  /* Ancien padding: 6px 8px; */
+  padding: 12px 15px; /* <--- MODIFIÉ : Augmenter le padding pour plus d'espace */
+  border-bottom: 1px solid #eee; /* <--- ANCIEN : Cette ligne sera remplacée par un margin-bottom */
   cursor: pointer;
-  display: flex;
-  align-items: flex-start;
-  transition: background-color 0.2s ease, box-shadow 0.2s ease;
-  font-size: 16px;
+  /* Ancien display: flex; align-items: flex-start; */
+  display: flex; /* <--- MODIFIÉ */
+  align-items: center; /* <--- MODIFIÉ : Aligner verticalement */
+  justify-content: space-between; /* <--- AJOUTÉ : Espacer le titre et le badge de statut */
+  transition: background-color 0.2s ease, box-shadow 0.2s ease, transform 0.2s ease; /* <--- MODIFIÉ : Ajout de transform */
+  font-size: 14px; /* <--- MODIFIÉ : Taille de police légèrement augmentée */
+  border-radius: 6px; /* <--- AJOUTÉ : Bords légèrement arrondis pour un look plus doux */
+  margin-bottom: 8px; /* <--- AJOUTÉ : Espacement entre les éléments de la liste, remplace border-bottom pour l'esthétique */
+  background-color: #fff; /* <--- AJOUTÉ : Fond blanc pour les "cartes" */
+  box-shadow: 0 1px 3px rgba(0,0,0,0.05); /* <--- AJOUTÉ : Ombre légère */
+}
+.project-list li:last-child { /* <--- AJOUTÉ : Pour éviter la double bordure ou marge au dernier élément */
+    border-bottom: none;
+    margin-bottom: 0;
 }
 .project-list li:hover {
-  background-color: #f9f9f9;
-  box-shadow: 0px 1px 4px rgba(0, 0, 0, 0.1);
+  background-color: #f0f0f0; /* <--- MODIFIÉ : Changement de couleur au survol */
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1); /* <--- MODIFIÉ : Ombre plus prononcée au survol */
+  transform: translateY(-2px); /* <--- AJOUTÉ : Léger mouvement vers le haut */
 }
+.project-info { /* Conteneur pour le titre, s'il y a d'autres éléments à gauche du badge */
+    display: flex;
+    align-items: center;
+    flex-grow: 1; /* Permet à cette section de prendre l'espace disponible */
+}
+
+/* Vous pouvez supprimer .status-icon-wrapper si vous utilisez le badge uniquement dans la liste */
+/* Si vous voulez une icône plus petite dans la liste, mais le badge est suffisant pour le statut visuel
+.status-icon-wrapper {
+    width: 18px;
+    height: 18px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-right: 12px;
+    font-size: 12px;
+}
+*/
+
+
+.project-title { /* Styles pour le titre du projet dans la liste */
+    /* Ancien font-weight: bold; font-size: 13px; */
+    font-weight: 600; /* <--- MODIFIÉ : Plus de gras */
+    font-size: 14px; /* <--- MODIFIÉ */
+    color: #333; /* <--- AJOUTÉ : Couleur de texte plus foncée */
+    line-height: 1.4; /* <--- AJOUTÉ : Espacement entre les lignes pour les titres longs */
+}
+
+/* Styles pour le badge de statut (Nouveau) */
+.status-badge {
+    padding: 4px 8px;
+    border-radius: 15px; /* Forme de pilule */
+    font-size: 11px;
+    font-weight: bold;
+    text-transform: uppercase;
+    color: #fff; /* Texte blanc */
+    min-width: 70px; /* Largeur minimale pour éviter des variations de taille */
+    text-align: center;
+    white-space: nowrap; /* Empêche le texte de se casser sur plusieurs lignes */
+}
+
+.badge-in-progress {
+    background-color: #f39c12; /* Orange pour "En cours" */
+}
+
+.badge-completed {
+    background-color: #2ecc71; /* Vert pour "Clôturé" */
+}
+
+/* Les couleurs des icônes (si vous les gardez quelque part, par exemple dans la vue détail) */
+.in-progress {
+    color: #f39c12; /* orange */
+}
+
+.completed {
+    color: #2ecc71; /* vert */
+}
+/* Anciens .status-icon-wrapper, .project-title, .in-progress, .completed seront modifiés ou supprimés */
 .status-icon-wrapper {
   width: 24px;
   margin-top: 3px;
@@ -1463,6 +1587,7 @@ footer {
   font-weight: bold;
   font-size: 13px;
 }
+
 
 .back-btn {
   background: none;

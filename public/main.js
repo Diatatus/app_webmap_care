@@ -1,7 +1,7 @@
 // Chargement de la page de loading
 $(document).ready(function () {
   setTimeout(function () {
-    $("#loading").fadeOut(); // Masquer le div de chargement après 3 secondes
+    $("#loading").fadeOut(); 
   }, 2000); // Délai de 3000 millisecondes (3 secondes)
 });
 
@@ -16,12 +16,6 @@ document.getElementById('search-toggle').addEventListener('click', function() {
 });
 
 
-
-// Modal d'aide
-document.getElementById('help-btn').addEventListener('click', function() {
-  // Créer et afficher votre modal d'aide ici
-  alert("Modal d'aide et guide utilisateur à implémenter");
-});
 
 // Définition du projection et  de la vue sur la carte
 
@@ -536,6 +530,7 @@ var clusterStyle = function (feature) {
 // Définition de la couche des clusters avec le style
 var clusterLayer = new ol.layer.Vector({
   source: clusterSource,
+  zIndex:35,
   style: clusterStyle, // Appliquer le style aux clusters
 });
 
@@ -765,112 +760,58 @@ map.on("click", function (evt) {
 });
 
 
-// Gestion de l'affichage/masquage des couches et du popup
-document
-  .getElementById("toggleRegionsCheckbox")
-  .addEventListener("change", function (event) {
-    if (event.target.checked) {
+// Variable pour éviter d'afficher plusieurs fois le popup inutilement
+let popupShownForLayer = false;
+
+// Fonction pour afficher le popup dès que la couche est rendue et la source prête
+function showPopupWhenLayerReady(layer) {
+  popupShownForLayer = false;
+
+  // Fonction interne pour tenter d'afficher le popup
+  function tryShowPopup() {
+    const source = layer.getSource();
+    if (source.getState() === "ready" && !popupShownForLayer) {
+      const features = source.getFeatures();
+      if (features.length > 0) {
+        showPopup(features[0]);
+        popupShownForLayer = true;
+        // Une fois affiché, on peut retirer l'écouteur 'postrender'
+        layer.un("postrender", tryShowPopup);
+      }
+    }
+  }
+
+  // Attendre le rendu effectif de la couche
+  layer.on("postrender", tryShowPopup);
+}
+
+// Gestion du checkbox toggleRegionsCheckbox
+document.getElementById("toggleRegionsCheckbox").addEventListener("change", function (event) {
+  if (event.target.checked) {
+    if (!map.getLayers().getArray().includes(regionLayer)) {
       map.addLayer(regionLayer);
-      regionLayerVisible = true;
+    }
+    regionLayerVisible = true;
+
+    if (!map.getLayers().getArray().includes(CamerounLayer)) {
       map.addLayer(CamerounLayer);
-      camerounLayerVisible = false;
-      // Show popup when layer is toggled on
-      const source = CamerounLayer.getSource();
-      if (source.getState() === "ready") {
-        const features = source.getFeatures();
-        if (features.length > 0) {
-          showPopup(features[0]); // Display popup
-        }
-      }
-    } else {
+    }
+    camerounLayerVisible = true;
+
+    // Appeler la fonction qui attend le rendu et affiche le popup
+    showPopupWhenLayerReady(CamerounLayer);
+  } else {
+    if (map.getLayers().getArray().includes(regionLayer)) {
       map.removeLayer(regionLayer);
-      regionLayerVisible = false;
+    }
+    if (map.getLayers().getArray().includes(CamerounLayer)) {
       map.removeLayer(CamerounLayer);
-      camerounLayerVisible = false;
-      hidePopup(); // Hide popup when layer is toggled off
     }
-  });
-
-// Fonction d'affichage du popup lors du chargement de l'application
-function showInitialPopup() {
-  const isSmartphone = window.innerWidth <= 600; // Vérifier si on est sur un smartphone
-
-  if (!isSmartphone) {
-    const source = CamerounLayer.getSource();
-
-    if (source.getState() === "ready") {
-      // Si la source est déjà prête, afficher le popup
-      const features = source.getFeatures();
-      if (features.length > 0) {
-        showPopup(features[0]); // Affiche le popup pour la première entité
-      }
-    } else {
-      // Attendre que la source soit prête
-      source.once("change", function () {
-        if (source.getState() === "ready") {
-          const features = source.getFeatures();
-          if (features.length > 0) {
-            showPopup(features[0]); // Affiche le popup pour la première entité
-          }
-        }
-      });
-    }
+    regionLayerVisible = false;
+    camerounLayerVisible = false;
+    hidePopup();
   }
-}
-
-// Ajout d'un écouteur pour détecter les changements de couche via layer-switcher
-function attachLayerSwitcherHandler(map) {
-  map.getLayers().forEach(function (layer) {
-    if (layer instanceof ol.layer.Group) {
-      layer.getLayers().forEach(function (subLayer) {
-        // Réagir au changement de visibilité de la couche
-        subLayer.on("change:visible", function () {
-          if (subLayer.getVisible()) {
-            // Appeler la fonction après avoir vérifié la visibilité
-            const source = subLayer.getSource();
-            if (source && source.getState() === "ready") {
-              showInitialPopup();
-            }
-          }
-        });
-      });
-    }
-  });
-}
-
-
-
-
-// Display the initial popup
-function showInitialPopup() {
-  const isSmartphone = window.innerWidth <= 600;
-  if (!isSmartphone) {
-    const source = CamerounLayer.getSource();
-    if (source.getState() === "ready") {
-      const features = source.getFeatures();
-      if (features.length > 0) {
-        showPopup(features[0]); // Display popup for the first feature
-      }
-    } else {
-      source.once("change", function () {
-        if (source.getState() === "ready") {
-          const features = source.getFeatures();
-          if (features.length > 0) {
-            showPopup(features[0]);
-          }
-        }
-      });
-    }
-  }
-}
-
-// Handle render complete for initial popup display
-map.once("rendercomplete", function () {
-  showInitialPopup(); // Display the initial popup
 });
-
-
-
 
 
 function toggleLayer(eve) {
@@ -1511,18 +1452,48 @@ backBtn.addEventListener('click', () => {
 });
 
 // On intègre tout ça dans displayPopup()
+// On intègre tout ça dans displayPopup()
 function displayPopup(baseName) {
-  if (!currentBaseProjects.length) return;
+    if (!currentBaseProjects.length) {
+        // Optionnel: si pas de projets, vous pourriez vouloir afficher un message spécifique
+        document.getElementById("base-name").textContent = baseName;
+        const basePopup = document.getElementById("base-projects-popup");
+        basePopup.style.display = "block";
+        setTimeout(() => (basePopup.style.opacity = 1), 10);
+        projectListEl.innerHTML = '<li class="no-projects-found">Aucun projet trouvé pour cette base.</li>'; // Message si la base n'a pas de projets
+        listView.classList.remove('hidden'); // Assurez-vous que la vue liste est visible
+        detailView.classList.add('hidden');   // Cachez la vue détail
+        // Réinitialiser la checkbox de zoom également si elle est visible
+        const zoomCheckbox = document.getElementById('zoom-to-sites');
+        if (zoomCheckbox) {
+            zoomCheckbox.checked = false;
+            resetSitesHighlight();
+        }
+        return;
+    }
 
-  document.getElementById("base-name").textContent = baseName;
-  currentBaseProjectIndex = 0;
- 
+    document.getElementById("base-name").textContent = baseName;
+    currentBaseProjectIndex = 0;
 
-  const basePopup = document.getElementById("base-projects-popup");
-  basePopup.style.display = "block";
-  setTimeout(() => (basePopup.style.opacity = 1), 10);
-  applyFilter();          // initialise filteredProjects
-  renderProjectList();    // affiche la liste
+    const basePopup = document.getElementById("base-projects-popup");
+    basePopup.style.display = "block";
+    setTimeout(() => (basePopup.style.opacity = 1), 10);
+
+    // --- AJOUT IMPORTANT ICI ---
+    // S'assurer que la vue liste est affichée et la vue détail masquée
+    listView.classList.remove('hidden');
+    detailView.classList.add('hidden');
+
+    // Réinitialiser la checkbox de zoom également
+    const zoomCheckbox = document.getElementById('zoom-to-sites');
+    if (zoomCheckbox) { // Vérifie que la checkbox existe
+        zoomCheckbox.checked = false; // Décocher la checkbox
+        resetSitesHighlight(); // Supprimer la surbrillance des sites sur la carte
+    }
+    // --- FIN DE L'AJOUT IMPORTANT ---
+
+    applyFilter();      // initialise filteredProjects
+    renderProjectList(); // affiche la liste
 }
 
 

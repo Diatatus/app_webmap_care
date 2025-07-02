@@ -8,9 +8,9 @@ function requireAuth(req, res, next) {
   if (req.session?.user) {
     return next();
   }
-  res.status(401).json({ 
+  res.status(401).json({
     error: "Session expirée",
-    redirect: "/admin.html" 
+    redirect: "/admin.html"
   });
 }
 
@@ -20,8 +20,8 @@ router.post("/api/login", async (req, res) => {
 
   if (username === "admin" && password === "careadmin2025") {
     req.session.user = { username };
-    return res.json({ 
-      success: true, 
+    return res.json({
+      success: true,
       message: "Connexion réussie",
       user: { username }
     });
@@ -184,7 +184,7 @@ router.post("/api/care_partner/add", upload.fields([{ name: "img_logo", maxCount
     const latitudeNum = parseFloat(latitude);
 
     const geom = longitudeNum && latitudeNum
-      ? `{"type":"Point","coordinates":[${longitudeNum},${latitudeNum}]}` 
+      ? `{"type":"Point","coordinates":[${longitudeNum},${latitudeNum}]}`
       : null;
 
     const values = [id_partenaire, nom, sigle, act_srvc_offert, statut_prest, img_logo, info, geom];
@@ -281,7 +281,7 @@ router.get("/api/care_partner/:id", async (req, res) => {
 /**
  * Route : Mettre à jour un partenaire
  */
-router.put("/api/care_partner/update/:id",upload.single("img_logo"), async (req, res) => {
+router.put("/api/care_partner/update/:id", upload.single("img_logo"), async (req, res) => {
   try {
     const { id } = req.params;
     const {
@@ -405,13 +405,13 @@ router.get("/api/bureaux_base/:id", async (req, res) => {
 /**
  * Route : Mettre à jour un bureaux de base
  */
-router.put("/api/bureaux_base/update/:id",upload.single("img_logo"), async (req, res) => {
+router.put("/api/bureaux_base/update/:id", upload.single("img_logo"), async (req, res) => {
   try {
     const { id } = req.params;
     const {
       id_base,
-      id_region, 
-      nom_base, 
+      id_region,
+      nom_base,
       date_crea,
       longitude,
       latitude
@@ -431,7 +431,7 @@ router.put("/api/bureaux_base/update/:id",upload.single("img_logo"), async (req,
       WHERE id_base = $5
       RETURNING *;
     `;
-    const values = [ id_region, nom_base, date_crea, geom,id_base];
+    const values = [id_region, nom_base, date_crea, geom, id_base];
 
     const result = await pool.query(query, values);
 
@@ -480,12 +480,13 @@ const storage1 = multer.diskStorage({
 const upload1 = multer({ storage: storage1 });
 
 router.post(
-  "/api/projets/add", requireAuth,
+  "/api/projets/add",
+  requireAuth,
   upload1.fields([
     { name: "photo1", maxCount: 1 },
     { name: "photo2", maxCount: 1 },
     { name: "photo3", maxCount: 1 },
-    { name: "photo4", maxCount: 1 }
+    { name: "photo4", maxCount: 1 },
   ]),
   async (req, res) => {
     try {
@@ -500,18 +501,18 @@ router.post(
         budget_projet,
         bailleur,
         objectif_global,
-        site_intervention,
+        site_intervention, // This will now be an array of commune IDs
         statut,
         realisations,
         cible,
-      
       } = req.body;
 
-      // Convertir les communes sélectionnées en string
-      const communesSelectionnees = Array.isArray(site_intervention) 
-        ? site_intervention.join(', ') 
-        : site_intervention;
-
+      // Ensure site_intervention is an array, even if a single value is sent
+      const selectedCommuneIds = Array.isArray(site_intervention)
+        ? site_intervention.map(Number)
+        : site_intervention
+        ? [Number(site_intervention)]
+        : []; // Convert to numbers, handle single value, and ensure it's an array
 
       const photo1 = req.files["photo1"]
         ? `/resources/images/project/${req.files["photo1"][0].filename}`
@@ -526,9 +527,7 @@ router.post(
         ? `/resources/images/project/${req.files["photo4"][0].filename}`
         : null;
 
-
-
-      const values = [
+      const projectValues = [
         id_projet,
         nom_projet,
         sigle_projet,
@@ -537,7 +536,6 @@ router.post(
         budget_projet,
         bailleur,
         objectif_global,
-        communesSelectionnees,,
         statut,
         realisations,
         cible,
@@ -547,7 +545,8 @@ router.post(
         photo4,
       ];
 
-      const query = `
+      // Remove site_intervention from the INSERT/UPDATE query for `projets` table
+      const projectQuery = `
         INSERT INTO projets (
           id_projet,
           nom_projet,
@@ -557,18 +556,17 @@ router.post(
           budget_projet,
           bailleur,
           objectif_global,
-          site_intervention,
           statut,
           realisations,
           cible,
           photo1,
           photo2,
           photo3,
-          photo4,
+          photo4
         )
         VALUES (
           $1, $2, $3, $4, $5, $6, $7, $8, $9, $10,
-          $11, $12, $13, $14, $15, $16
+          $11, $12, $13, $14, $15
         )
         ON CONFLICT (id_projet)
         DO UPDATE SET
@@ -579,7 +577,6 @@ router.post(
           budget_projet = EXCLUDED.budget_projet,
           bailleur = EXCLUDED.bailleur,
           objectif_global = EXCLUDED.objectif_global,
-          site_intervention = EXCLUDED.site_intervention,
           statut = EXCLUDED.statut,
           realisations = EXCLUDED.realisations,
           cible = EXCLUDED.cible,
@@ -587,11 +584,28 @@ router.post(
           photo2 = EXCLUDED.photo2,
           photo3 = EXCLUDED.photo3,
           photo4 = EXCLUDED.photo4
-        RETURNING *;
+        RETURNING id_projet;
       `;
 
-      const result = await pool.query(query, values);
-      res.json({ success: true, projets: result.rows[0] });
+      const result = await pool.query(projectQuery, projectValues);
+      const insertedProjectId = result.rows[0].id_projet;
+
+      // Handle the projets_communes junction table
+      if (selectedCommuneIds.length > 0) {
+        // Prepare values for bulk insert into projets_communes
+        const communeInsertValues = selectedCommuneIds
+          .map((communeId) => `(${insertedProjectId}, ${communeId})`)
+          .join(", ");
+
+        const insertCommunesQuery = `
+          INSERT INTO projets_communes (id_projet, id_commune)
+          VALUES ${communeInsertValues}
+          ON CONFLICT (id_projet, id_commune) DO NOTHING;
+        `;
+        await pool.query(insertCommunesQuery);
+      }
+
+      res.json({ success: true, project: result.rows[0] });
     } catch (err) {
       console.error("Erreur lors de l'ajout du projet", err.stack);
       res.status(500).json({ error: "Erreur lors de l'ajout du projet" });
@@ -607,24 +621,32 @@ router.post(
 router.get("/api/projets", requireAuth, async (req, res) => {
   try {
     const result = await pool.query(`
-      SELECT 
-        id_projet,
-        nom_projet,
-        sigle_projet,
-        date_debut,
-        date_fin,
-        budget_projet,
-        bailleur,
-        objectif_global,
-        site_intervention, 
-        statut, 
-        realisations, 
-        cible,
-        photo1,
-        photo2,
-        photo3,
-        photo4  
-      FROM projets
+      SELECT
+        p.id_projet,
+        p.nom_projet,
+        p.sigle_projet,
+        p.date_debut,
+        p.date_fin,
+        p.budget_projet,
+        p.bailleur,
+        p.objectif_global,
+        p.statut,
+        p.realisations,
+        p.cible,
+        p.photo1,
+        p.photo2,
+        p.photo3,
+        p.photo4,
+        ARRAY_AGG(c.nom_commune ORDER BY c.nom_commune) AS site_intervention_noms,
+        ARRAY_AGG(pc.id_commune ORDER BY pc.id_commune) AS site_intervention_ids
+      FROM projets p
+      LEFT JOIN projets_communes pc ON p.id_projet = pc.id_projet
+      LEFT JOIN communes c ON pc.id_commune = c.id_commune
+      GROUP BY
+        p.id_projet, p.nom_projet, p.sigle_projet, p.date_debut, p.date_fin,
+        p.budget_projet, p.bailleur, p.objectif_global, p.statut,
+        p.realisations, p.cible, p.photo1, p.photo2, p.photo3, p.photo4
+      ORDER BY p.id_projet;
     `);
 
     res.json(result.rows);
@@ -643,41 +665,48 @@ router.get("/api/projets/:id", requireAuth, async (req, res) => {
     const { id } = req.params;
 
     const query = `
-      SELECT 
-        id_projet,
-        nom_projet,
-        sigle_projet,
-        date_debut,
-        date_fin,
-        budget_projet,
-        bailleur,
-        objectif_global,
-        site_intervention, 
-        statut, 
-        realisations, 
-        cible,
-        photo1,
-        photo2,
-        photo3,
-        photo4 
-      FROM projets
-      WHERE id_projet = $1;
+      SELECT
+        p.id_projet,
+        p.nom_projet,
+        p.sigle_projet,
+        p.date_debut,
+        p.date_fin,
+        p.budget_projet,
+        p.bailleur,
+        p.objectif_global,
+        p.statut,
+        p.realisations,
+        p.cible,
+        p.photo1,
+        p.photo2,
+        p.photo3,
+        p.photo4,
+        ARRAY_AGG(c.nom_commune ORDER BY c.nom_commune) AS site_intervention_noms,
+        ARRAY_AGG(pc.id_commune ORDER BY pc.id_commune) AS site_intervention_ids
+      FROM projets p
+      LEFT JOIN projets_communes pc ON p.id_projet = pc.id_projet
+      LEFT JOIN communes c ON pc.id_commune = c.id_commune
+      WHERE p.id_projet = $1
+      GROUP BY
+        p.id_projet, p.nom_projet, p.sigle_projet, p.date_debut, p.date_fin,
+        p.budget_projet, p.bailleur, p.objectif_global, p.statut,
+        p.realisations, p.cible, p.photo1, p.photo2, p.photo3, p.photo4;
     `;
 
     const { rows } = await pool.query(query, [id]);
 
-    if (rows.length === 0) {
+    if (rows.length === 0 || rows[0].id_projet === null) { // Check if a project was actually found
       return res.status(404).json({ error: "Projet non trouvé" });
     }
 
-     const projet = rows[0];
-    if (projet.site_intervention) {
-      projet.communesSelectionnees = projet.site_intervention.split(', ').filter(Boolean);
-    } else {
-      projet.communesSelectionnees = [];
-    }
+    const projet = rows[0];
 
-    res.json(rows[0]); // Retourne un seul partenaire
+    // Ensure site_intervention_noms and site_intervention_ids are empty arrays if no communes are linked
+    projet.site_intervention_noms = projet.site_intervention_noms.includes(null) ? [] : projet.site_intervention_noms;
+    projet.site_intervention_ids = projet.site_intervention_ids.includes(null) ? [] : projet.site_intervention_ids;
+
+
+    res.json(projet);
   } catch (err) {
     console.error("Erreur lors de la récupération du projet", err);
     res.status(500).json({ error: "Erreur serveur" });
@@ -688,89 +717,122 @@ router.get("/api/projets/:id", requireAuth, async (req, res) => {
 /**
  * Route : Mettre à jour un projet
  */
-router.put("/api/projets/update/:id", requireAuth, upload1.fields([
-  { name: "photo1", maxCount: 1 },
-  { name: "photo2", maxCount: 1 },
-  { name: "photo3", maxCount: 1 },
-  { name: "photo4", maxCount: 1 }
-]), async (req, res) => {
-  try {
-    const { id } = req.params;
-    const {
-      nom_projet,
-      sigle_projet,
-      date_debut,
-      date_fin,
-      budget_projet,
-      bailleur,
-      objectif_global,
-      site_intervention, 
-      statut, 
-      realisations, 
-      cible
-    } = req.body;
+router.put(
+  "/api/projets/update/:id",
+  requireAuth,
+  upload1.fields([
+    { name: "photo1", maxCount: 1 },
+    { name: "photo2", maxCount: 1 },
+    { name: "photo3", maxCount: 1 },
+    { name: "photo4", maxCount: 1 },
+  ]),
+  async (req, res) => {
+    try {
+      const { id } = req.params;
+      let {
+        nom_projet,
+        sigle_projet,
+        date_debut,
+        date_fin,
+        budget_projet,
+        bailleur,
+        objectif_global,
+        site_intervention, // This will now be an array of commune IDs
+        statut,
+        realisations,
+        cible,
+      } = req.body;
 
-    const communesSelectionnees = Array.isArray(site_intervention) 
-      ? site_intervention.join(', ') 
-      : site_intervention;
+      // Ensure site_intervention is an array of numbers
+      const selectedCommuneIds = Array.isArray(site_intervention)
+        ? site_intervention.map(Number)
+        : site_intervention
+        ? [Number(site_intervention)]
+        : [];
 
-const photo1 = req.files["photo1"] ? `/resources/images/project/${req.files["photo1"][0].filename}` : req.body.photo1;
-const photo2 = req.files["photo2"] ? `/resources/images/project/${req.files["photo2"][0].filename}` : req.body.photo2;
-const photo3 = req.files["photo3"] ? `/resources/images/project/${req.files["photo3"][0].filename}` : req.body.photo3;
-const photo4 = req.files["photo4"] ? `/resources/images/project/${req.files["photo4"][0].filename}` : req.body.photo4;
+      // For debugging
+      console.log("Valeurs reçues pour la mise à jour (req.body):", JSON.stringify(req.body, null, 2));
+      console.log("Communes sélectionnées (après traitement backend):", selectedCommuneIds);
 
+      const photo1 = req.files["photo1"] ? `/resources/images/project/${req.files["photo1"][0].filename}` : req.body.photo1;
+      const photo2 = req.files["photo2"] ? `/resources/images/project/${req.files["photo2"][0].filename}` : req.body.photo2;
+      const photo3 = req.files["photo3"] ? `/resources/images/project/${req.files["photo3"][0].filename}` : req.body.photo3;
+      const photo4 = req.files["photo4"] ? `/resources/images/project/${req.files["photo4"][0].filename}` : req.body.photo4;
 
-    const files = req.files;
-    
-    
-    
-    // Construction dynamique de la requête SQL
-    const fields = [
-      { name: "nom_projet", value: nom_projet },
-      { name: "sigle_projet", value: sigle_projet },
-      { name: "date_debut", value: date_debut },
-      { name: "date_fin", value: date_fin },
-      { name: "budget_projet", value: budget_projet },
-      { name: "bailleur", value: bailleur },
-      { name: "objectif_global", value: objectif_global },
-      { name: "site_intervention", value: site_intervention },
-      { name: "statut", value: statut },
-      { name: "realisations", value: realisations },
-      { name: "cible", value: cible },
-      { name: "photo1", value: photo1 },
-      { name: "photo2", value: photo2 },
-      { name: "photo3", value: photo3 },
-      { name: "photo4", value: photo4 },
-    ].filter(field => field.value !== undefined && field.value !== null && field.value !== "");
+      // Build fields for the `projets` table update
+      const fields = [
+        { name: "nom_projet", value: nom_projet },
+        { name: "sigle_projet", value: sigle_projet },
+        { name: "date_debut", value: date_debut },
+        { name: "date_fin", value: date_fin },
+        { name: "budget_projet", value: budget_projet },
+        { name: "bailleur", value: bailleur },
+        { name: "objectif_global", value: objectif_global },
+        { name: "statut", value: statut },
+        { name: "realisations", value: realisations },
+        { name: "cible", value: cible },
+        { name: "photo1", value: photo1 },
+        { name: "photo2", value: photo2 },
+        { name: "photo3", value: photo3 },
+        { name: "photo4", value: photo4 },
+      ].filter(field => field.value !== undefined && field.value !== null); // Filter out undefined/null, allow empty strings for text fields
 
-    const setClauses = fields.map((field, idx) => `${field.name} = $${idx + 1}`);
-    const values = fields.map(field => field.value);
+      const setClauses = fields.map((field, idx) => `${field.name} = $${idx + 1}`);
+      const values = fields.map(field => field.value);
 
-    if (fields.length === 0) {
-      return res.status(400).json({ error: "Aucune donnée à mettre à jour." });
+      if (fields.length === 0 && selectedCommuneIds.length === 0) {
+        return res.status(400).json({ error: "Aucune donnée à mettre à jour." });
+      }
+
+      // Update the `projets` table
+      const projectUpdateQuery = `
+        UPDATE projets
+        SET ${setClauses.join(", ")}
+        WHERE id_projet = $${fields.length + 1}
+        RETURNING *;
+      `;
+      values.push(id); // Add project ID to values for WHERE clause
+
+      const projectResult = await pool.query(projectUpdateQuery, values);
+
+      if (projectResult.rows.length === 0) {
+        return res.status(404).json({ error: "Projet non trouvé." });
+      }
+
+      // Handle the `projets_communes` junction table
+      // Start a transaction for atomicity
+      await pool.query('BEGIN');
+
+      try {
+        // 1. Delete existing associations for this project
+        await pool.query('DELETE FROM projets_communes WHERE id_projet = $1', [id]);
+
+        // 2. Insert new associations
+        if (selectedCommuneIds.length > 0) {
+          const communeInsertValues = selectedCommuneIds
+            .map((communeId) => `(${id}, ${communeId})`)
+            .join(", ");
+
+          const insertCommunesQuery = `
+            INSERT INTO projets_communes (id_projet, id_commune)
+            VALUES ${communeInsertValues};
+          `;
+          await pool.query(insertCommunesQuery);
+        }
+
+        await pool.query('COMMIT');
+        res.json({ success: true, project: projectResult.rows[0] });
+      } catch (communeError) {
+        await pool.query('ROLLBACK'); // Rollback if junction table update fails
+        throw communeError; // Re-throw to be caught by the outer catch
+      }
+
+    } catch (err) {
+      console.error("Erreur lors de la mise à jour du projet :", err.stack);
+      res.status(500).json({ error: "Erreur lors de la mise à jour du projet." });
     }
-
-    const query = `
-      UPDATE projets 
-      SET ${setClauses.join(", ")}
-      WHERE id_projet = $${fields.length + 1}
-      RETURNING *;
-    `;
-
-    values.push(id); // ID du projet en dernière position
-
-    const result = await pool.query(query, values);
-
-    if (result.rows.length === 0) {
-      return res.status(404).json({ error: "Projet non trouvé." });
-    }
-
-    res.json({ success: true, projet: result.rows[0] });
-  } catch (err) {
-    console.error("Erreur lors de la mise à jour du projet :", err.stack);
-    res.status(500).json({ error: "Erreur lors de la mise à jour du projet." });
   }
-});
+);
 
 /**
  * Route : Supprimer un projet
@@ -813,7 +875,7 @@ router.get("/api/communes", async (req, res) => {
 router.get('/api/projects/:id/sites', async (req, res) => {
   try {
     const projectId = req.params.id;
-    
+
     const query = `
       SELECT 
         ST_Extent(c.geom) as bbox,
@@ -822,18 +884,18 @@ router.get('/api/projects/:id/sites', async (req, res) => {
       JOIN communes c ON pc.id_commune = c.id_commune
       WHERE pc.id_projet = $1
     `;
-    
+
     const result = await pool.query(query, [projectId]);
-    
+
     if (!result.rows[0].bbox) {
       return res.status(404).json({ error: "Aucun site trouvé" });
     }
-    
+
     res.json({
       bbox: result.rows[0].bbox,
       communes: result.rows[0].communes || []
     });
-    
+
   } catch (err) {
     console.error("Erreur:", err);
     res.status(500).json({ error: "Erreur serveur" });

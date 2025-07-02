@@ -34,37 +34,37 @@ document.addEventListener("DOMContentLoaded", () => {
   const btnListProjects = document.getElementById("btnListProjects");
   const btnListOfficesProjects = document.getElementById("btnListOfficesProjects");
 
-async function loadRegions() {
-  try {
-    const response = await fetch("/admin/api/regions", {
-      method: "GET",
-      headers: { 
-        "Content-Type": "application/json",
-        "Accept": "application/json"
-      },
-      credentials: "include"
-    });
+  async function loadRegions() {
+    try {
+      const response = await fetch("/admin/api/regions", {
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json",
+          "Accept": "application/json"
+        },
+        credentials: "include"
+      });
 
-    if (!response.ok) {
-      const error = await response.json();
-      if (response.status === 401) {
-        window.location.href = '/admin.html?session=expired';
-        return;
+      if (!response.ok) {
+        const error = await response.json();
+        if (response.status === 401) {
+          window.location.href = '/admin.html?session=expired';
+          return;
+        }
+        throw new Error(error.message || "Erreur serveur");
       }
-      throw new Error(error.message || "Erreur serveur");
-    }
 
-    const geojsonData = await response.json();
-    
-    // Traitez les données GeoJSON ici
-    console.log(geojsonData);
-    displayRegions(geojsonData);
-    
-  } catch (error) {
-    console.error("Erreur:", error);
-    alert("Erreur lors du chargement des régions");
+      const geojsonData = await response.json();
+
+      // Traitez les données GeoJSON ici
+      console.log(geojsonData);
+      displayRegions(geojsonData);
+
+    } catch (error) {
+      console.error("Erreur:", error);
+      alert("Erreur lors du chargement des régions");
+    }
   }
-}
 
   function displayRegions(regions) {
     let html = `<h2>Régions (Indicateurs socio-économiques)</h2>
@@ -822,22 +822,23 @@ async function loadRegions() {
   }
 
   async function loadCommunes() {
-  const response = await fetch("/admin/api/communes", {
-    method: "GET",
-    headers: { "Content-Type": "application/json" },
-  });
-  if (response.ok) {
-    return await response.json();
-  } else {
-    console.error("Erreur lors du chargement des communes.");
-    return [];
+    const response = await fetch("/admin/api/communes", {
+      method: "GET",
+      headers: { "Content-Type": "application/json" },
+    });
+    if (response.ok) {
+      return await response.json();
+    } else {
+      console.error("Erreur lors du chargement des communes.");
+      return [];
+    }
   }
-}
 
 
-  function displayProjects(projects) {
+function displayProjects(projects) {
+    console.log("Data received by displayProjects:", projects); // <-- Add this line
     let html = `
-      <h2>Projets  
+      <h2>Projets
         <button id="btnAddProject" class="add-btn">
           <i class="fas fa-plus"></i> Ajouter
         </button>
@@ -862,42 +863,39 @@ async function loadRegions() {
               <th>Photo2</th>
               <th>Photo3</th>
               <th>Photo4</th>
-              <th class="fixed-column">Actions</th>
+              <th class="fixed-row">Actions</th>
             </tr>
           </thead>
           <tbody>`;
 
     projects.forEach((project) => {
       html += `<tr>
-                <td>${project.id_projet}</td>
-                <td>${project.nom_projet}</td>
-                <td>${project.sigle_projet}</td>
-                <td>${project.date_debut}</td>
-                <td>${project.date_fin}</td> 
-                <td>${project.budget_projet}</td> 
-                <td>${project.bailleur}</td> 
-                <td>${project.objectif_global}</td> 
-                <td>${project.site_intervention}</td> 
-                <td>${project.statut}</td> 
-                <td>${project.realisations}</td> 
-                <td>${project.cible}</td>
-                <td>${project.photo1}</td>
-                <td>${project.photo2}</td>
-                <td>${project.photo3}</td>
-                <td>${project.photo4}</td>      
-              
-                <td class="fixed-column">
-                  <button class="editBtn" data-id="${project.id_projet
+              <td>${project.id_projet}</td>
+              <td>${project.nom_projet}</td>
+              <td>${project.sigle_projet}</td>
+              <td>${project.date_debut}</td>
+              <td>${project.date_fin}</td>
+              <td>${project.budget_projet}</td>
+              <td>${project.bailleur}</td>
+              <td>${project.objectif_global}</td>
+              <td>${project.site_intervention_noms ? project.site_intervention_noms.join(', ') : ''}</td>
+              <td>${project.statut}</td>
+              <td>${project.realisations}</td>
+              <td>${project.cible}</td>
+              <td>${project.photo1 || ''}</td>
+              <td>${project.photo2 || ''}</td>
+              <td>${project.photo3 || ''}</td>
+              <td>${project.photo4 || ''}</td>
+              <td class="fixed-column">
+                <button class="editBtn" data-id="${project.id_projet
         }"><i class="fas fa-pen-to-square"></i></button>
-                  <button class="deleteBtn" data-id="${project.id_projet
+                <button class="deleteBtn" data-id="${project.id_projet
         }"><i class="fas fa-trash"></i></button>
-                </td>
-              </tr>`;
+              </td>
+            </tr>`;
     });
-
     html += `</tbody></table></div>`;
     contentArea.innerHTML = html;
-
     // Ajouter l'événement après l'injection HTML
     const btnAddProject = document.getElementById("btnAddProject");
     if (btnAddProject) {
@@ -934,94 +932,107 @@ async function loadRegions() {
   async function displayAddProjectForm() {
 
     // Charger les communes
-  const communes = await loadCommunes();
+    const communes = await loadCommunes();
     let html = `
-      <h2>Ajouter un projet</h2>
-      <form id="addProjectForm" enctype="multipart/form-data">
-      <div class="form-group">
-          <label for="id_projet">ID_projet :</label>
-          <input type="number" id="id_projet" name="id_projet" required>
-        </div>
-        <div class="form-group">
-          <label for="nom_projet">Nom projet :</label>
-          <textarea  id="nom_projet" name="nom_projet" rows="3"  required></textarea>
-        </div>
-        <div class="form-group">
-          <label for="sigle_projet">Sigle projet :</label>
-          <input type="text" id="sigle_projet" name="sigle_projet">
-        </div>
-        <div class="form-group">
-          <label for="date_debut">Date de debut :</label>
-          <input type="text" id="date_debut" name="date_debut">
-        </div>
-        <div class="form-group">
-          <label for="date_fin">Date de fin :</label>
-          <input type="text" id="date_fin" name="date_fin" step="any">
-        </div>
-        <div class="form-group">
-          <label for="budget_projet">Budget :</label>
-          <input type="text" id="budget_projet" name="budget_projet" step="any">
-        </div>
-        <div class="form-group">
-          <label for="bailleur">Bailleur :</label>
-          <input type="text" id="bailleur" name="bailleur" step="any">
-        </div>
-        <div class="form-group">
-          <label for="objectif_global">Objectif global :</label>
-          <textarea  id="objectif_global" name="objectif_global" rows="5"  required></textarea>
-        </div>
-<div class="form-group" style="height: 200px;>
-        <label for="site_intervention">Site d'intervention :</label>
-        <select id="site_intervention" name="site_intervention" multiple required>
-          ${communes.map(commune => 
-            `<option value="${commune.nom_commune}">${commune.nom_commune}</option>`
-          ).join('')}
-        </select>
-        
-      </div>
-        <div class="form-group">
-          <label for="statut">Statut :</label>
-          <input type="text" id="statut" name="statut" step="any">
-        </div>
-        <div class="form-group">
-          <label for="realisations">Realisation :</label>
-          <textarea id="realisations" name="realisations" rows="6"  required></textarea>
-        </div>
-        <div class="form-group">
-          <label for="cible">Cible :</label>
-          <textarea id="cible" name="cible" rows="3"  required></textarea>
-        </div>
-        <div class="form-group">
-          <label for="photo1">Photo 1 :</label>
-          <input type="file" id="photo1" name="photo1" accept="image/png, image/jpeg, image/jpg, image/webp">
-        </div>
-        <div class="form-group">
-          <label for="photo2">Photo 2 :</label>
-          <input type="file" id="photo1" name="photo2" accept="image/png, image/jpeg, image/jpg, image/webp">
-        </div>
-        <div class="form-group">
-          <label for="photo3">Photo 3 :</label>
-          <input type="file" id="photo1" name="photo3" accept="image/png, image/jpeg, image/jpg, image/webp">
-        </div>
-        <div class="form-group">
-          <label for="photo4">Photo 4 :</label>
-          <input type="file" id="photo1" name="photo4" accept="image/png, image/jpeg, image/jpg, image/webp">
-        </div>
-        <button type="submit">Ajouter</button>
-      </form>`;
+      <h2>Ajouter un projet</h2>
+      <form id="addProjectForm" enctype="multipart/form-data">
+      <div class="form-group">
+          <label for="id_projet">ID_projet :</label>
+          <input type="number" id="id_projet" name="id_projet" required>
+        </div>
+        <div class="form-group">
+          <label for="nom_projet">Nom projet :</label>
+          <textarea  id="nom_projet" name="nom_projet" rows="3"  required></textarea>
+        </div>
+        <div class="form-group">
+          <label for="sigle_projet">Sigle projet :</label>
+          <input type="text" id="sigle_projet" name="sigle_projet">
+        </div>
+        <div class="form-group">
+          <label for="date_debut">Date de debut :</label>
+          <input type="text" id="date_debut" name="date_debut">
+        </div>
+        <div class="form-group">
+          <label for="date_fin">Date de fin :</label>
+          <input type="text" id="date_fin" name="date_fin" step="any">
+        </div>
+        <div class="form-group">
+          <label for="budget_projet">Budget :</label>
+          <input type="text" id="budget_projet" name="budget_projet" step="any">
+        </div>
+        <div class="form-group">
+          <label for="bailleur">Bailleur :</label>
+          <input type="text" id="bailleur" name="bailleur" step="any">
+        </div>
+        <div class="form-group">
+          <label for="objectif_global">Objectif global :</label>
+          <textarea  id="objectif_global" name="objectif_global" rows="5"  required></textarea>
+        </div>
+<div class="form-group" style="height: 200px;">
+        <label for="site_intervention">Site d'intervention :</label>
+        <select id="site_intervention" name="site_intervention" multiple required>
+          ${communes.map(commune =>
+      `<option value="${commune.id_commune}">${commune.nom_commune}</option>` // Use id_commune as value
+    ).join('')}
+        </select>
+
+      </div>
+<div class="form-group">
+    <label for="statut">Statut du projet:</label>
+    <select id="statut" name="statut" required>
+        <option value="En cours">En cours</option>
+        <option value="Cloturé">Clôturé</option>
+    </select>
+</div>
+        <div class="form-group">
+          <label for="realisations">Realisation :</label>
+          <textarea id="realisations" name="realisations" rows="6"  required></textarea>
+        </div>
+        <div class="form-group">
+          <label for="cible">Cible :</label>
+          <textarea id="cible" name="cible" rows="3"  required></textarea>
+        </div>
+        <div class="form-group">
+          <label for="photo1">Photo 1 :</label>
+          <input type="file" id="photo1" name="photo1" accept="image/png, image/jpeg, image/jpg, image/webp">
+        </div>
+        <div class="form-group">
+          <label for="photo2">Photo 2 :</label>
+          <input type="file" id="photo2" name="photo2" accept="image/png, image/jpeg, image/jpg, image/webp">
+        </div>
+        <div class="form-group">
+          <label for="photo3">Photo 3 :</label>
+          <input type="file" id="photo3" name="photo3" accept="image/png, image/jpeg, image/jpg, image/webp">
+        </div>
+        <div class="form-group">
+          <label for="photo4">Photo 4 :</label>
+          <input type="file" id="photo4" name="photo4" accept="image/png, image/jpeg, image/jpg, image/webp">
+        </div>
+        <button type="submit">Ajouter</button>
+      </form>`;
 
     contentArea.innerHTML = html;
 
     // Initialiser le select multiple avec un plugin si nécessaire (ex: Select2)
-  $('#site_intervention').select2({
-    placeholder: "Sélectionnez une ou plusieurs communes",
-    allowClear: true
-  });
+    $('#site_intervention').select2({
+      placeholder: "Sélectionnez une ou plusieurs communes",
+      allowClear: true
+    });
 
     const addProjectForm = document.getElementById("addProjectForm");
     addProjectForm.addEventListener("submit", async (e) => {
       e.preventDefault();
       const formData = new FormData(addProjectForm);
+
+      // Get selected commune IDs from the select2 input
+      const selectedCommuneIds = $('#site_intervention').val();
+      if (selectedCommuneIds) {
+        // Append the array of IDs to formData
+        selectedCommuneIds.forEach(id => formData.append('site_intervention', id));
+      } else {
+        // Ensure site_intervention is present even if empty
+        formData.append('site_intervention', '');
+      }
 
       const response = await fetch("/admin/api/projets/add", {
         method: "POST",
@@ -1030,7 +1041,7 @@ async function loadRegions() {
 
       if (response.ok) {
         alert("Projet ajouté avec succès.");
-        loadPartners();
+        loadProjects();
       } else {
         alert("Erreur lors de l'ajout du projet.");
       }
@@ -1053,136 +1064,155 @@ async function loadRegions() {
   async function displayEditProjectForm(project) {
 
     const communes = await loadCommunes();
-  
-  // Convertir les sites d'intervention existants en tableau
-  const selectedSites = project.site_intervention ? 
-    project.site_intervention.split(',') : [];
+
+    // Convertir les sites d'intervention existants en tableau
+    const selectedSiteIds = project.site_intervention_ids || [];
 
 
     let html = `<h2>Modifier le projet</h2>
-      <form id="editProjectForm" enctype="multipart/form-data">
-        <input type="hidden" name="id_projet" value="${project.id_projet}">
+      <form id="editProjectForm" enctype="multipart/form-data">
+        <input type="hidden" name="id_projet" value="${project.id_projet}">
 
-        <div class="form-group">
-          <label for="nom_projet">Nom projet :</label>
-          <textarea id="nom_projet" name="nom_projet" rows="3" required>${project.nom_projet}</textarea>
-        </div>
+        <div class="form-group">
+          <label for="nom_projet">Nom projet :</label>
+          <textarea id="nom_projet" name="nom_projet" rows="3" required>${project.nom_projet}</textarea>
+        </div>
 
-        <div class="form-group">
-          <label for="sigle_projet">Sigle :</label>
-          <input type="text" id="sigle_projet" name="sigle_projet" value="${project.sigle_projet}" required>
-        </div>
+        <div class="form-group">
+          <label for="sigle_projet">Sigle :</label>
+          <input type="text" id="sigle_projet" name="sigle_projet" value="${project.sigle_projet}" required>
+        </div>
 
-        <div class="form-group">
-          <label for="date_debut">Date de début :</label>
-          <input type="text" id="date_debut" name="date_debut" value="${project.date_debut}"/>
-        </div>
+        <div class="form-group">
+          <label for="date_debut">Date de début :</label>
+          <input type="text" id="date_debut" name="date_debut" value="${project.date_debut}"/>
+        </div>
 
-        <div class="form-group">
-          <label for="date_fin">Date de fin :</label>
-          <input type="text" id="date_fin" name="date_fin" value="${project.date_fin}"/>
-        </div>
-        <div class="form-group">
-          <label for="budget_projet">Budget :</label>
-          <input type="text" id="budget_projet" name="budget_projet" value="${project.budget_projet}"/>
-        </div>
-        <div class="form-group">
-          <label for="bailleur">Bailleur :</label>
-          <input type="text" id="bailleur" name="bailleur" value="${project.bailleur}"/>
-        </div>
-        <div class="form-group">
-          <label for="objectif_global">Objectif global :</label>
-          <textarea id="objectif_global" name="objectif_global"  rows="4" required>${project.objectif_global}</textarea>
-        </div>
+        <div class="form-group">
+          <label for="date_fin">Date de fin :</label>
+          <input type="text" id="date_fin" name="date_fin" value="${project.date_fin}"/>
+        </div>
+        <div class="form-group">
+          <label for="budget_projet">Budget :</label>
+          <input type="text" id="budget_projet" name="budget_projet" value="${project.budget_projet}"/>
+        </div>
+        <div class="form-group">
+          <label for="bailleur">Bailleur :</label>
+          <input type="text" id="bailleur" name="bailleur" value="${project.bailleur}"/>
+        </div>
+        <div class="form-group">
+          <label for="objectif_global">Objectif global :</label>
+          <textarea id="objectif_global" name="objectif_global"  rows="4" required>${project.objectif_global}</textarea>
+        </div>
+      <div class="form-group">
+        <label for="site_intervention">Site d'intervention :</label>
+        <select id="site_intervention" name="site_intervention" multiple required>
+          ${communes.map(commune =>
+      `<option value="${commune.id_commune}"
+             ${selectedSiteIds.includes(commune.id_commune) ? 'selected' : ''}>
+             ${commune.nom_commune}
+            </option>`
+    ).join('')}
+        </select>
+      </div>
       <div class="form-group">
-        <label for="site_intervention">Site d'intervention :</label>
-        <select id="site_intervention" name="site_intervention" multiple required>
-          ${communes.map(commune => 
-            `<option value="${commune.nom_commune}" 
-             ${selectedSites.includes(commune.nom_commune) ? 'selected' : ''}>
-             ${commune.nom_commune}
-            </option>`
-          ).join('')}
-        </select>
-      </div>
-        <div class="form-group">
-          <label for="statut">Statut :</label>
-          <input type="text" id="statut" name="statut" value="${project.statut}"/>
+            <label for="statut">Statut :</label>
+            <select id="statut" name="statut" required>
+                <option value="En cours" ${project.statut === 'En cours' ? 'selected' : ''}>En cours</option>
+                <option value="Cloturé" ${project.statut === 'Cloturé' ? 'selected' : ''}>Clôturé</option>
+            </select>
         </div>
-        <div class="form-group">
-          <label for="realisations">Réalisations :</label>
-          <textarea id="realisations" name="realisations" rows="6" >${project.realisations}</textarea>
-        </div>
-        <div class="form-group">
-          <label for="cible">Cible :</label>
-          <textarea id="cible" name="cible" rows="4" >${project.cible}</textarea>
-        </div>
-        <div class="form-group">
-          <label for="photo1">Photo 1 :</label>
-          <input type="file" id="photo1" name="photo1" accept="image/png, image/jpeg, image/jpg, image/webp" value="${project.photo1}"/>
-        </div>
-        <div class="form-group">
-          <label for="photo2">Photo 2 :</label>
-          <input type="file" id="photo2" name="photo2" accept="image/png, image/jpeg, image/jpg, image/webp" value="${project.photo2}"/>
-        </div>
-        <div class="form-group">
-          <label for="photo3">Photo 3 :</label>
-          <input type="file" id="photo3" name="photo3" accept="image/png, image/jpeg, image/jpg, image/webp" value="${project.photo3}"/>
-        </div>
-        <div class="form-group">
-          <label for="photo4">Photo 4 :</label>
-          <input type="file" id="photo4" name="photo4" accept="image/png, image/jpeg, image/jpg, image/webp" value="${project.photo4}"/>
-        </div>
-        
-        <button type="submit">Enregistrer les modifications</button>
-      </form>`;
+        <div class="form-group">
+          <label for="realisations">Réalisations :</label>
+          <textarea id="realisations" name="realisations" rows="6" >${project.realisations}</textarea>
+        </div>
+        <div class="form-group">
+          <label for="cible">Cible :</label>
+          <textarea id="cible" name="cible" rows="4" >${project.cible}</textarea>
+        </div>
+        <div class="form-group">
+          <label for="photo1">Photo 1 :</label>
+          <input type="file" id="photo1" name="photo1" accept="image/png, image/jpeg, image/jpg, image/webp"/>
+            ${project.photo1 ? `<p>Current: <a href="${project.photo1}" target="_blank">View Photo 1</a></p><input type="hidden" name="photo1" value="${project.photo1}"/>` : ''}
+        </div>
+        <div class="form-group">
+          <label for="photo2">Photo 2 :</label>
+          <input type="file" id="photo2" name="photo2" accept="image/png, image/jpeg, image/jpg, image/webp"/>
+            ${project.photo2 ? `<p>Current: <a href="${project.photo2}" target="_blank">View Photo 2</a></p><input type="hidden" name="photo2" value="${project.photo2}"/>` : ''}
+        </div>
+        <div class="form-group">
+          <label for="photo3">Photo 3 :</label>
+          <input type="file" id="photo3" name="photo3" accept="image/png, image/jpeg, image/jpg, image/webp"/>
+            ${project.photo3 ? `<p>Current: <a href="${project.photo3}" target="_blank">View Photo 3</a></p><input type="hidden" name="photo3" value="${project.photo3}"/>` : ''}
+        </div>
+        <div class="form-group">
+          <label for="photo4">Photo 4 :</label>
+          <input type="file" id="photo4" name="photo4" accept="image/png, image/jpeg, image/jpg, image/webp"/>
+            ${project.photo4 ? `<p>Current: <a href="${project.photo4}" target="_blank">View Photo 4</a></p><input type="hidden" name="photo4" value="${project.photo4}"/>` : ''}
+        </div>
 
-    contentArea.innerHTML = html;
+        <button type="submit">Enregistrer les modifications</button>
+      </form>`;
 
-      // Initialiser le select multiple avec un plugin si nécessaire (ex: Select2)
-$(document).ready(function() {
-  $('#site_intervention').select2({
-    placeholder: "Sélectionnez une ou plusieurs communes",
-    allowClear: true
-  });
-});
+    contentArea.innerHTML = html;
 
-    // Modifiez la partie submit handler :
-editProjectForm.addEventListener("submit", async (e) => {
-  e.preventDefault();
-  
-  const formData = new FormData(editProjectForm);
-  
-  // Récupération des communes sélectionnées
-  const selectedSites = Array.from(document.querySelectorAll('#site_intervention option:checked'))
-    .map(opt => opt.value);
-  formData.set('site_intervention', selectedSites.join(','));
-  
-  try {
-    const response = await fetch(`/admin/api/projets/update/${formData.get("id_projet")}`, {
-      method: "PUT",
-      body: formData,
-      headers: {
-        'Authorization': `Bearer ${localStorage.getItem('token')}` // Si vous utilisez JWT
+    // Initialize select2 with pre-selected values
+    $(document).ready(function () {
+      $('#site_intervention').select2({
+        placeholder: "Sélectionnez une ou plusieurs communes",
+        allowClear: true
+      }).val(selectedSiteIds).trigger('change'); // Set selected values and trigger change
+    });
+
+    // Modifiez la partie submit handler :
+    editProjectForm.addEventListener("submit", async (e) => {
+      e.preventDefault();
+
+      const formData = new FormData(editProjectForm);
+
+      // Get selected commune IDs from the select2 input
+      const selectedCommuneIds = $('#site_intervention').val();
+      // Remove any existing 'site_intervention' entries from formData to avoid duplicates if select2 adds them
+      formData.delete('site_intervention');
+      if (selectedCommuneIds) {
+          // Append each selected ID as a separate entry to formData
+          selectedCommuneIds.forEach(id => formData.append('site_intervention', id));
+      } else {
+          // Ensure site_intervention is present even if empty, to signal deselecting all
+          formData.append('site_intervention', '');
       }
-    });
 
-    if (response.ok) {
-      const result = await response.json();
-      alert("Projet mis à jour avec succès.");
-      loadProjects();
-    } else if (response.status === 401) {
-      // Redirection vers le login si non autorisé
-      window.location.href = '/admin.html';
-    } else {
-      const error = await response.json();
-      alert(`Erreur: ${error.error || "Une erreur est survenue"}`);
-    }
-  } catch (err) {
-    console.error("Erreur:", err);
-    alert("Erreur réseau ou serveur");
-  }
-});
+      // Important: Add current photo paths as hidden inputs if no new file is uploaded
+      // (This is already done in the HTML above by conditionally adding hidden inputs)
+      // Check if file input is empty, and if so, send the existing path from the 'value' attribute
+      // The backend needs to handle this as well (which it does with `req.body.photoX`)
+
+      try {
+        const response = await fetch(`/admin/api/projets/update/${formData.get("id_projet")}`, {
+          method: "PUT",
+          body: formData,
+          headers: {
+            // No 'Content-Type' header when sending FormData, as browser sets it correctly
+            'Authorization': `Bearer ${localStorage.getItem('token')}` // Si vous utilisez JWT
+          }
+        });
+
+        if (response.ok) {
+          const result = await response.json();
+          alert("Projet mis à jour avec succès.");
+          loadProjects();
+        } else if (response.status === 401) {
+          // Redirection vers le login si non autorisé
+          window.location.href = '/admin.html';
+        } else {
+          const error = await response.json();
+          alert(`Erreur: ${error.error || "Une erreur est survenue"}`);
+        }
+      } catch (err) {
+        console.error("Erreur:", err);
+        alert("Erreur réseau ou serveur");
+      }
+    });
   }
 
 

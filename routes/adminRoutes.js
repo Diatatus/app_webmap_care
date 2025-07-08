@@ -502,6 +502,7 @@ router.post(
         bailleur,
         objectif_global,
         site_intervention, // This will now be an array of commune IDs
+        bureaux_base,
         statut,
         realisations,
         cible,
@@ -513,6 +514,10 @@ router.post(
         : site_intervention
         ? [Number(site_intervention)]
         : []; // Convert to numbers, handle single value, and ensure it's an array
+
+                    const selectedBureauBaseIds = Array.isArray(bureaux_base)
+                ? bureaux_base.map(Number)
+                : bureaux_base ? [Number(bureaux_base)] : [];
 
       const photo1 = req.files["photo1"]
         ? `/resources/images/project/${req.files["photo1"][0].filename}`
@@ -587,30 +592,53 @@ router.post(
         RETURNING id_projet;
       `;
 
-      const result = await pool.query(projectQuery, projectValues);
-      const insertedProjectId = result.rows[0].id_projet;
+      // Utiliser une transaction pour assurer l'atomicité
+            await pool.query('BEGIN');
+            let insertedProjectId;
 
-      // Handle the projets_communes junction table
-      if (selectedCommuneIds.length > 0) {
-        // Prepare values for bulk insert into projets_communes
-        const communeInsertValues = selectedCommuneIds
-          .map((communeId) => `(${insertedProjectId}, ${communeId})`)
-          .join(", ");
+            try {
+                const result = await pool.query(projectQuery, projectValues);
+                insertedProjectId = result.rows[0].id_projet;
 
-        const insertCommunesQuery = `
-          INSERT INTO projets_communes (id_projet, id_commune)
-          VALUES ${communeInsertValues}
-          ON CONFLICT (id_projet, id_commune) DO NOTHING;
-        `;
-        await pool.query(insertCommunesQuery);
-      }
+                // Handle projets_communes junction table
+                if (selectedCommuneIds.length > 0) {
+                    const communeInsertValues = selectedCommuneIds
+                        .map((communeId) => `(${insertedProjectId}, ${communeId})`)
+                        .join(", ");
+                    const insertCommunesQuery = `
+                        INSERT INTO projets_communes (id_projet, id_commune)
+                        VALUES ${communeInsertValues}
+                        ON CONFLICT (id_projet, id_commune) DO NOTHING;
+                    `;
+                    await pool.query(insertCommunesQuery);
+                }
 
-      res.json({ success: true, project: result.rows[0] });
-    } catch (err) {
-      console.error("Erreur lors de l'ajout du projet", err.stack);
-      res.status(500).json({ error: "Erreur lors de l'ajout du projet" });
+                // NEW: Handle projets_bureaux junction table
+                if (selectedBureauBaseIds.length > 0) {
+                    const bureauxBaseInsertValues = selectedBureauBaseIds
+                        .map((baseId) => `(${insertedProjectId}, ${baseId})`)
+                        .join(", ");
+                    const insertBureauxBaseQuery = `
+                        INSERT INTO projets_bureaux (id_projet, id_base)
+                        VALUES ${bureauxBaseInsertValues}
+                        ON CONFLICT (id_projet, id_base) DO NOTHING;
+                    `;
+                    await pool.query(insertBureauxBaseQuery);
+                }
+
+                await pool.query('COMMIT');
+                res.json({ success: true, project: result.rows[0] });
+
+            } catch (transactionError) {
+                await pool.query('ROLLBACK');
+                throw transactionError; // Re-throw to be caught by the outer catch
+            }
+
+        } catch (err) {
+            console.error("Erreur lors de l'ajout du projet", err.stack);
+            res.status(500).json({ error: "Erreur lors de l'ajout du projet" });
+        }
     }
-  }
 );
 
 
@@ -637,23 +665,29 @@ router.get("/api/projets", requireAuth, async (req, res) => {
         p.photo2,
         p.photo3,
         p.photo4,
-        ARRAY_AGG(c.nom_commune ORDER BY c.nom_commune) AS site_intervention_noms,
-        ARRAY_AGG(pc.id_commune ORDER BY pc.id_commune) AS site_intervention_ids
-      FROM projets p
-      LEFT JOIN projets_communes pc ON p.id_projet = pc.id_projet
-      LEFT JOIN communes c ON pc.id_commune = c.id_commune
-      GROUP BY
-        p.id_projet, p.nom_projet, p.sigle_projet, p.date_debut, p.date_fin,
-        p.budget_projet, p.bailleur, p.objectif_global, p.statut,
-        p.realisations, p.cible, p.photo1, p.photo2, p.photo3, p.photo4
-      ORDER BY p.id_projet;
-    `);
+                
+                COALESCE(ARRAY_AGG(DISTINCT c.nom_commune ORDER BY c.nom_commune) FILTER (WHERE c.nom_commune IS NOT NULL), '{}') AS site_intervention_noms,
+                COALESCE(ARRAY_AGG(DISTINCT pc.id_commune ORDER BY pc.id_commune) FILTER (WHERE pc.id_commune IS NOT NULL), '{}') AS site_intervention_ids,
+                
+                COALESCE(ARRAY_AGG(DISTINCT bb.nom_base ORDER BY bb.nom_base) FILTER (WHERE bb.nom_base IS NOT NULL), '{}') AS bureaux_base_noms,
+                COALESCE(ARRAY_AGG(DISTINCT pb.id_base ORDER BY pb.id_base) FILTER (WHERE pb.id_base IS NOT NULL), '{}') AS bureaux_base_ids
+            FROM projets p
+            LEFT JOIN projets_communes pc ON p.id_projet = pc.id_projet
+            LEFT JOIN communes c ON pc.id_commune = c.id_commune
+            LEFT JOIN projets_bureaux pb ON p.id_projet = pb.id_projet -- NEW JOIN
+            LEFT JOIN bureaux_base bb ON pb.id_base = bb.id_base      -- NEW JOIN
+            GROUP BY
+                p.id_projet, p.nom_projet, p.sigle_projet, p.date_debut, p.date_fin,
+                p.budget_projet, p.bailleur, p.objectif_global, p.statut,
+                p.realisations, p.cible, p.photo1, p.photo2, p.photo3, p.photo4
+            ORDER BY p.id_projet;
+        `);
 
-    res.json(result.rows);
-  } catch (err) {
-    console.error("Erreur lors de la récupération des projets", err.stack);
-    res.status(500).json({ error: "Erreur lors de la récupération des projets" });
-  }
+        res.json(result.rows);
+    } catch (err) {
+        console.error("Erreur lors de la récupération des projets", err.stack);
+        res.status(500).json({ error: "Erreur lors de la récupération des projets" });
+    }
 });
 
 
@@ -681,36 +715,44 @@ router.get("/api/projets/:id", requireAuth, async (req, res) => {
         p.photo2,
         p.photo3,
         p.photo4,
-        ARRAY_AGG(c.nom_commune ORDER BY c.nom_commune) AS site_intervention_noms,
-        ARRAY_AGG(pc.id_commune ORDER BY pc.id_commune) AS site_intervention_ids
-      FROM projets p
-      LEFT JOIN projets_communes pc ON p.id_projet = pc.id_projet
-      LEFT JOIN communes c ON pc.id_commune = c.id_commune
-      WHERE p.id_projet = $1
-      GROUP BY
-        p.id_projet, p.nom_projet, p.sigle_projet, p.date_debut, p.date_fin,
-        p.budget_projet, p.bailleur, p.objectif_global, p.statut,
-        p.realisations, p.cible, p.photo1, p.photo2, p.photo3, p.photo4;
-    `;
+                -- Communes associées
+                COALESCE(ARRAY_AGG(DISTINCT c.nom_commune ORDER BY c.nom_commune) FILTER (WHERE c.nom_commune IS NOT NULL), '{}') AS site_intervention_noms,
+                COALESCE(ARRAY_AGG(DISTINCT pc.id_commune ORDER BY pc.id_commune) FILTER (WHERE pc.id_commune IS NOT NULL), '{}') AS site_intervention_ids,
+                -- NEW: Bureaux de base associés
+                COALESCE(ARRAY_AGG(DISTINCT bb.nom_base ORDER BY bb.nom_base) FILTER (WHERE bb.nom_base IS NOT NULL), '{}') AS bureaux_base_noms,
+                COALESCE(ARRAY_AGG(DISTINCT pb.id_base ORDER BY pb.id_base) FILTER (WHERE pb.id_base IS NOT NULL), '{}') AS bureaux_base_ids
+            FROM projets p
+            LEFT JOIN projets_communes pc ON p.id_projet = pc.id_projet
+            LEFT JOIN communes c ON pc.id_commune = c.id_commune
+            LEFT JOIN projets_bureaux pb ON p.id_projet = pb.id_projet -- NEW JOIN
+            LEFT JOIN bureaux_base bb ON pb.id_base = bb.id_base      -- NEW JOIN
+            WHERE p.id_projet = $1
+            GROUP BY
+                p.id_projet, p.nom_projet, p.sigle_projet, p.date_debut, p.date_fin,
+                p.budget_projet, p.bailleur, p.objectif_global, p.statut,
+                p.realisations, p.cible, p.photo1, p.photo2, p.photo3, p.photo4;
+        `;
 
-    const { rows } = await pool.query(query, [id]);
+        const { rows } = await pool.query(query, [id]);
 
-    if (rows.length === 0 || rows[0].id_projet === null) { // Check if a project was actually found
-      return res.status(404).json({ error: "Projet non trouvé" });
+        if (rows.length === 0 || rows[0].id_projet === null) {
+            return res.status(404).json({ error: "Projet non trouvé" });
+        }
+
+        const projet = rows[0];
+
+        // Ensure arrays are empty if no associations (COALESCE handles this in SQL now)
+        projet.site_intervention_noms = projet.site_intervention_noms.includes(null) ? [] : projet.site_intervention_noms;
+        projet.site_intervention_ids = projet.site_intervention_ids.includes(null) ? [] : projet.site_intervention_ids;
+        projet.bureaux_base_noms = projet.bureaux_base_noms.includes(null) ? [] : projet.bureaux_base_noms; 
+        projet.bureaux_base_ids = projet.bureaux_base_ids.includes(null) ? [] : projet.bureaux_base_ids; 
+
+
+        res.json(projet);
+    } catch (err) {
+        console.error("Erreur lors de la récupération du projet", err);
+        res.status(500).json({ error: "Erreur serveur" });
     }
-
-    const projet = rows[0];
-
-    // Ensure site_intervention_noms and site_intervention_ids are empty arrays if no communes are linked
-    projet.site_intervention_noms = projet.site_intervention_noms.includes(null) ? [] : projet.site_intervention_noms;
-    projet.site_intervention_ids = projet.site_intervention_ids.includes(null) ? [] : projet.site_intervention_ids;
-
-
-    res.json(projet);
-  } catch (err) {
-    console.error("Erreur lors de la récupération du projet", err);
-    res.status(500).json({ error: "Erreur serveur" });
-  }
 });
 
 
@@ -738,6 +780,7 @@ router.put(
         bailleur,
         objectif_global,
         site_intervention, // This will now be an array of commune IDs
+        bureaux_base,
         statut,
         realisations,
         cible,
@@ -750,9 +793,14 @@ router.put(
         ? [Number(site_intervention)]
         : [];
 
+        const selectedBureauBaseIds = Array.isArray(bureaux_base)
+            ? bureaux_base.map(Number)
+            : bureaux_base ? [Number(bureaux_base)] : [];
+
       // For debugging
       console.log("Valeurs reçues pour la mise à jour (req.body):", JSON.stringify(req.body, null, 2));
       console.log("Communes sélectionnées (après traitement backend):", selectedCommuneIds);
+      console.log("Bureaux de base sélectionnés (backend):", selectedBureauBaseIds);
 
       const photo1 = req.files["photo1"] ? `/resources/images/project/${req.files["photo1"][0].filename}` : req.body.photo1;
       const photo2 = req.files["photo2"] ? `/resources/images/project/${req.files["photo2"][0].filename}` : req.body.photo2;
@@ -793,7 +841,7 @@ router.put(
       `;
       values.push(id); // Add project ID to values for WHERE clause
 
-      const projectResult = await pool.query(projectUpdateQuery, values);
+      
 
       if (projectResult.rows.length === 0) {
         return res.status(404).json({ error: "Projet non trouvé." });
@@ -801,38 +849,65 @@ router.put(
 
       // Handle the `projets_communes` junction table
       // Start a transaction for atomicity
-      await pool.query('BEGIN');
+        await pool.query('BEGIN');
+        let projectResult;
 
-      try {
-        // 1. Delete existing associations for this project
-        await pool.query('DELETE FROM projets_communes WHERE id_projet = $1', [id]);
+        try {
+            // Update the `projets` table
+            const projectUpdateQuery = `
+                UPDATE projets
+                SET ${setClauses.join(", ")}
+                WHERE id_projet = $${fields.length + 1}
+                RETURNING *;
+            `;
+            values.push(id); // Add project ID to values for WHERE clause
 
-        // 2. Insert new associations
-        if (selectedCommuneIds.length > 0) {
-          const communeInsertValues = selectedCommuneIds
-            .map((communeId) => `(${id}, ${communeId})`)
-            .join(", ");
+            projectResult = await pool.query(projectUpdateQuery, values);
 
-          const insertCommunesQuery = `
-            INSERT INTO projets_communes (id_projet, id_commune)
-            VALUES ${communeInsertValues};
-          `;
-          await pool.query(insertCommunesQuery);
+            if (projectResult.rows.length === 0) {
+                await pool.query('ROLLBACK');
+                return res.status(404).json({ error: "Projet non trouvé." });
+            }
+
+            // Handle the `projets_communes` junction table
+            await pool.query('DELETE FROM projets_communes WHERE id_projet = $1', [id]);
+            if (selectedCommuneIds.length > 0) {
+                const communeInsertValues = selectedCommuneIds
+                    .map((communeId) => `(${id}, ${communeId})`)
+                    .join(", ");
+                const insertCommunesQuery = `
+                    INSERT INTO projets_communes (id_projet, id_commune)
+                    VALUES ${communeInsertValues};
+                `;
+                await pool.query(insertCommunesQuery);
+            }
+
+            // NEW: Handle the `projets_bureaux` junction table
+            await pool.query('DELETE FROM projets_bureaux WHERE id_projet = $1', [id]);
+            if (selectedBureauBaseIds.length > 0) {
+                const bureauxBaseInsertValues = selectedBureauBaseIds
+                    .map((baseId) => `(${id}, ${baseId})`)
+                    .join(", ");
+                const insertBureauxBaseQuery = `
+                    INSERT INTO projets_bureaux (id_projet, id_base)
+                    VALUES ${bureauxBaseInsertValues};
+                `;
+                await pool.query(insertBureauxBaseQuery);
+            }
+
+            await pool.query('COMMIT');
+            res.json({ success: true, project: projectResult.rows[0] });
+
+        } catch (transactionError) {
+            await pool.query('ROLLBACK'); // Rollback if any part of the transaction fails
+            throw transactionError; // Re-throw to be caught by the outer catch
         }
 
-        await pool.query('COMMIT');
-        res.json({ success: true, project: projectResult.rows[0] });
-      } catch (communeError) {
-        await pool.query('ROLLBACK'); // Rollback if junction table update fails
-        throw communeError; // Re-throw to be caught by the outer catch
-      }
-
     } catch (err) {
-      console.error("Erreur lors de la mise à jour du projet :", err.stack);
-      res.status(500).json({ error: "Erreur lors de la mise à jour du projet." });
+        console.error("Erreur lors de la mise à jour du projet :", err.stack);
+        res.status(500).json({ error: "Erreur lors de la mise à jour du projet." });
     }
-  }
-);
+});
 
 /**
  * Route : Supprimer un projet

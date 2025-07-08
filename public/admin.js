@@ -856,6 +856,7 @@ function displayProjects(projects) {
               <th>Bailleur</th>
               <th>Objectif global</th>
               <th>Site d'intervention</th>
+              <th>Bureaux de Base</th>
               <th>Statut</th>
               <th>Réalisations</th>
               <th>Cible</th>
@@ -879,6 +880,7 @@ function displayProjects(projects) {
               <td>${project.bailleur}</td>
               <td>${project.objectif_global}</td>
               <td>${project.site_intervention_noms ? project.site_intervention_noms.join(', ') : ''}</td>
+              <td>${project.bureaux_base_noms ? project.bureaux_base_noms.join(', ') : ''}</td>
               <td>${project.statut}</td>
               <td>${project.realisations}</td>
               <td>${project.cible}</td>
@@ -929,10 +931,25 @@ function displayProjects(projects) {
     }
   }
 
+  // --- NOUVELLE FONCTION : Charger les bureaux de base ---
+async function loadBureauxBase() {
+    const response = await fetch("/admin/api/bureaux_base", {
+        method: "GET",
+        headers: { "Content-Type": "application/json" },
+    });
+    if (response.ok) {
+        return await response.json();
+    } else {
+        console.error("Erreur lors du chargement des bureaux de base.");
+        return [];
+    }
+}
+
   async function displayAddProjectForm() {
 
     // Charger les communes
     const communes = await loadCommunes();
+    const bureauxBase = await loadBureauxBase();
     let html = `
       <h2>Ajouter un projet</h2>
       <form id="addProjectForm" enctype="multipart/form-data">
@@ -977,6 +994,14 @@ function displayProjects(projects) {
         </select>
 
       </div>
+            <div class="form-group" style="height: 200px;">
+                <label for="bureaux_base">Bureaux de Base :</label>
+                <select id="bureaux_base" name="bureaux_base" multiple>
+                    ${bureauxBase.map(bureau =>
+                        `<option value="${bureau.id_base}">${bureau.nom_base}</option>`
+                    ).join('')}
+                </select>
+            </div>
 <div class="form-group">
     <label for="statut">Statut du projet:</label>
     <select id="statut" name="statut" required>
@@ -1019,34 +1044,53 @@ function displayProjects(projects) {
       allowClear: true
     });
 
+        $('#bureaux_base').select2({
+        placeholder: "Sélectionnez un ou plusieurs bureaux de base",
+        allowClear: true
+    });
+
     const addProjectForm = document.getElementById("addProjectForm");
     addProjectForm.addEventListener("submit", async (e) => {
-      e.preventDefault();
-      const formData = new FormData(addProjectForm);
+        e.preventDefault();
+        const formData = new FormData(addProjectForm);
 
-      // Get selected commune IDs from the select2 input
-      const selectedCommuneIds = $('#site_intervention').val();
-      if (selectedCommuneIds) {
-        // Append the array of IDs to formData
-        selectedCommuneIds.forEach(id => formData.append('site_intervention', id));
-      } else {
-        // Ensure site_intervention is present even if empty
-        formData.append('site_intervention', '');
-      }
+        // Get selected commune IDs from the select2 input
+        const selectedCommuneIds = $('#site_intervention').val();
+        formData.delete('site_intervention'); // Remove existing entry
+        if (selectedCommuneIds) {
+            selectedCommuneIds.forEach(id => formData.append('site_intervention', id));
+        } else {
+            formData.append('site_intervention', '');
+        }
 
-      const response = await fetch("/admin/api/projets/add", {
-        method: "POST",
-        body: formData,
-      });
+        // NEW: Get selected bureaux_base IDs from the select2 input
+        const selectedBureauBaseIds = $('#bureaux_base').val();
+        formData.delete('bureaux_base'); // Remove existing entry
+        if (selectedBureauBaseIds) {
+            selectedBureauBaseIds.forEach(id => formData.append('bureaux_base', id));
+        } else {
+            formData.append('bureaux_base', '');
+        }
 
-      if (response.ok) {
-        alert("Projet ajouté avec succès.");
-        loadProjects();
-      } else {
-        alert("Erreur lors de l'ajout du projet.");
-      }
+        try {
+            const response = await fetch("/admin/api/projets/add", {
+                method: "POST",
+                body: formData,
+            });
+
+            if (response.ok) {
+                alert("Projet ajouté avec succès.");
+                loadProjects();
+            } else {
+                const error = await response.json();
+                alert(`Erreur lors de l'ajout du projet: ${error.error || "Une erreur est survenue"}`);
+            }
+        } catch (err) {
+            console.error("Erreur:", err);
+            alert("Erreur réseau ou serveur");
+        }
     });
-  }
+}
 
   async function loadProjectForEdit(id) {
     const response = await fetch(`/admin/api/projets/${id}`, {
@@ -1115,6 +1159,17 @@ function displayProjects(projects) {
     ).join('')}
         </select>
       </div>
+        <div class="form-group">
+            <label for="bureaux_base">Bureaux de Base :</label>
+            <select id="bureaux_base" name="bureaux_base" multiple>
+                ${bureauxBase.map(bureau =>
+                    `<option value="${bureau.id_base}"
+                         ${selectedBureauBaseIds.includes(bureau.id_base) ? 'selected' : ''}>
+                         ${bureau.nom_base}
+                     </option>`
+                ).join('')}
+            </select>
+        </div>
       <div class="form-group">
             <label for="statut">Statut :</label>
             <select id="statut" name="statut" required>
@@ -1156,64 +1211,84 @@ function displayProjects(projects) {
 
     contentArea.innerHTML = html;
 
-    // Initialize select2 with pre-selected values
-    $(document).ready(function () {
-      $('#site_intervention').select2({
-        placeholder: "Sélectionnez une ou plusieurs communes",
-        allowClear: true
-      }).val(selectedSiteIds).trigger('change'); // Set selected values and trigger change
-    });
+        // Initialiser les selects multiples avec Select2
+    $(document).ready(function () {
+        $('#site_intervention').select2({
+            placeholder: "Sélectionnez une ou plusieurs communes",
+            allowClear: true
+        }).val(selectedSiteIds).trigger('change');
 
-    // Modifiez la partie submit handler :
-    editProjectForm.addEventListener("submit", async (e) => {
-      e.preventDefault();
+        // NEW: Initialiser Select2 pour les bureaux de base et pré-sélectionner
+        $('#bureaux_base').select2({
+            placeholder: "Sélectionnez un ou plusieurs bureaux de base",
+            allowClear: true
+        }).val(selectedBureauBaseIds).trigger('change');
+    });
 
-      const formData = new FormData(editProjectForm);
+    const editProjectForm = document.getElementById("editProjectForm");
+    editProjectForm.addEventListener("submit", async (e) => {
+        e.preventDefault();
 
-      // Get selected commune IDs from the select2 input
-      const selectedCommuneIds = $('#site_intervention').val();
-      // Remove any existing 'site_intervention' entries from formData to avoid duplicates if select2 adds them
-      formData.delete('site_intervention');
-      if (selectedCommuneIds) {
-          // Append each selected ID as a separate entry to formData
-          selectedCommuneIds.forEach(id => formData.append('site_intervention', id));
-      } else {
-          // Ensure site_intervention is present even if empty, to signal deselecting all
-          formData.append('site_intervention', '');
-      }
+        const formData = new FormData(editProjectForm);
 
-      // Important: Add current photo paths as hidden inputs if no new file is uploaded
-      // (This is already done in the HTML above by conditionally adding hidden inputs)
-      // Check if file input is empty, and if so, send the existing path from the 'value' attribute
-      // The backend needs to handle this as well (which it does with `req.body.photoX`)
+        // Get selected commune IDs from the select2 input
+        const selectedCommuneIds = $('#site_intervention').val();
+        formData.delete('site_intervention');
+        if (selectedCommuneIds) {
+            selectedCommuneIds.forEach(id => formData.append('site_intervention', id));
+        } else {
+            formData.append('site_intervention', '');
+        }
 
-      try {
-        const response = await fetch(`/admin/api/projets/update/${formData.get("id_projet")}`, {
-          method: "PUT",
-          body: formData,
-          headers: {
-            // No 'Content-Type' header when sending FormData, as browser sets it correctly
-            'Authorization': `Bearer ${localStorage.getItem('token')}` // Si vous utilisez JWT
-          }
-        });
+        // NEW: Get selected bureaux_base IDs from the select2 input
+        const selectedBureauBaseIds = $('#bureaux_base').val();
+        formData.delete('bureaux_base');
+        if (selectedBureauBaseIds) {
+            selectedBureauBaseIds.forEach(id => formData.append('bureaux_base', id));
+        } else {
+            formData.append('bureaux_base', '');
+        }
 
-        if (response.ok) {
-          const result = await response.json();
-          alert("Projet mis à jour avec succès.");
-          loadProjects();
-        } else if (response.status === 401) {
-          // Redirection vers le login si non autorisé
-          window.location.href = '/admin.html';
-        } else {
-          const error = await response.json();
-          alert(`Erreur: ${error.error || "Une erreur est survenue"}`);
-        }
-      } catch (err) {
-        console.error("Erreur:", err);
-        alert("Erreur réseau ou serveur");
-      }
-    });
-  }
+        // Handle existing photos if new files are not uploaded
+        ['photo1', 'photo2', 'photo3', 'photo4'].forEach(photoField => {
+            const fileInput = document.getElementById(photoField);
+            const currentPhotoPath = formData.get(`${photoField}_current`);
+
+            if (!fileInput.files || fileInput.files.length === 0) {
+                if (currentPhotoPath) {
+                    formData.set(photoField, currentPhotoPath);
+                } else {
+                    formData.delete(photoField);
+                }
+            }
+            formData.delete(`${photoField}_current`);
+        });
+
+        try {
+            const response = await fetch(`/admin/api/projets/update/${formData.get("id_projet")}`, {
+                method: "PUT",
+                body: formData,
+                headers: {
+                    'Authorization': `Bearer ${localStorage.getItem('token')}`
+                }
+            });
+
+            if (response.ok) {
+                const result = await response.json();
+                alert("Projet mis à jour avec succès.");
+                loadProjects();
+            } else if (response.status === 401) {
+                window.location.href = '/admin.html';
+            } else {
+                const error = await response.json();
+                alert(`Erreur: ${error.error || "Une erreur est survenue"}`);
+            }
+        } catch (err) {
+            console.error("Erreur:", err);
+            alert("Erreur réseau ou serveur");
+        }
+    });
+}
 
 
   // Gestion de la déconnexion

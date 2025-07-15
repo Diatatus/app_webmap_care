@@ -1,506 +1,460 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>CARE CAMEROUN</title>
-    <link
-      rel="stylesheet"
-      href="/node_modules/bootstrap/dist/css/bootstrap.css" />
-    <link rel="stylesheet" href="/node_modules/ol/ol.css" />
-    <script src="/node_modules/ol/dist/ol.js"></script>
-    <script src="/node_modules/bootstrap/dist/js/bootstrap.js"></script>
-    <script src="/node_modules/chart.js/dist/chart.umd.js"></script>
-    <!-- ol-ext -->
-    <link rel="stylesheet" href="/node_modules/ol-ext/dist/ol-ext.css" />
-    <script
-      type="text/javascript"
-      src="/node_modules/ol-ext/dist/ol-ext.js"></script>
-    <link rel="stylesheet" href="./style.css" />
-    <link rel="shortcut icon " href="./resources/images/care_logo.png" />
-    <!-- jQuery -->
-    <script
-      type="text/javascript"
-      src="https://code.jquery.com/jquery-1.11.0.min.js"></script>
-    <!-- FontAwesome -->
-    <link
-      rel="stylesheet"
-      href="/node_modules/@fortawesome/fontawesome-free/css/all.min.css" />
-    <!-- Add icon library -->
-    <script src="https://unpkg.com/elm-pep"></script>
-    <!-- Bingmap -->
-    <script
-      type="text/javascript"
-      src="https://www.bing.com/api/maps/mapcontrol?key=AuOKP0N2ww907dY398Ci9ZKg38AqF2jc7q1QchUixWw30TpwdCt4T36ip-OyE49R&callback=loadMapScenario"
-      async
-      defer></script>
-  </head>
 
-  <body>
-      <!-- Page de loading -->
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>CARE CAMEROUN</title>
+  <link rel="stylesheet" href="/node_modules/bootstrap/dist/css/bootstrap.css" />
+  <link rel="stylesheet" href="/node_modules/ol/ol.css" />
+  <script src="/node_modules/ol/dist/ol.js"></script>
+  <script src="/node_modules/bootstrap/dist/js/bootstrap.js"></script>
+  <script src="/node_modules/chart.js/dist/chart.umd.js"></script>
+  <!-- ol-ext -->
+  <link rel="stylesheet" href="/node_modules/ol-ext/dist/ol-ext.css" />
+  <script type="text/javascript" src="/node_modules/ol-ext/dist/ol-ext.js"></script>
+  <link rel="stylesheet" href="./style.css" />
+  <link rel="shortcut icon " href="./resources/images/care_logo.png" />
+  <!-- jQuery -->
+  <script type="text/javascript" src="https://code.jquery.com/jquery-1.11.0.min.js"></script>
+  <!-- FontAwesome -->
+  <link rel="stylesheet" href="/node_modules/@fortawesome/fontawesome-free/css/all.min.css" />
+  <!-- Add icon library -->
+  <script src="https://unpkg.com/elm-pep"></script>
+  <!-- Bingmap -->
+  <script type="text/javascript"
+    src="https://www.bing.com/api/maps/mapcontrol?key=AuOKP0N2ww907dY398Ci9ZKg38AqF2jc7q1QchUixWw30TpwdCt4T36ip-OyE49R&callback=loadMapScenario"
+    async defer></script>
+</head>
+
+<body>
+  <!-- Page de loading -->
   <div id="loading" class="loading">
     <div class="loader">
-      <img
-        src="./resources/images/care_logo.png"
-        alt="Loading..."
-        class="animated-logo" />
-      <img
-        src="./resources/images/care.png"
-        alt="Care Logo"
-        class="static-logo" />
+      <img src="./resources/images/care_logo.png" alt="Loading..." class="animated-logo" />
+      <img src="./resources/images/care.png" alt="Care Logo" class="static-logo" />
     </div>
   </div>
-    <!-- Carte -->
-    <div id="map" class="map2"></div>
-<!-- Buttons couche de données -->
-<div id="layer-slider-container">
-  <div id="layer-slider" class="custom-layer-slider-horizontal">
-    <label class="btn">
-      <input type="checkbox" id="toggleBasesCheckbox" class="layer-checkbox" />
-      <i class="fas fa-house"></i>Bases et Projets
-    </label>
-    <label class="btn">
-      <input
-        type="checkbox"
-        id="togglePartenairesCheckbox"
-        class="layer-checkbox"
-      />
-      <i class="fas fa-people-group"></i>Partenaires
-    </label>
-    <label class="btn">
-      <input
-        type="checkbox"
-        id="toggleRegionsCheckbox"
-        class="layer-checkbox"
-      />
-      <i class="fas fa-chart-line"></i> Régions et Indicateurs
-    </label>
-  </div>
-</div>
-
-<header>
-  <div class="header-container">
-    <div class="header-left">
-      <a href="https://www.care.org/our-work/where-we-work/cameroon/" target="_blank" rel="noopener noreferrer">
-  <img src="./resources/images/care_.png" alt="CARE Logo" class="header-logo">
-</a>
-      <div class="search-container">
-        <i class="fas fa-search search-icon" id="search-toggle"></i>
-        <input id="inpt_search" type="text" class="searchTerm" placeholder="Chercher...">
-        <div class="liveDataDiv" id="liveDataDiv"></div>
-      </div>
-    </div>
-    <div class="header-right">
-
-      
-      <a href="https://www.care.org/our-work/where-we-work/cameroon/" target="_blank" rel="noopener noreferrer">
-  <button class="help-btn" id="help-btn">
-    <i class="fas fa-question-circle"></i>
-  </button>
-</a>
-
-    </div>
-  </div>
-</header>
-
-<footer>
-  <div class="footer-content">
-    <div class="footer-copyright">
-      © 2025 <strong><a href="https://www.care.org/our-work/where-we-work/cameroon/" target="_blank" rel="noopener noreferrer">CARE Cameroun</a></strong> - Tous droits réservés / avec l'appui technique de 
-      <a href="https://www.geostrategies.net" target="_blank" rel="noopener noreferrer">Géostrategies</a>
-    </div>
-  </div>
-</footer>
-
-
-    <!-- Story Map -->
-    <div id="story" style="display: block">
-      <div
-        class="chapter"
-        name="start"
-        data-lon="12.2"
-        data-lat="7.5"
-        data-zoom="6.2"
-        data-animation="flyto">
-        <h3>Bases de Care au Cameroun</h3>
-        <p>
-          Notre présence au Cameroun en 2024 est marquée par cinq bureaux dont :
-          un bureau de base à Maroua (Extrême-Nord), deux bureaux de
-          coordination à Yaoundé (Centre) et Garoua (Nord), deux sous-bureaux de
-          CARE situés à Douala (Littoral) et Batouri (Est).
-          <br />
-          <span style="font-size: 0.8em"> Source et Images &copy; Care </span>
-        </p>
-        <div class="ol-scroll-next"><span></span></div>
-      </div>
-      <div
-        class="chapter"
-        name="MAROUA"
-        data-lon="14.311887"
-        data-lat="10.592242"
-        data-zoom="10"
-        data-animation="flyto">
-        <h3>Maroua</h3>
-        <img data-title="Maroua" src="./resources/images/bases/Maroua.jpeg" />
-        <p></p>
-      </div>
-      <div
-        class="chapter"
-        name="BATOURI"
-        data-lon="13.68459"
-        data-lat="4.575472"
-        data-zoom="10"
-        data-animation="flyto">
-        <h3>Batouri</h3>
-        <img data-title="Batouri" src="./resources/images/bases/Batouri.jpeg" />
-        <p></p>
-      </div>
-      <div
-        class="chapter"
-        name="GAROUA"
-        data-lon="13.396125"
-        data-lat="9.3340337"
-        data-zoom="10"
-        data-animation="flyto">
-        <h3>Garoua</h3>
-        <img data-title="Garoua" src="./resources/images/bases/Garoua.jpeg" />
-        <p></p>
-      </div>
-      <div
-        class="chapter"
-        name="YAOUNDE"
-        data-lon="11.50019"
-        data-lat="3.89854"
-        data-zoom="10"
-        data-animation="flyto">
-        <h3>Yaoundé (Bureaux de coordination)</h3>
-        <img
-          data-title="Yaoundé"
-          src="./resources/images/bases/Yaounde.jpeg" />
-        <p></p>
-      </div>
-      <div
-        class="chapter"
-        name="DOUALA"
-        data-lon="9.71"
-        data-lat="4.0583"
-        data-zoom="10"
-        data-animation="flyto">
-        <h3>Douala</h3>
-        <img data-title="Douala" src="./resources/images/bases/Douala.jpeg" />
-        <p></p>
-        <div class="ol-scroll-top"><span></span></div>
-      </div>
-    </div>
-
-    <!-- Popup Indicateurs socio-economiques Regions et Villes-->
-    <div id="popup-container" class="popup-container">
-      <div id="popup-close-btn-wrapper" class="popup-header">
-        <i class="fas fa-chart-line"></i
-        ><span id="zone-name" class="zone-name"></span>
-        <button id="popup-close-btn" class="popup-close-btn">&times;</button>
-      </div>
-
-      <div id="popup-info" class="popup-info">
-        <!-- Démographie -->
-        <h3><strong>-- Démographie --</strong></h3>
-        <br />
-        <div id="demography-icons">
-          <div class="demography-icon-group">
-            <i class="fas fa-users"></i>
-            <span id="total-population-info"></span>
-          </div>
-          <div class="demography-icon-group">
-            <i class="fas fa-street-view"></i>
-            <span id="population-density-info"></span>
-          </div>
-        </div>
-        <div id="demography-bar-chart-container">
-          <canvas id="demography-chart"></canvas>
-        </div>
-        <br />
-        <h3><strong>-- Santé --</strong></h3>
-        <div id="health-icons">
-          <div id="access-sanity-icon">
-            <i class="fas fa-hand-holding-medical fa-2x"></i>
-            <p id="sanity-access">
-              Accès aux installations sanitaires améliorées :<br />
-              <strong><span id="access-sanity"></span>%</strong>
-            </p>
-          </div>
-          <div id="access-water-icon">
-            <i class="fas fa-glass-water-droplet fa-2x"></i>
-            <p id="water-access">
-              Accès à une source améliorée d'eau de boisson :<br />
-              <strong><span id="access-water"></span>%</strong>
-            </p>
-          </div>
-          <div id="handwashing-icon">
-            <i class="fas fa-faucet-drip fa-2x"></i>
-            <p id="handwashing-acess">
-              Installation de lavage des mains dans les ménages :<br />
-              <strong><span id="handwashing"></span>%</strong>
-            </p>
-          </div>
-        </div>
-        <div id="hiv-icons">
-          <div id="hiv-ribbon" class="icon-center">
-            <i class="fas fa-ribbon fa-3x"></i>
-            <p><strong>Prévalence VIH 15-49 ans</strong></p>
-          </div>
-          <div id="hiv-gender-icons" class="icon-gender">
-            <div id="hiv-male">
-              <i class="fas fa-mars fa-2x"></i>
-              <p>
-                Hommes : <strong><span id="hiv-males"></span>%</strong>
-              </p>
-            </div>
-            <div id="hiv-female">
-              <i class="fas fa-venus fa-2x"></i>
-              <p>
-                Femmes : <strong><span id="hiv-females"></span>%</strong>
-              </p>
-            </div>
-          </div>
-        </div>
-        <br />
-        <!-- Economie -->
-        <h3><strong>-- Economie et Emploi --</strong></h3>
-        <div id="economy-icons">
-          <div id="poverty-rate-icon">
-            <i class="fas fa-hand-holding-usd fa-2x"></i>
-            <p id="rate-poverty">
-              Taux de pauvreté :<br />
-              <strong><span id="poverty-rate"></span>%</strong>
-            </p>
-          </div>
-          <div id="unemployment-rate-icon">
-            <i class="fas fa-briefcase fa-2x"></i>
-            <p id="rate-unemployment">
-              Taux de chômage :<br />
-              <strong><span id="unemployment-rate"></span>%</strong>
-            </p>
-          </div>
-          <div id="financial-inclusion-icon">
-            <i class="fas fa-university fa-2x"></i>
-            <p id="Inclusion-financial">
-              Inclusion financière :<br />
-              <strong><span id="financial-inclusion"></span>%</strong>
-            </p>
-          </div>
-        </div>
-        <br />
-        <!-- Foyer et Planning famillial -->
-        <h3><strong>-- Foyer et Planning Familial --</strong></h3>
-        <div id="family-planning-icons">
-          <div id="unmet-need-icon">
-            <i class="fas fa-person-breastfeeding fa-2x"></i>
-            <p id="need-unmet">
-              Besoins non satisfaits en matière des femmes de planification
-              familiale :<br />
-              <strong><span id="unmet-need"></span>%</strong>
-            </p>
-          </div>
-          <div id="contraceptive-use-icon">
-            <i class="fas fa-female fa-2x"></i>
-            <p id="use-contraceptive">
-              Femmes de 15-49 ans utilisant des contraceptifs modernes :<br />
-              <strong><span id="contraceptive-use"></span>%</strong>
-            </p>
-          </div>
-        </div>
-        <div id="domestic-violence-section">
-          <div id="domestic-violence-icon">
-            <i class="fas fa-person-harassing fa-beat fa-2x"></i>
-            <p>
-              <strong>Personnes justifiant la violence conjugale</strong>
-            </p>
-          </div>
-          <div id="domestic-violence-pie-chart-container">
-            <canvas id="domestic-violence-pie-chart"></canvas>
-          </div>
-        </div>
-      </div>
-
-      <!-- Sources indicateurs socio-économique -->
-      <div id="popup-footer" class="popup-footer">
-        <h6>Sources</h6>
-        <div class="source-logos">
-          <a href="https://ins-cameroun.cm/" target="_blank">
-            <img
-              src="./resources/images/INS.jpg"
-              alt="Source 1"
-              class="source-logo" />
-          </a>
-          <img
-            src="./resources/images/bucrep.png"
-            alt="Source 2"
-            class="source-logo" />
-          <a href="https://www.cnls.cm/" target="_blank">
-            <img
-              src="./resources/images/CNLS.jpg"
-              alt="Source 3"
-              class="source-logo" />
-          </a>
-        </div>
-      </div>
-    </div>
-
-<!-- Popup for Bureaux de Base Projects -->
-<div id="base-projects-popup" class="popup-container">
-  <div id="base-popup-header" class="popup-header">
-    <i class="fas fa-house"></i>
-    <span id="base-name" class="zone-name"></span>
-    <button id="base-popup-close-btn" class="popup-close-btn">&times;</button>
-  </div>
-
-  <div id="project-list-view">
-    <div class="filter-container">
-      <label for="status-filter">
-        <strong>Réalisations</strong>
+  <!-- Carte -->
+  <div id="map" class="map2"></div>
+  <!-- Buttons couche de données -->
+  <div id="layer-slider-container">
+    <div id="layer-slider" class="custom-layer-slider-horizontal">
+      <label class="btn">
+        <input type="checkbox" id="toggleBasesCheckbox" class="layer-checkbox" />
+        <i class="fas fa-house"></i>Bases et Projets
       </label>
-      <select id="status-filter">
-        <option value="all">Tous</option>
-        <option value="En cours">En cours</option>
-        <option value="Cloturé">Clôturé</option>
-      </select>
-      <i class="fas fa-filter"></i>
-    </div>
-
-
-    <ul id="project-list" class="project-list"></ul>
-  </div>
-
-  <div id="project-detail-view" class="hidden">
-    <button id="back-to-list" class="back-btn">
-      <i class="fas fa-arrow-left"></i> Retour à la liste
-    </button>
-    
-    <div id="project-details">
-      <h3 id="detail-project-name" class="project-title"></h3>
-      
-      <div class="project-section"><i class="fas fa-tag"></i><span><strong>Sigle :</strong> <span id="detail-project-sigle"></span></span></div>
-      <div class="project-section project-dates">
-        <div class="project-section">
-          <i class="fas fa-calendar-alt"></i>
-          <span><strong>Date de Début :</strong> <span id="detail-project-start-date"></span></span>
-        </div>
-        <div class="project-section">
-          <i class="fas fa-calendar-check"></i>
-          <span><strong>Date de Fin :</strong> <span id="detail-project-end-date"></span></span>
-        </div>
-      </div>
-      
-      <div class="project-section"><i class="fas fa-money-bill-wave"></i><span><strong>Budget :</strong> <span id="detail-project-budget"></span></span></div>
-      <div class="project-section"><i class="fas fa-handshake"></i><span><strong>Bailleur :</strong> <span id="detail-project-bailleur"></span></span></div>
-      <div class="project-section"><i class="fas fa-bullseye"></i><span><strong>Objectif Global :</strong><ul id="detail-project-objective"></ul></span></div>
-      <div class="project-section"><i class="fas fa-users"></i><span><strong>Cible :</strong><ul id="detail-project-target"></ul></span></div>
-      <div class="project-section">
-        <i class="fas fa-map-marker-alt"></i>
-        <span>
-          <strong>Sites :</strong>
-          <div class="sites-container">
-            <ul id="detail-project-sites"></ul>
-            <label class="zoom-checkbox">
-              <input type="checkbox" id="zoom-to-sites">
-              <span id="zoom-loading" style="display:none; margin-left:5px;">
-                <i class="fas fa-spinner fa-spin"></i>
-              </span>
-              <strong>Localisation des sites d'intervention</strong>
-            </label>
-          </div>
-        </span>
-      </div>
-      <div class="project-section"><i class="fas fa-info-circle"></i><span><strong>Statut :</strong> <span id="detail-project-status"></span></span></div>
-      <div class="project-section"><i class="fas fa-award"></i><span><strong>Réalisations :</strong><ul id="detail-project-achievements"></ul></span></div>
-      
-      <div class="project-section">
-        <i class="fas fa-images"></i>
-        <span><strong>Photos :</strong>
-          <div id="project-photo-gallery" class="photo-gallery"></div>
-        </span>
-      </div>
+      <label class="btn">
+        <input type="checkbox" id="togglePartenairesCheckbox" class="layer-checkbox" />
+        <i class="fas fa-people-group"></i>Partenaires
+      </label>
+      <label class="btn">
+        <input type="checkbox" id="toggleRegionsCheckbox" class="layer-checkbox" />
+        <i class="fas fa-chart-line"></i> Régions et Indicateurs
+      </label>
     </div>
   </div>
-  
-</div>
 
-  
-<!-- Modal Slider -->
-<div id="image-modal" class="image-modal hidden">
-  <span class="close-modal">&times;</span>
-  <div class="modal-content-container">
-    <button id="prev-slide" class="slider-nav">&#10094;</button>
-    <div class="slider-image-container">
-      <img id="modal-img" class="modal-content" src="" alt="Project photo" />
+  <header>
+    <div class="header-container">
+      <div class="header-left">
+        <a href="https://www.care.org/our-work/where-we-work/cameroon/" target="_blank" rel="noopener noreferrer">
+          <img src="./resources/images/care_.png" alt="CARE Logo" class="header-logo">
+        </a>
+        <div class="search-container">
+          <i class="fas fa-search search-icon" id="search-toggle"></i>
+          <input id="inpt_search" type="text" class="searchTerm" placeholder="Chercher...">
+          <div class="liveDataDiv" id="liveDataDiv"></div>
+        </div>
+      </div>
+      <div class="header-right">
+        <a href="tel:+237696616735" class="phone-contact">
+          <i class="fas fa-phone"></i>
+          <span class="phone-number">+237 69 66 16 735</span>
+        </a>
+        <a href="https://www.care.org/our-work/where-we-work/cameroon/" target="_blank" rel="noopener noreferrer">
+          <button class="help-btn" id="help-btn">
+            <i class="fas fa-question-circle"></i>
+          </button>
+        </a>
+
+      </div>
     </div>
-    <button id="next-slide" class="slider-nav">&#10095;</button>
+  </header>
+
+  <footer>
+    <div class="footer-content">
+      <div class="footer-copyright">
+        © 2025 <strong><a href="https://www.care.org/our-work/where-we-work/cameroon/" target="_blank"
+            rel="noopener noreferrer">CARE Cameroun</a></strong> - Tous droits réservés / avec l'appui technique de
+        <a href="https://www.geostrategies.net" target="_blank" rel="noopener noreferrer">Géostrategies</a>
+      </div>
+    </div>
+  </footer>
+
+
+  <!-- Story Map -->
+  <div id="story" style="display: block">
+    <div class="chapter" name="start" data-lon="12.2" data-lat="7.5" data-zoom="6.2" data-animation="flyto">
+      <h3>Bases de Care au Cameroun</h3>
+      <p>
+        Notre présence au Cameroun en 2024 est marquée par cinq bureaux dont :
+        un bureau de base à Maroua (Extrême-Nord), deux bureaux de
+        coordination à Yaoundé (Centre) et Garoua (Nord), deux sous-bureaux de
+        CARE situés à Douala (Littoral) et Batouri (Est).
+        <br />
+        <span style="font-size: 0.8em"> Source et Images &copy; Care </span>
+      </p>
+      <div class="ol-scroll-next"><span></span></div>
+    </div>
+    <div class="chapter" name="MAROUA" data-lon="14.311887" data-lat="10.592242" data-zoom="10" data-animation="flyto">
+      <h3>Maroua</h3>
+      <img data-title="Maroua" src="./resources/images/bases/Maroua.jpeg" />
+      <p></p>
+    </div>
+    <div class="chapter" name="BATOURI" data-lon="13.68459" data-lat="4.575472" data-zoom="10" data-animation="flyto">
+      <h3>Batouri</h3>
+      <img data-title="Batouri" src="./resources/images/bases/Batouri.jpeg" />
+      <p></p>
+    </div>
+    <div class="chapter" name="GAROUA" data-lon="13.396125" data-lat="9.3340337" data-zoom="10" data-animation="flyto">
+      <h3>Garoua</h3>
+      <img data-title="Garoua" src="./resources/images/bases/Garoua.jpeg" />
+      <p></p>
+    </div>
+    <div class="chapter" name="YAOUNDE" data-lon="11.50019" data-lat="3.89854" data-zoom="10" data-animation="flyto">
+      <h3>Yaoundé (Bureaux de coordination)</h3>
+      <img data-title="Yaoundé" src="./resources/images/bases/Yaounde.jpeg" />
+      <p></p>
+    </div>
+    <div class="chapter" name="DOUALA" data-lon="9.71" data-lat="4.0583" data-zoom="10" data-animation="flyto">
+      <h3>Douala</h3>
+      <img data-title="Douala" src="./resources/images/bases/Douala.jpeg" />
+      <p></p>
+      <div class="ol-scroll-top"><span></span></div>
+    </div>
   </div>
-</div>
-  
 
+  <!-- Popup Indicateurs socio-economiques Regions et Villes-->
+  <div id="popup-container" class="popup-container">
+    <div id="popup-close-btn-wrapper" class="popup-header">
+      <i class="fas fa-chart-line"></i><span id="zone-name" class="zone-name"></span>
+      <button id="popup-close-btn" class="popup-close-btn">&times;</button>
+    </div>
 
-
-
-
-    <!-- Popup Information Partenaire -->
-    <div id="partner-popup" class="popup">
-      <div class="popup-content">
-        <!-- Logo Section -->
-        <div class="popup-section logo-section">
-          <img
-            id="partner-logo"
-            src=""
-            alt="Logo du partenaire"
-            class="popup-logo" />
-          <i id="partner-logo-icon" class="fas fa-people-group"></i>
+    <div id="popup-info" class="popup-info">
+      <!-- Démographie -->
+      <h3><strong>-- Démographie --</strong></h3>
+      <br />
+      <div id="demography-icons">
+        <div class="demography-icon-group">
+          <i class="fas fa-users"></i>
+          <span id="total-population-info"></span>
         </div>
-
-        <!-- Nom du partenaire -->
-        <div class="popup-section name-section">
-          <h3>
-            <i class="fas fa-building"></i> <span id="partner-name">Nom</span>
-          </h3>
+        <div class="demography-icon-group">
+          <i class="fas fa-street-view"></i>
+          <span id="population-density-info"></span>
         </div>
-
-        <!-- Sigle -->
-        <div class="popup-section type-section">
-          <h4>
-            <i class="fas fa-tag"></i><b>
-            <span id="partner-type">Sigle</b></span>
-          </h4>
+      </div>
+      <div id="demography-bar-chart-container">
+        <canvas id="demography-chart"></canvas>
+      </div>
+      <br />
+      <h3><strong>-- Santé --</strong></h3>
+      <div id="health-icons">
+        <div id="access-sanity-icon">
+          <i class="fas fa-hand-holding-medical fa-2x"></i>
+          <p id="sanity-access">
+            Accès aux installations sanitaires améliorées :<br />
+            <strong><span id="access-sanity"></span>%</strong>
+          </p>
         </div>
-
-        <!-- Services Offerts -->
-        <div class="popup-section activity-section">
-          <h4>
-            <i class="fas fa-briefcase"></i
-            ><b> Activités et Services Offerts</b>
-          </h4>
-          <ul id="partner-activity-list" class="activity-list"></ul>
+        <div id="access-water-icon">
+          <i class="fas fa-glass-water-droplet fa-2x"></i>
+          <p id="water-access">
+            Accès à une source améliorée d'eau de boisson :<br />
+            <strong><span id="access-water"></span>%</strong>
+          </p>
         </div>
-
-        <!-- Informations supplémentaires -->
-        <div class="popup-section info-section">
-          <p>
-            <i class="fas fa-info-circle"></i>
-            <span id="partner-info">Informations complémentaires</span>
+        <div id="handwashing-icon">
+          <i class="fas fa-faucet-drip fa-2x"></i>
+          <p id="handwashing-acess">
+            Installation de lavage des mains dans les ménages :<br />
+            <strong><span id="handwashing"></span>%</strong>
           </p>
         </div>
       </div>
+      <div id="hiv-icons">
+        <div id="hiv-ribbon" class="icon-center">
+          <i class="fas fa-ribbon fa-3x"></i>
+          <p><strong>Prévalence VIH 15-49 ans</strong></p>
+        </div>
+        <div id="hiv-gender-icons" class="icon-gender">
+          <div id="hiv-male">
+            <i class="fas fa-mars fa-2x"></i>
+            <p>
+              Hommes : <strong><span id="hiv-males"></span>%</strong>
+            </p>
+          </div>
+          <div id="hiv-female">
+            <i class="fas fa-venus fa-2x"></i>
+            <p>
+              Femmes : <strong><span id="hiv-females"></span>%</strong>
+            </p>
+          </div>
+        </div>
+      </div>
+      <br />
+      <!-- Economie -->
+      <h3><strong>-- Economie et Emploi --</strong></h3>
+      <div id="economy-icons">
+        <div id="poverty-rate-icon">
+          <i class="fas fa-hand-holding-usd fa-2x"></i>
+          <p id="rate-poverty">
+            Taux de pauvreté :<br />
+            <strong><span id="poverty-rate"></span>%</strong>
+          </p>
+        </div>
+        <div id="unemployment-rate-icon">
+          <i class="fas fa-briefcase fa-2x"></i>
+          <p id="rate-unemployment">
+            Taux de chômage :<br />
+            <strong><span id="unemployment-rate"></span>%</strong>
+          </p>
+        </div>
+        <div id="financial-inclusion-icon">
+          <i class="fas fa-university fa-2x"></i>
+          <p id="Inclusion-financial">
+            Inclusion financière :<br />
+            <strong><span id="financial-inclusion"></span>%</strong>
+          </p>
+        </div>
+      </div>
+      <br />
+      <!-- Foyer et Planning famillial -->
+      <h3><strong>-- Foyer et Planning Familial --</strong></h3>
+      <div id="family-planning-icons">
+        <div id="unmet-need-icon">
+          <i class="fas fa-person-breastfeeding fa-2x"></i>
+          <p id="need-unmet">
+            Besoins non satisfaits en matière des femmes de planification
+            familiale :<br />
+            <strong><span id="unmet-need"></span>%</strong>
+          </p>
+        </div>
+        <div id="contraceptive-use-icon">
+          <i class="fas fa-female fa-2x"></i>
+          <p id="use-contraceptive">
+            Femmes de 15-49 ans utilisant des contraceptifs modernes :<br />
+            <strong><span id="contraceptive-use"></span>%</strong>
+          </p>
+        </div>
+      </div>
+      <div id="domestic-violence-section">
+        <div id="domestic-violence-icon">
+          <i class="fas fa-person-harassing fa-beat fa-2x"></i>
+          <p>
+            <strong>Personnes justifiant la violence conjugale</strong>
+          </p>
+        </div>
+        <div id="domestic-violence-pie-chart-container">
+          <canvas id="domestic-violence-pie-chart"></canvas>
+        </div>
+      </div>
     </div>
 
-    <!-- Zoom controls -->
-    <div id="zoom-controls">
-      <button id="zoom-in" class="zoom-btn"><i class="fas fa-plus"></i></button>
-      <button id="zoom-initial" class="zoom-btn">
-        <i class="fas fa-house"></i>
+    <!-- Sources indicateurs socio-économique -->
+    <div id="popup-footer" class="popup-footer">
+      <h6>Sources</h6>
+      <div class="source-logos">
+        <a href="https://ins-cameroun.cm/" target="_blank">
+          <img src="./resources/images/INS.jpg" alt="Source 1" class="source-logo" />
+        </a>
+        <img src="./resources/images/bucrep.png" alt="Source 2" class="source-logo" />
+        <a href="https://www.cnls.cm/" target="_blank">
+          <img src="./resources/images/CNLS.jpg" alt="Source 3" class="source-logo" />
+        </a>
+      </div>
+    </div>
+  </div>
+
+  <!-- Popup for Bureaux de Base Projects -->
+  <div id="base-projects-popup" class="popup-container">
+    <div id="base-popup-header" class="popup-header">
+      <i class="fas fa-house"></i>
+      <span id="base-name" class="zone-name"></span>
+      <button id="base-popup-close-btn" class="popup-close-btn">&times;</button>
+    </div>
+
+    <div id="project-list-view">
+      <div class="filter-container">
+        <label for="status-filter">
+          <strong>Réalisations</strong>
+        </label>
+        <select id="status-filter">
+          <option value="all">Tous</option>
+          <option value="En cours">En cours</option>
+          <option value="Cloturé">Clôturé</option>
+        </select>
+        <i class="fas fa-filter"></i>
+      </div>
+
+
+      <ul id="project-list" class="project-list"></ul>
+    </div>
+
+    <div id="project-detail-view" class="hidden">
+      <button id="back-to-list" class="back-btn">
+        <i class="fas fa-arrow-left"></i> Retour à la liste
+      </button>
+
+      <div id="project-details">
+        <h3 id="detail-project-name" class="project-title"></h3>
+
+        <div class="project-section"><i class="fas fa-tag"></i><span><strong>Sigle :</strong> <span
+              id="detail-project-sigle"></span></span></div>
+        <div class="project-section project-dates">
+          <div class="project-section">
+            <i class="fas fa-calendar-alt"></i>
+            <span><strong>Date de Début :</strong> <span id="detail-project-start-date"></span></span>
+          </div>
+          <div class="project-section">
+            <i class="fas fa-calendar-check"></i>
+            <span><strong>Date de Fin :</strong> <span id="detail-project-end-date"></span></span>
+          </div>
+        </div>
+
+        <div class="project-section"><i class="fas fa-money-bill-wave"></i><span><strong>Budget :</strong> <span
+              id="detail-project-budget"></span></span></div>
+        <div class="project-section"><i class="fas fa-handshake"></i><span><strong>Bailleur :</strong> <span
+              id="detail-project-bailleur"></span></span></div>
+        <div class="project-section"><i class="fas fa-bullseye"></i><span><strong>Objectif Global :</strong>
+            <ul id="detail-project-objective"></ul>
+          </span></div>
+        <div class="project-section"><i class="fas fa-users"></i><span><strong>Cible :</strong>
+            <ul id="detail-project-target"></ul>
+          </span></div>
+        <div class="project-section">
+          <i class="fas fa-map-marker-alt"></i>
+          <span>
+            <strong>Sites :</strong>
+            <div class="sites-container">
+              <ul id="detail-project-sites"></ul>
+              <label class="zoom-checkbox">
+                <input type="checkbox" id="zoom-to-sites">
+                <span id="zoom-loading" style="display:none; margin-left:5px;">
+                  <i class="fas fa-spinner fa-spin"></i>
+                </span>
+                <strong>Localisation des sites d'intervention</strong>
+              </label>
+            </div>
+          </span>
+        </div>
+        <div class="project-section"><i class="fas fa-info-circle"></i><span><strong>Statut :</strong> <span
+              id="detail-project-status"></span></span></div>
+        <div class="project-section"><i class="fas fa-award"></i><span><strong>Réalisations :</strong>
+            <ul id="detail-project-achievements"></ul>
+          </span></div>
+
+        <div class="project-section">
+          <i class="fas fa-images"></i>
+          <span><strong>Photos :</strong>
+            <div id="project-photo-gallery" class="photo-gallery"></div>
+          </span>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+
+  <!-- Modal Slider -->
+  <div id="image-modal" class="image-modal hidden">
+    <span class="close-modal">&times;</span>
+    <div class="modal-content-container">
+      <button id="prev-slide" class="slider-nav">&#10094;</button>
+      <div class="slider-image-container">
+        <img id="modal-img" class="modal-content" src="" alt="Project photo" />
+      </div>
+      <button id="next-slide" class="slider-nav">&#10095;</button>
+    </div>
+  </div>
+
+
+
+
+
+
+  <!-- Popup Information Partenaire -->
+  <div id="partner-popup" class="popup">
+    <div class="popup-content">
+      <!-- Logo Section -->
+      <div class="popup-section logo-section">
+        <img id="partner-logo" src="" alt="Logo du partenaire" class="popup-logo" />
+        <i id="partner-logo-icon" class="fas fa-people-group"></i>
+      </div>
+
+      <!-- Nom du partenaire -->
+      <div class="popup-section name-section">
+        <h3>
+          <i class="fas fa-building"></i> <span id="partner-name">Nom</span>
+        </h3>
+      </div>
+
+      <!-- Sigle -->
+      <div class="popup-section type-section">
+        <h4>
+          <i class="fas fa-tag"></i><b>
+            <span id="partner-type">Sigle</b></span>
+        </h4>
+      </div>
+
+      <!-- Services Offerts -->
+      <div class="popup-section activity-section">
+        <h4>
+          <i class="fas fa-briefcase"></i><b> Activités et Services Offerts</b>
+        </h4>
+        <ul id="partner-activity-list" class="activity-list"></ul>
+      </div>
+
+      <!-- Informations supplémentaires -->
+      <div class="popup-section info-section">
+        <p>
+          <i class="fas fa-info-circle"></i>
+          <span id="partner-info">Informations complémentaires</span>
+        </p>
+      </div>
+    </div>
+  </div>
+
+  <!-- Zoom controls -->
+  <div id="zoom-controls">
+    <button id="zoom-in" class="zoom-btn"><i class="fas fa-plus"></i></button>
+    <button id="zoom-initial" class="zoom-btn">
+      <i class="fas fa-house"></i>
       <button id="zoom-out" class="zoom-btn">
         <i class="fas fa-minus"></i>
       </button>
-    </div>
-  </body>
+  </div>
 
-  <script src="./resources/config.js"></script>
-  <script src="./main.js"></script>
+  <div id="custom-layer-switcher" class="layer-switcher collapsed">
+    <div id="switcher-icon" class="switcher-icon-circle">
+      <img src="https://upload.wikimedia.org/wikipedia/commons/b/b0/Openstreetmap_logo.svg" alt="Map Layer Icon" />
+    </div>
+    <div id="layer-options" class="layer-options">
+      <div class="layer-option" data-layer-name="OSM">
+        <img src="https://upload.wikimedia.org/wikipedia/commons/b/b0/Openstreetmap_logo.svg" alt="OSM Thumbnail" />
+        <span>OSM</span>
+      </div>
+      <div class="layer-option" data-layer-name="Satellite">
+        <img src="https://via.placeholder.com/40x40/0A2342/FFFFFF?text=SAT" alt="Satellite Thumbnail" />
+        <span>Satellite</span>
+      </div>
+    </div>
+  </div>
+</body>
+
+<script src="./resources/config.js"></script>
+<script src="./main.js"></script>
+
 </html>

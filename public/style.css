@@ -405,11 +405,34 @@ header {
   cursor: pointer;
 }
 
-/* Partie droite */
 .header-right {
   display: flex;
   align-items: center;
-  gap: 15px;
+  gap: 15px; /* Gardez cet espacement, il gérera l'espace entre le téléphone et le bouton aide */
+}
+
+/* Nouveau style pour le contact téléphonique */
+.phone-contact {
+  display: flex; /* Utiliser flexbox pour aligner l'icône et le texte */
+  align-items: center; /* Aligner verticalement au centre */
+  gap: 8px; /* Espacement entre l'icône et le numéro */
+  text-decoration: none; /* Supprimer le soulignement par défaut du lien */
+  color: #333; /* Couleur de texte sombre */
+  font-size: 14px; /* Taille de la police */
+  font-weight: bold; /* Rendre le numéro un peu plus gras */
+  padding: 5px 10px; /* Un peu de padding pour le rendre cliquable plus facilement */
+  border-radius: 4px;
+  transition: background 0.3s, color 0.3s; /* Transition douce pour le hover */
+}
+
+.phone-contact:hover {
+  background: #f0f0f0; /* Léger fond au survol */
+  color: #e55b00; /* Changer la couleur du texte au survol (couleur de votre marque) */
+}
+
+.phone-contact i.fas.fa-phone {
+  color: #e55b00; /* Couleur de l'icône, celle de votre marque */
+  font-size: 16px; /* Taille de l'icône */
 }
 
 /* Bouton langue */
@@ -1817,4 +1840,152 @@ footer {
     transform: scale(1);
     opacity: 1;
   }
+}
+
+/* Base styling for the layer switcher */
+.layer-switcher {
+  position: absolute;
+  bottom: 50px; /* Légèrement décalé du bas */
+  right: 20px; /* Légèrement décalé de la droite */
+  background-color: rgba(255, 255, 255, 0.95); /* Fond plus opaque */
+  border-radius: 8px; /* Bords légèrement arrondis pour le conteneur */
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2); /* Ombre plus prononcée */
+  overflow: hidden; /* Cache le contenu qui dépasse */
+  width: 50px; /* Taille initiale légèrement plus grande */
+  height: 50px; /* Taille initiale légèrement plus grande */
+  transition: all 0.3s ease-in-out; /* Transition pour toutes les propriétés */
+  z-index: 900; /* Assurez-vous qu'il est au-dessus de la carte mais en dessous de la popup principale */
+  display: flex; /* Utilise flexbox pour centrer le contenu initial */
+  justify-content: center;
+  align-items: center;
+  flex-direction: column; /* Pour empiler icône et options */
+}
+
+/* Collapsed state (initial) */
+.layer-switcher.collapsed {
+  width: 50px;
+  height: 50px;
+  border-radius: 50%; /* Rendre le bouton circulaire en mode collapsed */
+  /* Cacher les options lorsque c'est collapsed */
+  .layer-options {
+    display: none;
+  }
+  /* Afficher l'icône du switcher */
+  .switcher-icon-circle {
+    display: flex;
+  }
+}
+
+/* Expanded state (when not collapsed) */
+.layer-switcher:not(.collapsed) {
+  width: auto; /* Laisser la largeur s'adapter au contenu */
+  height: auto; /* Laisser la hauteur s'adapter au contenu */
+  border-radius: 8px; /* Remettre les bords arrondis pour le mode étendu */
+  padding: 10px; /* Ajouter un padding pour l'espace intérieur */
+  align-items: flex-start; /* Aligner les options au début */
+
+  /* Cacher l'icône du switcher en mode étendu */
+  .switcher-icon-circle {
+    display: none;
+  }
+  /* Afficher les options */
+  .layer-options {
+    display: flex;
+    flex-direction: column;
+    width: 100%; /* Les options prennent toute la largeur disponible */
+  }
+}
+
+
+/* Styling for the main switcher icon (the circle) */
+.switcher-icon-circle {
+  width: 100%; /* Occupe toute la largeur du conteneur parent */
+  height: 100%; /* Occupe toute la hauteur du conteneur parent */
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  cursor: pointer;
+  overflow: hidden; /* Cache tout ce qui dépasse du cercle */
+}
+
+.switcher-icon-circle img {
+  max-width: 90%; /* Légèrement plus petit pour une marge */
+  max-height: 90%;
+  width: auto;
+  height: auto;
+  object-fit: contain;
+  border-radius: 50%; /* S'assurer que l'image elle-même est circulaire */
+  border: 1px solid rgba(0,0,0,0.1); /* Petite bordure */
+}
+
+/* Styling for the layer options container */
+.layer-options {
+  /* display: none; sera contrôlé par .layer-switcher:not(.collapsed) */
+  flex-direction: column; /* Empile les options verticalement */
+  gap: 8px; /* Espacement entre les options */
+  /* padding: 10px; Le padding sera sur .layer-switcher:not(.collapsed) */
+  width: 100%; /* S'adaptera au parent */
+}
+
+/* Styling for each layer option */
+.layer-option {
+  position: relative;
+  display: flex;
+  align-items: center; /* Aligner l'image et le texte */
+  gap: 10px; /* Espacement entre l'image et le texte */
+  cursor: pointer;
+  transition: background-color 0.2s ease, box-shadow 0.2s ease, transform 0.2s ease;
+  padding: 8px; /* Padding pour la zone de clic */
+  border-radius: 6px; /* Bords arrondis pour chaque option */
+  width: 100%; /* L'option prend toute la largeur disponible */
+  background-color: #fff; /* Fond blanc pour les options */
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.08); /* Ombre légère */
+}
+
+.layer-option.active { /* Style pour l'option actuellement sélectionnée */
+    background-color: #e55b00; /* Couleur d'accentuation */
+    color: white;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.2);
+}
+
+.layer-option.active span {
+    color: white; /* Texte blanc pour le statut actif */
+}
+
+.layer-option.active img {
+    border-color: rgba(255,255,255,0.5); /* Bordure claire pour l'image active */
+}
+
+
+/* Styling for the images within layer options (thumbnails) */
+.layer-option img {
+  width: 40px; /* Taille de la vignette */
+  height: 40px; /* Taille de la vignette */
+  object-fit: cover; /* Assure que l'image couvre l'espace */
+  border-radius: 4px; /* Bords légèrement arrondis pour les vignettes */
+  border: 1px solid rgba(0, 0, 0, 0.1);
+}
+
+/* Styling for the spans (text label) */
+.layer-option span {
+  font-size: 13px;
+  font-weight: 500;
+  color: #333; /* Couleur de texte sombre */
+  flex-grow: 1; /* Permet au texte de prendre l'espace restant */
+}
+
+/* Hover effect on the entire option */
+.layer-option:hover {
+  background-color: #f0f0f0; /* Changement de couleur au survol */
+  box-shadow: 0px 2px 6px rgba(0, 0, 0, 0.1); /* Ombre plus prononcée au survol */
+  transform: translateY(-2px); /* Léger mouvement vers le haut */
+}
+
+.layer-option::after {
+    /* Supprimez cette règle si vous n'avez plus besoin du trait animé */
+    content: none;
+}
+.layer-option:hover::after {
+    /* Supprimez cette règle */
+    content: none;
 }

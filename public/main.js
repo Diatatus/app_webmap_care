@@ -88,8 +88,93 @@ var osm = new ol.layer.Tile({
   opacity: 0.6,
 });
 
+// Nouvelle couche ESRI World Imagery (Satellite)
+var esriWorldImagery = new ol.layer.Tile({
+    title: "Satellite", // Nouveau titre pour le sélecteur
+    baseLayer: true,
+    isBaseLayer: true,
+    preload: Infinity,
+    source: new ol.source.XYZ({
+        attributions: 'Tiles &copy; Esri &mdash; Source: Esri, i-cubed, USDA, USGS, AEX, GeoEye, Getmapping, Aerogrid, IGN, IGP, UPR-EGP, and the GIS User Community',
+        url: 'https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}',
+        crossOrigin: 'anonymous' // Important pour éviter les problèmes de CORS avec certaines ressources
+    }),
+    visible: false, // Non visible par défaut
+    name: "Satellite", // Nom pour la référence dans la fonction switchLayer
+});
+
+// Ajouter les couches à la carte (assurez-vous que 'map' est déjà défini)
 map.addLayer(osm);
+map.addLayer(esriWorldImagery);
+
+// Assurez-vous que OSM est la couche active au démarrage
 osm.setVisible(true);
+esriWorldImagery.setVisible(false);
+
+// --- FONCTION switchLayer mise à jour ---
+function switchLayer(layerName) {
+    map.getLayers().forEach(function (layer) {
+        // Vérifie si la couche est une couche de fond de carte (isBaseLayer: true)
+        // et s'assure de ne pas affecter d'autres couches (vecteur, etc.)
+        if (layer.get("isBaseLayer")) {
+            if (layer.get("name") === layerName) {
+                layer.setVisible(true);
+            } else {
+                layer.setVisible(false);
+            }
+        }
+    });
+}
+
+// --- LOGIQUE D'INITIALISATION ET DE BASCULEMENT du sélecteur ---
+
+// Récupération des éléments du sélecteur
+const customLayerSwitcher = document.getElementById("custom-layer-switcher");
+const switcherIcon = document.getElementById("switcher-icon");
+const layerOptionsContainer = document.getElementById("layer-options");
+
+// Toggle des options de calque au clic sur l'icône principale
+switcherIcon.addEventListener("click", function (event) {
+    event.stopPropagation(); // Empêche la propagation du clic pour ne pas fermer immédiatement
+    customLayerSwitcher.classList.toggle("collapsed"); // Inverse l'état collapsed/expanded
+});
+
+// Fermer le sélecteur si on clique n'importe où en dehors
+document.addEventListener("click", function (event) {
+    if (!customLayerSwitcher.contains(event.target) && !customLayerSwitcher.classList.contains("collapsed")) {
+        customLayerSwitcher.classList.add("collapsed");
+    }
+});
+
+// Gestion du clic sur une option de calque
+document.querySelectorAll(".layer-option").forEach((option) => {
+    option.addEventListener("click", function () {
+        const layerName = this.dataset.layerName; // Utilisation de dataset pour récupérer le nom
+        const imgSrc = this.querySelector("img").src;
+
+        switchLayer(layerName); // Bascule la couche de fond de carte
+
+        // Met à jour l'icône du sélecteur principal
+        switcherIcon.querySelector("img").src = imgSrc;
+
+        // Ferme le sélecteur après sélection
+        customLayerSwitcher.classList.add("collapsed");
+
+        // Optionnel : Mettre en surbrillance l'option active (si souhaité)
+        document.querySelectorAll(".layer-option").forEach(opt => opt.classList.remove('active'));
+        this.classList.add('active');
+    });
+});
+
+// --- Initialisation au chargement pour s'assurer que la bonne icône est affichée au démarrage ---
+document.addEventListener('DOMContentLoaded', () => {
+    // Supposons que OSM est la couche par défaut au démarrage
+    const initialOsmOption = document.querySelector('.layer-option[data-layer-name="OSM"]');
+    if (initialOsmOption) {
+        switcherIcon.querySelector("img").src = initialOsmOption.querySelector("img").src;
+        initialOsmOption.classList.add('active'); // Marquer OSM comme active au démarrage
+    }
+});
 
 
 // Definition de couche des limites national du cameroun

@@ -779,7 +779,7 @@ router.put(
         budget_projet,
         bailleur,
         objectif_global,
-        site_intervention, // This will now be an array of commune IDs
+        site_intervention, 
         bureaux_base,
         statut,
         realisations,

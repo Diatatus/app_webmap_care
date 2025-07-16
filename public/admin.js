@@ -385,89 +385,114 @@ document.addEventListener("DOMContentLoaded", () => {
     }
   }
 
-  function displayAddPartnerForm() {
+function displayAddPartnerForm() {
     let html = `
-      <h2>Ajouter un partenaire</h2>
-      <form id="addPartnerForm" enctype="multipart/form-data">
-      <div class="form-group">
-          <label for="id_partenaire">ID_partenaire :</label>
-          <input type="number" id="id_partenaire" name="id_partenaire" required>
+        <h2>Ajouter un partenaire</h2>
+        <form id="addPartnerForm" enctype="multipart/form-data">
+        <div class="form-group">
+            <label for="id_partenaire">ID_partenaire :</label>
+            <input type="number" id="id_partenaire" name="id_partenaire" required>
         </div>
         <div class="form-group">
-          <label for="nom">Nom :</label>
-          <input type="text" id="nom" name="nom" required>
+            <label for="nom">Nom :</label>
+            <input type="text" id="nom" name="nom" required>
         </div>
         <div class="form-group">
-          <label for="sigle">Sigle :</label>
-          <input type="text" id="sigle" name="sigle">
+            <label for="sigle">Sigle :</label>
+            <input type="text" id="sigle" name="sigle">
         </div>
         <div class="form-group">
-          <label for="act_srvc_offert">Activités et services offerts :</label>
-          <textarea type="text" id="act_srvc_offert" name="act_srvc_offert" rows="6"></textarea>
+            <label for="act_srvc_offert">Activités et services offerts :</label>
+            <textarea type="text" id="act_srvc_offert" name="act_srvc_offert" rows="6"></textarea>
         </div>
-        <div class="form-group">
-  <label for="is_ssr">Est-ce un SSR/Clinique juridiques/DIC ?</label>
-  <select id="is_ssr" name="is_ssr">
-    <option value="non" selected>Non</option>
-    <option value="oui">Oui</option>
-  </select>
-</div>
 
         <div class="form-group">
-          <label for="statut_prest">Statut de la prestation :</label>
-          <input type="text" id="statut_prest" name="statut_prest">
+            <label for="statut_prest_select">Statut de la prestation :</label>
+            <select id="statut_prest_select" required>
+                <option value="">Sélectionnez un statut</option>
+                <option value="ONG locale">ONG locale</option>
+                <option value="Clinique juridique">Clinique juridique</option>
+                <option value="DIC">DIC</option>
+                <option value="Clinique juridique et DIC">Clinique juridique et DIC</option>
+                <option value="Autre">Autre...</option> </select>
+            <input type="text" id="statut_prest_custom" placeholder="Saisir un statut personnalisé" style="display:none; margin-top: 5px;">
+            <input type="hidden" id="statut_prest_final" name="statut_prest">
         </div>
         <div class="form-group">
-          <label for="img_logo">Image logo :</label>
-          <input type="file" id="img_logo" name="img_logo" accept="image/png, image/jpeg, image/jpg, image/webp">
+            <label for="img_logo">Image logo :</label>
+            <input type="file" id="img_logo" name="img_logo" accept="image/png, image/jpeg, image/jpg, image/webp">
         </div>
         <div class="form-group">
-          <label for="longitude">Longitude :</label>
-          <input type="number" id="longitude" name="longitude" step="any">
+            <label for="longitude">Longitude :</label>
+            <input type="number" id="longitude" name="longitude" step="any">
         </div>
         <div class="form-group">
-          <label for="latitude">Latitude :</label>
-          <input type="number" id="latitude" name="latitude" step="any">
+            <label for="latitude">Latitude :</label>
+            <input type="number" id="latitude" name="latitude" step="any">
         </div>
         <div class="form-group">
-          <label for="info">Info :</label>
-          <input type="text" id="info" name="info">
+            <label for="info">Info :</label>
+            <input type="text" id="info" name="info">
         </div>
         <button type="submit">Ajouter</button>
-      </form>`;
+        </form>`;
 
     contentArea.innerHTML = html;
 
-    document.getElementById("is_ssr").addEventListener("change", function () {
-      const statutInput = document.getElementById("statut_prest");
-      if (this.value === "oui") {
-        statutInput.value = "SSR/Clinique juridiques/DIC";
-        statutInput.disabled = true;
-      } else {
-        statutInput.value = "";
-        statutInput.disabled = false;
-      }
+    // Logique pour gérer la sélection "Autre..."
+    const statutPrestSelect = document.getElementById("statut_prest_select");
+    const statutPrestCustom = document.getElementById("statut_prest_custom");
+    const statutPrestFinal = document.getElementById("statut_prest_final");
+
+    statutPrestSelect.addEventListener("change", function () {
+        if (this.value === "Autre") {
+            statutPrestCustom.style.display = "block"; // Afficher l'input personnalisé
+            statutPrestCustom.setAttribute('required', 'true'); // Rendre l'input personnalisé requis
+            statutPrestCustom.value = ''; // Vider l'input personnalisé
+            statutPrestFinal.value = ''; // Vider le champ hidden initialement
+        } else {
+            statutPrestCustom.style.display = "none"; // Cacher l'input personnalisé
+            statutPrestCustom.removeAttribute('required'); // Retirer le statut requis
+            statutPrestFinal.value = this.value; // Définir la valeur finale sur l'option sélectionnée
+        }
+    });
+
+    // Écouter les changements sur l'input personnalisé pour mettre à jour le champ final
+    statutPrestCustom.addEventListener("input", function() {
+        statutPrestFinal.value = this.value;
     });
 
 
     const addPartnerForm = document.getElementById("addPartnerForm");
     addPartnerForm.addEventListener("submit", async (e) => {
-      e.preventDefault();
-      const formData = new FormData(addPartnerForm);
+        e.preventDefault();
 
-      const response = await fetch("/admin/api/care_partner/add", {
-        method: "POST",
-        body: formData,
-      });
+        // Mettre à jour la valeur finale juste avant la soumission au cas où "Autre" était sélectionné
+        if (statutPrestSelect.value !== "Autre") {
+            statutPrestFinal.value = statutPrestSelect.value;
+        } else if (statutPrestCustom.value === "") {
+             alert("Veuillez saisir un statut personnalisé.");
+             return; // Empêcher la soumission
+        } else {
+            statutPrestFinal.value = statutPrestCustom.value;
+        }
 
-      if (response.ok) {
-        alert("Partenaire ajouté avec succès.");
-        loadPartners();
-      } else {
-        alert("Erreur lors de l'ajout du partenaire.");
-      }
+        const formData = new FormData(addPartnerForm);
+        // formData contient maintenant la valeur correcte pour 'statut_prest' grâce à 'statut_prest_final'
+
+        const response = await fetch("/admin/api/care_partner/add", {
+            method: "POST",
+            body: formData,
+        });
+
+        if (response.ok) {
+            alert("Partenaire ajouté avec succès.");
+            loadPartners();
+        } else {
+            alert("Erreur lors de l'ajout du partenaire.");
+        }
     });
-  }
+}
 
   async function loadPartnerForEdit(id) {
     const response = await fetch(`/admin/api/care_partner/${id}`, {
@@ -482,108 +507,134 @@ document.addEventListener("DOMContentLoaded", () => {
     }
   }
 
-  function displayEditPartnerForm(partner) {
+function displayEditPartnerForm(partner) {
     const longitude = partner.longitude || ""; // Gérer les valeurs null/undefined
     const latitude = partner.latitude || "";
 
+    // Déterminer si la valeur actuelle du partenaire est une de nos options prédéfinies
+    const predefinedOptions = ["ONG locale", "Clinique juridique", "DIC", "Clinique juridique et DIC", "SSR/Clinique juridiques/DIC"];
+    const isPredefined = predefinedOptions.includes(partner.statut_prest);
+    
+    // Si la valeur existe mais n'est pas prédéfinie, elle est "Autre"
+    const selectedOptionValue = isPredefined ? partner.statut_prest : "Autre";
+    const customValueDisplay = isPredefined ? "" : partner.statut_prest;
+    const customInputDisplay = isPredefined ? "none" : "block"; // Afficher si "Autre"
+
     let html = `<h2>Modifier le partenaire</h2>
-      <form id="editPartnerForm" enctype="multipart/form-data">
-        <input type="hidden" name="id_partenaire" value="${partner.id_partenaire}">
+        <form id="editPartnerForm" enctype="multipart/form-data">
+            <input type="hidden" name="id_partenaire" value="${partner.id_partenaire}">
 
-        <div class="form-group">
-          <label for="nom">Nom :</label>
-          <input type="text" id="nom" name="nom" value="${partner.nom}" required>
-        </div>
+            <div class="form-group">
+                <label for="nom">Nom :</label>
+                <input type="text" id="nom" name="nom" value="${partner.nom}" required>
+            </div>
 
-        <div class="form-group">
-          <label for="sigle">Sigle :</label>
-          <input type="text" id="sigle" name="sigle" value="${partner.sigle}" required>
-        </div>
+            <div class="form-group">
+                <label for="sigle">Sigle :</label>
+                <input type="text" id="sigle" name="sigle" value="${partner.sigle}" required>
+            </div>
 
-        <div class="form-group">
-          <label for="act_srvc_offert">Activité et services offerts :</label>
-          <textarea id="act_srvc_offert" name="act_srvc_offert" rows="6" required>${partner.act_srvc_offert}</textarea>
-        </div>
-        <div class="form-group">
-  <label for="is_ssr">Est-ce un SSR/Clinique juridiques/DIC ?</label>
-  <select id="is_ssr" name="is_ssr">
-    <option value="non">Non</option>
-    <option value="oui">Oui</option>
-  </select>
-</div>
+            <div class="form-group">
+                <label for="act_srvc_offert">Activité et services offerts :</label>
+                <textarea id="act_srvc_offert" name="act_srvc_offert" rows="6" required>${partner.act_srvc_offert}</textarea>
+            </div>
 
+            <div class="form-group">
+                <label for="statut_prest_select">Statut de la prestation :</label>
+                <select id="statut_prest_select" required>
+                    <option value="">Sélectionnez un statut</option>
+                    <option value="ONG locale">ONG locale</option>
+                    <option value="Clinique juridique">Clinique juridique</option>
+                    <option value="DIC">DIC</option>
+                    <option value="Clinique juridique et DIC">Clinique juridique et DIC</option>
+                    <option value="Autre">Autre...</option>
+                </select>
+                <input type="text" id="statut_prest_custom" placeholder="Saisir un statut personnalisé" 
+                       value="${customValueDisplay}" 
+                       style="display:${customInputDisplay}; margin-top: 5px;" ${!isPredefined ? 'required' : ''}>
+                <input type="hidden" id="statut_prest_final" name="statut_prest" value="${partner.statut_prest}">
+            </div>
+            <div class="form-group">
+                <label for="img_logo">Image logo :</label>
+                <input type="file" id="img_logo" name="img_logo" accept="image/png, image/jpeg, image/jpg, image/webp">
+            </div>
 
-        <div class="form-group">
-          <label for="statut_prest">Statut de la prestation :</label>
-          <input type="text" id="statut_prest" name="statut_prest" value="${partner.statut_prest}" required>
-        </div>
+            <div class="form-group">
+                <label for="info">Info :</label>
+                <input type="text" id="info" name="info" value="${partner.info}" required>
+            </div>
 
-        <div class="form-group">
-          <label for="img_logo">Image logo :</label>
-          <input type="file" id="img_logo" name="img_logo" accept="image/png, image/jpeg, image/jpg, image/webp">
-        </div>
+            <div class="form-group">
+                <label for="longitude">Longitude :</label>
+                <input type="number" id="longitude" name="longitude" value="${longitude}" step="any" required>
+            </div>
 
-        <div class="form-group">
-          <label for="info">Info :</label>
-          <input type="text" id="info" name="info" value="${partner.info}" required>
-        </div>
+            <div class="form-group">
+                <label for="latitude">Latitude :</label>
+                <input type="number" id="latitude" name="latitude" value="${latitude}" step="any" required>
+            </div>
 
-        <div class="form-group">
-          <label for="longitude">Longitude :</label>
-          <input type="number" id="longitude" name="longitude" value="${longitude}" step="any" required>
-        </div>
-
-        <div class="form-group">
-          <label for="latitude">Latitude :</label>
-          <input type="number" id="latitude" name="latitude" value="${latitude}" step="any" required>
-        </div>
-
-        <button type="submit">Enregistrer les modifications</button>
-      </form>`;
+            <button type="submit">Enregistrer les modifications</button>
+        </form>`;
 
     contentArea.innerHTML = html;
 
-    const isSSRSelect = document.getElementById("is_ssr");
-    const statutInput = document.getElementById("statut_prest");
+    // Logique pour gérer la sélection "Autre..." et pré-remplir
+    const statutPrestSelect = document.getElementById("statut_prest_select");
+    const statutPrestCustom = document.getElementById("statut_prest_custom");
+    const statutPrestFinal = document.getElementById("statut_prest_final");
 
-    if (partner.statut_prest === "SSR/Clinique juridiques/DIC") {
-      isSSRSelect.value = "oui";
-      statutInput.disabled = true;
-    } else {
-      isSSRSelect.value = "non";
-    }
+    // Pré-sélectionner l'option correcte dans le <select>
+    statutPrestSelect.value = selectedOptionValue;
 
-    isSSRSelect.addEventListener("change", function () {
-      if (this.value === "oui") {
-        statutInput.value = "SSR/Clinique juridiques/DIC";
-        statutInput.disabled = true;
-      } else {
-        statutInput.value = "";
-        statutInput.disabled = false;
-      }
+    statutPrestSelect.addEventListener("change", function () {
+        if (this.value === "Autre") {
+            statutPrestCustom.style.display = "block"; // Afficher l'input personnalisé
+            statutPrestCustom.setAttribute('required', 'true'); // Rendre l'input personnalisé requis
+            statutPrestCustom.value = ''; // Vider l'input personnalisé lors du passage à "Autre"
+            statutPrestFinal.value = ''; // Vider le champ hidden initialement
+        } else {
+            statutPrestCustom.style.display = "none"; // Cacher l'input personnalisé
+            statutPrestCustom.removeAttribute('required'); // Retirer le statut requis
+            statutPrestFinal.value = this.value; // Définir la valeur finale sur l'option sélectionnée
+        }
     });
 
+    // Écouter les changements sur l'input personnalisé pour mettre à jour le champ final
+    statutPrestCustom.addEventListener("input", function() {
+        statutPrestFinal.value = this.value;
+    });
 
     const editPartnerForm = document.getElementById("editPartnerForm");
     editPartnerForm.addEventListener("submit", async (e) => {
-      e.preventDefault();
+        e.preventDefault();
 
-      const formData = new FormData(editPartnerForm);
-      const partnerId = formData.get("id_partenaire");
+        // Mettre à jour la valeur finale juste avant la soumission
+        if (statutPrestSelect.value !== "Autre") {
+            statutPrestFinal.value = statutPrestSelect.value;
+        } else if (statutPrestCustom.value === "") {
+             alert("Veuillez saisir un statut personnalisé.");
+             return; // Empêcher la soumission
+        } else {
+            statutPrestFinal.value = statutPrestCustom.value;
+        }
 
-      const response = await fetch(`/admin/api/care_partner/update/${partnerId}`, {
-        method: "PUT",
-        body: formData,
-      });
+        const formData = new FormData(editPartnerForm);
+        const partnerId = formData.get("id_partenaire");
 
-      if (response.ok) {
-        alert("Partenaire mis à jour avec succès.");
-        loadPartners();
-      } else {
-        alert("Erreur lors de la mise à jour du partenaire.");
-      }
+        const response = await fetch(`/admin/api/care_partner/update/${partnerId}`, {
+            method: "PUT",
+            body: formData,
+        });
+
+        if (response.ok) {
+            alert("Partenaire mis à jour avec succès.");
+            loadPartners();
+        } else {
+            alert("Erreur lors de la mise à jour du partenaire.");
+        }
     });
-  }
+}
 
 
   btnListOffices.addEventListener("click", loadOffices);
@@ -864,7 +915,7 @@ function displayProjects(projects) {
               <th>Photo2</th>
               <th>Photo3</th>
               <th>Photo4</th>
-              <th class="fixed-row">Actions</th>
+              <th class="fixed-column">Actions</th>
             </tr>
           </thead>
           <tbody>`;

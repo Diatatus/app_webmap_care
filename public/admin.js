@@ -179,22 +179,22 @@ document.addEventListener("DOMContentLoaded", () => {
         <div class="form-group">
           <label for="popsex_masc">Population Homme :</label>
           <input type="number" id="popsex_masc" name="popsex_masc" value="${region.popsex_masc
-      }" required>
+      }" required step="any">
         </div>
         <div class="form-group">
           <label for="popsex_fem">Population Femme :</label>
           <input type="number" id="popsex_fem" name="popsex_fem" value="${region.popsex_fem
-      }" required>
+      }" required step="any">
         </div>
         <div class="form-group">
           <label for="denspop_reg">Densité Population :</label>
           <input type="number" id="denspop_reg" name="denspop_reg" value="${region.denspop_reg
-      }" required>
+      }" required step="any">
         </div>
         <div class="form-group">
           <label for="total_pop">Total Population :</label>
           <input type="number" id="total_pop" name="total_pop" value="${region.total_pop || ""
-      }">
+      }"required step="any">
         </div>
         <div class="form-group">
           <label for="taux_pvrt">Taux de pauvreté :</label>
@@ -204,57 +204,57 @@ document.addEventListener("DOMContentLoaded", () => {
         <div class="form-group">
           <label for="prev_vih_hom">Prevalence VIH Homme :</label>
           <input type="number" id="prev_vih_hom" name="prev_vih_hom" value="${region.prev_vih_hom
-      }" required>
+      }" required step="any">
         </div>
         <div class="form-group">
           <label for="prev_vih_fem">Prevalence VIH Femme :</label>
           <input type="number" id="prev_vih_fem" name="prev_vih_fem" value="${region.prev_vih_fem
-      }" required>
+      }" required  step="any">
         </div>
         <div class="form-group">
           <label for="acces_eau_amel">Accès à une source améliorée d'eau de boisson :</label>
           <input type="number" id="acces_eau_amel" name="acces_eau_amel" value="${region.acces_eau_amel
-      }" required>
+      }" required   step="any">
         </div>
         <div class="form-group">
           <label for="inst_lavmain_lim">Installation de lavage des mains dans les ménages :</label>
           <input type="number" id="inst_lavmain_lim" name="inst_lavmain_lim" value="${region.inst_lavmain_lim
-      }" required>
+      }" required step="any">
         </div>
         <div class="form-group">
           <label for="taux_chom">Taux de chômage :</label>
           <input type="number" id="taux_chom" name="taux_chom" value="${region.taux_chom
-      }" required>
+      }" required step="any">
         </div>
         <div class="form-group">
           <label for="incl_fin_emf">Inclusion financière :</label>
           <input type="number" id="incl_fin_emf" name="incl_fin_emf" value="${region.incl_fin_emf
-      }" required>
+      }" required step="any">
         </div>
          <div class="form-group">
           <label for="acces_sanit_amel">Accès aux installations sanitaires améliorées :</label>
           <input type="number" id="acces_sanit_amel" name="acces_sanit_amel" value="${region.acces_sanit_amel
-      }" required>
+      }" required step="any">
         </div>
          <div class="form-group">
           <label for="besoins_nonsatisf_pf">Besoins non satisfaits en matière des femmes de planification familiale :</label>
           <input type="number" id="besoins_nonsatisf_pf" name="besoins_nonsatisf_pf" value="${region.besoins_nonsatisf_pf
-      }" required>
+      }" required step="any">
         </div>
          <div class="form-group">
           <label for="fem_utilmethcontracep_mod">Femmes de 15-49 ans utilisant des contraceptifs modernes :</label>
           <input type="number" id="fem_utilmethcontracep_mod" name="fem_utilmethcontracep_mod" value="${region.fem_utilmethcontracep_mod
-      }" required>
+      }" required step="any">
         </div>
          <div class="form-group">
           <label for="justif_violconj_hom">Homme justifiant la violence conjugale :</label>
           <input type="number" id="justif_violconj_hom" name="justif_violconj_hom" value="${region.justif_violconj_hom
-      }" required>
+      }" required step="any">
         </div>
          <div class="form-group">
           <label for="justif_violconj_fem">Femme justifiant la violence conjugale :</label>
           <input type="number" id="justif_violconj_fem" name="justif_violconj_fem" value="${region.justif_violconj_fem
-      }" required>
+      }" required step="any">
         </div>
 
         

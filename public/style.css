@@ -15,7 +15,7 @@
   height: 100%;
   background-size: cover;
   z-index: 9999;
-  background-color: rgba(255, 255, 255, 0.9);
+  background-color: rgba(255, 255, 255, 1);
 }
 
 /* Loader Box */
@@ -354,7 +354,7 @@ header {
 
 /* Logo */
 .header-logo {
-  height: 50px;
+  height: 60px;
   margin-right: 30px;
   transition: all 0.3s ease;
 }
@@ -411,28 +411,28 @@ header {
   gap: 15px; /* Gardez cet espacement, il gérera l'espace entre le téléphone et le bouton aide */
 }
 
-/* Nouveau style pour le contact téléphonique */
 .phone-contact {
-  display: flex; /* Utiliser flexbox pour aligner l'icône et le texte */
-  align-items: center; /* Aligner verticalement au centre */
-  gap: 8px; /* Espacement entre l'icône et le numéro */
-  text-decoration: none; /* Supprimer le soulignement par défaut du lien */
-  color: #333; /* Couleur de texte sombre */
-  font-size: 14px; /* Taille de la police */
-  font-weight: bold; /* Rendre le numéro un peu plus gras */
-  padding: 5px 10px; /* Un peu de padding pour le rendre cliquable plus facilement */
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  text-decoration: none;
+  color: #2e7d32; /* Vert foncé pour indiquer un numéro vert */
+  font-size: 14px;
+  font-weight: bold;
+  padding: 5px 10px;
   border-radius: 4px;
-  transition: background 0.3s, color 0.3s; /* Transition douce pour le hover */
+  background-color: #e8f5e9; /* Fond légèrement vert clair */
+  transition: background 0.3s, color 0.3s;
 }
 
 .phone-contact:hover {
-  background: #f0f0f0; /* Léger fond au survol */
-  color: #e55b00; /* Changer la couleur du texte au survol (couleur de votre marque) */
+  background: #c8e6c9; /* Vert clair au survol */
+  color: #1b5e20; /* Vert plus foncé au survol */
 }
 
 .phone-contact i.fas.fa-phone {
-  color: #e55b00; /* Couleur de l'icône, celle de votre marque */
-  font-size: 16px; /* Taille de l'icône */
+  color: #2e7d32; /* Icône verte aussi */
+  font-size: 16px;
 }
 
 /* Bouton langue */

@@ -1055,7 +1055,6 @@ inputBox.onkeyup = function () {
         { name: "partenaires", attribute: "nom" },
         { name: "partenaires", attribute: "sigle" },
         { name: "bureaux_base", attribute: "nom_base" },
-        {name: "regions", attribute: "nom" },
 
       ];
 

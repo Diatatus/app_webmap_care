@@ -338,372 +338,344 @@ html {
 
 /* Nouveau Header */
 header {
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 70px;
-  background-color: #fff;
-  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
-  display: flex;
-  align-items: center;
-  padding: 0 20px;
-  z-index: 1000;
-  transition: all 0.3s ease;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 70px;
+    background-color: #fff;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+    display: flex;
+    align-items: center;
+    padding: 0 20px;
+    z-index: 1000;
+    transition: all 0.3s ease;
 }
 
 /* Logo */
 .header-logo {
-  height: 60px;
-  margin-right: 30px;
-  transition: all 0.3s ease;
+    height: 60px;
+    margin-right: 30px;
+    transition: all 0.3s ease;
 }
 
 /* Conteneur principal */
 .header-container {
-  display: flex;
-  align-items: center;
-  width: 100%;
-  justify-content: space-between;
+    display: flex;
+    align-items: center;
+    width: 100%;
+    justify-content: space-between;
 }
 
 /* Partie gauche */
 .header-left {
-  display: flex;
-  align-items: center;
+    display: flex;
+    align-items: center;
 }
 
 /* Partie centrale - Search */
 .search-container {
-  position: relative;
-  width: 300px;
-  transition: all 0.3s ease;
+    position: relative;
+    width: 300px;
+    transition: all 0.3s ease;
 }
 
 .search-container.collapsed {
-  width: 0;
-  opacity: 0;
-  overflow: hidden;
+    width: 0;
+    opacity: 0;
+    overflow: hidden;
 }
 
 #inpt_search {
-  width: 100%;
-  border: 2px solid #e55b00;
-  padding: 8px 15px 8px 35px;
-  border-radius: 20px;
-  font-size: 14px;
-  background-color: #f9f9f9;
-  transition: all 0.3s ease;
+    width: 100%;
+    border: 2px solid #e55b00;
+    padding: 8px 15px 8px 35px;
+    border-radius: 20px;
+    font-size: 14px;
+    background-color: #f9f9f9;
+    transition: all 0.3s ease;
 }
 
 .search-icon {
-  position: absolute;
-  left: 10px;
-  top: 50%;
-  transform: translateY(-50%);
-  color: #e55b00;
-  cursor: pointer;
+    position: absolute;
+    left: 10px;
+    top: 50%;
+    transform: translateY(-50%);
+    color: #e55b00;
+    cursor: pointer;
 }
 
 .header-right {
-  display: flex;
-  align-items: center;
-  gap: 15px; /* Gardez cet espacement, il gérera l'espace entre le téléphone et le bouton aide */
+    display: flex;
+    align-items: center;
+    gap: 15px;
 }
 
 .phone-contact {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  text-decoration: none;
-  color: #2e7d32; /* Vert foncé pour indiquer un numéro vert */
-  font-size: 14px;
-  font-weight: bold;
-  padding: 5px 10px;
-  border-radius: 4px;
-  background-color: #e8f5e9; /* Fond légèrement vert clair */
-  transition: background 0.3s, color 0.3s;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    text-decoration: none;
+    color: #2e7d32;
+    font-size: 14px;
+    font-weight: bold;
+    padding: 5px 10px;
+    border-radius: 4px;
+    background-color: #e8f5e9;
+    transition: background 0.3s, color 0.3s;
+    /* Supprimez les lignes suivantes si vous les avez ajoutées précédemment, car elles empêchent le retour à la ligne */
+    /* white-space: nowrap; */
+    /* overflow: hidden; */
+    /* text-overflow: ellipsis; */
 }
 
+
 .phone-contact:hover {
-  background: #c8e6c9; /* Vert clair au survol */
-  color: #1b5e20; /* Vert plus foncé au survol */
+    background: #c8e6c9;
+    color: #1b5e20;
 }
 
 .phone-contact i.fas.fa-phone {
-  color: #2e7d32; /* Icône verte aussi */
-  font-size: 16px;
-}
-
-/* Bouton langue */
-.language-selector {
-  position: relative;
-}
-
-.language-btn {
-  background: none;
-  border: none;
-  display: flex;
-  align-items: center;
-  gap: 5px;
-  cursor: pointer;
-  padding: 5px 10px;
-  border-radius: 4px;
-  transition: background 0.3s;
-}
-
-.language-btn:hover {
-  background: #f0f0f0;
-}
-
-.language-dropdown {
-  position: absolute;
-  top: 100%;
-  right: 0;
-  background: white;
-  border-radius: 4px;
-  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
-  display: none;
-  min-width: 100px;
-}
-
-.language-dropdown.show {
-  display: block;
-}
-
-.language-option {
-  padding: 8px 15px;
-  cursor: pointer;
-  display: block;
-  text-align: left;
-  width: 100%;
-  border: none;
-  background: none;
-}
-
-.language-option:hover {
-  background: #f5f5f5;
+    color: #2e7d32;
+    font-size: 16px;
 }
 
 /* Bouton aide */
 .help-btn {
-  background: none;
-  border: none;
-  font-size: 18px;
-  color: #e55b00;
-  cursor: pointer;
-  padding: 5px;
-  border-radius: 50%;
-  width: 36px;
-  height: 36px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  transition: background 0.3s;
+    background: none;
+    border: none;
+    font-size: 18px;
+    color: #e55b00;
+    cursor: pointer;
+    padding: 5px;
+    border-radius: 50%;
+    width: 36px;
+    height: 36px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: background 0.3s;
 }
 
 .help-btn:hover {
-  background: rgba(229, 91, 0, 0.1);
+    background: rgba(229, 91, 0, 0.1);
 }
 
-/* Footer */
+/* Footer (pas de changements ici, inclus pour le contexte) */
 footer {
-  position: fixed;
-  bottom: 0;
-  left: 0;
-  width: 100%;
-  background-color: rgba(255, 255, 255, 0.9);
-  padding: 10px 0;
-  text-align: center;
-  font-size: 12px;
-  color: #333;
-  border-top: 1px solid #e0e0e0;
-  z-index: 999;
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    background-color: rgba(255, 255, 255, 0.9);
+    padding: 10px 0;
+    text-align: center;
+    font-size: 12px;
+    color: #333;
+    border-top: 1px solid #e0e0e0;
+    z-index: 999;
 }
 
 .footer-content {
-  max-width: 1200px;
-  margin: 0 auto;
-  padding: 0 15px;
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 15px;
 }
 
+/* Media Query pour les petits écrans (smartphones) */
+/* Media Query pour les petits écrans (smartphones) */
 @media (max-width: 480px) {
-  .search-container {
-    display: none !important;
-  }
-  
-  .header-left {
-    justify-content: center;
-    width: 100%;
-  }
-  
-  .header-logo {
-    margin-right: 0;
-  }
-  
-  .header-right {
-    position: absolute;
-    right: 15px;
-  }
+    .search-container {
+        display: none !important;
+    }
+
+    .header-left {
+        justify-content: flex-start;
+        width: auto;
+        flex-grow: 1;
+    }
+
+    .header-logo {
+        margin-right: 10px;
+        height: 50px;
+    }
+
+    .header-container {
+        justify-content: space-between;
+        padding: 0 10px;
+    }
+
+    .header-right {
+        position: static;
+        right: auto;
+        display: flex;
+        align-items: center;
+        gap: 5px;
+        flex-shrink: 0;
+    }
+
+    .phone-contact {
+        /* Permettre le retour à la ligne */
+        flex-direction: column; /* Aligne l'icône et le texte verticalement */
+        align-items: flex-start; /* Aligne l'icône et le texte à gauche dans leur colonne */
+        text-align: left; /* Assure que le texte du numéro s'aligne à gauche */
+        font-size: 12px;
+        padding: 3px 5px;
+        gap: 0; /* Réduit ou supprime l'espace entre l'icône et le texte verticalement */
+        max-width: none; /* Supprime toute restriction de largeur si vous l'aviez mise */
+        white-space: normal; /* Permet au texte de se couper normalement */
+        overflow: visible; /* Assure que le texte n'est pas caché */
+        text-overflow: clip; /* Empêche les points de suspension si le texte est caché */
+    }
+
+    .phone-contact i.fas.fa-phone {
+        font-size: 14px;
+        margin-bottom: 2px; /* Ajoute un petit espace sous l'icône */
+    }
+
+    .phone-contact .phone-number {
+        display: block; /* S'assure que le span prend toute la largeur disponible pour se mettre en dessous */
+        line-height: 1.2; /* Ajuste l'espacement entre les lignes si le numéro se casse */
+        /* Optionnel: réduire encore la taille de la police pour le numéro spécifiquement si la première ligne est trop longue */
+        /* font-size: 11px; */
+    }
+
+    .help-btn {
+        width: 30px;
+        height: 30px;
+        font-size: 16px;
+        padding: 3px;
+    }
 }
 
 
-/* Care Search Bar */
+/* Care Search Bar et autres styles (pas de changements majeurs nécessaires pour le header ici) */
 .care-search-bar {
-  position: absolute;
-  top: 30px;
-  left: 50%;
-  transform: translateX(-50%);
-  display: flex;
-  align-items: center;
-  padding: 10px 15px;
-  background-color: rgba(
-    255,
-    255,
-    255,
-    1
-  ); /* CARE's primary color in semi-transparent */
-  border-radius: 8px;
-  box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
-  width: 120%;
-  max-width: 500px;
-  transition: all 0.3s ease;
-  z-index: 0;
+    position: absolute;
+    top: 30px;
+    left: 50%;
+    transform: translateX(-50%);
+    display: flex;
+    align-items: center;
+    padding: 10px 15px;
+    background-color: rgba(255, 255, 255, 1);
+    border-radius: 8px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+    width: 120%;
+    max-width: 500px;
+    transition: all 0.3s ease;
+    z-index: 0;
 }
 
 #care-logo {
-  width: 100px;
-  height: auto;
-  margin-right: 8px;
+    width: 100px;
+    height: auto;
+    margin-right: 8px;
 }
 
-/* Input and Icon container */
 .search-container {
-  position: relative;
-  width: 100%;
+    position: relative;
+    width: 100%;
 }
 
-/* Input styling */
 #inpt_search {
-  width: 100%;
-  border: 2px solid #ffa500; /* Border color to match CARE’s color scheme */
-  padding: 10px 40px;
-  border-radius: 20px;
-  font-size: 16px;
-  color: #444;
-  background-color: rgba(255, 255, 255, 0.9);
-  transition: background-color 0.3s ease;
+    width: 100%;
+    border: 2px solid #ffa500;
+    padding: 10px 40px;
+    border-radius: 20px;
+    font-size: 16px;
+    color: #444;
+    background-color: rgba(255, 255, 255, 0.9);
+    transition: background-color 0.3s ease;
 }
 
-/* Icon styling */
 .search-icon {
-  position: absolute;
-  left: 10px;
-  top: 50%;
-  transform: translateY(-50%);
-  color: #e55b00; /* Darker CARE color for contrast */
-  font-size: 18px;
-  pointer-events: none;
+    position: absolute;
+    left: 10px;
+    top: 50%;
+    transform: translateY(-50%);
+    color: #e55b00;
+    font-size: 18px;
+    pointer-events: none;
 }
 
-/* Focus effect on input */
 #inpt_search:focus {
-  background-color: #fff5e5;
-  border-color: #e55b00;
+    background-color: #fff5e5;
+    border-color: #e55b00;
 }
 
-/* Suggestions dropdown */
 .liveDataDiv {
-  position: absolute;
-  top: 50px;
-  left: 0px;
-  width: 100%;
-  max-height: 200px;
-  overflow-y: auto;
-  background-color: rgba(255, 255, 255, 0.9);
-  border: 1px solid #e55b00;
-  border-radius: 5px;
-  box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.2);
-  font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
-  font-size: 0.8em;
-  line-height: 1.5;
-  z-index: 3000;
+    position: absolute;
+    top: 50px;
+    left: 0px;
+    width: 100%;
+    max-height: 200px;
+    overflow-y: auto;
+    background-color: rgba(255, 255, 255, 0.9);
+    border: 1px solid #e55b00;
+    border-radius: 5px;
+    box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.2);
+    font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+    font-size: 0.8em;
+    line-height: 1.5;
+    z-index: 3000;
 }
 
 .liveDataDiv:empty {
-  display: none;
+    display: none;
 }
 
-/* Table inside live search */
 #assetSearchTableID {
-  width: 100%;
-  border-collapse: collapse;
+    width: 100%;
+    border-collapse: collapse;
 }
 
 #assetSearchTableID th,
 #assetSearchTableID td {
-  padding: 8px 10px;
-  text-align: left;
+    padding: 8px 10px;
+    text-align: left;
 }
 
 #assetSearchTableID th {
-  color: #e55b00;
-  font-weight: bold;
+    color: #e55b00;
+    font-weight: bold;
 }
 
 #assetSearchTableID td:hover {
-  background-color: #ffe6cc;
-  color: #e55b00;
-  cursor: pointer;
+    background-color: #ffe6cc;
+    color: #e55b00;
+    cursor: pointer;
 }
 
 @media (max-width: 600px) {
-  .care-search-bar {
-    width: 95%;
-  }
-  #care-logo {
-    width: 80px;
-  }
-  #inpt_search {
-    font-size: 14px;
-  }
+    .care-search-bar {
+        width: 95%;
+    }
+    #care-logo {
+        width: 80px;
+    }
+    #inpt_search {
+        font-size: 14px;
+    }
 }
 
-/* Media Queries for responsiveness */
 @media (max-width: 768px) {
-  .care-search-bar {
-    width: 90%;
-    max-width: 400px;
-  }
+    .care-search-bar {
+        width: 90%;
+        max-width: 400px;
+    }
 
-  #care-logo {
-    width: 100px;
-  }
+    #care-logo {
+        width: 100px;
+    }
 
-  #care-search-input {
-    font-size: 12px;
-  }
+    #care-search-input {
+        font-size: 12px;
+    }
 }
 
-@media (max-width: 480px) {
-  .care-search-bar {
-    width: 95%;
-    max-width: 350px;
-    padding: 8px 15px;
-  }
-
-  #care-logo {
-    width: 80px;
-  }
-
-  #care-search-input {
-    font-size: 12px;
-  }
-
-  .search-icon {
-    font-size: 16px;
-  }
-}
+/* Le media query pour 480px est déjà défini plus haut, assurez-vous qu'il soit le dernier pour la spécificité */
+/* @media (max-width: 480px) { ... } (déjà défini ci-dessus) */
 
 /* Adjusted style for responsive layout and proper positioning */
 #layer-slider-container {

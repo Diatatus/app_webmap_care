@@ -3,8 +3,6 @@ version: '3.8'
 services:
   app:
     build: .
-    ports:
-      - "3000"
     depends_on:
       - db
     environment:
@@ -15,18 +13,18 @@ services:
       PGPORT: 5432
       VIRTUAL_HOST: careapp.geostrategies.net
       LETSENCRYPT_HOST: careapp.geostrategies.net
-      LETSENCRYPT_EMAIL:  ftmn2001@yahoo.fr 
+      LETSENCRYPT_EMAIL: ftmn2001@yahoo.fr
     networks:
-    - web
-    - default
+      - web
+      - default
     volumes:
-      - .:/app  
-      - /app/node_modules  
-    command: ["npx", "nodemon", "index.js"]  
+      - .:/app
+      - /app/node_modules
+    command: ["npx", "nodemon", "index.js"]
     restart: unless-stopped
 
   db:
-    image: postgis/postgis:16-3.4  # PostgreSQL 15 + PostGIS 3.3
+    image: postgis/postgis:16-3.4
     restart: always
     environment:
       POSTGRES_USER: postgres
@@ -41,3 +39,7 @@ services:
 
 volumes:
   db-data:
+
+networks:
+  web:
+    external: true   

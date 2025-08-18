@@ -1,5 +1,5 @@
 # Image officielle Node.js
-FROM node:20.18.0
+FROM node:20.18.0-alpine
 
 # Dossier de travail dans le conteneur
 WORKDIR /app
@@ -8,7 +8,7 @@ WORKDIR /app
 COPY package*.json ./
 
 # Installation des dépendances
-RUN npm install
+RUN npm install --omit=dev && npm audit fix --force
 
 # Copie tout le projet
 COPY . .

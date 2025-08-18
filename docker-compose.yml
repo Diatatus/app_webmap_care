@@ -49,10 +49,6 @@ services:
       VIRTUAL_HOST: careapp.geostrategies.net
       LETSENCRYPT_HOST: careapp.geostrategies.net
       LETSENCRYPT_EMAIL: ftmn2001@yahoo.fr
-    volumes:
-      - .:/app
-      - /app/node_modules
-    command: ["npx", "nodemon", "index.js"]
     restart: unless-stopped
     networks:
       - web
@@ -67,8 +63,6 @@ services:
       POSTGRES_USER: postgres
       POSTGRES_PASSWORD: geopass
       POSTGRES_DB: care_db
-    ports:
-      - "5432:5432"
     volumes:
       - db-data:/var/lib/postgresql/data
       - ./db-init:/docker-entrypoint-initdb.d

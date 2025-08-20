@@ -1,43 +1,10 @@
 version: '3.8'
 
 services:
-  # --- Reverse proxy (nginx) ---
-  nginx-proxy:
-    image: jwilder/nginx-proxy
-    container_name: nginx-proxy
-    restart: always
-    ports:
-      - "80:80"
-      - "443:443"
-    volumes:
-      - /var/run/docker.sock:/tmp/docker.sock:ro
-      - ./certs:/etc/nginx/certs:rw
-      - ./vhost.d:/etc/nginx/vhost.d
-      - ./html:/usr/share/nginx/html
-    networks:
-      - web
-
-  # --- Let's Encrypt SSL ---
-  letsencrypt:
-    image: jrcs/letsencrypt-nginx-proxy-companion
-    container_name: letsencrypt
-    restart: always
-    environment:
-      DEFAULT_EMAIL: "ftmn2001@yahoo.fr"
-    volumes:
-      - /var/run/docker.sock:/var/run/docker.sock:ro
-      - ./certs:/etc/nginx/certs:rw
-      - ./vhost.d:/etc/nginx/vhost.d
-      - ./html:/usr/share/nginx/html
-    depends_on:
-      - nginx-proxy
-    networks:
-      - web
-
-  # --- Application Node.js ---
   app:
     build: .
-    container_name: care_app
+    ports:
+      - "127.0.0.1:3000:3000"
     depends_on:
       - db
     environment:
@@ -46,37 +13,25 @@ services:
       PGPASSWORD: geopass
       PGDATABASE: care_db
       PGPORT: 5432
-      VIRTUAL_HOST: careapp.geostrategies.net
-      LETSENCRYPT_HOST: careapp.geostrategies.net
-      LETSENCRYPT_EMAIL: ftmn2001@yahoo.fr
+    volumes:
+      - .:/app  
+      - /app/node_modules  
+    command: ["npx", "nodemon", "index.js"]  
     restart: unless-stopped
-    networks:
-      - web
-      - backend
 
-  # --- Base de données PostgreSQL + PostGIS ---
   db:
-    image: postgis/postgis:16-3.4
-    container_name: care_db
+    image: postgis/postgis:16-3.4  # PostgreSQL 15 + PostGIS 3.3
     restart: always
     environment:
       POSTGRES_USER: postgres
       POSTGRES_PASSWORD: geopass
       POSTGRES_DB: care_db
+    ports:
+      - "5432:5432"
     volumes:
       - db-data:/var/lib/postgresql/data
       - ./db-init:/docker-entrypoint-initdb.d
       - ./public/resources/Backup_BD:/backup
-    networks:
-      - backend
 
-# --- Volumes persistants ---
 volumes:
   db-data:
-
-# --- Réseaux ---
-networks:
-  web:        # réseau partagé pour le proxy
-    external: false
-  backend:    # réseau privé app <-> db
-    driver: bridge

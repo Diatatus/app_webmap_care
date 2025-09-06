@@ -852,13 +852,13 @@ footer {
   top: 10.5%;
   right: 7%;
   width: 400px;
-  height: 630px; /* Define height */
+  max-height: 630px; /* Define height */
   background-color: rgba(255, 255, 255, 1);
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
   border-radius: 5px;
   z-index: 1000;
   opacity: 0;
-  transition: opacity 0.5s ease-in-out;
+  transition: opacity 0.5s ease-in-out, max-height 0.2s ease-in-out;
   overflow: hidden; /* Hide overflow of internal elements */
 }
 
@@ -867,7 +867,7 @@ footer {
     top: 15%;
     right: 5%;
     width: 380px;
-    height: 630px; /* Define height */
+    max-height: 630px;
   }
 }
 
@@ -876,7 +876,7 @@ footer {
     top: 15%;
     right: 5%;
     width: 380px;
-    height: 630px; /* Define height */
+    max-height: 630px; /* Define height */
   }
 }
 
@@ -885,7 +885,7 @@ footer {
     top: 15%;
     right: 5%;
     width: 330px;
-    height: 630px; /* Define height */
+    max-height: 630px; /* Define height */
   }
 }
 
@@ -894,7 +894,7 @@ footer {
     top: 3.5%;
     right: 7%;
     width: 330px;
-    height: 630px; /* Define height */
+    max-height: 630px; /* Define height */
   }
 }
 
@@ -903,7 +903,7 @@ footer {
     top: 2.5%;
     right: 7%;
     width: 330px;
-    height: 630px; /* Define height */
+    max-height: 630px; /* Define height */
     z-index: 3000;
     transition: opacity 0.3s ease;
   }
@@ -1306,6 +1306,43 @@ footer {
   }
 }
 
+/* Styles pour le bouton de réduction/agrandissement */
+.popup-toggle-btn {
+  background: none;
+  border: none;
+  font-size: 20px;
+  cursor: pointer;
+  margin-right: 10px;
+  color: #333;
+}
+
+.popup-toggle-btn:hover {
+  color: #000;
+}
+
+/* Ajout d'une classe pour l'état réduit */
+.popup-container.collapsed {
+  max-height: 60px; /* Seulement la hauteur de l'en-tête */
+}
+
+.popup-container.collapsed #popup-info,
+.popup-container.collapsed #popup-footer {
+  display: none; /* Masquer le contenu et le pied de page */
+}
+
+/* Ajustement pour l'état réduit sur mobile */
+@media (max-width: 390px) {
+  .popup-container.collapsed {
+    max-height: 50px;
+  }
+}
+
+@media (max-width: 360px) {
+  .popup-container.collapsed {
+    max-height: 45px;
+  }
+}
+
 /* General popup styling */
 .popup {
   position: absolute;
@@ -1399,7 +1436,7 @@ footer {
   font-family: Arial, sans-serif;
   font-size: 13px;
   opacity: 0;
-  transition: opacity 0.3s ease-in-out;
+  transition: opacity 0.5s ease-in-out, max-height 0.2s ease-in-out;
   z-index: 10000;
   overflow-y: auto;
 }

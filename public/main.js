@@ -783,6 +783,27 @@ function createCharts(feature) {
   );
 }
 
+// Fonction pour basculer l'état de la popup (plier/déplier)
+function togglePopup() {
+  const popupContainer = document.getElementById("popup-container");
+  const toggleIcon = document.getElementById("toggle-icon");
+  
+  // Basculer la classe 'collapsed'
+  popupContainer.classList.toggle("collapsed");
+  
+  // Changer l'icône en fonction de l'état
+  if (popupContainer.classList.contains("collapsed")) {
+    toggleIcon.classList.remove("fas fa-chevron-up");
+    toggleIcon.classList.add("fas  fa-chevron-down");
+  } else {
+    toggleIcon.classList.remove("fas  fa-chevron-down");
+    toggleIcon.classList.add("fas fa-chevron-up");
+  }
+}
+
+// Ajouter l'écouteur d'événement pour le bouton de bascule
+document.getElementById("popup-toggle-btn").addEventListener("click", togglePopup);
+
 // Fonction d'affichege du popup d'informations sur les indicateurs socio-economiques
 function showPopup(feature) {
   const popupContainer = document.getElementById("popup-container");

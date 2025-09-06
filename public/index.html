@@ -67,17 +67,17 @@
           <div class="liveDataDiv" id="liveDataDiv"></div>
         </div>
       </div>
-<div class="header-right">
-  <a href="tel:+237696616735" class="phone-contact" aria-label="Appeler le numéro vert +237 69 66 16 735">
-    <i class="fas fa-phone"></i>
-    <span class="phone-number">Numéro Vert : +237 696 616 735</span>
-  </a>
-  <a href="https://www.care.org/our-work/where-we-work/cameroon/" target="_blank" rel="noopener noreferrer">
-    <button class="help-btn" id="help-btn">
-      <i class="fas fa-question-circle"></i>
-    </button>
-  </a>
-</div>
+      <div class="header-right">
+        <a href="tel:+237696616735" class="phone-contact" aria-label="Appeler le numéro vert +237 69 66 16 735">
+          <i class="fas fa-phone"></i>
+          <span class="phone-number">Numéro Vert : +237 696 616 735</span>
+        </a>
+        <a href="https://www.care.org/our-work/where-we-work/cameroon/" target="_blank" rel="noopener noreferrer">
+          <button class="help-btn" id="help-btn">
+            <i class="fas fa-question-circle"></i>
+          </button>
+        </a>
+      </div>
 
     </div>
   </header>
@@ -127,7 +127,7 @@
       <img data-title="Yaoundé" src="./resources/images/bases/Yaounde.jpeg" />
       <p></p>
     </div>
-       <div class="chapter" name="YAOUNDE" data-lon="11.50019" data-lat="3.89854" data-zoom="10" data-animation="flyto">
+    <div class="chapter" name="YAOUNDE" data-lon="11.50019" data-lat="3.89854" data-zoom="10" data-animation="flyto">
       <h3>Yaoundé (sous-bureaux TITI-GARAGE)</h3>
       <img data-title="Yaoundé" src="./resources/images/bases/Centre-sb.png" />
       <p></p>
@@ -144,6 +144,9 @@
   <div id="popup-container" class="popup-container">
     <div id="popup-close-btn-wrapper" class="popup-header">
       <i class="fas fa-chart-line"></i><span id="zone-name" class="zone-name"></span>
+      <button id="popup-toggle-btn" class="popup-toggle-btn" title="Réduire/Agrandir">
+        <i class="fas fa-chevron-up" id="toggle-icon"></i>
+      </button>
       <button id="popup-close-btn" class="popup-close-btn">&times;</button>
     </div>
 
@@ -288,6 +291,9 @@
     <div id="base-popup-header" class="popup-header">
       <i class="fas fa-house"></i>
       <span id="base-name" class="zone-name"></span>
+       <button id="popup-toggle-btn" class="popup-toggle-btn" title="Réduire/Agrandir">
+        <i class="fas fa-chevron-up" id="toggle-icon"></i>
+      </button>
       <button id="base-popup-close-btn" class="popup-close-btn">&times;</button>
     </div>
 
@@ -424,7 +430,7 @@
 
       <!-- Informations supplémentaires -->
       <div class="popup-section info-section">
-         <h4>
+        <h4>
           <i class="fas fa-location-dot"></i><b> Quartier / Lieu-dit</b>
         </h4>
         <p>

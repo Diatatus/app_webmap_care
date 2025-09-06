@@ -794,9 +794,9 @@ function togglePopup() {
   // Changer l'icône en fonction de l'état
   if (popupContainer.classList.contains("collapsed")) {
     toggleIcon.classList.remove("fas fa-chevron-up");
-    toggleIcon.classList.add("fas  fa-chevron-down");
+    toggleIcon.classList.add("fas fa-chevron-down");
   } else {
-    toggleIcon.classList.remove("fas  fa-chevron-down");
+    toggleIcon.classList.remove("fas fa-chevron-down");
     toggleIcon.classList.add("fas fa-chevron-up");
   }
 }

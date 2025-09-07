@@ -1,15 +1,57 @@
-// Chargement de la page de loading
-$(document).ready(function () {
-  setTimeout(function () {
-    $("#loading").fadeOut(); 
-  }, 2000); // Délai de 3000 millisecondes (3 secondes)
+// Simulation du chargement avec progression réaliste
+document.addEventListener('DOMContentLoaded', function () {
+  let progress = 0;
+  const progressBar = document.querySelector('.progress-bar');
+  const loadingText = document.querySelector('.loading-text');
+
+  // Messages de chargement progressifs
+  const loadingMessages = [
+    'Préparation de la carte<span class="loading-dots"></span>',
+    'Préparation de la carte<span class="loading-dots"></span>',
+    'Préparation de la carte<span class="loading-dots"></span>',
+    'Préparation de la carte<span class="loading-dots"></span>'
+  ];
+
+  let messageIndex = 0;
+
+  const updateProgress = () => {
+    if (progress < 100) {
+      // Simulation d'un chargement réaliste
+      const increment = Math.random() * 15 + 5;
+      progress = Math.min(progress + increment, 100);
+
+      progressBar.style.width = progress + '%';
+
+      // Changer le message selon le progrès
+      const newMessageIndex = Math.floor(progress / 25);
+      if (newMessageIndex !== messageIndex && newMessageIndex < loadingMessages.length) {
+        messageIndex = newMessageIndex;
+        loadingText.innerHTML = loadingMessages[messageIndex];
+      }
+
+      if (progress < 100) {
+        setTimeout(updateProgress, 100 + Math.random() * 200);
+      } else {
+        setTimeout(() => {
+          document.getElementById('loading').style.opacity = '0';
+          document.getElementById('loading').style.transition = 'opacity 0.5s ease-out';
+          setTimeout(() => {
+            document.getElementById('loading').style.display = 'none';
+          }, 500);
+        }, 300);
+      }
+    }
+  };
+
+  // Démarrer le chargement après un petit délai
+  setTimeout(updateProgress, 1200);
 });
 
 // Toggle de la barre de recherche
-document.getElementById('search-toggle').addEventListener('click', function() {
+document.getElementById('search-toggle').addEventListener('click', function () {
   const searchContainer = document.querySelector('.search-container');
   searchContainer.classList.toggle('collapsed');
-  
+
   if (!searchContainer.classList.contains('collapsed')) {
     document.getElementById('inpt_search').focus();
   }
@@ -90,17 +132,17 @@ var osm = new ol.layer.Tile({
 
 // Nouvelle couche ESRI World Imagery (Satellite)
 var esriWorldImagery = new ol.layer.Tile({
-    title: "Satellite", // Nouveau titre pour le sélecteur
-    baseLayer: true,
-    isBaseLayer: true,
-    preload: Infinity,
-    source: new ol.source.XYZ({
-        attributions: 'Tiles &copy; Esri &mdash; Source: Esri, i-cubed, USDA, USGS, AEX, GeoEye, Getmapping, Aerogrid, IGN, IGP, UPR-EGP, and the GIS User Community',
-        url: 'https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}',
-        crossOrigin: 'anonymous' // Important pour éviter les problèmes de CORS avec certaines ressources
-    }),
-    visible: false, // Non visible par défaut
-    name: "Satellite", // Nom pour la référence dans la fonction switchLayer
+  title: "Satellite", // Nouveau titre pour le sélecteur
+  baseLayer: true,
+  isBaseLayer: true,
+  preload: Infinity,
+  source: new ol.source.XYZ({
+    attributions: 'Tiles &copy; Esri &mdash; Source: Esri, i-cubed, USDA, USGS, AEX, GeoEye, Getmapping, Aerogrid, IGN, IGP, UPR-EGP, and the GIS User Community',
+    url: 'https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}',
+    crossOrigin: 'anonymous' // Important pour éviter les problèmes de CORS avec certaines ressources
+  }),
+  visible: false, // Non visible par défaut
+  name: "Satellite", // Nom pour la référence dans la fonction switchLayer
 });
 
 // Ajouter les couches à la carte (assurez-vous que 'map' est déjà défini)
@@ -113,17 +155,17 @@ esriWorldImagery.setVisible(false);
 
 // --- FONCTION switchLayer mise à jour ---
 function switchLayer(layerName) {
-    map.getLayers().forEach(function (layer) {
-        // Vérifie si la couche est une couche de fond de carte (isBaseLayer: true)
-        // et s'assure de ne pas affecter d'autres couches (vecteur, etc.)
-        if (layer.get("isBaseLayer")) {
-            if (layer.get("name") === layerName) {
-                layer.setVisible(true);
-            } else {
-                layer.setVisible(false);
-            }
-        }
-    });
+  map.getLayers().forEach(function (layer) {
+    // Vérifie si la couche est une couche de fond de carte (isBaseLayer: true)
+    // et s'assure de ne pas affecter d'autres couches (vecteur, etc.)
+    if (layer.get("isBaseLayer")) {
+      if (layer.get("name") === layerName) {
+        layer.setVisible(true);
+      } else {
+        layer.setVisible(false);
+      }
+    }
+  });
 }
 
 // --- LOGIQUE D'INITIALISATION ET DE BASCULEMENT du sélecteur ---
@@ -135,45 +177,45 @@ const layerOptionsContainer = document.getElementById("layer-options");
 
 // Toggle des options de calque au clic sur l'icône principale
 switcherIcon.addEventListener("click", function (event) {
-    event.stopPropagation(); // Empêche la propagation du clic pour ne pas fermer immédiatement
-    customLayerSwitcher.classList.toggle("collapsed"); // Inverse l'état collapsed/expanded
+  event.stopPropagation(); // Empêche la propagation du clic pour ne pas fermer immédiatement
+  customLayerSwitcher.classList.toggle("collapsed"); // Inverse l'état collapsed/expanded
 });
 
 // Fermer le sélecteur si on clique n'importe où en dehors
 document.addEventListener("click", function (event) {
-    if (!customLayerSwitcher.contains(event.target) && !customLayerSwitcher.classList.contains("collapsed")) {
-        customLayerSwitcher.classList.add("collapsed");
-    }
+  if (!customLayerSwitcher.contains(event.target) && !customLayerSwitcher.classList.contains("collapsed")) {
+    customLayerSwitcher.classList.add("collapsed");
+  }
 });
 
 // Gestion du clic sur une option de calque
 document.querySelectorAll(".layer-option").forEach((option) => {
-    option.addEventListener("click", function () {
-        const layerName = this.dataset.layerName; // Utilisation de dataset pour récupérer le nom
-        const imgSrc = this.querySelector("img").src;
+  option.addEventListener("click", function () {
+    const layerName = this.dataset.layerName; // Utilisation de dataset pour récupérer le nom
+    const imgSrc = this.querySelector("img").src;
 
-        switchLayer(layerName); // Bascule la couche de fond de carte
+    switchLayer(layerName); // Bascule la couche de fond de carte
 
-        // Met à jour l'icône du sélecteur principal
-        switcherIcon.querySelector("img").src = imgSrc;
+    // Met à jour l'icône du sélecteur principal
+    switcherIcon.querySelector("img").src = imgSrc;
 
-        // Ferme le sélecteur après sélection
-        customLayerSwitcher.classList.add("collapsed");
+    // Ferme le sélecteur après sélection
+    customLayerSwitcher.classList.add("collapsed");
 
-        // Optionnel : Mettre en surbrillance l'option active (si souhaité)
-        document.querySelectorAll(".layer-option").forEach(opt => opt.classList.remove('active'));
-        this.classList.add('active');
-    });
+    // Optionnel : Mettre en surbrillance l'option active (si souhaité)
+    document.querySelectorAll(".layer-option").forEach(opt => opt.classList.remove('active'));
+    this.classList.add('active');
+  });
 });
 
 // --- Initialisation au chargement pour s'assurer que la bonne icône est affichée au démarrage ---
 document.addEventListener('DOMContentLoaded', () => {
-    // Supposons que OSM est la couche par défaut au démarrage
-    const initialOsmOption = document.querySelector('.layer-option[data-layer-name="OSM"]');
-    if (initialOsmOption) {
-        switcherIcon.querySelector("img").src = initialOsmOption.querySelector("img").src;
-        initialOsmOption.classList.add('active'); // Marquer OSM comme active au démarrage
-    }
+  // Supposons que OSM est la couche par défaut au démarrage
+  const initialOsmOption = document.querySelector('.layer-option[data-layer-name="OSM"]');
+  if (initialOsmOption) {
+    switcherIcon.querySelector("img").src = initialOsmOption.querySelector("img").src;
+    initialOsmOption.classList.add('active'); // Marquer OSM comme active au démarrage
+  }
 });
 
 
@@ -406,11 +448,11 @@ var partnerLayer = new ol.layer.Vector({
 function createDefaultStyle(feature) {
   const statut = feature.get("statut_prest");
 
-  
-  let iconSrc = "./resources/images/partner_location.svg"; 
+
+  let iconSrc = "./resources/images/partner_location.svg";
 
   if (statut === "SSR/Clinique juridiques/DIC") {
-    iconSrc = "./resources/images/partner_location_clinique.svg"; 
+    iconSrc = "./resources/images/partner_location_clinique.svg";
   }
 
   return new ol.style.Style({
@@ -615,7 +657,7 @@ var clusterStyle = function (feature) {
 // Définition de la couche des clusters avec le style
 var clusterLayer = new ol.layer.Vector({
   source: clusterSource,
-  zIndex:35,
+  zIndex: 35,
   style: clusterStyle, // Appliquer le style aux clusters
 });
 
@@ -787,10 +829,10 @@ function createCharts(feature) {
 function togglePopup() {
   const popupContainer = document.getElementById("popup-container");
   const toggleIcon = document.getElementById("toggle-icon");
-  
+
   // Basculer la classe 'collapsed'
   popupContainer.classList.toggle("collapsed");
-  
+
   // Changer l'icône en fonction de l'état
   if (popupContainer.classList.contains("collapsed")) {
     toggleIcon.classList.remove("fas fa-chevron-up");
@@ -984,7 +1026,7 @@ document.addEventListener("DOMContentLoaded", function () {
     partnerLayerVisible;
   document.getElementById("toggleRegionsCheckbox").checked =
     regionLayerVisible;
-    document.getElementById("toggleRegionsCheckbox").checked =
+  document.getElementById("toggleRegionsCheckbox").checked =
     camerounLayerVisible;
 
 });
@@ -1288,35 +1330,35 @@ function applyFilter() {
 // Affiche la liste initiale
 // Affiche la liste initiale
 function renderProjectList() {
-    projectListEl.innerHTML = '';
-    if (!filteredProjects.length) {
-        projectListEl.innerHTML = '<li class="no-projects-found">Aucun projet trouvé pour ce filtre.</li>';
-        return;
-    }
-    filteredProjects.forEach((p, idx) => {
-        const li = document.createElement('li');
-        // !! IMPORTANT : Ne plus utiliser l'icône ici, le badge gère le statut visuel
-        // Si vous avez encore cette ligne, supprimez-la ou mettez-la en commentaire
-        // const iconClass = p.statut === 'En cours' ? 'fas fa-circle in-progress' : 'fas fa-circle completed';
+  projectListEl.innerHTML = '';
+  if (!filteredProjects.length) {
+    projectListEl.innerHTML = '<li class="no-projects-found">Aucun projet trouvé pour ce filtre.</li>';
+    return;
+  }
+  filteredProjects.forEach((p, idx) => {
+    const li = document.createElement('li');
+    // !! IMPORTANT : Ne plus utiliser l'icône ici, le badge gère le statut visuel
+    // Si vous avez encore cette ligne, supprimez-la ou mettez-la en commentaire
+    // const iconClass = p.statut === 'En cours' ? 'fas fa-circle in-progress' : 'fas fa-circle completed';
 
-        const statusText = p.statut === 'En cours' ? 'En cours' : 'Clôturé'; // <-- IMPORTANT : Texte du badge
-        const badgeClass = p.statut === 'En cours' ? 'badge-in-progress' : 'badge-completed';
+    const statusText = p.statut === 'En cours' ? 'En cours' : 'Clôturé'; // <-- IMPORTANT : Texte du badge
+    const badgeClass = p.statut === 'En cours' ? 'badge-in-progress' : 'badge-completed';
 
-        li.innerHTML = `
+    li.innerHTML = `
             <div class="project-info">
                 <span class="project-title">${p.nom_projet}</span>
             </div>
             <span class="status-badge ${badgeClass}">${statusText}</span>  `;
-        
-        li.addEventListener('click', () => showProjectDetail(idx));
-        projectListEl.appendChild(li);
-    });
+
+    li.addEventListener('click', () => showProjectDetail(idx));
+    projectListEl.appendChild(li);
+  });
 }
 
 // Variables globales
 let sitesHighlightLayer = new ol.layer.Vector({
   source: new ol.source.Vector(),
-  style: function(feature) {
+  style: function (feature) {
     return new ol.style.Style({
       fill: new ol.style.Fill({
         color: [255, 255, 0, 0.4] // Jaune semi-transparent
@@ -1345,14 +1387,14 @@ map.addLayer(sitesHighlightLayer);
 // Fonction principale
 async function setupZoomCheckbox(projectId) {
   const zoomCheckbox = document.getElementById('zoom-to-sites');
-  
+
   zoomCheckbox.addEventListener('change', async (e) => {
     if (e.target.checked) {
       try {
         // Afficher un indicateur de chargement
         zoomCheckbox.disabled = true;
         document.getElementById('zoom-loading').style.display = 'inline-block';
-        
+
         const response = await fetch('/api/projects/sites_extent', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
@@ -1360,9 +1402,9 @@ async function setupZoomCheckbox(projectId) {
         });
 
         if (!response.ok) throw new Error(await response.text());
-        
+
         const data = await response.json();
-        
+
         // 1. Zoom sur l'emprise
         const extent = data.bbox.match(/\d+\.?\d*/g).map(Number);
         map.getView().fit(extent, {
@@ -1373,7 +1415,7 @@ async function setupZoomCheckbox(projectId) {
             highlightSites(data.communes);
           }
         });
-        
+
       } catch (error) {
         console.error("Erreur:", error);
         zoomCheckbox.checked = false;
@@ -1401,9 +1443,9 @@ async function highlightSites(communes) {
     });
 
     if (!response.ok) throw new Error(await response.text());
-    
+
     const data = await response.json();
-    
+
     // Vérification du format des données
     if (!data || !data.features) {
       throw new Error("Format de données invalide");
@@ -1416,7 +1458,7 @@ async function highlightSites(communes) {
       featureProjection: 'EPSG:3857'
     });
 
-        // Assignation explicite du nom
+    // Assignation explicite du nom
     features.forEach(feature => {
       feature.set('nom_commune', feature.getProperties().name || '');
     });
@@ -1424,7 +1466,7 @@ async function highlightSites(communes) {
     // Affichage des features
     sitesHighlightLayer.getSource().clear();
     sitesHighlightLayer.getSource().addFeatures(features);
-    
+
   } catch (error) {
     console.error("Erreur de surbrillance:", error);
     alert("Erreur lors de la mise en surbrillance des communes");
@@ -1446,7 +1488,7 @@ function showProjectDetail(index) {
   listView.classList.add('hidden');
   detailView.classList.remove('hidden');
 
-  
+
 
   const p = filteredProjects[index];
   initZoomCheckbox(p.id_projet);
@@ -1465,64 +1507,64 @@ function showProjectDetail(index) {
   fillPhotoGallery(p);
 
   function fillPhotoGallery(p) {
-  const gallery = document.getElementById('project-photo-gallery');
-  gallery.innerHTML = '';
+    const gallery = document.getElementById('project-photo-gallery');
+    gallery.innerHTML = '';
 
-  currentPhotos = [p.photo1, p.photo2, p.photo3, p.photo4].filter(url => url && url.trim() !== '');
+    currentPhotos = [p.photo1, p.photo2, p.photo3, p.photo4].filter(url => url && url.trim() !== '');
 
-  if (!currentPhotos.length) {
-    gallery.innerHTML = '<em>Aucune photo disponible.</em>';
-    return;
+    if (!currentPhotos.length) {
+      gallery.innerHTML = '<em>Aucune photo disponible.</em>';
+      return;
+    }
+
+    currentPhotos.forEach((url, idx) => {
+      const img = document.createElement('img');
+      img.src = url;
+      img.alt = `Photo ${idx + 1}`;
+      img.className = 'project-photo';
+      img.addEventListener('click', () => openImageSlider(idx));
+      gallery.appendChild(img);
+    });
   }
 
-  currentPhotos.forEach((url, idx) => {
-    const img = document.createElement('img');
-    img.src = url;
-    img.alt = `Photo ${idx + 1}`;
-    img.className = 'project-photo';
-    img.addEventListener('click', () => openImageSlider(idx));
-    gallery.appendChild(img);
-  });
-}
-  
 
 }
 
 // Nouvelle fonction d'initialisation
 async function initZoomCheckbox(projectId) {
   const zoomCheckbox = document.getElementById('zoom-to-sites');
-  
+
   zoomCheckbox.addEventListener('change', async (e) => {
     if (e.target.checked) {
       try {
         // Activation du loader
         document.getElementById('zoom-loading').style.display = 'inline-block';
         zoomCheckbox.disabled = true;
-        
+
         // Appel API avec le bon endpoint
         const response = await fetch(`/api/projects/${projectId}/sites`);
-        
+
         if (!response.ok) throw new Error(await response.text());
-        
+
         const data = await response.json();
-        
+
         // Conversion de la bbox PostGIS en format OpenLayers
         const [minX, minY, maxX, maxY] = data.bbox.match(/\d+\.?\d*/g).map(Number);
         const extent = ol.proj.transformExtent(
           [minX, minY, maxX, maxY],
-          'EPSG:4326', 
+          'EPSG:4326',
           'EPSG:3857'
         );
-        
+
         // Zoom sur l'emprise
         map.getView().fit(extent, {
           padding: [50, 50, 50, 50],
           duration: 1000
         });
-        
+
         // Surbrillance des communes
         highlightSites(data.communes);
-        
+
       } catch (error) {
         console.error("Erreur:", error);
         zoomCheckbox.checked = false;
@@ -1559,46 +1601,46 @@ backBtn.addEventListener('click', () => {
 // On intègre tout ça dans displayPopup()
 // On intègre tout ça dans displayPopup()
 function displayPopup(baseName) {
-    if (!currentBaseProjects.length) {
-        // Optionnel: si pas de projets, vous pourriez vouloir afficher un message spécifique
-        document.getElementById("base-name").textContent = baseName;
-        const basePopup = document.getElementById("base-projects-popup");
-        basePopup.style.display = "block";
-        setTimeout(() => (basePopup.style.opacity = 1), 10);
-        projectListEl.innerHTML = '<li class="no-projects-found">Aucun projet trouvé pour cette base.</li>'; // Message si la base n'a pas de projets
-        listView.classList.remove('hidden'); // Assurez-vous que la vue liste est visible
-        detailView.classList.add('hidden');   // Cachez la vue détail
-        // Réinitialiser la checkbox de zoom également si elle est visible
-        const zoomCheckbox = document.getElementById('zoom-to-sites');
-        if (zoomCheckbox) {
-            zoomCheckbox.checked = false;
-            resetSitesHighlight();
-        }
-        return;
-    }
-
+  if (!currentBaseProjects.length) {
+    // Optionnel: si pas de projets, vous pourriez vouloir afficher un message spécifique
     document.getElementById("base-name").textContent = baseName;
-    currentBaseProjectIndex = 0;
-
     const basePopup = document.getElementById("base-projects-popup");
     basePopup.style.display = "block";
     setTimeout(() => (basePopup.style.opacity = 1), 10);
-
-    // --- AJOUT IMPORTANT ICI ---
-    // S'assurer que la vue liste est affichée et la vue détail masquée
-    listView.classList.remove('hidden');
-    detailView.classList.add('hidden');
-
-    // Réinitialiser la checkbox de zoom également
+    projectListEl.innerHTML = '<li class="no-projects-found">Aucun projet trouvé pour cette base.</li>'; // Message si la base n'a pas de projets
+    listView.classList.remove('hidden'); // Assurez-vous que la vue liste est visible
+    detailView.classList.add('hidden');   // Cachez la vue détail
+    // Réinitialiser la checkbox de zoom également si elle est visible
     const zoomCheckbox = document.getElementById('zoom-to-sites');
-    if (zoomCheckbox) { // Vérifie que la checkbox existe
-        zoomCheckbox.checked = false; // Décocher la checkbox
-        resetSitesHighlight(); // Supprimer la surbrillance des sites sur la carte
+    if (zoomCheckbox) {
+      zoomCheckbox.checked = false;
+      resetSitesHighlight();
     }
-    // --- FIN DE L'AJOUT IMPORTANT ---
+    return;
+  }
 
-    applyFilter();      // initialise filteredProjects
-    renderProjectList(); // affiche la liste
+  document.getElementById("base-name").textContent = baseName;
+  currentBaseProjectIndex = 0;
+
+  const basePopup = document.getElementById("base-projects-popup");
+  basePopup.style.display = "block";
+  setTimeout(() => (basePopup.style.opacity = 1), 10);
+
+  // --- AJOUT IMPORTANT ICI ---
+  // S'assurer que la vue liste est affichée et la vue détail masquée
+  listView.classList.remove('hidden');
+  detailView.classList.add('hidden');
+
+  // Réinitialiser la checkbox de zoom également
+  const zoomCheckbox = document.getElementById('zoom-to-sites');
+  if (zoomCheckbox) { // Vérifie que la checkbox existe
+    zoomCheckbox.checked = false; // Décocher la checkbox
+    resetSitesHighlight(); // Supprimer la surbrillance des sites sur la carte
+  }
+  // --- FIN DE L'AJOUT IMPORTANT ---
+
+  applyFilter();      // initialise filteredProjects
+  renderProjectList(); // affiche la liste
 }
 
 
@@ -1627,7 +1669,7 @@ document
       // Assurez-vous que la vue liste est visible et que la vue détail est cachée
       listView.classList.remove('hidden');
       detailView.classList.add('hidden');
-      
+
       // --- AJOUTEZ CES LIGNES POUR RÉINITIALISER LA CHECKBOX ET LA COUCHE DE MISE EN SURBRILLANCE ---
       const zoomCheckbox = document.getElementById('zoom-to-sites');
       if (zoomCheckbox) { // Vérifie que la checkbox existe

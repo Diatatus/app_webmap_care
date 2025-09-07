@@ -33,6 +33,15 @@
     <div class="loader">
       <img src="./resources/images/care_logo.png" alt="Loading..." class="animated-logo" />
       <img src="./resources/images/care.png" alt="Care Logo" class="static-logo" />
+      <!-- Barre de progression -->
+      <div class="progress-container">
+        <div class="progress-bar"></div>
+      </div>
+
+      <!-- Texte de chargement -->
+      <div class="loading-text">
+        Préparation de la carte<span class="loading-dots"></span>
+      </div>
     </div>
   </div>
   <!-- Carte -->
@@ -70,7 +79,7 @@
       <div class="header-right">
         <a href="tel:+237696616735" class="phone-contact" aria-label="Appeler le numéro vert +237 69 66 16 735">
           <i class="fas fa-phone"></i>
-          <span class="phone-number">Numéro Vert : +237 696 616 735</span>
+          <span class="phone-number">+237 696 616 735</span>
         </a>
         <a href="https://www.care.org/our-work/where-we-work/cameroon/" target="_blank" rel="noopener noreferrer">
           <button class="help-btn" id="help-btn">
@@ -291,7 +300,7 @@
     <div id="base-popup-header" class="popup-header">
       <i class="fas fa-house"></i>
       <span id="base-name" class="zone-name"></span>
-       <button id="popup-toggle-btn" class="popup-toggle-btn" title="Réduire/Agrandir">
+      <button id="popup-toggle-btn" class="popup-toggle-btn" title="Réduire/Agrandir">
         <i class="fas fa-chevron-up" id="toggle-icon"></i>
       </button>
       <button id="base-popup-close-btn" class="popup-close-btn">&times;</button>

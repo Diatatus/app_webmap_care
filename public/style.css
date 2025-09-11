@@ -356,7 +356,7 @@
         }
 
         .ol-control.ol-storymap {
-          top: 250px;
+          top: 350px;
           left: 20px;
           bottom: 0.5em;
           max-width: 100%;
@@ -389,7 +389,7 @@
         /* Hide story div for tablets with a resolution of 768x1024 */
         @media (max-width: 1440px) {
           .ol-control.ol-storymap {
-            top: 250px;
+            top: 350px;
             left: 20px;
             bottom: 0.5em;
             max-width: 100%;
@@ -423,7 +423,7 @@
 
         @media (max-width: 1366px) {
           .ol-control.ol-storymap {
-            top: 250px;
+            top: 350px;
             left: 50px;
             bottom: 0.5em;
             max-width: 100%;
@@ -457,7 +457,7 @@
 
         @media (max-width: 1280px) {
           .ol-control.ol-storymap {
-            top: 250px;
+            top: 320px;
             left: 20px;
             bottom: 0.5em;
             max-width: 100%;
@@ -491,7 +491,7 @@
 
         @media (max-width: 768px) {
           .ol-control.ol-storymap {
-            top: 670px;
+            top: 400px;
             left: 20px;
             bottom: 0.5em;
             max-width: 100%;
@@ -526,7 +526,7 @@
         /* Hide story div for smartphones with a resolution of 390x844 */
         @media (max-width: 390px) {
           .ol-control.ol-storymap {
-            top: 350px;
+            top: 430px;
             left: 20px;
             bottom: 0.5em;
             max-width: 100%;
@@ -560,7 +560,7 @@
 
         @media (max-width: 360px) {
           .ol-control.ol-storymap {
-            top: 350px;
+            top: 430px;
             left: 18px;
             bottom: 0.5em;
             max-width: 100%;
@@ -1710,558 +1710,698 @@
 
         /* General styles for the popup-info container */
 
-        /* Main container that holds both the close button and the popup info */
+        /* Container principal de la popup - positionnement sans chevauchement */
         .popup-container {
           display: none;
-          /* Initially hidden */
           position: absolute;
-          top: 10.5%;
-          right: 7%;
-          width: 400px;
-          max-height: 630px;
-          /* Define height */
-          background-color: rgba(255, 255, 255, 1);
-          box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
-          border-radius: 5px;
-          z-index: 1000;
+          top: 90px;
+          right: 2%;
+          bottom: 80px;
+          width: min(400px, calc(100vw - 40px));
+          max-height: calc(100vh - 170px);
+          background: rgba(255, 255, 255, 0.98);
+          backdrop-filter: blur(20px);
+          -webkit-backdrop-filter: blur(20px);
+          border-radius: 16px;
+          border: 1px solid rgba(255, 255, 255, 0.2);
+          box-shadow: 0 16px 48px rgba(0, 0, 0, 0.08),
+            0 4px 20px rgba(0, 0, 0, 0.04);
+          z-index: 2000;
           opacity: 0;
-          transition: opacity 0.5s ease-in-out, max-height 0.2s ease-in-out;
+          transform: translateY(15px) scale(0.98);
+          transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
           overflow: hidden;
-          /* Hide overflow of internal elements */
+          font-family: 'Inter', 'Segoe UI', system-ui, sans-serif;
         }
 
-        @media (max-width: 1440px) {
-          .popup-container {
-            top: 15%;
-            right: 5%;
-            width: 380px;
-            max-height: 630px;
-          }
+        .popup-container.show {
+          opacity: 1;
+          transform: translateY(0) scale(1);
         }
 
-        @media (max-width: 1366px) {
-          .popup-container {
-            top: 15%;
-            right: 5%;
-            width: 380px;
-            max-height: 630px;
-            /* Define height */
-          }
-        }
-
-        @media (max-width: 1280px) {
-          .popup-container {
-            top: 15%;
-            right: 5%;
-            width: 330px;
-            max-height: 630px;
-            /* Define height */
-          }
-        }
-
-        @media (max-width: 390px) {
-          .popup-container {
-            top: 3.5%;
-            right: 7%;
-            width: 330px;
-            max-height: 630px;
-            /* Define height */
-          }
-        }
-
-        @media (max-width: 360px) {
-          .popup-container {
-            top: 2.5%;
-            right: 7%;
-            width: 330px;
-            max-height: 630px;
-            /* Define height */
-            z-index: 3000;
-            transition: opacity 0.3s ease;
-          }
-        }
-
+        /* Header compact et moderne */
         .popup-header {
           display: flex;
           justify-content: space-between;
           align-items: center;
-          padding: 10px;
-          background-color: #ee8845;
-          border-bottom: 1px solid #ccc;
+          padding: 10px 16px;
+          background: linear-gradient(135deg, #e55b00 0%, #ff7730 100%);
+          color: white;
+          position: relative;
+          overflow: hidden;
+          min-height: 50px;
+        }
+
+        .popup-header::before {
+          content: '';
+          position: absolute;
+          top: 0;
+          left: 0;
+          right: 0;
+          bottom: 0;
+          background: linear-gradient(45deg, transparent 30%, rgba(255, 255, 255, 0.1) 50%, transparent 70%);
+          animation: shimmer 3s ease-in-out infinite;
+        }
+
+        @keyframes shimmer {
+
+          0%,
+          100% {
+            transform: translateX(-100%);
+          }
+
+          50% {
+            transform: translateX(100%);
+          }
+        }
+
+        .popup-header i.fas.fa-chart-line {
+          font-size: 18px;
+          margin-right: 8px;
+          color: rgba(255, 255, 255, 0.9);
+          z-index: 1;
+          position: relative;
         }
 
         .zone-name {
-          font-weight: bold;
-          font-size: 18px;
-        }
-
-        .popup-close-btn {
-          background: none;
-          border: none;
-          font-size: 24px;
-          cursor: pointer;
-        }
-
-        /* Popup content (scrollable) */
-        .popup-info {
-          padding: 15px;
-          max-height: 450px;
-          /* Ensure the content inside is scrollable */
-          overflow-y: auto;
-          /* Enable vertical scrolling */
-        }
-
-        .popup-info h3 {
-          text-align: center;
-          margin-top: 10px;
-          margin-bottom: 10px;
-          font-family: Arial, sans-serif;
+          font-weight: 700;
           font-size: 16px;
+          letter-spacing: 0.3px;
+          text-shadow: 0 1px 2px rgba(0, 0, 0, 0.2);
+          flex-grow: 1;
+          z-index: 1;
+          position: relative;
         }
 
-        .popup-info canvas {
-          width: 100%;
-          height: 200px;
-          margin-bottom: 20px;
-          background-color: #f8f8f8;
-          border: 1px solid #ddd;
+        /* Boutons header uniformisés */
+        .popup-toggle-btn,
+        .popup-close-btn {
+          background: rgba(255, 255, 255, 0.2);
+          border: 1px solid rgba(255, 255, 255, 0.3);
           border-radius: 8px;
-        }
-
-        .popup-footer {
-          margin-top: 20px;
-          text-align: center;
-          padding: 10px;
-          background-color: #f1f1f1ae;
-          border-top: 1px solid #000000;
-        }
-
-        .source-logos {
+          color: white;
+          cursor: pointer;
+          transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
           display: flex;
-          justify-content: space-around;
           align-items: center;
-          margin-top: 10px;
+          justify-content: center;
+          z-index: 1;
+          position: relative;
+          width: 32px;
+          height: 32px;
+          font-size: 14px;
+          font-weight: 500;
         }
 
-        .source-logo {
-          max-width: 50px;
-          /* Set a maximum width */
-          height: 50px;
-          /* Keep the aspect ratio */
-          object-fit: contain;
-          /* Ensure the logo fits within the container without stretching */
-          margin-right: 5px;
-          /* Add some spacing between logos */
+        .popup-toggle-btn {
+          margin-right: 6px;
         }
 
+        .popup-toggle-btn:hover,
+        .popup-close-btn:hover {
+          background: rgba(255, 255, 255, 0.3);
+          transform: scale(1.05);
+          box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+        }
+
+        /* Contenu principal optimisé */
+        .popup-info {
+          padding: 16px;
+          max-height: calc(100vh - 240px);
+          overflow-y: auto;
+        }
+
+        .popup-info::-webkit-scrollbar {
+          width: 4px;
+        }
+
+        .popup-info::-webkit-scrollbar-track {
+          background: rgba(0, 0, 0, 0.05);
+          border-radius: 2px;
+        }
+
+        .popup-info::-webkit-scrollbar-thumb {
+          background: linear-gradient(135deg, #e55b00, #ff7730);
+          border-radius: 2px;
+        }
+
+        /* Titres de section modernes */
+        .popup-info h3 {
+          font-size: 15px;
+          font-weight: 700;
+          color: #1e293b;
+          margin: 20px 0 12px 0;
+          text-align: center;
+          position: relative;
+          letter-spacing: 0.3px;
+        }
+
+        .popup-info h3:first-child {
+          margin-top: 0;
+        }
+
+        .popup-info h3::after {
+          content: '';
+          position: absolute;
+          bottom: -4px;
+          left: 50%;
+          transform: translateX(-50%);
+          width: 40px;
+          height: 2px;
+          background: linear-gradient(90deg, #e55b00, #ff7730);
+          border-radius: 1px;
+        }
+
+        /* Suppression des <br> inutiles en CSS */
+        .popup-info br {
+          display: none;
+        }
+
+        /* Section démographie compacte */
         #demography-icons {
-          display: flex;
-          justify-content: space-around;
-          margin-bottom: 20px;
+          display: grid;
+          grid-template-columns: 1fr 1fr;
+          gap: 12px;
+          margin-bottom: 16px;
+          background: linear-gradient(135deg, #f8fafc 0%, #e2e8f0 100%);
+          padding: 12px;
+          border-radius: 12px;
+          border: 1px solid rgba(0, 0, 0, 0.06);
         }
 
         .demography-icon-group {
           text-align: center;
+          padding: 12px;
+          background: white;
+          border-radius: 8px;
+          box-shadow: 0 1px 4px rgba(0, 0, 0, 0.04);
+          transition: transform 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .demography-icon-group:hover {
+          transform: translateY(-1px);
+          box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
         }
 
         .demography-icon-group i {
-          font-size: 2em;
-          color: #4bc0c0;
-          /* You can adjust the color */
+          font-size: 24px;
+          color: #14b8a6;
+          margin-bottom: 6px;
+          display: block;
         }
 
         .demography-icon-group span {
           display: block;
-          margin-top: 5px;
-          font-size: 1.2em;
-          font-weight: bold;
+          font-size: 13px;
+          font-weight: 700;
+          color: #1e293b;
+          line-height: 1.3;
         }
 
-        #demography-bar-chart-container {
-          width: 50%;
-          height: auto;
-          margin-left: 100px;
-          /* Add some spacing on the left */
+        /* Container de graphique centré et compact */
+        #demography-bar-chart-container,
+        #domestic-violence-pie-chart-container {
+          width: 100%;
+          max-width: 250px;
+          margin: 16px auto;
+          padding: 12px;
+          background: white;
+          border-radius: 12px;
+          box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
+          border: 1px solid rgba(0, 0, 0, 0.06);
         }
 
-        .chartjs-legend i {
-          font-size: 20px;
-          /* Adjust this size if necessary */
+        .popup-info canvas {
+          width: 100% !important;
+          height: auto !important;
+          max-height: 150px;
+          border-radius: 6px;
         }
 
-        /* General Styles */
-        #health-icons {
-          display: flex;
-          justify-content: space-between;
-          padding: 20px 0;
+        /* Sections d'indicateurs modernisées */
+        #health-icons,
+        #economy-icons {
+          display: grid;
+          grid-template-columns: repeat(auto-fit, minmax(100px, 1fr));
+          gap: 10px;
+          margin: 16px 0;
         }
 
-        #hiv-icons {
-          display: flex;
-          flex-direction: column;
-          align-items: center;
-          padding: 20px 0;
+        #family-planning-icons {
+          display: grid;
+          grid-template-columns: 1fr 1fr;
+          gap: 10px;
+          margin: 16px 0;
         }
 
-        /* Positioning and Styling for Each Icon */
-        #access-water-icon,
-        #handwashing-icon,
-        #access-sanity-icon {
+        /* Cartes d'indicateurs compactes */
+        #health-icons>div,
+        #economy-icons>div,
+        #family-planning-icons>div {
+          background: white;
+          padding: 12px 8px;
+          border-radius: 12px;
           text-align: center;
-          width: 32%;
+          box-shadow: 0 1px 4px rgba(0, 0, 0, 0.04);
+          border: 1px solid rgba(0, 0, 0, 0.06);
+          transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+          position: relative;
+          overflow: hidden;
         }
 
-        /* Ribbon Centered */
+        #health-icons>div:hover,
+        #economy-icons>div:hover,
+        #family-planning-icons>div:hover {
+          transform: translateY(-1px);
+          box-shadow: 0 3px 12px rgba(0, 0, 0, 0.08);
+        }
+
+        #health-icons>div::before,
+        #economy-icons>div::before,
+        #family-planning-icons>div::before {
+          content: '';
+          position: absolute;
+          top: 0;
+          left: 0;
+          right: 0;
+          height: 3px;
+          background: linear-gradient(90deg, #e55b00, #ff7730);
+          opacity: 0;
+          transition: opacity 0.2s ease;
+        }
+
+        #health-icons>div:hover::before,
+        #economy-icons>div:hover::before,
+        #family-planning-icons>div:hover::before {
+          opacity: 1;
+        }
+
+        /* Palette de couleurs professionnelle pour les icônes */
+        #access-sanity-icon i {
+          color: #0ea5e9;
+        }
+
+        #access-water-icon i {
+          color: #06b6d4;
+        }
+
+        #handwashing-icon i {
+          color: #0891b2;
+        }
+
+        #poverty-rate-icon i {
+          color: #10b981;
+        }
+
+        #unemployment-rate-icon i {
+          color: #6366f1;
+        }
+
+        #financial-inclusion-icon i {
+          color: #f59e0b;
+        }
+
+        #unmet-need-icon i {
+          color: #e879f9;
+        }
+
+        #contraceptive-use-icon i {
+          color: #a855f7;
+        }
+
+        #domestic-violence-icon i {
+          color: #64748b;
+        }
+
+        #hiv-ribbon i {
+          color: #dc2626;
+        }
+
+        #hiv-male i {
+          color: #3b82f6;
+        }
+
+        #hiv-female i {
+          color: #ec4899;
+        }
+
+        /* Icônes d'indicateurs */
+        #health-icons i,
+        #economy-icons i,
+        #family-planning-icons i {
+          font-size: 20px;
+          margin-bottom: 6px;
+          display: block;
+        }
+
+        #health-icons p,
+        #economy-icons p,
+        #family-planning-icons p {
+          margin: 0;
+          font-size: 11px;
+          font-weight: 600;
+          color: #475569;
+          line-height: 1.3;
+        }
+
+        #health-icons strong,
+        #economy-icons strong,
+        #family-planning-icons strong {
+          font-size: 12px;
+          color: #1e293b;
+          display: block;
+          margin-top: 2px;
+        }
+
+        /* Section VIH compacte */
+        #hiv-icons {
+          background: linear-gradient(135deg, #fef2f2 0%, #fee2e2 100%);
+          padding: 16px;
+          border-radius: 12px;
+          margin: 16px 0;
+          border: 1px solid rgba(239, 68, 68, 0.1);
+        }
+
         #hiv-ribbon {
           text-align: center;
-          margin-bottom: 20px;
+          margin-bottom: 12px;
+        }
+
+        #hiv-ribbon i {
+          font-size: 28px;
+          color: #dc2626;
+          margin-bottom: 4px;
+        }
+
+        #hiv-ribbon p {
+          font-size: 13px;
+          font-weight: 700;
+          color: #1e293b;
+          margin: 0;
         }
 
         #hiv-gender-icons {
-          display: flex;
-          justify-content: space-between;
-          width: 100%;
+          display: grid;
+          grid-template-columns: 1fr 1fr;
+          gap: 10px;
         }
 
         #hiv-male,
         #hiv-female {
+          background: white;
+          padding: 10px;
+          border-radius: 8px;
           text-align: center;
-          width: 32%;
-        }
-
-        /* Distinct Colors for Each Section */
-        #access-sanity-icon i {
-          color: #ff4500;
-          /* Cyan */
-        }
-
-        #access-water-icon i {
-          color: #36a2eb;
-          /* Cyan */
-        }
-
-        #handwashing-icon i {
-          color: #36a2eb;
-          /* Yellow */
-        }
-
-        #hiv-ribbon i {
-          color: red;
-          /* Red Ribbon for HIV Awareness */
-        }
-
-        #hiv-male i {
-          color: #36a2eb;
-          /* Blue for Males */
-        }
-
-        #hiv-female i {
-          color: #ff6384;
-          /* Pink for Females */
-        }
-
-        /* Ensure Text is Black */
-        #health-icons p,
-        #hiv-icons p {
-          color: black;
-        }
-
-        /* Optional: Adjust icon sizes */
-        #hiv-ribbon i {
-          font-size: 3em;
-          /* Bigger Ribbon Icon */
+          box-shadow: 0 1px 4px rgba(0, 0, 0, 0.04);
         }
 
         #hiv-male i,
         #hiv-female i {
-          font-size: 2em;
+          font-size: 18px;
+          margin-bottom: 4px;
         }
 
-        /* Economy Section Icons */
-        #economy-icons {
-          display: flex;
-          justify-content: space-between;
-          padding: 20px 0;
+        #hiv-male p,
+        #hiv-female p {
+          font-size: 11px;
+          font-weight: 600;
+          color: #475569;
+          margin: 0;
         }
 
-        #economy-icons div {
-          text-align: center;
-          width: 32%;
-        }
-
-        /* Distinct Icon Colors */
-        #poverty-rate-icon i {
-          color: #359e2b;
-          /* Red for Poverty */
-        }
-
-        #unemployment-rate-icon i {
-          color: #36a2eb;
-          /* Blue for Unemployment */
-        }
-
-        #financial-inclusion-icon i {
-          color: #ffce56;
-          /* Yellow for Financial Inclusion */
-        }
-
-        /* Text Formatting */
-        #economy-icons p {
-          color: black;
-          /* Text in black */
-        }
-
-        /* Family Planning Icons */
-        #family-planning-icons {
-          display: flex;
-          justify-content: space-between;
-          padding: 20px 0;
-        }
-
-        #family-planning-icons div {
-          text-align: center;
-          width: 45%;
-        }
-
-        /* Distinct Icon Colors */
-        #unmet-need-icon i {
-          color: #ff6384;
-          /* Red for unmet needs */
-        }
-
-        #contraceptive-use-icon i {
-          color: #ff6384;
-          /* Blue for contraceptive use */
-        }
-
-        #domestic-violence-icon i {
-          color: #626d6b;
-        }
-
-        /* Domestic Violence Section */
+        /* Section violence domestique compacte */
         #domestic-violence-section {
-          margin-top: 30px;
+          background: linear-gradient(135deg, #f8fafc 0%, #e2e8f0 100%);
+          padding: 16px;
+          border-radius: 12px;
+          margin: 16px 0;
           text-align: center;
         }
 
         #domestic-violence-icon {
-          margin-bottom: 10px;
+          margin-bottom: 12px;
         }
 
-        #domestic-violence-pie-chart-container {
-          width: 50%;
-          height: auto;
-          margin-left: 100px;
-          /* Center the pie chart */
+        #domestic-violence-icon i {
+          font-size: 24px;
+          color: #64748b;
+          margin-bottom: 4px;
         }
 
-        /* General Text Styling */
-        #family-planning-icons p,
         #domestic-violence-icon p {
-          color: black;
+          font-size: 13px;
+          font-weight: 700;
+          color: #1e293b;
+          margin: 0;
         }
 
-        @media (max-width: 1280px) {
-          .popup-info h3 {
-            text-align: center;
-            margin-top: 10px;
-            margin-bottom: 10px;
-            font-family: Arial, sans-serif;
-            font-size: 15px;
-          }
-
-          #access-water-icon,
-          #handwashing-icon,
-          #access-sanity-icon {
-            text-align: center;
-            width: 30%;
-          }
-
-          #water-access,
-          #handwashing-acess,
-          #sanity-access {
-            font-size: 12px;
-          }
-
-          #rate-poverty,
-          #rate-unemployment,
-          #Inclusion-financial {
-            font-size: 15px;
-          }
-
-          #need-unmet,
-          #use-contraceptive {
-            font-size: 12px;
-          }
-
-          #demography-bar-chart-container {
-            width: 45%;
-            height: auto;
-            margin-left: 90px;
-            /* Add some spacing on the left */
-          }
-
-          #domestic-violence-pie-chart-container {
-            width: 45%;
-            height: auto;
-            margin-left: 90px;
-            /* Center the pie chart */
-          }
-
-          .chartjs-legend i {
-            font-size: 15px;
-            /* Adjust this size if necessary */
-          }
+        /* Footer compact */
+        .popup-footer {
+          padding: 8px 16px;
+          background: linear-gradient(135deg, #f8fafc 0%, #e2e8f0 100%);
+          border-top: 1px solid rgba(0, 0, 0, 0.06);
+          text-align: center;
+          min-height: 50px;
         }
 
-        @media (max-width: 390px) {
-          .popup-info h3 {
-            text-align: center;
-            margin-top: 10px;
-            margin-bottom: 10px;
-            font-family: Arial, sans-serif;
-            font-size: 15px;
-          }
-
-          #total-population-info,
-          #population-density-info {
-            font-size: 14px;
-          }
-
-          #access-water-icon,
-          #handwashing-icon,
-          #access-sanity-icon {
-            text-align: center;
-            width: 30%;
-          }
-
-          #water-access,
-          #handwashing-acess,
-          #sanity-access {
-            font-size: 12px;
-          }
-
-          #rate-poverty,
-          #rate-unemployment,
-          #Inclusion-financial {
-            font-size: 15px;
-          }
-
-          #need-unmet,
-          #use-contraceptive {
-            font-size: 12px;
-          }
-
-          #demography-bar-chart-container {
-            width: 45%;
-            height: auto;
-            margin-left: 90px;
-            /* Add some spacing on the left */
-          }
-
-          #domestic-violence-pie-chart-container {
-            width: 45%;
-            height: auto;
-            margin-left: 90px;
-            /* Center the pie chart */
-          }
-
-          .chartjs-legend i {
-            font-size: 15px;
-            /* Adjust this size if necessary */
-          }
+        .popup-footer h6 {
+          font-size: 11px;
+          font-weight: 700;
+          color: #475569;
+          margin: 0 0 6px 0;
+          letter-spacing: 0.3px;
+          text-transform: uppercase;
         }
 
-        @media (max-width: 360px) {
-          .popup-info h3 {
-            text-align: center;
-            margin-top: 10px;
-            margin-bottom: 10px;
-            font-family: Arial, sans-serif;
-            font-size: 15px;
-          }
-
-          #access-water-icon,
-          #handwashing-icon,
-          #access-sanity-icon {
-            text-align: center;
-            width: 30%;
-          }
-
-          #water-access,
-          #handwashing-acess,
-          #sanity-access {
-            font-size: 12px;
-          }
-
-          #rate-poverty,
-          #rate-unemployment,
-          #Inclusion-financial {
-            font-size: 15px;
-          }
-
-          #need-unmet,
-          #use-contraceptive {
-            font-size: 12px;
-          }
-
-          #demography-bar-chart-container {
-            width: 45%;
-            height: auto;
-            margin-left: 90px;
-            /* Add some spacing on the left */
-          }
-
-          #domestic-violence-pie-chart-container {
-            width: 45%;
-            height: auto;
-            margin-left: 90px;
-            /* Center the pie chart */
-          }
-
-          .chartjs-legend i {
-            font-size: 15px;
-            /* Adjust this size if necessary */
-          }
+        .source-logos {
+          display: flex;
+          justify-content: center;
+          align-items: center;
+          gap: 8px;
+          flex-wrap: wrap;
         }
 
-        /* Styles pour le bouton de réduction/agrandissement */
-        .popup-toggle-btn {
-          background: none;
-          border: none;
-          font-size: 20px;
-          cursor: pointer;
-          margin-right: 10px;
-          color: #333;
+        .source-logo {
+          width: 32px;
+          height: 32px;
+          object-fit: contain;
+          border-radius: 4px;
+          background: white;
+          padding: 2px;
+          box-shadow: 0 1px 4px rgba(0, 0, 0, 0.06);
+          transition: transform 0.2s cubic-bezier(0.4, 0, 0.2, 1);
         }
 
-        .popup-toggle-btn:hover {
-          color: #000;
+        .source-logo:hover {
+          transform: scale(1.05);
+          box-shadow: 0 2px 8px rgba(0, 0, 0, 0.12);
         }
 
-        /* Ajout d'une classe pour l'état réduit */
+        /* État collapsed */
         .popup-container.collapsed {
-          max-height: 60px;
-          /* Seulement la hauteur de l'en-tête */
+          max-height: 50px;
         }
 
         .popup-container.collapsed #popup-info,
         .popup-container.collapsed #popup-footer {
           display: none;
-          /* Masquer le contenu et le pied de page */
         }
 
-        /* Ajustement pour l'état réduit sur mobile */
-        @media (max-width: 390px) {
+        /* Responsive design optimisé */
+        @media (max-width: 768px) {
+          .popup-container {
+            top: 85px;
+            right: 3%;
+            left: 3%;
+            bottom: 70px;
+            width: auto;
+            max-height: calc(100vh - 155px);
+          }
+
+          .popup-header {
+            padding: 8px 12px;
+            min-height: 44px;
+          }
+
+          .zone-name {
+            font-size: 15px;
+          }
+
+          .popup-toggle-btn,
+          .popup-close-btn {
+            width: 28px;
+            height: 28px;
+            font-size: 12px;
+          }
+
+          .popup-info {
+            padding: 12px;
+            max-height: calc(100vh - 199px);
+          }
+
+          .popup-info h3 {
+            font-size: 14px;
+            margin: 16px 0 10px 0;
+          }
+
+          #demography-icons {
+            grid-template-columns: 1fr;
+            gap: 8px;
+            padding: 10px;
+          }
+
+          #health-icons,
+          #economy-icons {
+            grid-template-columns: 1fr;
+            gap: 8px;
+          }
+
+          #family-planning-icons {
+            grid-template-columns: 1fr;
+            gap: 8px;
+          }
+
+          #hiv-gender-icons {
+            grid-template-columns: 1fr;
+            gap: 8px;
+          }
+
+          .popup-footer {
+            padding: 6px 12px;
+            min-height: 44px;
+          }
+
+          .popup-footer h6 {
+            font-size: 10px;
+            margin: 0 0 4px 0;
+          }
+
+          .source-logo {
+            width: 28px;
+            height: 28px;
+          }
+
           .popup-container.collapsed {
-            max-height: 50px;
+            max-height: 44px;
           }
         }
 
-        @media (max-width: 360px) {
-          .popup-container.collapsed {
-            max-height: 45px;
+        @media (max-width: 480px) {
+          .popup-container {
+            top: 80px;
+            right: 2%;
+            left: 2%;
+            bottom: 60px;
+            max-height: calc(100vh - 140px);
           }
+
+          .popup-header {
+            padding: 6px 10px;
+            min-height: 40px;
+          }
+
+          .zone-name {
+            font-size: 14px;
+          }
+
+          .popup-toggle-btn,
+          .popup-close-btn {
+            width: 26px;
+            height: 26px;
+            font-size: 11px;
+          }
+
+          .popup-info {
+            padding: 10px;
+            max-height: calc(100vh - 180px);
+          }
+
+          .popup-info h3 {
+            font-size: 13px;
+            margin: 14px 0 8px 0;
+          }
+
+          .demography-icon-group i,
+          #health-icons i,
+          #economy-icons i,
+          #family-planning-icons i {
+            font-size: 18px;
+          }
+
+          .demography-icon-group span {
+            font-size: 12px;
+          }
+
+          #health-icons p,
+          #economy-icons p,
+          #family-planning-icons p {
+            font-size: 10px;
+          }
+
+          #health-icons strong,
+          #economy-icons strong,
+          #family-planning-icons strong {
+            font-size: 11px;
+          }
+
+          #hiv-ribbon i {
+            font-size: 24px;
+          }
+
+          #domestic-violence-icon i {
+            font-size: 20px;
+          }
+
+          .popup-footer {
+            padding: 8px 10px;
+            min-height: 50px;
+          }
+
+          .source-logo {
+            width: 30px;
+            height: 30px;
+          }
+
+          .popup-container.collapsed {
+            max-height: 40px;
+          }
+        }
+
+        /* Animation d'entrée fluide */
+        @keyframes fadeInUp {
+          from {
+            opacity: 0;
+            transform: translateY(10px);
+          }
+
+          to {
+            opacity: 1;
+            transform: translateY(0);
+          }
+        }
+
+        .popup-info>* {
+          animation: fadeInUp 0.4s cubic-bezier(0.4, 0, 0.2, 1) forwards;
+        }
+
+        .popup-info>*:nth-child(1) {
+          animation-delay: 0.05s;
+        }
+
+        .popup-info>*:nth-child(2) {
+          animation-delay: 0.1s;
+        }
+
+        .popup-info>*:nth-child(3) {
+          animation-delay: 0.15s;
+        }
+
+        .popup-info>*:nth-child(4) {
+          animation-delay: 0.2s;
+        }
+
+        .popup-info>*:nth-child(5) {
+          animation-delay: 0.25s;
         }
 
         /* General popup styling */
@@ -2345,294 +2485,371 @@
           color: #e55b00;
         }
 
+        /* Container principal de la popup projets - style moderne */
         #base-projects-popup {
-          position: absolute;
           display: none;
-          background: rgba(255, 255, 255, 1);
-          box-shadow: 0px 4px 8px rgba(0, 0, 0, 1);
-          border-radius: 8px;
-          /* Ancienne max-width: 400px; */
-          max-width: 450px;
-          /* <--- MODIFIÉ : Un peu plus large pour le nouveau design */
-          max-height: 90vh;
-          /* Ancien padding: 15px; */
-          padding: 20px;
-          /* <--- MODIFIÉ : Plus de padding général */
-          font-family: Arial, sans-serif;
-          font-size: 13px;
+          position: absolute;
+          top: 90px;
+          right: 2%;
+          bottom: 80px;
+          width: min(450px, calc(100vw - 40px));
+          max-height: calc(100vh - 170px);
+          background: rgba(255, 255, 255, 0.98);
+          backdrop-filter: blur(20px);
+          -webkit-backdrop-filter: blur(20px);
+          border-radius: 16px;
+          border: 1px solid rgba(255, 255, 255, 0.2);
+          box-shadow: 0 16px 48px rgba(0, 0, 0, 0.08),
+            0 4px 20px rgba(0, 0, 0, 0.04);
+          z-index: 2000;
           opacity: 0;
-          transition: opacity 0.5s ease-in-out, max-height 0.2s ease-in-out;
-          z-index: 10000;
-          overflow-y: auto;
+          transform: translateY(15px) scale(0.98);
+          transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+          overflow: hidden;
+          font-family: 'Inter', 'Segoe UI', system-ui, sans-serif;
         }
 
+        #base-projects-popup.show {
+          opacity: 1;
+          transform: translateY(0) scale(1);
+        }
+
+        /* Header moderne avec icône maison */
         #base-popup-header {
           display: flex;
           justify-content: space-between;
           align-items: center;
-          position: sticky;
-          z-index: 10;
+          padding: 10px 16px;
+          background: linear-gradient(135deg, #ff8c42 0%, #ffab73 100%);
+          color: white;
+          position: relative;
+          overflow: hidden;
+          min-height: 50px;
+        }
+
+        #base-popup-header::before {
+          content: '';
+          position: absolute;
           top: 0;
-          /* Ancien padding-bottom: 10px; */
-          padding-bottom: 15px;
-          /* <--- MODIFIÉ : Plus d'espace sous l'en-tête */
-          border-bottom: 1px solid #ccc;
-          font-weight: bold;
-          margin-bottom: 10px;
-          /* <--- AJOUTÉ : Plus d'espace entre l'en-tête et le contenu */
+          left: 0;
+          right: 0;
+          bottom: 0;
+          background: linear-gradient(45deg, transparent 30%, rgba(255, 255, 255, 0.1) 50%, transparent 70%);
+          animation: shimmer 3s ease-in-out infinite;
         }
 
+        @keyframes shimmer {
 
+          0%,
+          100% {
+            transform: translateX(-100%);
+          }
 
-        .hidden {
-          display: none;
+          50% {
+            transform: translateX(100%);
+          }
         }
 
-        .filter-container {
-          /* Ancien margin: 10px 0; */
-          margin: 15px 0 10px;
-          /* <--- MODIFIÉ : Ajuster les marges */
+        #base-popup-header i.fas.fa-house {
+          font-size: 18px;
+          margin-right: 8px;
+          color: rgba(255, 255, 255, 0.9);
+          z-index: 1;
+          position: relative;
+        }
+
+        #base-name {
+          font-weight: 700;
+          font-size: 16px;
+          letter-spacing: 0.3px;
+          text-shadow: 0 1px 2px rgba(0, 0, 0, 0.2);
+          flex-grow: 1;
+          z-index: 1;
+          position: relative;
+        }
+
+        /* Boutons header uniformisés - reprise du style popup indicateurs */
+        #base-projects-popup .popup-toggle-btn,
+        #base-popup-close-btn {
+          background: rgba(255, 255, 255, 0.2);
+          border: 1px solid rgba(255, 255, 255, 0.3);
+          border-radius: 8px;
+          color: white;
+          cursor: pointer;
+          transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
           display: flex;
-          /* <--- AJOUTÉ : Pour aligner les éléments */
           align-items: center;
-          /* <--- AJOUTÉ : Pour aligner les éléments */
-          gap: 10px;
-          /* <--- AJOUTÉ : Espacement entre label, select et icône */
-          position: sticky;
+          justify-content: center;
+          z-index: 1;
+          position: relative;
+          width: 32px;
+          height: 32px;
+          font-size: 14px;
+          font-weight: 500;
+        }
+
+        #base-projects-popup .popup-toggle-btn {
+          margin-right: 6px;
+        }
+
+        #base-projects-popup .popup-toggle-btn:hover,
+        #base-popup-close-btn:hover {
+          background: rgba(255, 255, 255, 0.3);
+          transform: scale(1.05);
+          box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+        }
+
+        /* Vue liste des projets */
+        #project-list-view {
+          padding: 16px;
+          max-height: calc(100vh - 265px);
+          overflow-y: auto;
+        }
+
+        #project-list-view::-webkit-scrollbar {
+          width: 4px;
+        }
+
+        #project-list-view::-webkit-scrollbar-track {
+          background: rgba(0, 0, 0, 0.05);
+          border-radius: 2px;
+        }
+
+        #project-list-view::-webkit-scrollbar-thumb {
+          background: linear-gradient(135deg, #ff8c42, #ffab73);
+          border-radius: 2px;
+        }
+
+        /* Container de filtre moderne */
+        .filter-container {
+          display: flex;
+          align-items: center;
+          gap: 12px;
+          margin-bottom: 20px;
+          background: linear-gradient(135deg, #f8fafc 0%, #e2e8f0 100%);
+          padding: 12px 16px;
+          border-radius: 12px;
+          border: 1px solid rgba(0, 0, 0, 0.06);
+        }
+
+        .filter-container label {
+          font-size: 13px;
+          font-weight: 700;
+          color: #475569;
+          white-space: nowrap;
         }
 
         #status-filter {
-          /* Ancien margin-left: 5px; */
-          /* Ancien padding: 4px; */
           flex-grow: 1;
-          /* <--- AJOUTÉ : Permet au sélecteur de prendre plus d'espace */
-          padding: 8px 10px;
-          /* <--- MODIFIÉ : Plus de padding pour le sélecteur */
-          border-radius: 5px;
-          /* <--- AJOUTÉ : Bords légèrement arrondis */
-          border: 1px solid #ccc;
-          /* <--- AJOUTÉ : Bordure */
-          background-color: #f9f9f9;
-          /* <--- AJOUTÉ : Fond léger */
+          padding: 8px 12px;
+          border-radius: 8px;
+          border: 1px solid rgba(0, 0, 0, 0.1);
+          background: white;
+          font-size: 13px;
+          font-weight: 500;
+          color: #475569;
+          transition: border-color 0.2s ease;
         }
 
-        .filter-container label strong {
-          /* <--- AJOUTÉ : Style pour le texte "Réalisations" */
-          color: #555;
+        #status-filter:focus {
+          outline: none;
+          border-color: #ff8c42;
+          box-shadow: 0 0 0 3px rgba(255, 140, 66, 0.1);
         }
 
         .filter-container i.fas.fa-filter {
-          margin-right: 5px;
-          /* Garder, mais le 'gap' du parent le gérera mieux */
-          color: #007bff;
+          color: #ff8c42;
+          font-size: 16px;
         }
 
-        /* Nouveaux styles pour la légende */
-        .legend-container {
-          display: flex;
-          justify-content: flex-end;
-          /* Aligne la légende à droite */
-          gap: 15px;
-          /* Espacement entre les éléments de la légende */
-          margin-top: 10px;
-          margin-bottom: 15px;
-          font-size: 12px;
-          padding-right: 10px;
-          /* Petit padding pour l'esthétique */
-        }
-
-        .legend-item {
-          display: flex;
-          align-items: center;
-          gap: 5px;
-        }
-
-        .legend-color {
-          width: 12px;
-          height: 12px;
-          border-radius: 50%;
-          /* Pour un cercle */
-          display: inline-block;
-          border: 1px solid rgba(0, 0, 0, 0.1);
-          /* Petite bordure pour la définition */
-        }
-
-        .in-progress-color {
-          background-color: #f39c12;
-          /* Orange - couleur pour "En cours" */
-        }
-
-        .completed-color {
-          background-color: #2ecc71;
-          /* Vert - couleur pour "Clôturé" */
-        }
-
+        /* Liste de projets moderne */
         .project-list {
           list-style: none;
           padding: 0;
-          overflow-y: auto;
-          margin: 10px 0;
-          /* Optionnel : vous pouvez définir une hauteur maximale si la popup est trop grande
-     max-height: calc(90vh - 200px); */
+          margin: 0;
         }
 
         .project-list li {
-          /* Ancien padding: 6px 8px; */
-          padding: 12px 15px;
-          /* <--- MODIFIÉ : Augmenter le padding pour plus d'espace */
-          border-bottom: 1px solid #eee;
-          /* <--- ANCIEN : Cette ligne sera remplacée par un margin-bottom */
-          cursor: pointer;
-          /* Ancien display: flex; align-items: flex-start; */
           display: flex;
-          /* <--- MODIFIÉ */
           align-items: center;
-          /* <--- MODIFIÉ : Aligner verticalement */
           justify-content: space-between;
-          /* <--- AJOUTÉ : Espacer le titre et le badge de statut */
-          transition: background-color 0.2s ease, box-shadow 0.2s ease, transform 0.2s ease;
-          /* <--- MODIFIÉ : Ajout de transform */
-          font-size: 14px;
-          /* <--- MODIFIÉ : Taille de police légèrement augmentée */
-          border-radius: 6px;
-          /* <--- AJOUTÉ : Bords légèrement arrondis pour un look plus doux */
-          margin-bottom: 8px;
-          /* <--- AJOUTÉ : Espacement entre les éléments de la liste, remplace border-bottom pour l'esthétique */
-          background-color: #fff;
-          /* <--- AJOUTÉ : Fond blanc pour les "cartes" */
-          box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
-          /* <--- AJOUTÉ : Ombre légère */
+          padding: 16px;
+          margin-bottom: 12px;
+          background: white;
+          border-radius: 12px;
+          border: 1px solid rgba(0, 0, 0, 0.06);
+          box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
+          cursor: pointer;
+          transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+          position: relative;
+          overflow: hidden;
         }
 
-        .project-list li:last-child {
-          /* <--- AJOUTÉ : Pour éviter la double bordure ou marge au dernier élément */
-          border-bottom: none;
-          margin-bottom: 0;
+        .project-list li::before {
+          content: '';
+          position: absolute;
+          top: 0;
+          left: -100%;
+          width: 100%;
+          height: 100%;
+          background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.6), transparent);
+          transition: left 0.5s ease;
+        }
+
+        .project-list li:hover::before {
+          left: 100%;
         }
 
         .project-list li:hover {
-          background-color: #f0f0f0;
-          /* <--- MODIFIÉ : Changement de couleur au survol */
-          box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
-          /* <--- MODIFIÉ : Ombre plus prononcée au survol */
           transform: translateY(-2px);
-          /* <--- AJOUTÉ : Léger mouvement vers le haut */
+          box-shadow: 0 6px 20px rgba(0, 0, 0, 0.08);
+          border-color: rgba(255, 140, 66, 0.2);
+        }
+
+        .project-list li:last-child {
+          margin-bottom: 0;
         }
 
         .project-info {
-          /* Conteneur pour le titre, s'il y a d'autres éléments à gauche du badge */
           display: flex;
           align-items: center;
           flex-grow: 1;
-          /* Permet à cette section de prendre l'espace disponible */
         }
-
-        /* Vous pouvez supprimer .status-icon-wrapper si vous utilisez le badge uniquement dans la liste */
-        /* Si vous voulez une icône plus petite dans la liste, mais le badge est suffisant pour le statut visuel
-.status-icon-wrapper {
-    width: 18px;
-    height: 18px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    margin-right: 12px;
-    font-size: 12px;
-}
-*/
-
 
         .project-title {
-          /* Styles pour le titre du projet dans la liste */
-          /* Ancien font-weight: bold; font-size: 13px; */
-          font-weight: 600;
-          /* <--- MODIFIÉ : Plus de gras */
+          font-weight: 700;
           font-size: 14px;
-          /* <--- MODIFIÉ */
-          color: #333;
-          /* <--- AJOUTÉ : Couleur de texte plus foncée */
+          color: #1e293b;
           line-height: 1.4;
-          /* <--- AJOUTÉ : Espacement entre les lignes pour les titres longs */
+          z-index: 1;
+          position: relative;
         }
 
-        /* Styles pour le badge de statut (Nouveau) */
+        /* Badges de statut modernes */
         .status-badge {
-          padding: 4px 8px;
-          border-radius: 15px;
-          /* Forme de pilule */
+          padding: 6px 12px;
+          border-radius: 20px;
           font-size: 11px;
-          font-weight: bold;
+          font-weight: 700;
           text-transform: uppercase;
-          color: #fff;
-          /* Texte blanc */
-          min-width: 70px;
-          /* Largeur minimale pour éviter des variations de taille */
+          color: white;
+          min-width: 80px;
           text-align: center;
           white-space: nowrap;
-          /* Empêche le texte de se casser sur plusieurs lignes */
+          letter-spacing: 0.5px;
+          z-index: 1;
+          position: relative;
         }
 
         .badge-in-progress {
-          background-color: #f39c12;
-          /* Orange pour "En cours" */
+          background: linear-gradient(135deg, #f39c12 0%, #e67e22 100%);
+          box-shadow: 0 2px 8px rgba(243, 156, 18, 0.3);
         }
 
         .badge-completed {
-          background-color: #2ecc71;
-          /* Vert pour "Clôturé" */
+          background: linear-gradient(135deg, #27ae60 0%, #2ecc71 100%);
+          box-shadow: 0 2px 8px rgba(39, 174, 96, 0.3);
         }
 
-        /* Les couleurs des icônes (si vous les gardez quelque part, par exemple dans la vue détail) */
-        .in-progress {
-          color: #f39c12;
-          /* orange */
+        /* Message aucun projet */
+        .no-projects-found {
+          text-align: center;
+          padding: 32px 16px;
+          color: #64748b;
+          font-style: italic;
+          font-size: 14px;
+          background: linear-gradient(135deg, #f8fafc 0%, #e2e8f0 100%);
+          border-radius: 12px;
+          border: 1px solid rgba(0, 0, 0, 0.06);
         }
 
-        .completed {
-          color: #2ecc71;
-          /* vert */
+        /* Vue détail du projet */
+        #project-detail-view {
+          padding: 16px;
+          max-height: calc(100vh - 265px);
+          overflow-y: auto;
         }
 
-        /* Anciens .status-icon-wrapper, .project-title, .in-progress, .completed seront modifiés ou supprimés */
-        .status-icon-wrapper {
-          width: 24px;
-          margin-top: 3px;
-          margin-right: 8px;
+        #project-detail-view::-webkit-scrollbar {
+          width: 4px;
         }
 
-        .project-title {
-          font-weight: bold;
-          font-size: 13px;
+        #project-detail-view::-webkit-scrollbar-track {
+          background: rgba(0, 0, 0, 0.05);
+          border-radius: 2px;
         }
 
+        #project-detail-view::-webkit-scrollbar-thumb {
+          background: linear-gradient(135deg, #ff8c42, #ffab73);
+          border-radius: 2px;
+        }
 
+        /* Bouton retour */
         .back-btn {
-          background: none;
-          border: none;
+          background: linear-gradient(135deg, #f8fafc 0%, #e2e8f0 100%);
+          border: 1px solid rgba(0, 0, 0, 0.1);
+          padding: 10px 16px;
+          border-radius: 10px;
           font-size: 13px;
-          margin-bottom: 10px;
+          font-weight: 600;
+          color: #475569;
           cursor: pointer;
-          color: #007bff;
           display: flex;
           align-items: center;
-          gap: 5px;
+          gap: 8px;
+          margin-bottom: 20px;
+          transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
         }
 
         .back-btn:hover {
-          text-decoration: underline;
+          background: linear-gradient(135deg, #e2e8f0 0%, #cbd5e1 100%);
+          transform: translateX(-2px);
+          color: #ff8c42;
         }
 
-        #project-detail-view {
-          max-height: 500px;
-          overflow-y: auto;
-          padding-right: 5px;
+        .back-btn i {
+          font-size: 12px;
         }
 
+        /* Titre du projet en détail */
+        .project-title {
+          font-size: 18px;
+          font-weight: 700;
+          color: #1e293b;
+          margin-bottom: 24px;
+          text-align: center;
+          position: relative;
+        }
+
+        .project-title::after {
+          content: '';
+          position: absolute;
+          bottom: -8px;
+          left: 50%;
+          transform: translateX(-50%);
+          width: 60px;
+          height: 3px;
+          background: linear-gradient(90deg, #ff8c42, #ffab73);
+          border-radius: 2px;
+        }
+
+        /* Sections du projet */
         .project-section {
           display: flex;
           align-items: flex-start;
-          margin-bottom: 10px;
-          font-size: 13px;
-          gap: 10px;
+          gap: 12px;
+          margin-bottom: 20px;
+          background: white;
+          padding: 16px;
+          border-radius: 12px;
+          border: 1px solid rgba(0, 0, 0, 0.06);
+          box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
+          transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .project-section:hover {
+          transform: translateY(-1px);
+          box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
         }
 
         .project-section i {
@@ -2640,129 +2857,166 @@
           width: 36px;
           height: 36px;
           border-radius: 50%;
-          font-size: 20px;
+          font-size: 16px;
           color: white;
           display: flex;
           justify-content: center;
           align-items: center;
+          box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
         }
 
+        /* Couleurs des icônes de section */
         .project-section i.fa-tag {
-          background-color: #f39c12;
+          background: linear-gradient(135deg, #f39c12, #e67e22);
         }
 
         .project-section i.fa-calendar-alt,
         .project-section i.fa-calendar-check {
-          background-color: #2980b9;
+          background: linear-gradient(135deg, #3498db, #2980b9);
         }
 
         .project-section i.fa-money-bill-wave {
-          background-color: #e74c3c;
+          background: linear-gradient(135deg, #e74c3c, #c0392b);
         }
 
         .project-section i.fa-handshake {
-          background-color: #8e44ad;
+          background: linear-gradient(135deg, #9b59b6, #8e44ad);
         }
 
         .project-section i.fa-bullseye {
-          background-color: #27ae60;
+          background: linear-gradient(135deg, #27ae60, #2ecc71);
         }
 
         .project-section i.fa-users {
-          background-color: #f1c40f;
-          color: black;
+          background: linear-gradient(135deg, #f1c40f, #f39c12);
+          color: #2c3e50;
         }
 
         .project-section i.fa-map-marker-alt {
-          background-color: #1abc9c;
+          background: linear-gradient(135deg, #1abc9c, #16a085);
         }
 
         .project-section i.fa-info-circle {
-          background-color: #3498db;
+          background: linear-gradient(135deg, #3498db, #2980b9);
         }
 
         .project-section i.fa-award {
-          background-color: #9b59b6;
+          background: linear-gradient(135deg, #9b59b6, #8e44ad);
         }
 
         .project-section i.fa-images {
-          background-color: #34495e;
+          background: linear-gradient(135deg, #34495e, #2c3e50);
         }
 
+        .project-section span {
+          flex-grow: 1;
+          font-size: 13px;
+          line-height: 1.5;
+          color: #475569;
+        }
+
+        .project-section strong {
+          font-weight: 700;
+          color: #1e293b;
+          margin-right: 8px;
+        }
+
+        /* Listes dans les sections */
         .project-section ul {
-          margin: 5px 0 0 15px;
-          padding: 0;
+          margin: 8px 0 0 0;
+          padding-left: 20px;
           list-style-type: disc;
         }
 
+        .project-section li {
+          margin-bottom: 4px;
+          font-size: 13px;
+          color: #475569;
+          line-height: 1.4;
+        }
+
+        /* Dates du projet en grid */
+        .project-dates {
+          display: grid;
+          grid-template-columns: 1fr 1fr;
+          gap: 12px;
+          background: none;
+          padding: 0;
+          box-shadow: none;
+          border: none;
+        }
+
+        .project-dates .project-section {
+          margin-bottom: 0;
+        }
+
+        /* Container des sites avec checkbox */
         .sites-container {
           display: flex;
           flex-direction: column;
-          gap: 5px;
+          gap: 12px;
         }
 
         .zoom-checkbox {
           display: flex;
           align-items: center;
-          gap: 5px;
+          gap: 8px;
           font-size: 12px;
+          font-weight: 600;
           cursor: pointer;
-          margin-top: 5px;
-          color: #555;
+          color: #475569;
+          background: linear-gradient(135deg, #f8fafc 0%, #e2e8f0 100%);
+          padding: 8px 12px;
+          border-radius: 8px;
+          border: 1px solid rgba(0, 0, 0, 0.06);
+          transition: all 0.2s ease;
+        }
+
+        .zoom-checkbox:hover {
+          color: #ff8c42;
+          border-color: rgba(255, 140, 66, 0.3);
+          background: linear-gradient(135deg, #fff7ed 0%, #fed7aa 100%);
         }
 
         .zoom-checkbox input {
           cursor: pointer;
+          transform: scale(1.1);
         }
 
-        .zoom-checkbox:hover {
-          color: #007bff;
-        }
-
-        .project-photos {
-          margin-top: 10px;
-        }
-
+        /* Galerie de photos moderne */
         .photo-gallery {
           display: grid;
           grid-template-columns: repeat(auto-fill, minmax(100px, 1fr));
-          gap: 8px;
-          margin-top: 6px;
+          gap: 12px;
+          margin-top: 12px;
         }
 
         .project-photo {
           width: 100%;
           height: 80px;
           object-fit: cover;
-          border-radius: 4px;
-          box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-          transition: transform 0.2s ease;
+          border-radius: 8px;
+          box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+          transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+          cursor: pointer;
         }
 
         .project-photo:hover {
           transform: scale(1.05);
+          box-shadow: 0 4px 16px rgba(0, 0, 0, 0.15);
         }
 
-        .project-dates {
-          display: flex;
-          justify-content: space-between;
-          gap: 15px;
+        /* État collapsed - seule les vues sont affectées */
+        #base-projects-popup.collapsed {
+          max-height: 50px;
         }
 
-        .project-dates .project-section {
-          flex: 1;
+        #base-projects-popup.collapsed #project-list-view,
+        #base-projects-popup.collapsed #project-detail-view {
+          display: none !important;
         }
 
-        .in-progress {
-          color: #f39c12;
-          /* orange */
-        }
-
-        .completed {
-          color: #2ecc71;
-          /* vert */
-        }
-
+        /* Modal d'image moderne */
         .image-modal {
           display: flex;
           justify-content: center;
@@ -2773,7 +3027,9 @@
           top: 0;
           width: 100%;
           height: 100%;
-          background-color: rgba(0, 0, 0, 0.9);
+          background: rgba(0, 0, 0, 0.9);
+          backdrop-filter: blur(8px);
+          animation: fadeIn 0.3s ease-out;
         }
 
         .modal-content-container {
@@ -2792,25 +3048,8 @@
         .modal-content {
           max-width: 100%;
           max-height: 80vh;
-          border-radius: 6px;
-          box-shadow: 0 0 15px rgba(255, 255, 255, 0.3);
-        }
-
-        .image-modal.hidden {
-          display: none;
-        }
-
-        .slider-container {
-          position: relative;
-          max-width: 90%;
-          max-height: 90%;
-        }
-
-        .modal-content {
-          width: 100%;
-          height: auto;
-          border-radius: 6px;
-          box-shadow: 0 0 15px rgba(255, 255, 255, 0.3);
+          border-radius: 12px;
+          box-shadow: 0 0 30px rgba(255, 255, 255, 0.3);
           animation: zoomIn 0.3s ease-out forwards;
         }
 
@@ -2823,39 +3062,192 @@
           font-weight: bold;
           cursor: pointer;
           z-index: 10;
+          transition: all 0.2s ease;
+        }
+
+        .close-modal:hover {
+          color: #ff8c42;
+          transform: scale(1.1);
         }
 
         .slider-nav {
-          background-color: rgba(255, 255, 255, 0.2);
-          border: none;
+          background: rgba(255, 255, 255, 0.2);
+          backdrop-filter: blur(10px);
+          border: 1px solid rgba(255, 255, 255, 0.3);
           color: white;
-          font-size: 40px;
-          padding: 15px;
+          font-size: 24px;
+          padding: 12px;
           cursor: pointer;
-          z-index: 10;
-          user-select: none;
           border-radius: 50%;
-          width: 60px;
-          height: 60px;
+          width: 50px;
+          height: 50px;
           display: flex;
           align-items: center;
           justify-content: center;
-          margin: 0 20px;
-          transition: background-color 0.3s;
-        }
-
-        #prev-slide {
-          left: 50px;
-        }
-
-        #next-slide {
-          right: 50px;
+          margin: 0 15px;
+          transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
         }
 
         .slider-nav:hover {
-          background-color: rgba(255, 255, 255, 0.4);
+          background: rgba(255, 140, 66, 0.8);
+          transform: scale(1.1);
+          box-shadow: 0 4px 16px rgba(255, 140, 66, 0.4);
         }
 
+        .image-modal.hidden {
+          display: none;
+        }
+
+        /* Responsive design */
+        @media (max-width: 768px) {
+          #base-projects-popup {
+            top: 85px;
+            right: 3%;
+            left: 3%;
+            bottom: 70px;
+            width: auto;
+            max-height: calc(100vh - 155px);
+          }
+
+          #base-popup-header {
+            padding: 8px 12px;
+            min-height: 44px;
+          }
+
+          #base-name {
+            font-size: 15px;
+          }
+
+          #base-projects-popup .popup-toggle-btn,
+          #base-popup-close-btn {
+            width: 28px;
+            height: 28px;
+            font-size: 12px;
+          }
+
+          #project-list-view,
+          #project-detail-view {
+            padding: 12px;
+            max-height: calc(100vh - 199px);
+          }
+
+          .filter-container {
+            padding: 10px 12px;
+            gap: 8px;
+          }
+
+          .project-list li {
+            padding: 12px;
+            margin-bottom: 8px;
+          }
+
+          .project-title {
+            font-size: 13px;
+          }
+
+          .project-section {
+            padding: 12px;
+            gap: 10px;
+          }
+
+          .project-section i {
+            width: 32px;
+            height: 32px;
+            font-size: 14px;
+          }
+
+          .project-dates {
+            grid-template-columns: 1fr;
+            gap: 8px;
+          }
+
+          .photo-gallery {
+            grid-template-columns: repeat(auto-fill, minmax(80px, 1fr));
+            gap: 8px;
+          }
+
+          .project-photo {
+            height: 60px;
+          }
+
+          #base-projects-popup.collapsed {
+            max-height: 44px;
+          }
+        }
+
+        @media (max-width: 480px) {
+          #base-projects-popup {
+            top: 80px;
+            right: 2%;
+            left: 2%;
+            bottom: 60px;
+            max-height: calc(100vh - 140px);
+          }
+
+          #base-popup-header {
+            padding: 6px 10px;
+            min-height: 40px;
+          }
+
+          #base-name {
+            font-size: 14px;
+          }
+
+          #base-projects-popup .popup-toggle-btn,
+          #base-popup-close-btn {
+            width: 26px;
+            height: 26px;
+            font-size: 11px;
+          }
+
+          #project-list-view,
+          #project-detail-view {
+            padding: 10px;
+            max-height: calc(100vh - 180px);
+          }
+
+          .filter-container {
+            padding: 8px 10px;
+            gap: 6px;
+          }
+
+          .project-list li {
+            padding: 10px;
+            margin-bottom: 6px;
+          }
+
+          .project-title {
+            font-size: 12px;
+          }
+
+          .status-badge {
+            padding: 4px 8px;
+            font-size: 10px;
+            min-width: 70px;
+          }
+
+          .project-section {
+            padding: 10px;
+            gap: 8px;
+          }
+
+          .project-section i {
+            width: 28px;
+            height: 28px;
+            font-size: 12px;
+          }
+
+          .back-btn {
+            padding: 8px 12px;
+            font-size: 12px;
+          }
+
+          #base-projects-popup.collapsed {
+            max-height: 40px;
+          }
+        }
+
+        /* Animations */
         @keyframes fadeIn {
           from {
             background-color: rgba(0, 0, 0, 0);
@@ -2878,202 +3270,451 @@
           }
         }
 
-        /* Base styling for the layer switcher */
-        .layer-switcher {
+        /* Animation d'entrée des éléments */
+        @keyframes fadeInUp {
+          from {
+            opacity: 0;
+            transform: translateY(10px);
+          }
+
+          to {
+            opacity: 1;
+            transform: translateY(0);
+          }
+        }
+
+        .project-list li {
+          animation: fadeInUp 0.3s cubic-bezier(0.4, 0, 0.2, 1) forwards;
+        }
+
+        .project-list li:nth-child(1) {
+          animation-delay: 0.05s;
+        }
+
+        .project-list li:nth-child(2) {
+          animation-delay: 0.1s;
+        }
+
+        .project-list li:nth-child(3) {
+          animation-delay: 0.15s;
+        }
+
+        .project-list li:nth-child(4) {
+          animation-delay: 0.2s;
+        }
+
+        .project-list li:nth-child(5) {
+          animation-delay: 0.25s;
+        }
+
+        /* Container principal du layer switcher moderne */
+        #custom-layer-switcher {
           position: absolute;
-          bottom: 50px;
-          /* Légèrement décalé du bas */
-          right: 20px;
-          /* Légèrement décalé de la droite */
-          background-color: rgba(255, 255, 255, 0.95);
-          /* Fond plus opaque */
-          border-radius: 8px;
-          /* Bords légèrement arrondis pour le conteneur */
-          box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
-          /* Ombre plus prononcée */
+          bottom: 60px;
+          right: 24px;
+          background: rgba(255, 255, 255, 0.95);
+          backdrop-filter: blur(20px);
+          -webkit-backdrop-filter: blur(20px);
+          border-radius: 20px;
+          box-shadow: 0 12px 40px rgba(0, 0, 0, 0.08),
+            0 4px 16px rgba(0, 0, 0, 0.04);
+          border: 1px solid rgba(255, 255, 255, 0.2);
           overflow: hidden;
-          /* Cache le contenu qui dépasse */
-          width: 50px;
-          /* Taille initiale légèrement plus grande */
-          height: 50px;
-          /* Taille initiale légèrement plus grande */
-          transition: all 0.3s ease-in-out;
-          /* Transition pour toutes les propriétés */
+          width: 56px;
+          height: 56px;
+          transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
           z-index: 900;
-          /* Assurez-vous qu'il est au-dessus de la carte mais en dessous de la popup principale */
           display: flex;
-          /* Utilise flexbox pour centrer le contenu initial */
           justify-content: center;
           align-items: center;
           flex-direction: column;
-          /* Pour empiler icône et options */
         }
 
-        /* Collapsed state (initial) */
-        .layer-switcher.collapsed {
-          width: 50px;
-          height: 50px;
+        #custom-layer-switcher:hover {
+          transform: translateY(-2px);
+          box-shadow: 0 16px 48px rgba(0, 0, 0, 0.12),
+            0 6px 20px rgba(0, 0, 0, 0.06);
+        }
+
+        /* État collapsed (initial) - Bouton circulaire moderne */
+        #custom-layer-switcher.collapsed {
+          width: 56px;
+          height: 56px;
           border-radius: 50%;
-
-          /* Rendre le bouton circulaire en mode collapsed */
-          /* Cacher les options lorsque c'est collapsed */
-          .layer-options {
-            display: none;
-          }
-
-          /* Afficher l'icône du switcher */
-          .switcher-icon-circle {
-            display: flex;
-          }
+          cursor: pointer;
         }
 
-        /* Expanded state (when not collapsed) */
-        .layer-switcher:not(.collapsed) {
+        #custom-layer-switcher.collapsed .layer-options {
+          display: none;
+        }
+
+        #custom-layer-switcher.collapsed .switcher-icon-circle {
+          display: flex;
+          width: 100%;
+          height: 100%;
+        }
+
+        /* État expanded - Panel moderne */
+        #custom-layer-switcher:not(.collapsed) {
           width: auto;
-          /* Laisser la largeur s'adapter au contenu */
+          min-width: 200px;
           height: auto;
-          /* Laisser la hauteur s'adapter au contenu */
-          border-radius: 8px;
-          /* Remettre les bords arrondis pour le mode étendu */
-          padding: 10px;
-          /* Ajouter un padding pour l'espace intérieur */
-          align-items: flex-start;
-          /* Aligner les options au début */
-
-          /* Cacher l'icône du switcher en mode étendu */
-          .switcher-icon-circle {
-            display: none;
-          }
-
-          /* Afficher les options */
-          .layer-options {
-            display: flex;
-            flex-direction: column;
-            width: 100%;
-            /* Les options prennent toute la largeur disponible */
-          }
+          border-radius: 20px;
+          padding: 16px;
+          align-items: stretch;
         }
 
+        #custom-layer-switcher:not(.collapsed) .switcher-icon-circle {
+          display: none;
+        }
 
-        /* Styling for the main switcher icon (the circle) */
+        #custom-layer-switcher:not(.collapsed) .layer-options {
+          display: flex;
+          flex-direction: column;
+          width: 100%;
+        }
+
+        /* Icône principale avec effet moderne */
         .switcher-icon-circle {
           width: 100%;
-          /* Occupe toute la largeur du conteneur parent */
           height: 100%;
-          /* Occupe toute la hauteur du conteneur parent */
           display: flex;
           justify-content: center;
           align-items: center;
           cursor: pointer;
           overflow: hidden;
-          /* Cache tout ce qui dépasse du cercle */
+          position: relative;
+        }
+
+        .switcher-icon-circle::before {
+          content: '';
+          position: absolute;
+          top: 0;
+          left: -100%;
+          width: 100%;
+          height: 100%;
+          background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.6), transparent);
+          transition: left 0.5s ease;
+        }
+
+        .switcher-icon-circle:hover::before {
+          left: 100%;
         }
 
         .switcher-icon-circle img {
-          max-width: 90%;
-          /* Légèrement plus petit pour une marge */
-          max-height: 90%;
-          width: auto;
-          height: auto;
-          object-fit: contain;
+          width: 32px;
+          height: 32px;
+          object-fit: cover;
           border-radius: 50%;
-          /* S'assurer que l'image elle-même est circulaire */
-          border: 1px solid rgba(0, 0, 0, 0.1);
-          /* Petite bordure */
+          border: 2px solid rgba(229, 91, 0, 0.2);
+          transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
         }
 
-        /* Styling for the layer options container */
+        .switcher-icon-circle:hover img {
+          transform: scale(1.1) rotate(5deg);
+          border-color: #e55b00;
+          box-shadow: 0 4px 12px rgba(229, 91, 0, 0.3);
+        }
+
+        /* Container des options avec header */
         .layer-options {
-          /* display: none; sera contrôlé par .layer-switcher:not(.collapsed) */
           flex-direction: column;
-          /* Empile les options verticalement */
-          gap: 8px;
-          /* Espacement entre les options */
-          /* padding: 10px; Le padding sera sur .layer-switcher:not(.collapsed) */
+          gap: 12px;
           width: 100%;
-          /* S'adaptera au parent */
         }
 
-        /* Styling for each layer option */
+        .layer-options::before {
+          content: 'Fonds de carte';
+          font-size: 14px;
+          font-weight: 700;
+          color: #475569;
+          margin-bottom: 8px;
+          text-align: center;
+          letter-spacing: 0.5px;
+          text-transform: uppercase;
+        }
+
+        /* Options de layer modernes avec images de fond */
         .layer-option {
           position: relative;
           display: flex;
           align-items: center;
-          /* Aligner l'image et le texte */
-          gap: 10px;
-          /* Espacement entre l'image et le texte */
+          gap: 12px;
           cursor: pointer;
-          transition: background-color 0.2s ease, box-shadow 0.2s ease, transform 0.2s ease;
-          padding: 8px;
-          /* Padding pour la zone de clic */
-          border-radius: 6px;
-          /* Bords arrondis pour chaque option */
+          transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+          padding: 12px;
+          border-radius: 12px;
           width: 100%;
-          /* L'option prend toute la largeur disponible */
-          background-color: #fff;
-          /* Fond blanc pour les options */
-          box-shadow: 0 1px 3px rgba(0, 0, 0, 0.08);
-          /* Ombre légère */
+          background: #ffffff;
+          border: 1px solid rgba(0, 0, 0, 0.06);
+          box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
+          overflow: hidden;
         }
 
+        /* Effet de brillance au survol */
+        .layer-option::before {
+          content: '';
+          position: absolute;
+          top: 0;
+          left: -100%;
+          width: 100%;
+          height: 100%;
+          background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.6), transparent);
+          transition: left 0.5s ease;
+          z-index: 1;
+        }
+
+        .layer-option:hover::before {
+          left: 100%;
+        }
+
+        /* État actif moderne */
         .layer-option.active {
-          /* Style pour l'option actuellement sélectionnée */
-          background-color: #e55b00;
-          /* Couleur d'accentuation */
-          color: white;
-          box-shadow: 0 2px 6px rgba(0, 0, 0, 0.2);
+          background: linear-gradient(135deg, rgba(229, 91, 0, 0.08) 0%, rgba(255, 119, 48, 0.12) 100%);
+          border-color: rgba(229, 91, 0, 0.3);
+          box-shadow: 0 4px 16px rgba(229, 91, 0, 0.15);
+          transform: translateX(4px);
+        }
+
+        .layer-option.active::after {
+          content: '';
+          position: absolute;
+          left: 0;
+          top: 0;
+          bottom: 0;
+          width: 4px;
+          background: linear-gradient(135deg, #e55b00, #ff7730);
+          border-radius: 0 12px 12px 0;
+        }
+
+        /* Images des options avec fond spécifique */
+        .layer-option img {
+          width: 48px;
+          height: 48px;
+          object-fit: cover;
+          border-radius: 8px;
+          border: 1px solid rgba(0, 0, 0, 0.1);
+          transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+          z-index: 2;
+          position: relative;
+        }
+
+        /* Image OSM avec pattern de carte */
+        .layer-option[data-layer-name="OSM"] img {
+          background-image:
+            linear-gradient(45deg, #f8f9fa 25%, transparent 25%),
+            linear-gradient(-45deg, #f8f9fa 25%, transparent 25%),
+            linear-gradient(45deg, transparent 75%, #f8f9fa 75%),
+            linear-gradient(-45deg, transparent 75%, #f8f9fa 75%);
+          background-size: 8px 8px;
+          background-position: 0 0, 0 4px, 4px -4px, -4px 0px;
+          background-color: #e9ecef;
+        }
+
+        /* Image Satellite avec pattern étoilé */
+        .layer-option[data-layer-name="Satellite"] img {
+          background:
+            radial-gradient(circle at 20% 20%, rgba(255, 255, 255, 0.3) 1px, transparent 1px),
+            radial-gradient(circle at 80% 40%, rgba(255, 255, 255, 0.2) 1px, transparent 1px),
+            radial-gradient(circle at 40% 80%, rgba(255, 255, 255, 0.3) 1px, transparent 1px),
+            linear-gradient(135deg, #1a472a 0%, #2d5a3d 50%, #1a472a 100%);
+          background-size: 20px 20px, 24px 24px, 16px 16px, 100% 100%;
+        }
+
+        /* Texte des options */
+        .layer-option span {
+          font-size: 14px;
+          font-weight: 600;
+          color: #475569;
+          flex-grow: 1;
+          z-index: 2;
+          position: relative;
+          transition: color 0.3s cubic-bezier(0.4, 0, 0.2, 1);
         }
 
         .layer-option.active span {
-          color: white;
-          /* Texte blanc pour le statut actif */
+          color: #e55b00;
         }
 
-        .layer-option.active img {
-          border-color: rgba(255, 255, 255, 0.5);
-          /* Bordure claire pour l'image active */
-        }
-
-
-        /* Styling for the images within layer options (thumbnails) */
-        .layer-option img {
-          width: 40px;
-          /* Taille de la vignette */
-          height: 40px;
-          /* Taille de la vignette */
-          object-fit: cover;
-          /* Assure que l'image couvre l'espace */
-          border-radius: 4px;
-          /* Bords légèrement arrondis pour les vignettes */
-          border: 1px solid rgba(0, 0, 0, 0.1);
-        }
-
-        /* Styling for the spans (text label) */
-        .layer-option span {
-          font-size: 13px;
-          font-weight: 500;
-          color: #333;
-          /* Couleur de texte sombre */
-          flex-grow: 1;
-          /* Permet au texte de prendre l'espace restant */
-        }
-
-        /* Hover effect on the entire option */
+        /* Effets de survol */
         .layer-option:hover {
-          background-color: #f0f0f0;
-          /* Changement de couleur au survol */
-          box-shadow: 0px 2px 6px rgba(0, 0, 0, 0.1);
-          /* Ombre plus prononcée au survol */
-          transform: translateY(-2px);
-          /* Léger mouvement vers le haut */
+          background: linear-gradient(135deg, #f8fafc 0%, #f1f5f9 100%);
+          border-color: rgba(229, 91, 0, 0.2);
+          box-shadow: 0 6px 20px rgba(0, 0, 0, 0.08);
+          transform: translateY(-2px) translateX(4px);
         }
 
-        .layer-option::after {
-          /* Supprimez cette règle si vous n'avez plus besoin du trait animé */
-          content: none;
+        .layer-option:hover img {
+          transform: scale(1.05);
+          border-color: rgba(229, 91, 0, 0.3);
         }
 
-        .layer-option:hover::after {
-          /* Supprimez cette règle */
-          content: none;
+        .layer-option:hover span {
+          color: #e55b00;
+        }
+
+        /* Animation d'entrée */
+        @keyframes slideInFromBottom {
+          from {
+            opacity: 0;
+            transform: translateY(40px);
+          }
+
+          to {
+            opacity: 1;
+            transform: translateY(0);
+          }
+        }
+
+        #custom-layer-switcher {
+          animation: slideInFromBottom 0.6s cubic-bezier(0.4, 0, 0.2, 1) 0.5s both;
+        }
+
+        /* Responsive design */
+        @media (max-width: 768px) {
+          #custom-layer-switcher {
+            right: 16px;
+            bottom: 70px;
+            width: 48px;
+            height: 48px;
+          }
+
+          #custom-layer-switcher.collapsed {
+            width: 48px;
+            height: 48px;
+          }
+
+          #custom-layer-switcher:not(.collapsed) {
+            min-width: 180px;
+            padding: 12px;
+          }
+
+          .switcher-icon-circle img {
+            width: 28px;
+            height: 28px;
+          }
+
+          .layer-option {
+            padding: 10px;
+            gap: 10px;
+          }
+
+          .layer-option img {
+            width: 40px;
+            height: 40px;
+          }
+
+          .layer-option span {
+            font-size: 13px;
+          }
+
+          .layer-options::before {
+            font-size: 12px;
+            margin-bottom: 6px;
+          }
+        }
+
+        @media (max-width: 480px) {
+          #custom-layer-switcher {
+            right: 12px;
+            bottom: 60px;
+            width: 44px;
+            height: 44px;
+          }
+
+          #custom-layer-switcher.collapsed {
+            width: 44px;
+            height: 44px;
+          }
+
+          #custom-layer-switcher:not(.collapsed) {
+            min-width: 160px;
+            padding: 10px;
+          }
+
+          .switcher-icon-circle img {
+            width: 24px;
+            height: 24px;
+          }
+
+          .layer-option {
+            padding: 8px;
+            gap: 8px;
+            border-radius: 10px;
+          }
+
+          .layer-option img {
+            width: 36px;
+            height: 36px;
+          }
+
+          .layer-option span {
+            font-size: 12px;
+          }
+
+          .layer-options::before {
+            font-size: 11px;
+            margin-bottom: 4px;
+          }
+        }
+
+        /* États de focus pour l'accessibilité */
+        #custom-layer-switcher.collapsed:focus-visible {
+          outline: 2px solid #e55b00;
+          outline-offset: 2px;
+        }
+
+        .layer-option:focus-visible {
+          outline: 2px solid #e55b00;
+          outline-offset: 2px;
+        }
+
+        /* Animation lors du changement de layer */
+        .layer-option.switching {
+          pointer-events: none;
+          opacity: 0.7;
+        }
+
+        .layer-option.switching img {
+          animation: switching-pulse 1s ease-in-out infinite;
+        }
+
+        @keyframes switching-pulse {
+
+          0%,
+          100% {
+            opacity: 1;
+            transform: scale(1);
+          }
+
+          50% {
+            opacity: 0.7;
+            transform: scale(1.05);
+          }
+        }
+
+        /* Indicateur de connection/chargement */
+        .layer-option.loading::after {
+          content: '';
+          position: absolute;
+          top: 8px;
+          right: 8px;
+          width: 8px;
+          height: 8px;
+          background: #e55b00;
+          border-radius: 50%;
+          animation: loading-blink 1.5s ease-in-out infinite;
+          z-index: 3;
+        }
+
+        @keyframes loading-blink {
+
+          0%,
+          100% {
+            opacity: 1;
+          }
+
+          50% {
+            opacity: 0.3;
+          }
         }

@@ -44,7 +44,7 @@ document.addEventListener('DOMContentLoaded', function () {
   };
 
   // Démarrer le chargement après un petit délai
-  setTimeout(updateProgress, 1200);
+  setTimeout(updateProgress, 1500);
 });
 
 // Toggle de la barre de recherche
@@ -1260,6 +1260,8 @@ function zoomToFeature(featureElement, layerName, attributeName) {
   });
 }
 
+
+
 const baseProjectsCache = {}; // Cache pour les données chargées
 let currentBaseProjects = [];
 let currentBaseProjectIndex = 0;
@@ -1290,6 +1292,34 @@ function showBaseProjectsPopup(baseFeature) {
 // Nouveaux états
 let filteredProjects = [];
 let viewMode = 'list'; // 'list' ou 'detail'
+
+// AJOUTER CES FONCTIONS APRÈS LA LIGNE: let viewMode = 'list';
+
+// Fonction pour afficher uniquement la vue liste
+function showListView() {
+  viewMode = 'list';
+  const listView = document.getElementById('project-list-view');
+  const detailView = document.getElementById('project-detail-view');
+  
+  listView.classList.remove('hidden');
+  listView.style.display = 'block';
+  
+  detailView.classList.add('hidden');  
+  detailView.style.display = 'none';
+}
+
+// Fonction pour afficher uniquement la vue détail
+function showDetailView() {
+  viewMode = 'detail';
+  const listView = document.getElementById('project-list-view');
+  const detailView = document.getElementById('project-detail-view');
+  
+  listView.classList.add('hidden');
+  listView.style.display = 'none';
+  
+  detailView.classList.remove('hidden');
+  detailView.style.display = 'block';
+}
 
 // Récupération des éléments
 const statusFilter = document.getElementById('status-filter');
@@ -1483,13 +1513,10 @@ function showErrorToast(message) {
   alert(message);
 }
 // Bascule vers la vue détail
+// REMPLACER VOTRE FONCTION showProjectDetail PAR CELLE-CI:
 function showProjectDetail(index) {
-  viewMode = 'detail';
-  listView.classList.add('hidden');
-  detailView.classList.remove('hidden');
-
-
-
+  showDetailView(); // Basculer vers la vue détail uniquement
+  
   const p = filteredProjects[index];
   initZoomCheckbox(p.id_projet);
   detailName.textContent = p.nom_projet;
@@ -1505,29 +1532,6 @@ function showProjectDetail(index) {
   fillList(detailTarget, p.cible);
   fillList(detailAchievements, p.realisations);
   fillPhotoGallery(p);
-
-  function fillPhotoGallery(p) {
-    const gallery = document.getElementById('project-photo-gallery');
-    gallery.innerHTML = '';
-
-    currentPhotos = [p.photo1, p.photo2, p.photo3, p.photo4].filter(url => url && url.trim() !== '');
-
-    if (!currentPhotos.length) {
-      gallery.innerHTML = '<em>Aucune photo disponible.</em>';
-      return;
-    }
-
-    currentPhotos.forEach((url, idx) => {
-      const img = document.createElement('img');
-      img.src = url;
-      img.alt = `Photo ${idx + 1}`;
-      img.className = 'project-photo';
-      img.addEventListener('click', () => openImageSlider(idx));
-      gallery.appendChild(img);
-    });
-  }
-
-
 }
 
 // Nouvelle fonction d'initialisation
@@ -1591,56 +1595,64 @@ function fillList(ulEl, text) {
   });
 }
 
+// AJOUTER CETTE FONCTION POUR LE BOUTON TOGGLE:
+function toggleBaseProjectsPopup() {
+  const popupContainer = document.getElementById("base-projects-popup");
+  const toggleIcon = document.getElementById("base-toggle-icon"); // ← Changé ici
+
+  popupContainer.classList.toggle("collapsed");
+
+  if (popupContainer.classList.contains("collapsed")) {
+    toggleIcon.classList.remove("fas", "fa-chevron-up");
+    toggleIcon.classList.add("fas", "fa-chevron-down");
+  } else {
+    toggleIcon.classList.remove("fas", "fa-chevron-down");
+    toggleIcon.classList.add("fas", "fa-chevron-up");
+  }
+}
+
+// AJOUTER L'ÉVÉNEMENT AU BOUTON TOGGLE:
+document.getElementById("base-popup-toggle-btn").addEventListener("click", toggleBaseProjectsPopup);
 // Bouton Retour
+// REMPLACER VOTRE CODE: backBtn.addEventListener('click', () => {
 backBtn.addEventListener('click', () => {
-  viewMode = 'list';
-  detailView.classList.add('hidden');
-  listView.classList.remove('hidden');
+  showListView(); // Retourner à la vue liste uniquement
+  
+  // Réinitialiser la checkbox de zoom
+  const zoomCheckbox = document.getElementById('zoom-to-sites');
+  if (zoomCheckbox) {
+    zoomCheckbox.checked = false;
+    resetSitesHighlight();
+  }
 });
 
 // On intègre tout ça dans displayPopup()
 // On intègre tout ça dans displayPopup()
+// REMPLACER VOTRE FONCTION displayPopup PAR CELLE-CI:
 function displayPopup(baseName) {
-  if (!currentBaseProjects.length) {
-    // Optionnel: si pas de projets, vous pourriez vouloir afficher un message spécifique
-    document.getElementById("base-name").textContent = baseName;
-    const basePopup = document.getElementById("base-projects-popup");
-    basePopup.style.display = "block";
-    setTimeout(() => (basePopup.style.opacity = 1), 10);
-    projectListEl.innerHTML = '<li class="no-projects-found">Aucun projet trouvé pour cette base.</li>'; // Message si la base n'a pas de projets
-    listView.classList.remove('hidden'); // Assurez-vous que la vue liste est visible
-    detailView.classList.add('hidden');   // Cachez la vue détail
-    // Réinitialiser la checkbox de zoom également si elle est visible
-    const zoomCheckbox = document.getElementById('zoom-to-sites');
-    if (zoomCheckbox) {
-      zoomCheckbox.checked = false;
-      resetSitesHighlight();
-    }
-    return;
-  }
-
   document.getElementById("base-name").textContent = baseName;
-  currentBaseProjectIndex = 0;
-
+  
   const basePopup = document.getElementById("base-projects-popup");
   basePopup.style.display = "block";
   setTimeout(() => (basePopup.style.opacity = 1), 10);
 
-  // --- AJOUT IMPORTANT ICI ---
-  // S'assurer que la vue liste est affichée et la vue détail masquée
-  listView.classList.remove('hidden');
-  detailView.classList.add('hidden');
-
-  // Réinitialiser la checkbox de zoom également
+  // TOUJOURS commencer par la vue liste
+  showListView();
+  
+  // Réinitialiser la checkbox de zoom
   const zoomCheckbox = document.getElementById('zoom-to-sites');
-  if (zoomCheckbox) { // Vérifie que la checkbox existe
-    zoomCheckbox.checked = false; // Décocher la checkbox
-    resetSitesHighlight(); // Supprimer la surbrillance des sites sur la carte
+  if (zoomCheckbox) {
+    zoomCheckbox.checked = false;
+    resetSitesHighlight();
   }
-  // --- FIN DE L'AJOUT IMPORTANT ---
 
-  applyFilter();      // initialise filteredProjects
-  renderProjectList(); // affiche la liste
+  if (!currentBaseProjects.length) {
+    projectListEl.innerHTML = '<li class="no-projects-found">Aucun projet trouvé pour cette base.</li>';
+    return;
+  }
+
+  applyFilter();
+  renderProjectList();
 }
 
 
@@ -1656,29 +1668,32 @@ function formatList(text) {
 
 
 
-// Close popup
-// Close popup
-// Close popup
-document
-  .getElementById("base-popup-close-btn")
-  .addEventListener("click", () => {
-    const basePopup = document.getElementById("base-projects-popup");
-    basePopup.style.opacity = 0;
-    setTimeout(() => {
-      basePopup.style.display = "none";
-      // Assurez-vous que la vue liste est visible et que la vue détail est cachée
-      listView.classList.remove('hidden');
-      detailView.classList.add('hidden');
+document.getElementById("base-popup-close-btn").addEventListener("click", () => {
+  const basePopup = document.getElementById("base-projects-popup");
+  basePopup.style.opacity = 0;
+  
+  setTimeout(() => {
+    basePopup.style.display = "none";
+    basePopup.classList.remove("collapsed");
+    
+    // Réinitialiser l'icône
+    const toggleIcon = document.getElementById("base-toggle-icon"); // ← Changé ici
+    if (toggleIcon) {
+      toggleIcon.classList.remove("fas", "fa-chevron-down");
+      toggleIcon.classList.add("fas", "fa-chevron-up");
+    }
+    
+    // Toujours revenir à la vue liste
+    showListView();
 
-      // --- AJOUTEZ CES LIGNES POUR RÉINITIALISER LA CHECKBOX ET LA COUCHE DE MISE EN SURBRILLANCE ---
-      const zoomCheckbox = document.getElementById('zoom-to-sites');
-      if (zoomCheckbox) { // Vérifie que la checkbox existe
-        zoomCheckbox.checked = false; // Décocher la checkbox
-        resetSitesHighlight(); // Supprimer la surbrillance des sites sur la carte
-      }
-      // --- FIN DE L'AJOUT ---
-    }, 300);
-  });
+    // Réinitialiser la checkbox et la couche
+    const zoomCheckbox = document.getElementById('zoom-to-sites');
+    if (zoomCheckbox) {
+      zoomCheckbox.checked = false;
+      resetSitesHighlight();
+    }
+  }, 300);
+});
 
 // Modal d'image
 const imageModal = document.getElementById("image-modal");

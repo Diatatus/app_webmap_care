@@ -1541,6 +1541,15 @@ async function initZoomCheckbox(projectId) {
   zoomCheckbox.addEventListener('change', async (e) => {
     if (e.target.checked) {
       try {
+        // Replier la popup de base quand on coche la checkbox
+        const popupContainer = document.getElementById("base-projects-popup");
+        const toggleIcon = document.getElementById("base-toggle-icon");
+        if (popupContainer && !popupContainer.classList.contains("collapsed")) {
+          popupContainer.classList.add("collapsed");
+          toggleIcon.classList.remove("fas", "fa-chevron-up");
+          toggleIcon.classList.add("fas", "fa-chevron-down");
+        }
+
         // Activation du loader
         document.getElementById('zoom-loading').style.display = 'inline-block';
         zoomCheckbox.disabled = true;

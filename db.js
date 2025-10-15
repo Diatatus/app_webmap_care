@@ -30,4 +30,3 @@ pool.connect((err, client, release) => {
 });
 
 module.exports = pool;
-

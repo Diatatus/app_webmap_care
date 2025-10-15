@@ -617,8 +617,8 @@
 
         /* Logo avec effet hover moderne */
         .header-logo {
-          height: 110px;
-          margin-right: 40px;
+          height: 60px;
+          margin-right: 30px;
           transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
           filter: drop-shadow(0 4px 12px rgba(0, 0, 0, 0.1));
         }

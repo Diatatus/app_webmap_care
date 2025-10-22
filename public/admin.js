@@ -9,21 +9,37 @@ document.addEventListener("DOMContentLoaded", () => {
   // Gestion de la connexion
   loginForm.addEventListener("submit", async (e) => {
     e.preventDefault();
+    const submitBtn = e.target.querySelector('button[type="submit"]');
     const username = document.getElementById("username").value;
     const password = document.getElementById("password").value;
 
-    const response = await fetch("/admin/api/login", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ username, password }),
-    });
+    // Désactiver le bouton pendant la requête
+    submitBtn.disabled = true;
+    submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Connexion...';
 
-    if (response.ok) {
-      loginSection.classList.add("hidden");
-      adminInterface.classList.remove("hidden");
-      loadRegions(); // Afficher la liste des régions par défaut
-    } else {
-      alert("Échec de la connexion. Vérifiez vos identifiants.");
+    try {
+      const response = await fetch("/admin/api/login", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ username, password }),
+      });
+
+      if (response.ok) {
+        showToast("Connexion réussie ! Bienvenue.", "success");
+        setTimeout(() => {
+          loginSection.classList.add("hidden");
+          adminInterface.classList.remove("hidden");
+          loadRegions(); // Afficher la liste des régions par défaut
+        }, 500);
+      } else {
+        showToast("Échec de la connexion. Vérifiez vos identifiants.", "error");
+        submitBtn.disabled = false;
+        submitBtn.innerHTML = 'Se connecter';
+      }
+    } catch (error) {
+      showToast("Erreur réseau. Veuillez réessayer.", "error");
+      submitBtn.disabled = false;
+      submitBtn.innerHTML = 'Se connecter';
     }
   });
 
@@ -62,7 +78,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
     } catch (error) {
       console.error("Erreur:", error);
-      alert("Erreur lors du chargement des régions");
+      showToast("Erreur lors du chargement des régions", "error");
     }
   }
 
@@ -145,10 +161,10 @@ document.addEventListener("DOMContentLoaded", () => {
         headers: { "Content-Type": "application/json" },
       });
       if (response.ok) {
-        alert("Région supprimée.");
+        showToast("Région supprimée avec succès", "success");
         loadRegions();
       } else {
-        alert("Erreur lors de la suppression de la région.");
+        showToast("Erreur lors de la suppression de la région", "error");
       }
     }
   }
@@ -164,7 +180,7 @@ document.addEventListener("DOMContentLoaded", () => {
       const region = await response.json();
       displayEditRegionForm(region);
     } else {
-      alert("Erreur lors du chargement de la région.");
+      showToast("Erreur lors du chargement de la région", "error");
     }
   }
 
@@ -279,10 +295,10 @@ document.addEventListener("DOMContentLoaded", () => {
         body: JSON.stringify(data),
       });
       if (response.ok) {
-        alert("Région mise à jour avec succès.");
+        showToast("Région mise à jour avec succès", "success");
         loadRegions();
       } else {
-        alert("Erreur lors de la mise à jour de la région.");
+        showToast("Erreur lors de la mise à jour de la région", "error");
       }
     });
   }
@@ -299,7 +315,7 @@ document.addEventListener("DOMContentLoaded", () => {
       const partners = await response.json();
       displayPartners(partners);
     } else {
-      alert("Erreur lors du chargement des partenaires.");
+      showToast("Erreur lors du chargement des partenaires", "error");
     }
   }
 
@@ -377,10 +393,10 @@ document.addEventListener("DOMContentLoaded", () => {
         headers: { "Content-Type": "application/json" },
       });
       if (response.ok) {
-        alert("Partenaire supprimé.");
+        showToast("Partenaire supprimé avec succès", "success");
         loadPartners();
       } else {
-        alert("Erreur lors de la suppression du partenaire.");
+        showToast("Erreur lors de la suppression du partenaire", "error");
       }
     }
   }
@@ -471,7 +487,7 @@ function displayAddPartnerForm() {
         if (statutPrestSelect.value !== "Autre") {
             statutPrestFinal.value = statutPrestSelect.value;
         } else if (statutPrestCustom.value === "") {
-             alert("Veuillez saisir un statut personnalisé.");
+             showToast("Veuillez saisir un statut personnalisé", "warning");
              return; // Empêcher la soumission
         } else {
             statutPrestFinal.value = statutPrestCustom.value;
@@ -486,10 +502,10 @@ function displayAddPartnerForm() {
         });
 
         if (response.ok) {
-            alert("Partenaire ajouté avec succès.");
+            showToast("Partenaire ajouté avec succès", "success");
             loadPartners();
         } else {
-            alert("Erreur lors de l'ajout du partenaire.");
+            showToast("Erreur lors de l'ajout du partenaire", "error");
         }
     });
 }
@@ -503,7 +519,7 @@ function displayAddPartnerForm() {
       const partner = await response.json();
       displayEditPartnerForm(partner);
     } else {
-      alert("Erreur lors du chargement du partenaire.");
+      showToast("Erreur lors du chargement du partenaire", "error");
     }
   }
 
@@ -613,7 +629,7 @@ function displayEditPartnerForm(partner) {
         if (statutPrestSelect.value !== "Autre") {
             statutPrestFinal.value = statutPrestSelect.value;
         } else if (statutPrestCustom.value === "") {
-             alert("Veuillez saisir un statut personnalisé.");
+             showToast("Veuillez saisir un statut personnalisé", "warning");
              return; // Empêcher la soumission
         } else {
             statutPrestFinal.value = statutPrestCustom.value;
@@ -628,10 +644,10 @@ function displayEditPartnerForm(partner) {
         });
 
         if (response.ok) {
-            alert("Partenaire mis à jour avec succès.");
+            showToast("Partenaire mis à jour avec succès", "success");
             loadPartners();
         } else {
-            alert("Erreur lors de la mise à jour du partenaire.");
+            showToast("Erreur lors de la mise à jour du partenaire", "error");
         }
     });
 }
@@ -650,7 +666,7 @@ function displayEditPartnerForm(partner) {
       const projects = await response.json();
       displayProjects(projects);
     } else {
-      alert("Erreur lors du chargement des projets.");
+      showToast("Erreur lors du chargement des projets", "error");
     }
   }
 
@@ -756,10 +772,10 @@ function displayProjects(projects) {
         headers: { "Content-Type": "application/json" },
       });
       if (response.ok) {
-        alert("Projet supprimé.");
-        loadPartners();
+        showToast("Projet supprimé avec succès", "success");
+        loadProjects();
       } else {
-        alert("Erreur lors de la suppression du projet.");
+        showToast("Erreur lors de la suppression du projet", "error");
       }
     }
   }
@@ -912,15 +928,15 @@ async function loadBureauxBase() {
             });
 
             if (response.ok) {
-                alert("Projet ajouté avec succès.");
+                showToast("Projet ajouté avec succès", "success");
                 loadProjects();
             } else {
                 const error = await response.json();
-                alert(`Erreur lors de l'ajout du projet: ${error.error || "Une erreur est survenue"}`);
+                showToast(`Erreur lors de l'ajout du projet: ${error.error || "Une erreur est survenue"}`, "error");
             }
         } catch (err) {
             console.error("Erreur:", err);
-            alert("Erreur réseau ou serveur");
+            showToast("Erreur réseau ou serveur", "error");
         }
     });
 }
@@ -934,7 +950,7 @@ async function loadBureauxBase() {
       const projects = await response.json();
       displayEditProjectForm(projects);
     } else {
-      alert("Erreur lors du chargement du projet.");
+      showToast("Erreur lors du chargement du projet", "error");
     }
   }
 
@@ -1108,32 +1124,32 @@ async function loadBureauxBase() {
 
             if (response.ok) {
                 const result = await response.json();
-                alert("Projet mis à jour avec succès.");
+                showToast("Projet mis à jour avec succès", "success");
                 loadProjects();
             } else if (response.status === 401) {
                 window.location.href = '/admin.html';
             } else {
                 const error = await response.json();
-                alert(`Erreur: ${error.error || "Une erreur est survenue"}`);
+                showToast(`Erreur: ${error.error || "Une erreur est survenue"}`, "error");
             }
         } catch (err) {
             console.error("Erreur:", err);
-            alert("Erreur réseau ou serveur");
+            showToast("Erreur réseau ou serveur", "error");
         }
     });
 }
 
 
-  // Gestion de la déconnexion
-  btnLogout.addEventListener("click", async () => {
-    const response = await fetch("/admin/api/logout", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-    });
-    if (response.ok) {
-      location.reload();
-    } else {
-      alert("Erreur lors de la déconnexion.");
-    }
-  });
+  // Gestion de la déconnexion (déjà gérée dans admin.html)
+  // btnLogout.addEventListener("click", async () => {
+  //   const response = await fetch("/admin/api/logout", {
+  //     method: "POST",
+  //     headers: { "Content-Type": "application/json" },
+  //   });
+  //   if (response.ok) {
+  //     location.reload();
+  //   } else {
+  //     showToast("Erreur lors de la déconnexion", "error");
+  //   }
+  // });
 });

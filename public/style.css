@@ -1,6 +1,52 @@
+        /* ===== VARIABLES CSS GLOBALES ===== */
+        :root {
+          /* Couleurs principales */
+          --primary-color: #e55b00;
+          --primary-hover: #cc5000;
+          --secondary-color: #ff7730;
+          --accent-color: #ffa726;
+
+          /* Couleurs d'état */
+          --success-color: #28a745;
+          --danger-color: #dc3545;
+          --warning-color: #ffc107;
+          --info-color: #17a2b8;
+
+          /* Couleurs de fond */
+          --bg-light: #f5f7fa;
+          --bg-white: #ffffff;
+          --bg-dark: #2c3e50;
+          --card-bg: rgba(255, 255, 255, 0.95);
+
+          /* Texte */
+          --text-dark: #2d3748;
+          --text-light: #ffffff;
+          --text-muted: #718096;
+
+          /* Bordures */
+          --border-color: #e2e8f0;
+          --border-radius-sm: 8px;
+          --border-radius: 12px;
+          --border-radius-lg: 16px;
+          --border-radius-xl: 20px;
+
+          /* Ombres */
+          --shadow-sm: 0 2px 4px rgba(0, 0, 0, 0.06);
+          --shadow-md: 0 4px 6px rgba(0, 0, 0, 0.07);
+          --shadow-lg: 0 10px 15px rgba(0, 0, 0, 0.1);
+          --shadow-xl: 0 20px 25px rgba(0, 0, 0, 0.15);
+
+          /* Transitions */
+          --transition-fast: 150ms cubic-bezier(0.4, 0, 0.2, 1);
+          --transition-base: 250ms cubic-bezier(0.4, 0, 0.2, 1);
+          --transition-slow: 350ms cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
         /* Universal box-sizing */
         * {
           box-sizing: border-box;
+          margin: 0;
+          padding: 0;
         }
 
         /* Loader Background avec motifs cartographiques */
@@ -596,36 +642,47 @@
           cursor: pointer;
         }
 
-        /* Header moderne avec glassmorphism */
+        /* ===== HEADER MODERNE ET PROFESSIONNEL ===== */
         header {
           position: fixed;
           top: 0;
           left: 0;
           width: 100%;
-          height: 70px;
-          background: rgba(255, 255, 255, 0.95);
-          backdrop-filter: blur(20px);
-          -webkit-backdrop-filter: blur(20px);
-          border-bottom: 1px solid rgba(255, 255, 255, 0.2);
-          box-shadow: 0 8px 32px rgba(0, 0, 0, 0.08);
+          height: 75px;
+          background: linear-gradient(135deg, rgba(255, 255, 255, 0.98) 0%, rgba(250, 250, 250, 0.98) 100%);
+          backdrop-filter: blur(25px);
+          -webkit-backdrop-filter: blur(25px);
+          border-bottom: 2px solid rgba(229, 91, 0, 0.1);
+          box-shadow: var(--shadow-lg);
           display: flex;
           align-items: center;
-          padding: 0 32px;
+          padding: 0 40px;
           z-index: 1000;
-          transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+          transition: all var(--transition-base);
+          animation: slideInFromTop 0.6s var(--transition-base);
+        }
+
+        header:hover {
+          box-shadow: var(--shadow-xl);
+          border-bottom-color: rgba(229, 91, 0, 0.2);
         }
 
         /* Logo avec effet hover moderne */
         .header-logo {
-          height: 60px;
-          margin-right: 30px;
-          transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-          filter: drop-shadow(0 4px 12px rgba(0, 0, 0, 0.1));
+          height: 65px;
+          margin-right: 35px;
+          transition: all var(--transition-base);
+          filter: drop-shadow(0 4px 12px rgba(229, 91, 0, 0.15));
+          cursor: pointer;
         }
 
         .header-logo:hover {
+          transform: scale(1.05) translateY(-2px);
+          filter: drop-shadow(0 8px 20px rgba(229, 91, 0, 0.25));
+        }
+
+        .header-logo:active {
           transform: scale(1.02);
-          filter: drop-shadow(0 6px 16px rgba(0, 0, 0, 0.15));
         }
 
         /* Container principal avec flexbox moderne */
@@ -641,7 +698,8 @@
         .header-left {
           display: flex;
           align-items: center;
-          gap: 32px;
+          gap: 30px;
+          flex: 1;
         }
 
         /* Search container moderne avec design system */
@@ -717,23 +775,28 @@
           gap: 20px;
         }
 
-        /* Contact téléphone moderne */
+        /* Contact téléphone simplifié */
         .phone-contact {
           display: flex;
           align-items: center;
-          gap: 12px;
+          gap: 8px;
           text-decoration: none;
-          color: #2d5a27;
+          color: var(--success-color);
           font-size: 14px;
           font-weight: 600;
-          padding: 12px 20px;
-          border-radius: 16px;
-          background: linear-gradient(135deg, #f0f9ff 0%, #e0f2fe 100%);
-          border: 1px solid rgba(46, 125, 50, 0.2);
-          transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-          box-shadow: 0 4px 12px rgba(46, 125, 50, 0.08);
+          padding: 10px 16px;
+          border-radius: var(--border-radius);
+          background: linear-gradient(135deg, #f0fdf4 0%, #dcfce7 100%);
+          border: 2px solid rgba(34, 197, 94, 0.2);
+          transition: all var(--transition-base);
+          box-shadow: var(--shadow-sm);
           position: relative;
           overflow: hidden;
+        }
+
+        .phone-number {
+          font-weight: 700;
+          color: var(--success-color);
         }
 
         .phone-contact::before {
@@ -813,31 +876,40 @@
           box-shadow: 0 8px 20px rgba(229, 91, 0, 0.2);
         }
 
-        /* Footer moderne avec glassmorphism */
+        /* ===== FOOTER SIMPLIFIÉ ===== */
         footer {
           position: fixed;
           bottom: 0;
           left: 0;
           width: 100%;
-          background: rgba(60, 48, 132, 0.95);
-          backdrop-filter: blur(20px);
-          -webkit-backdrop-filter: blur(20px);
-          padding: 16px 0;
-          text-align: center;
-          font-size: 13px;
-          color: #4a5568;
-          border-top: 1px solid rgba(255, 255, 255, 0.2);
-          box-shadow: 0 -8px 32px rgba(0, 0, 0, 0.08);
+          background: linear-gradient(135deg, rgba(44, 62, 80, 0.98) 0%, rgba(52, 73, 94, 0.98) 100%);
+          backdrop-filter: blur(25px);
+          -webkit-backdrop-filter: blur(25px);
+          padding: 12px 0;
+          font-size: 12px;
+          border-top: 2px solid rgba(229, 91, 0, 0.3);
+          box-shadow: 0 -4px 12px rgba(0, 0, 0, 0.1);
           z-index: 999;
           font-weight: 500;
         }
 
         .footer-content {
-          max-width: 1200px;
+          max-width: 1400px;
           margin: 0 auto;
-          padding: 0 32px;
+          padding: 0 40px;
+          display: flex;
+          justify-content: center;
+          align-items: center;
+          gap: 12px;
+          flex-wrap: wrap;
+          text-align: center;
           line-height: 1.6;
-          color: #e2e8f0;
+          color: rgba(255, 255, 255, 0.9);
+        }
+
+        .footer-separator {
+          color: rgba(255, 255, 255, 0.4);
+          margin: 0 4px;
         }
 
         .footer-content a {
@@ -1113,37 +1185,33 @@
         /* Le media query pour 480px est déjà défini plus haut, assurez-vous qu'il soit le dernier pour la spécificité */
         /* @media (max-width: 480px) { ... } (déjà défini ci-dessus) */
 
-        /* Container principal avec glassmorphism moderne */
+        /* ===== CONTAINER COUCHES - SIMPLIFIÉ ===== */
         #layer-slider-container {
           position: absolute;
-          top: 80px;
+          top: 90px;
           left: 20px;
-          padding: 16px;
-          background: none;
-          backdrop-filter: blur(20px);
-          -webkit-backdrop-filter: blur(20px);
-          border-radius: 20px;
-          box-shadow: 0 12px 40px rgba(0, 0, 0, 0.08),
-            0 4px 16px rgba(0, 0, 0, 0.04);
+          padding: 12px;
+          background: var(--card-bg);
+          backdrop-filter: blur(25px);
+          -webkit-backdrop-filter: blur(25px);
+          border-radius: var(--border-radius-lg);
+          box-shadow: var(--shadow-md);
           width: auto;
           max-width: none;
           z-index: 1000;
-          border: 1px solid rgba(255, 255, 255, 0.2);
-          transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
-          transform: translateY(0);
+          border: 1px solid rgba(229, 91, 0, 0.15);
+          transition: all var(--transition-base);
         }
 
         #layer-slider-container:hover {
-          transform: translateY(-2px);
-          box-shadow: 0 16px 48px rgba(0, 0, 0, 0.12),
-            0 6px 20px rgba(0, 0, 0, 0.06);
+          box-shadow: var(--shadow-lg);
         }
 
-        /* Layout vertical moderne */
+        /* Layout vertical */
         .custom-layer-slider-horizontal {
           display: flex;
           flex-direction: column;
-          gap: 12px;
+          gap: 10px;
         }
 
         /* Boutons de couche avec design moderne */

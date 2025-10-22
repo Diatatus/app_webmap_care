@@ -49,17 +49,20 @@
   <!-- Buttons couche de données -->
   <div id="layer-slider-container">
     <div id="layer-slider" class="custom-layer-slider-horizontal">
-      <label class="btn">
+      <label class="btn" title="Afficher les bases et projets">
         <input type="checkbox" id="toggleBasesCheckbox" class="layer-checkbox" />
-        <i class="fas fa-house"></i>Bases et Projets
+        <i class="fas fa-house"></i>
+        <span>Bases et Projets</span>
       </label>
-      <label class="btn">
+      <label class="btn" title="Afficher les partenaires">
         <input type="checkbox" id="togglePartenairesCheckbox" class="layer-checkbox" />
-        <i class="fas fa-people-group"></i>Partenaires
+        <i class="fas fa-people-group"></i>
+        <span>Partenaires</span>
       </label>
-      <label class="btn">
+      <label class="btn" title="Afficher les régions">
         <input type="checkbox" id="toggleRegionsCheckbox" class="layer-checkbox" />
-        <i class="fas fa-chart-line"></i> Régions et Indicateurs
+        <i class="fas fa-chart-line"></i>
+        <span>Régions</span>
       </label>
     </div>
   </div>
@@ -72,32 +75,31 @@
         </a>
         <div class="search-container">
           <i class="fas fa-search search-icon" id="search-toggle"></i>
-          <input id="inpt_search" type="text" class="searchTerm" placeholder="Chercher...">
+          <input id="inpt_search" type="text" class="searchTerm" placeholder="Rechercher...">
           <div class="liveDataDiv" id="liveDataDiv"></div>
         </div>
       </div>
       <div class="header-right">
-        <a href="tel:+237696616735" class="phone-contact" aria-label="Appeler le numéro vert +237 69 66 16 735">
+        <a href="tel:+237696616735" class="phone-contact" title="Numéro vert: 8558">
           <i class="fas fa-phone"></i>
           <span class="phone-number">8558</span>
         </a>
         <a href="https://www.care.org/our-work/where-we-work/cameroon/" target="_blank" rel="noopener noreferrer">
-          <button class="help-btn" id="help-btn">
+          <button class="help-btn" id="help-btn" title="Aide">
             <i class="fas fa-question-circle"></i>
           </button>
         </a>
       </div>
-
     </div>
   </header>
 
   <footer>
     <div class="footer-content">
-      <div class="footer-copyright">
-        © 2025 <strong><a href="https://www.care.org/our-work/where-we-work/cameroon/" target="_blank"
-            rel="noopener noreferrer">CARE Cameroun</a></strong> - Tous droits réservés / avec l'appui technique de
-        <a href="https://www.geostrategies.net" target="_blank" rel="noopener noreferrer">Géostrategies</a>
-      </div>
+      <span>© 2025 <strong><a href="https://www.care.org/our-work/where-we-work/cameroon/" target="_blank"
+            rel="noopener noreferrer">CARE Cameroun</a></strong> - Tous droits réservés</span>
+      <span class="footer-separator">|</span>
+      <span>Développé par <a href="https://www.geostrategies.net" target="_blank"
+          rel="noopener noreferrer"><strong>Géostrategies</strong></a></span>
     </div>
   </footer>
 

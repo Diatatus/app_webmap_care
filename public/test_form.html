@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html>
+<head>
+<style>
+form {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 20px;
+    padding: 30px;
+    background: white;
+}
+.form-section {
+    grid-column: 1 / -1;
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 20px;
+    padding: 20px;
+    background: rgba(229, 91, 0, 0.03);
+    border-left: 4px solid #e55b00;
+}
+.form-section-title {
+    grid-column: 1 / -1;
+    font-weight: bold;
+    color: #e55b00;
+    border-bottom: 2px solid rgba(229, 91, 0, 0.2);
+    padding-bottom: 10px;
+}
+.form-group {
+    display: flex;
+    flex-direction: column;
+}
+.full-width {
+    grid-column: 1 / -1;
+}
+</style>
+</head>
+<body>
+<form>
+  <div class="form-section">
+    <h3 class="form-section-title">Section 1</h3>
+    <div class="form-group"><label>Champ 1</label><input type="text"/></div>
+    <div class="form-group"><label>Champ 2</label><input type="text"/></div>
+    <div class="form-group"><label>Champ 3</label><input type="text"/></div>
+    <div class="form-group full-width"><label>Champ large</label><textarea></textarea></div>
+  </div>
+  
+  <div class="form-section">
+    <h3 class="form-section-title">Section 2</h3>
+    <div class="form-group"><label>Champ A</label><input type="text"/></div>
+    <div class="form-group"><label>Champ B</label><input type="text"/></div>
+  </div>
+</form>
+</body>
+</html>

@@ -13,7 +13,7 @@
     const username = document.getElementById("username").value;
     const password = document.getElementById("password").value;
 
-    // DĂ©sactiver le bouton pendant la requĂŞte
+    // Désactiver le bouton pendant la requĂŞte
     submitBtn.disabled = true;
     submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Connexion...';
 
@@ -25,25 +25,25 @@
       });
 
       if (response.ok) {
-        showToast("Connexion rĂ©ussie ! Bienvenue.", "success");
+        showToast("Connexion réussie ! Bienvenue.", "success");
         setTimeout(() => {
           loginSection.classList.add("hidden");
           adminInterface.classList.remove("hidden");
-          loadRegions(); // Afficher la liste des rĂ©gions par dĂ©faut
+          loadRegions(); // Afficher la liste des régions par défaut
         }, 500);
       } else {
-        showToast("Ă‰chec de la connexion. VĂ©rifiez vos identifiants.", "error");
+        showToast("Ă‰chec de la connexion. Vérifiez vos identifiants.", "error");
         submitBtn.disabled = false;
         submitBtn.innerHTML = 'Se connecter';
       }
     } catch (error) {
-      showToast("Erreur rĂ©seau. Veuillez rĂ©essayer.", "error");
+      showToast("Erreur réseau. Veuillez réessayer.", "error");
       submitBtn.disabled = false;
       submitBtn.innerHTML = 'Se connecter';
     }
   });
 
-  // Bouton pour afficher la liste des rĂ©gions
+  // Bouton pour afficher la liste des régions
   btnListRegions.addEventListener("click", loadRegions);
   const btnListPartners = document.getElementById("btnListPartners");
   const btnListOffices = document.getElementById("btnListOffices");
@@ -72,18 +72,18 @@
 
       const geojsonData = await response.json();
 
-      // Traitez les donnĂ©es GeoJSON ici
+      // Traitez les données GeoJSON ici
       console.log(geojsonData);
       displayRegions(geojsonData);
 
     } catch (error) {
       console.error("Erreur:", error);
-      showToast("Erreur lors du chargement des rĂ©gions", "error");
+      showToast("Erreur lors du chargement des régions", "error");
     }
   }
 
   function displayRegions(regions) {
-    let html = `<h2>RĂ©gions (Indicateurs socio-Ă©conomiques)</h2>
+    let html = `<h2>Régions (Indicateurs socio-économiques)</h2>
     <div class="table-wrapper">
      <table>
                 <thead>
@@ -92,17 +92,17 @@
                     <th>Nom</th>
                     <th>Population Homme</th>
                     <th>Population Femme</th>
-                    <th>DensitĂ© Population</th>
+                    <th>Densité Population</th>
                     <th>Total Population</th>
-                    <th>Taux de pauvretĂ©</th>
+                    <th>Taux de pauvreté</th>
                     <th>Prevalence VIH Homme</th>
                     <th>Prevalence VIH Femme</th>
-                    <th>AccĂ¨s Ă  une source amĂ©liorĂ©e d'eau de boisson </th>
-                    <th>Installation de lavage des mains dans les mĂ©nages </th>
-                    <th>Taux de chĂ´mage</th>
-                    <th>Inclusion financiĂ¨re</th>
-                    <th>AccĂ¨s aux installations sanitaires amĂ©liorĂ©es</th>
-                    <th>Besoins non satisfaits en matiĂ¨re des femmes de planification familiale</th>
+                    <th>Accès Ă  une source améliorée d'eau de boisson </th>
+                    <th>Installation de lavage des mains dans les ménages </th>
+                    <th>Taux de chômage</th>
+                    <th>Inclusion financière</th>
+                    <th>Accès aux installations sanitaires améliorées</th>
+                    <th>Besoins non satisfaits en matière des femmes de planification familiale</th>
                     <th>Femmes de 15-49 ans utilisant des contraceptifs modernes</th>
                     <th>Homme justifiant la violence conjugale</th>
                     <th>Femme justifiant la violence conjugale</th>
@@ -141,7 +141,7 @@
     html += `</tbody></table></div>`;
     contentArea.innerHTML = html;
 
-    // Ajout des Ă©vĂ©nements pour les boutons de modification et de suppression
+    // Ajout des événements pour les boutons de modification et de suppression
     document.querySelectorAll(".deleteBtn").forEach((btn) => {
       btn.addEventListener("click", deleteRegion);
     });
@@ -155,16 +155,16 @@
 
   async function deleteRegion(e) {
     const id = e.target.getAttribute("data-id");
-    if (confirm("ĂŠtes-vous sĂ»r de vouloir supprimer cette rĂ©gion ?")) {
+    if (confirm("ĂŠtes-vous sĂ»r de vouloir supprimer cette région ?")) {
       const response = await fetch(`/admin/api/regions/delete/${id}`, {
         method: "DELETE",
         headers: { "Content-Type": "application/json" },
       });
       if (response.ok) {
-        showToast("RĂ©gion supprimĂ©e avec succĂ¨s", "success");
+        showToast("Région supprimée avec succès", "success");
         loadRegions();
       } else {
-        showToast("Erreur lors de la suppression de la rĂ©gion", "error");
+        showToast("Erreur lors de la suppression de la région", "error");
       }
     }
   }
@@ -180,12 +180,12 @@
       const region = await response.json();
       displayEditRegionForm(region);
     } else {
-      showToast("Erreur lors du chargement de la rĂ©gion", "error");
+      showToast("Erreur lors du chargement de la région", "error");
     }
   }
 
   function displayEditRegionForm(region) {
-    let html = `<h2>Modifier la RĂ©gion</h2>
+    let html = `<h2>Modifier la Région</h2>
       <form id="editRegionForm">
         <input type="hidden" name="id_region" value="${region.id_region}">
         <div class="form-group full-width">
@@ -203,7 +203,7 @@
       }" required step="any">
         </div>
         <div class="form-group">
-          <label for="denspop_reg">DensitĂ© Population :</label>
+          <label for="denspop_reg">Densité Population :</label>
           <input type="number" id="denspop_reg" name="denspop_reg" value="${region.denspop_reg
       }" required step="any">
         </div>
@@ -213,7 +213,7 @@
       }"required step="any">
         </div>
         <div class="form-group">
-          <label for="taux_pvrt">Taux de pauvretĂ© :</label>
+          <label for="taux_pvrt">Taux de pauvreté :</label>
           <input type="number" id="taux_pvrt" name="taux_pvrt" value="${region.taux_pvrt
       }" required step="any">
         </div>
@@ -228,32 +228,32 @@
       }" required  step="any">
         </div>
         <div class="form-group">
-          <label for="acces_eau_amel">AccĂ¨s Ă  une source amĂ©liorĂ©e d'eau de boisson :</label>
+          <label for="acces_eau_amel">Accès Ă  une source améliorée d'eau de boisson :</label>
           <input type="number" id="acces_eau_amel" name="acces_eau_amel" value="${region.acces_eau_amel
       }" required   step="any">
         </div>
         <div class="form-group">
-          <label for="inst_lavmain_lim">Installation de lavage des mains dans les mĂ©nages :</label>
+          <label for="inst_lavmain_lim">Installation de lavage des mains dans les ménages :</label>
           <input type="number" id="inst_lavmain_lim" name="inst_lavmain_lim" value="${region.inst_lavmain_lim
       }" required step="any">
         </div>
         <div class="form-group">
-          <label for="taux_chom">Taux de chĂ´mage :</label>
+          <label for="taux_chom">Taux de chômage :</label>
           <input type="number" id="taux_chom" name="taux_chom" value="${region.taux_chom
       }" required step="any">
         </div>
         <div class="form-group">
-          <label for="incl_fin_emf">Inclusion financiĂ¨re :</label>
+          <label for="incl_fin_emf">Inclusion financière :</label>
           <input type="number" id="incl_fin_emf" name="incl_fin_emf" value="${region.incl_fin_emf
       }" required step="any">
         </div>
          <div class="form-group">
-          <label for="acces_sanit_amel">AccĂ¨s aux installations sanitaires amĂ©liorĂ©es :</label>
+          <label for="acces_sanit_amel">Accès aux installations sanitaires améliorées :</label>
           <input type="number" id="acces_sanit_amel" name="acces_sanit_amel" value="${region.acces_sanit_amel
       }" required step="any">
         </div>
          <div class="form-group">
-          <label for="besoins_nonsatisf_pf">Besoins non satisfaits en matiĂ¨re des femmes de planification familiale :</label>
+          <label for="besoins_nonsatisf_pf">Besoins non satisfaits en matière des femmes de planification familiale :</label>
           <input type="number" id="besoins_nonsatisf_pf" name="besoins_nonsatisf_pf" value="${region.besoins_nonsatisf_pf
       }" required step="any">
         </div>
@@ -305,10 +305,10 @@
         body: JSON.stringify(data),
       });
       if (response.ok) {
-        showToast("RĂ©gion mise Ă  jour avec succĂ¨s", "success");
+        showToast("Région mise Ă  jour avec succès", "success");
         loadRegions();
       } else {
-        showToast("Erreur lors de la mise Ă  jour de la rĂ©gion", "error");
+        showToast("Erreur lors de la mise Ă  jour de la région", "error");
       }
     });
   }
@@ -343,11 +343,11 @@
               <th>ID</th>
               <th>Nom</th>
               <th>Sigle</th>
-              <th>ActivitĂ©s et services offerts</th>
+              <th>Activités et services offerts</th>
               <th>Statut de la prestation</th>
               <th>Image logo</th>
               <th>Informations</th>
-              <th>CoordonnĂ©es (Longitude, Latitude)</th>
+              <th>Coordonnées (Longitude, Latitude)</th>
               <th class="fixed-column">Actions</th>
             </tr>
           </thead>
@@ -378,7 +378,7 @@
     html += `</tbody></table></div>`;
     contentArea.innerHTML = html;
 
-    // Ajouter l'Ă©vĂ©nement aprĂ¨s l'injection HTML
+    // Ajouter l'événement après l'injection HTML
     const btnAddPartner = document.getElementById("btnAddPartner");
     if (btnAddPartner) {
       btnAddPartner.addEventListener("click", displayAddPartnerForm);
@@ -403,7 +403,7 @@
         headers: { "Content-Type": "application/json" },
       });
       if (response.ok) {
-        showToast("Partenaire supprimĂ© avec succĂ¨s", "success");
+        showToast("Partenaire supprimé avec succès", "success");
         loadPartners();
       } else {
         showToast("Erreur lors de la suppression du partenaire", "error");
@@ -442,17 +442,17 @@ function displayAddPartnerForm() {
         <div class="form-group full-width">
             <label for="statut_prest_select">Statut de la prestation :</label>
             <select id="statut_prest_select" required>
-                <option value="">SĂ©lectionnez un statut</option>
+                <option value="">Sélectionnez un statut</option>
                 <option value="ONG locale">ONG locale</option>
                 <option value="Clinique juridique">Clinique juridique</option>
                 <option value="DIC">DIC</option>
                 <option value="Clinique juridique et DIC">Clinique juridique et DIC</option>
                 <option value="Autre">Autre...</option> </select>
-            <input type="text" id="statut_prest_custom" placeholder="Saisir un statut personnalisĂ©" style="display:none; margin-top: 5px;">
+            <input type="text" id="statut_prest_custom" placeholder="Saisir un statut personnalisé" style="display:none; margin-top: 5px;">
             <input type="hidden" id="statut_prest_final" name="statut_prest">
         </div>
         <div class="form-group full-width">
-            <label for="act_srvc_offert">ActivitĂ©s et services offerts :</label>
+            <label for="act_srvc_offert">Activités et services offerts :</label>
             <textarea type="text" id="act_srvc_offert" name="act_srvc_offert" rows="4"></textarea>
         </div>
         <div class="form-group full-width">
@@ -477,25 +477,25 @@ function displayAddPartnerForm() {
       loadPartners();
     });
 
-    // Logique pour gĂ©rer la sĂ©lection "Autre..."
+    // Logique pour gérer la sélection "Autre..."
     const statutPrestSelect = document.getElementById("statut_prest_select");
     const statutPrestCustom = document.getElementById("statut_prest_custom");
     const statutPrestFinal = document.getElementById("statut_prest_final");
 
     statutPrestSelect.addEventListener("change", function () {
         if (this.value === "Autre") {
-            statutPrestCustom.style.display = "block"; // Afficher l'input personnalisĂ©
-            statutPrestCustom.setAttribute('required', 'true'); // Rendre l'input personnalisĂ© requis
-            statutPrestCustom.value = ''; // Vider l'input personnalisĂ©
+            statutPrestCustom.style.display = "block"; // Afficher l'input personnalisé
+            statutPrestCustom.setAttribute('required', 'true'); // Rendre l'input personnalisé requis
+            statutPrestCustom.value = ''; // Vider l'input personnalisé
             statutPrestFinal.value = ''; // Vider le champ hidden initialement
         } else {
-            statutPrestCustom.style.display = "none"; // Cacher l'input personnalisĂ©
+            statutPrestCustom.style.display = "none"; // Cacher l'input personnalisé
             statutPrestCustom.removeAttribute('required'); // Retirer le statut requis
-            statutPrestFinal.value = this.value; // DĂ©finir la valeur finale sur l'option sĂ©lectionnĂ©e
+            statutPrestFinal.value = this.value; // Définir la valeur finale sur l'option sélectionnée
         }
     });
 
-    // Ă‰couter les changements sur l'input personnalisĂ© pour mettre Ă  jour le champ final
+    // Ă‰couter les changements sur l'input personnalisé pour mettre Ă  jour le champ final
     statutPrestCustom.addEventListener("input", function() {
         statutPrestFinal.value = this.value;
     });
@@ -505,11 +505,11 @@ function displayAddPartnerForm() {
     addPartnerForm.addEventListener("submit", async (e) => {
         e.preventDefault();
 
-        // Mettre Ă  jour la valeur finale juste avant la soumission au cas oĂą "Autre" Ă©tait sĂ©lectionnĂ©
+        // Mettre Ă  jour la valeur finale juste avant la soumission au cas oĂą "Autre" était sélectionné
         if (statutPrestSelect.value !== "Autre") {
             statutPrestFinal.value = statutPrestSelect.value;
         } else if (statutPrestCustom.value === "") {
-             showToast("Veuillez saisir un statut personnalisĂ©", "warning");
+             showToast("Veuillez saisir un statut personnalisé", "warning");
              return; // EmpĂŞcher la soumission
         } else {
             statutPrestFinal.value = statutPrestCustom.value;
@@ -524,7 +524,7 @@ function displayAddPartnerForm() {
         });
 
         if (response.ok) {
-            showToast("Partenaire ajoutĂ© avec succĂ¨s", "success");
+            showToast("Partenaire ajouté avec succès", "success");
             loadPartners();
         } else {
             showToast("Erreur lors de l'ajout du partenaire", "error");
@@ -546,14 +546,14 @@ function displayAddPartnerForm() {
   }
 
 function displayEditPartnerForm(partner) {
-    const longitude = partner.longitude || ""; // GĂ©rer les valeurs null/undefined
+    const longitude = partner.longitude || ""; // Gérer les valeurs null/undefined
     const latitude = partner.latitude || "";
 
-    // DĂ©terminer si la valeur actuelle du partenaire est une de nos options prĂ©dĂ©finies
+    // Déterminer si la valeur actuelle du partenaire est une de nos options prédéfinies
     const predefinedOptions = ["ONG locale", "Clinique juridique", "DIC", "Clinique juridique et DIC", "SSR/Clinique juridiques/DIC"];
     const isPredefined = predefinedOptions.includes(partner.statut_prest);
     
-    // Si la valeur existe mais n'est pas prĂ©dĂ©finie, elle est "Autre"
+    // Si la valeur existe mais n'est pas prédéfinie, elle est "Autre"
     const selectedOptionValue = isPredefined ? partner.statut_prest : "Autre";
     const customValueDisplay = isPredefined ? "" : partner.statut_prest;
     const customInputDisplay = isPredefined ? "none" : "block"; // Afficher si "Autre"
@@ -590,21 +590,21 @@ function displayEditPartnerForm(partner) {
             <div class="form-group full-width">
                 <label for="statut_prest_select">Statut de la prestation :</label>
                 <select id="statut_prest_select" required>
-                    <option value="">SĂ©lectionnez un statut</option>
+                    <option value="">Sélectionnez un statut</option>
                     <option value="ONG locale">ONG locale</option>
                     <option value="Clinique juridique">Clinique juridique</option>
                     <option value="DIC">DIC</option>
                     <option value="Clinique juridique et DIC">Clinique juridique et DIC</option>
                     <option value="Autre">Autre...</option>
                 </select>
-                <input type="text" id="statut_prest_custom" placeholder="Saisir un statut personnalisĂ©"
+                <input type="text" id="statut_prest_custom" placeholder="Saisir un statut personnalisé"
                        value="${customValueDisplay}"
                        style="display:${customInputDisplay}; margin-top: 5px;" ${!isPredefined ? 'required' : ''}>
                 <input type="hidden" id="statut_prest_final" name="statut_prest" value="${partner.statut_prest}">
             </div>
 
             <div class="form-group full-width">
-                <label for="act_srvc_offert">ActivitĂ© et services offerts :</label>
+                <label for="act_srvc_offert">Activité et services offerts :</label>
                 <textarea id="act_srvc_offert" name="act_srvc_offert" rows="4" required>${partner.act_srvc_offert}</textarea>
             </div>
 
@@ -630,28 +630,28 @@ function displayEditPartnerForm(partner) {
       loadPartners();
     });
 
-    // Logique pour gĂ©rer la sĂ©lection "Autre..." et prĂ©-remplir
+    // Logique pour gérer la sélection "Autre..." et pré-remplir
     const statutPrestSelect = document.getElementById("statut_prest_select");
     const statutPrestCustom = document.getElementById("statut_prest_custom");
     const statutPrestFinal = document.getElementById("statut_prest_final");
 
-    // PrĂ©-sĂ©lectionner l'option correcte dans le <select>
+    // Pré-sélectionner l'option correcte dans le <select>
     statutPrestSelect.value = selectedOptionValue;
 
     statutPrestSelect.addEventListener("change", function () {
         if (this.value === "Autre") {
-            statutPrestCustom.style.display = "block"; // Afficher l'input personnalisĂ©
-            statutPrestCustom.setAttribute('required', 'true'); // Rendre l'input personnalisĂ© requis
-            statutPrestCustom.value = ''; // Vider l'input personnalisĂ© lors du passage Ă  "Autre"
+            statutPrestCustom.style.display = "block"; // Afficher l'input personnalisé
+            statutPrestCustom.setAttribute('required', 'true'); // Rendre l'input personnalisé requis
+            statutPrestCustom.value = ''; // Vider l'input personnalisé lors du passage Ă  "Autre"
             statutPrestFinal.value = ''; // Vider le champ hidden initialement
         } else {
-            statutPrestCustom.style.display = "none"; // Cacher l'input personnalisĂ©
+            statutPrestCustom.style.display = "none"; // Cacher l'input personnalisé
             statutPrestCustom.removeAttribute('required'); // Retirer le statut requis
-            statutPrestFinal.value = this.value; // DĂ©finir la valeur finale sur l'option sĂ©lectionnĂ©e
+            statutPrestFinal.value = this.value; // Définir la valeur finale sur l'option sélectionnée
         }
     });
 
-    // Ă‰couter les changements sur l'input personnalisĂ© pour mettre Ă  jour le champ final
+    // Ă‰couter les changements sur l'input personnalisé pour mettre Ă  jour le champ final
     statutPrestCustom.addEventListener("input", function() {
         statutPrestFinal.value = this.value;
     });
@@ -664,7 +664,7 @@ function displayEditPartnerForm(partner) {
         if (statutPrestSelect.value !== "Autre") {
             statutPrestFinal.value = statutPrestSelect.value;
         } else if (statutPrestCustom.value === "") {
-             showToast("Veuillez saisir un statut personnalisĂ©", "warning");
+             showToast("Veuillez saisir un statut personnalisé", "warning");
              return; // EmpĂŞcher la soumission
         } else {
             statutPrestFinal.value = statutPrestCustom.value;
@@ -679,7 +679,7 @@ function displayEditPartnerForm(partner) {
         });
 
         if (response.ok) {
-            showToast("Partenaire mis Ă  jour avec succĂ¨s", "success");
+            showToast("Partenaire mis Ă  jour avec succès", "success");
             loadPartners();
         } else {
             showToast("Erreur lors de la mise Ă  jour du partenaire", "error");
@@ -742,7 +742,7 @@ function displayProjects(projects) {
               <th>Site d'intervention</th>
               <th>Bureaux de Base</th>
               <th>Statut</th>
-              <th>RĂ©alisations</th>
+              <th>Réalisations</th>
               <th>Cible</th>
               <th>Photo1</th>
               <th>Photo2</th>
@@ -782,7 +782,7 @@ function displayProjects(projects) {
     });
     html += `</tbody></table></div>`;
     contentArea.innerHTML = html;
-    // Ajouter l'Ă©vĂ©nement aprĂ¨s l'injection HTML
+    // Ajouter l'événement après l'injection HTML
     const btnAddProject = document.getElementById("btnAddProject");
     if (btnAddProject) {
       btnAddProject.addEventListener("click", displayAddProjectForm);
@@ -807,7 +807,7 @@ function displayProjects(projects) {
         headers: { "Content-Type": "application/json" },
       });
       if (response.ok) {
-        showToast("Projet supprimĂ© avec succĂ¨s", "success");
+        showToast("Projet supprimé avec succès", "success");
         loadProjects();
       } else {
         showToast("Erreur lors de la suppression du projet", "error");
@@ -890,7 +890,7 @@ async function loadBureauxBase() {
     <label for="statut">Statut du projet:</label>
     <select id="statut" name="statut" required>
         <option value="En cours">En cours</option>
-        <option value="CloturĂ©">ClĂ´turĂ©</option>
+        <option value="Cloturé">Clôturé</option>
     </select>
 </div>
         <div class="form-group full-width">
@@ -929,14 +929,14 @@ async function loadBureauxBase() {
 
     contentArea.innerHTML = html;
 
-    // Initialiser le select multiple avec un plugin si nĂ©cessaire (ex: Select2)
+    // Initialiser le select multiple avec un plugin si nécessaire (ex: Select2)
     $('#site_intervention').select2({
-      placeholder: "SĂ©lectionnez une ou plusieurs communes",
+      placeholder: "Sélectionnez une ou plusieurs communes",
       allowClear: true
     });
 
     $('#bureaux_base').select2({
-      placeholder: "SĂ©lectionnez un ou plusieurs bureaux de base",
+      placeholder: "Sélectionnez un ou plusieurs bureaux de base",
       allowClear: true
     });
 
@@ -975,7 +975,7 @@ async function loadBureauxBase() {
             });
 
             if (response.ok) {
-                showToast("Projet ajoutĂ© avec succĂ¨s", "success");
+                showToast("Projet ajouté avec succès", "success");
                 loadProjects();
             } else {
                 const error = await response.json();
@@ -983,7 +983,7 @@ async function loadBureauxBase() {
             }
         } catch (err) {
             console.error("Erreur:", err);
-            showToast("Erreur rĂ©seau ou serveur", "error");
+            showToast("Erreur réseau ou serveur", "error");
         }
     });
 }
@@ -1026,7 +1026,7 @@ async function loadBureauxBase() {
         </div>
 
         <div class="form-group">
-          <label for="date_debut">Date de dĂ©but :</label>
+          <label for="date_debut">Date de début :</label>
           <input type="text" id="date_debut" name="date_debut" value="${project.date_debut}"/>
         </div>
 
@@ -1072,11 +1072,11 @@ async function loadBureauxBase() {
             <label for="statut">Statut :</label>
             <select id="statut" name="statut" required>
                 <option value="En cours" ${project.statut === 'En cours' ? 'selected' : ''}>En cours</option>
-                <option value="CloturĂ©" ${project.statut === 'CloturĂ©' ? 'selected' : ''}>ClĂ´turĂ©</option>
+                <option value="Cloturé" ${project.statut === 'Cloturé' ? 'selected' : ''}>Clôturé</option>
             </select>
         </div>
         <div class="form-group full-width">
-          <label for="realisations">RĂ©alisations :</label>
+          <label for="realisations">Réalisations :</label>
           <textarea id="realisations" name="realisations" rows="3" >${project.realisations}</textarea>
         </div>
         <div class="form-group full-width">
@@ -1124,13 +1124,13 @@ async function loadBureauxBase() {
         // Initialiser les selects multiples avec Select2
     $(document).ready(function () {
         $('#site_intervention').select2({
-            placeholder: "SĂ©lectionnez une ou plusieurs communes",
+            placeholder: "Sélectionnez une ou plusieurs communes",
             allowClear: true
         }).val(selectedSiteIds).trigger('change');
 
-        // NEW: Initialiser Select2 pour les bureaux de base et prĂ©-sĂ©lectionner
+        // NEW: Initialiser Select2 pour les bureaux de base et pré-sélectionner
         $('#bureaux_base').select2({
-            placeholder: "SĂ©lectionnez un ou plusieurs bureaux de base",
+            placeholder: "Sélectionnez un ou plusieurs bureaux de base",
             allowClear: true
         }).val(selectedBureauBaseIds).trigger('change');
     });
@@ -1185,7 +1185,7 @@ async function loadBureauxBase() {
 
             if (response.ok) {
                 const result = await response.json();
-                showToast("Projet mis Ă  jour avec succĂ¨s", "success");
+                showToast("Projet mis Ă  jour avec succès", "success");
                 loadProjects();
             } else if (response.status === 401) {
                 window.location.href = '/admin.html';
@@ -1195,7 +1195,7 @@ async function loadBureauxBase() {
             }
         } catch (err) {
             console.error("Erreur:", err);
-            showToast("Erreur rĂ©seau ou serveur", "error");
+            showToast("Erreur réseau ou serveur", "error");
         }
     });
 }

@@ -1911,3 +1911,32 @@ function highlightChapter(chapter) {
   chapter.classList.add("active-chapter");
 }
 
+// ===== TOGGLE STORY MAP =====
+document.addEventListener('DOMContentLoaded', function () {
+  const toggleBtn = document.getElementById('story-map-toggle-btn');
+  const storyMapControl = document.querySelector('.ol-control.ol-storymap');
+  const toggleIcon = document.getElementById('story-toggle-icon');
+
+  // État initial : Story Map visible
+  let isStoryMapVisible = true;
+
+  // Fonction toggle
+  toggleBtn.addEventListener('click', function () {
+    isStoryMapVisible = !isStoryMapVisible;
+
+    if (isStoryMapVisible) {
+      // Afficher la Story Map
+      storyMapControl.classList.remove('story-collapsed');
+      toggleBtn.classList.remove('collapsed');
+      toggleIcon.className = 'fas fa-book-open';
+      toggleBtn.title = 'Masquer Story Map';
+    } else {
+      // Masquer la Story Map
+      storyMapControl.classList.add('story-collapsed');
+      toggleBtn.classList.add('collapsed');
+      toggleIcon.className = 'fas fa-book';
+      toggleBtn.title = 'Afficher Story Map';
+    }
+  });
+});
+

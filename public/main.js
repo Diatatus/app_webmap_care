@@ -1314,7 +1314,7 @@ inputBox.onkeyup = function () {
 
       layers.forEach((layer) => {
         $.ajax({
-          url: "http://localhost:3000/api/liveSearch", // Endpoint requete sql du serveur Node.js dans la base de donné
+          url: "/api/liveSearch", // URL relative - fonctionne en local ET en production
           type: "POST",
           data: JSON.stringify({
             request: "liveSearch",
@@ -1390,7 +1390,7 @@ function zoomToFeature(featureElement, layerName, attributeName) {
 
   // Requête pour récupérer les coordonnées du point dans la base de données
   $.ajax({
-    url: "http://localhost:3000/api/zoomFeature", // Endpoint requete sql du serveur Node.js dans la base de donné
+    url: "/api/zoomFeature", // URL relative - fonctionne en local ET en production
     type: "POST",
     contentType: "application/json",
     data: JSON.stringify({

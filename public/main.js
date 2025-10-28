@@ -37,6 +37,15 @@ document.addEventListener('DOMContentLoaded', function () {
           document.getElementById('loading').style.transition = 'opacity 0.5s ease-out';
           setTimeout(() => {
             document.getElementById('loading').style.display = 'none';
+
+            // Afficher les contrôles après le chargement
+            const zoomControls = document.getElementById('zoom-controls');
+            const layerSwitcher = document.getElementById('custom-layer-switcher');
+            const storyToggleBtn = document.getElementById('story-map-toggle-btn');
+
+            if (zoomControls) zoomControls.classList.add('loaded');
+            if (layerSwitcher) layerSwitcher.classList.add('loaded');
+            if (storyToggleBtn) storyToggleBtn.classList.add('loaded');
           }, 500);
         }, 300);
       }
@@ -739,6 +748,7 @@ document
 // Fonction de representation des graphes
 
 var demographyChart, familyChart; // Declaration des variables
+var sidebarDemographyChart, sidebarFamilyChart; // Graphiques pour la sidebar
 
 function createCharts(feature) {
   if (demographyChart) demographyChart.destroy();
@@ -825,6 +835,143 @@ function createCharts(feature) {
   );
 }
 
+// Fonction pour remplir les données dans le popup (sans créer les graphiques)
+function fillPopupData(feature) {
+  // Démographie
+  document.getElementById("total-population-info").textContent =
+    feature.get("total_pop").toLocaleString() + " habitants";
+  document.getElementById("population-density-info").textContent =
+    feature.get("denspop_reg") + " hab/km²";
+
+  // Santé
+  document.getElementById("access-sanity").textContent =
+    feature.get("acces_sanit_amel");
+  document.getElementById("access-water").textContent =
+    feature.get("acces_eau_amel");
+  document.getElementById("handwashing").textContent =
+    feature.get("inst_lavmain_lim");
+
+  // VIH
+  document.getElementById("hiv-males").textContent =
+    feature.get("prev_vih_hom");
+  document.getElementById("hiv-females").textContent =
+    feature.get("prev_vih_fem");
+
+  // Économie
+  document.getElementById("poverty-rate").textContent =
+    feature.get("taux_pvrt");
+  document.getElementById("unemployment-rate").textContent =
+    feature.get("taux_chom");
+  document.getElementById("financial-inclusion").textContent =
+    feature.get("incl_fin_emf");
+
+  // Planning familial
+  document.getElementById("unmet-need").textContent =
+    feature.get("besoins_nonsatisf_pf");
+  document.getElementById("contraceptive-use").textContent =
+    feature.get("fem_utilmethcontracep_mod");
+}
+
+// Fonction pour créer les graphiques dans la sidebar
+function createChartsInSidebar(feature) {
+  // Détruire les anciens graphiques s'ils existent
+  if (sidebarDemographyChart) sidebarDemographyChart.destroy();
+  if (sidebarFamilyChart) sidebarFamilyChart.destroy();
+
+  // Vérifier que les canvas existent dans la sidebar
+  const sidebarContent = document.getElementById('sidebar-content');
+  if (!sidebarContent) return;
+
+  const demographyCanvas = sidebarContent.querySelector('#demography-chart');
+  const violenceCanvas = sidebarContent.querySelector('#domestic-violence-pie-chart');
+
+  // Demography data
+  var demographyData = {
+    labels: ["Hommes", "Femmes"],
+    datasets: [
+      {
+        label: "Population",
+        data: [feature.get("popsex_masc"), feature.get("popsex_fem")],
+        backgroundColor: ["#36A2EB", "#FF6384"],
+      },
+    ],
+  };
+
+  // Family violence data
+  var familyData = {
+    labels: ["%Hommes", "%Femmes"],
+    datasets: [
+      {
+        data: [
+          feature.get("justif_violconj_hom"),
+          feature.get("justif_violconj_fem"),
+        ],
+        backgroundColor: ["#36A2EB", "#FF6384"],
+      },
+    ],
+  };
+
+  // Créer le graphique de démographie dans la sidebar
+  if (demographyCanvas) {
+    sidebarDemographyChart = new Chart(demographyCanvas, {
+      type: "pie",
+      data: demographyData,
+      options: {
+        responsive: true,
+        maintainAspectRatio: true,
+        plugins: {
+          legend: {
+            position: "bottom",
+            labels: {
+              font: {
+                size: 11
+              }
+            }
+          },
+          title: {
+            display: true,
+            text: 'Répartition par sexe',
+            font: {
+              size: 13,
+              weight: 'bold'
+            }
+          }
+        }
+      },
+    });
+  }
+
+  // Créer le graphique de violence domestique dans la sidebar
+  if (violenceCanvas) {
+    sidebarFamilyChart = new Chart(violenceCanvas, {
+      type: "pie",
+      data: familyData,
+      options: {
+        responsive: true,
+        maintainAspectRatio: true,
+        plugins: {
+          legend: {
+            position: "bottom",
+            labels: {
+              font: {
+                size: 11
+              }
+            }
+          },
+          title: {
+            display: true,
+            text: 'Justification violence conjugale',
+            font: {
+              size: 13,
+              weight: 'bold'
+            }
+          }
+        }
+      }
+    });
+  }
+}
+
 // Fonction pour basculer l'état de la popup (plier/déplier)
 function togglePopup() {
   const popupContainer = document.getElementById("popup-container");
@@ -848,40 +995,66 @@ document.getElementById("popup-toggle-btn").addEventListener("click", togglePopu
 
 // Fonction d'affichege du popup d'informations sur les indicateurs socio-economiques
 function showPopup(feature) {
-  const popupContainer = document.getElementById("popup-container");
-
   const zoneName = feature.get("nom"); // Nom region ou ville
 
-  document.getElementById(
-    "zone-name"
-  ).innerHTML = `<strong>${zoneName}</strong>`;
+  // Récupérer le contenu du popup existant
+  const popupContainer = document.getElementById("popup-container");
+  const popupInfo = document.getElementById("popup-info");
 
-  popupContainer.style.display = "block"; // Popup vible a l'acceuil
+  // Cacher l'ancien popup (au cas où)
+  if (popupContainer) {
+    popupContainer.style.display = "none";
+  }
 
+  // Mettre à jour les données dans les éléments (nécessaire pour createCharts)
+  document.getElementById("zone-name").innerHTML = `<strong>${zoneName}</strong>`;
+
+  // Remplir toutes les données dans le DOM AVANT de cloner
+  fillPopupData(feature);
+
+  // Cloner le contenu du popup pour la sidebar (APRÈS avoir rempli les données)
+  const sidebarContent = popupInfo ? popupInfo.cloneNode(true) : '<p>Aucune donnée disponible</p>';
+
+  // Ouvrir la sidebar avec le contenu
+  modernSidebar.open(
+    zoneName,
+    'fas fa-chart-line',
+    sidebarContent.outerHTML || sidebarContent
+  );
+
+  // Recréer les graphiques DANS la sidebar après l'injection du contenu
   setTimeout(() => {
-    popupContainer.style.opacity = 1;
-  }, 10);
-
-  // Fonction de creation des graphiques
-  createCharts(feature);
+    createChartsInSidebar(feature);
+  }, 100);
 }
 
 function hidePopup() {
+  // Fermer la sidebar au lieu du popup
+  modernSidebar.close();
+
+  // Cacher aussi l'ancien popup (au cas où)
   const popupContainer = document.getElementById("popup-container");
-  popupContainer.style.opacity = 0; // Appliquer une transition pour masquer
-  setTimeout(() => {
-    popupContainer.style.display = "none"; // Cacher complètement après la transition
-  }, 300);
+  if (popupContainer) {
+    popupContainer.style.opacity = 0;
+    setTimeout(() => {
+      popupContainer.style.display = "none";
+    }, 300);
+  }
 }
 
 // Fonction de fermeture de la fenetre popup
 function closePopup() {
-  const popupContainer = document.getElementById("popup-container");
-  popupContainer.style.opacity = 0;
+  // Fermer la sidebar
+  modernSidebar.close();
 
-  setTimeout(() => {
-    popupContainer.style.display = "none";
-  }, 500);
+  // Cacher aussi l'ancien popup (au cas où)
+  const popupContainer = document.getElementById("popup-container");
+  if (popupContainer) {
+    popupContainer.style.opacity = 0;
+    setTimeout(() => {
+      popupContainer.style.display = "none";
+    }, 500);
+  }
 }
 
 // Re-bind the close button event listener
@@ -1104,6 +1277,24 @@ var txtVal = "";
 var inputBox = document.getElementById("inpt_search");
 var liveDataDivEle = document.getElementById("liveDataDiv");
 var searchTable = document.createElement("table");
+var searchClearBtn = document.getElementById("search-clear");
+
+// Gestion du bouton clear
+inputBox.addEventListener('input', function() {
+  if (this.value.length > 0) {
+    searchClearBtn.style.display = 'block';
+  } else {
+    searchClearBtn.style.display = 'none';
+  }
+});
+
+searchClearBtn.addEventListener('click', function() {
+  inputBox.value = '';
+  txtVal = '';
+  searchClearBtn.style.display = 'none';
+  clearResults();
+  inputBox.focus();
+});
 
 inputBox.onkeyup = function () {
   const newVal = this.value.trim();
@@ -1640,14 +1831,17 @@ backBtn.addEventListener('click', () => {
 // REMPLACER VOTRE FONCTION displayPopup PAR CELLE-CI:
 function displayPopup(baseName) {
   document.getElementById("base-name").textContent = baseName;
-  
+
   const basePopup = document.getElementById("base-projects-popup");
-  basePopup.style.display = "block";
-  setTimeout(() => (basePopup.style.opacity = 1), 10);
+
+  // Cacher l'ancien popup
+  if (basePopup) {
+    basePopup.style.display = "none";
+  }
 
   // TOUJOURS commencer par la vue liste
   showListView();
-  
+
   // Réinitialiser la checkbox de zoom
   const zoomCheckbox = document.getElementById('zoom-to-sites');
   if (zoomCheckbox) {
@@ -1662,9 +1856,334 @@ function displayPopup(baseName) {
 
   applyFilter();
   renderProjectList();
+
+  // Récupérer le contenu complet du popup pour la sidebar
+  const projectListView = document.getElementById('project-list-view');
+  const projectDetailView = document.getElementById('project-detail-view');
+
+  // Créer le contenu HTML pour la sidebar
+  const sidebarHTML = `
+    <div id="sidebar-project-list-view" style="display: ${viewMode === 'list' ? 'block' : 'none'}">
+      ${projectListView ? projectListView.outerHTML : ''}
+    </div>
+    <div id="sidebar-project-detail-view" style="display: ${viewMode === 'detail' ? 'block' : 'none'}">
+      ${projectDetailView ? projectDetailView.outerHTML : ''}
+    </div>
+  `;
+
+  // Ouvrir la sidebar avec le contenu
+  modernSidebar.open(
+    baseName,
+    'fas fa-house',
+    sidebarHTML
+  );
+
+  // Réattacher les événements après l'injection dans la sidebar
+  setTimeout(() => {
+    reattachProjectEvents();
+
+    // Réattacher les événements de clic sur les projets de la liste
+    const sidebarContent = document.getElementById('sidebar-content');
+
+    if (sidebarContent) {
+      // Chercher les éléments de la liste de projets
+      let projectItems = sidebarContent.querySelectorAll('.project-list li');
+
+      if (projectItems.length === 0) {
+        projectItems = sidebarContent.querySelectorAll('#project-list li');
+      }
+
+      projectItems.forEach((li, idx) => {
+        li.addEventListener('click', function(e) {
+          e.stopPropagation();
+          const project = filteredProjects[idx];
+          if (project) {
+            showProjectDetailInSidebar(project);
+          }
+        });
+      });
+    }
+  }, 100);
 }
 
+// Fonction pour réattacher les événements dans la sidebar
+function reattachProjectEvents() {
+  const sidebarContent = document.getElementById('sidebar-content');
+  if (!sidebarContent) return;
 
+  // NOTE: Les événements de clic sur les projets sont attachés dans displayPopup() ligne 1878
+  // et dans le filtre (ligne 1932). Pas besoin de les réattacher ici pour éviter les doublons
+
+  // Réattacher le bouton retour
+  const backBtn = sidebarContent.querySelector('#back-to-list');
+  if (backBtn) {
+    backBtn.addEventListener('click', () => {
+      showListViewInSidebar();
+
+      const zoomCheckbox = sidebarContent.querySelector('#zoom-to-sites');
+      if (zoomCheckbox) {
+        zoomCheckbox.checked = false;
+        if (typeof resetSitesHighlight === 'function') {
+          resetSitesHighlight();
+        }
+      }
+    });
+  }
+
+  // Réattacher le filtre de statut
+  const statusFilter = sidebarContent.querySelector('#status-filter');
+  if (statusFilter) {
+    statusFilter.addEventListener('change', () => {
+      const currentSidebarContent = document.getElementById('sidebar-content');
+      if (!currentSidebarContent) return;
+
+      applyFilter();
+
+      // Re-render dans le DOM caché
+      renderProjectList();
+
+      // Mettre à jour le contenu de la sidebar avec le nouveau contenu
+      const projectListView = document.getElementById('project-list-view');
+      const listViewWrapper = currentSidebarContent.querySelector('#sidebar-project-list-view');
+
+      if (projectListView && listViewWrapper) {
+        listViewWrapper.innerHTML = projectListView.outerHTML;
+
+        // Réattacher les événements après la mise à jour
+        setTimeout(() => {
+          const projectItems = currentSidebarContent.querySelectorAll('.project-list li');
+          projectItems.forEach((li, idx) => {
+            li.addEventListener('click', function(e) {
+              e.stopPropagation();
+              const project = filteredProjects[idx];
+              if (project) {
+                showProjectDetailInSidebar(project);
+              }
+            });
+          });
+        }, 10);
+      }
+    });
+  }
+}
+
+// Fonctions pour gérer la vue dans la sidebar
+function showListViewInSidebar() {
+  viewMode = 'list';
+  const sidebarContent = document.getElementById('sidebar-content');
+  if (!sidebarContent) return;
+
+  // Chercher les wrappers sidebar
+  const listViewWrapper = sidebarContent.querySelector('#sidebar-project-list-view');
+  const detailViewWrapper = sidebarContent.querySelector('#sidebar-project-detail-view');
+
+  // Afficher le wrapper de la liste
+  if (listViewWrapper) {
+    listViewWrapper.style.display = 'block';
+    listViewWrapper.classList.remove('hidden');
+
+    // Aussi afficher la div interne project-list-view
+    const innerListView = listViewWrapper.querySelector('#project-list-view');
+    if (innerListView) {
+      innerListView.style.display = 'block';
+      innerListView.classList.remove('hidden');
+    }
+  }
+
+  // Cacher le wrapper des détails
+  if (detailViewWrapper) {
+    detailViewWrapper.style.display = 'none';
+    detailViewWrapper.classList.add('hidden');
+  }
+}
+
+function showDetailViewInSidebar() {
+  viewMode = 'detail';
+  const sidebarContent = document.getElementById('sidebar-content');
+  if (!sidebarContent) return;
+
+  // Chercher les wrappers sidebar
+  const listViewWrapper = sidebarContent.querySelector('#sidebar-project-list-view');
+  const detailViewWrapper = sidebarContent.querySelector('#sidebar-project-detail-view');
+
+  // Cacher le wrapper de la liste
+  if (listViewWrapper) {
+    listViewWrapper.style.display = 'none';
+    listViewWrapper.classList.add('hidden');
+  }
+
+  // Afficher le wrapper des détails
+  if (detailViewWrapper) {
+    detailViewWrapper.style.display = 'block';
+    detailViewWrapper.classList.remove('hidden');
+
+    // Aussi afficher la div interne project-detail-view
+    const innerDetailView = detailViewWrapper.querySelector('#project-detail-view');
+    if (innerDetailView) {
+      innerDetailView.style.display = 'block';
+      innerDetailView.classList.remove('hidden');
+    }
+  }
+}
+
+// Fonction pour afficher les détails d'un projet dans la sidebar
+function showProjectDetailInSidebar(project) {
+  const sidebarContent = document.getElementById('sidebar-content');
+  if (!sidebarContent) return;
+
+  // Basculer vers la vue détail
+  showDetailViewInSidebar();
+
+  // Attendre un instant pour que le DOM soit mis à jour
+  setTimeout(() => {
+    // Remplir les détails du projet
+    const detailName = sidebarContent.querySelector('#detail-project-name');
+    const detailSigle = sidebarContent.querySelector('#detail-project-sigle');
+    const detailStart = sidebarContent.querySelector('#detail-project-start-date');
+    const detailEnd = sidebarContent.querySelector('#detail-project-end-date');
+    const detailBudget = sidebarContent.querySelector('#detail-project-budget');
+    const detailBailleur = sidebarContent.querySelector('#detail-project-bailleur');
+    const detailStatus = sidebarContent.querySelector('#detail-project-status');
+    const detailObjective = sidebarContent.querySelector('#detail-project-objective');
+    const detailTarget = sidebarContent.querySelector('#detail-project-target');
+    const detailSites = sidebarContent.querySelector('#detail-project-sites');
+    const detailAchievements = sidebarContent.querySelector('#detail-project-achievements');
+    const detailPhotoGallery = sidebarContent.querySelector('#project-photo-gallery');
+
+    if (detailName) detailName.textContent = project.nom_projet || 'N/A';
+    if (detailSigle) detailSigle.textContent = project.sigle_projet || 'N/A';
+    if (detailStart) detailStart.textContent = project.date_debut || 'N/A';
+    if (detailEnd) detailEnd.textContent = project.date_fin || 'N/A';
+    if (detailBudget) detailBudget.textContent = project.budget_projet || 'N/A';
+    if (detailBailleur) detailBailleur.textContent = project.bailleur || 'N/A';
+    if (detailStatus) detailStatus.textContent = project.statut || 'N/A';
+
+    // Remplir les listes
+    if (detailObjective) {
+      detailObjective.innerHTML = '';
+      if (project.objectif_global) {
+        project.objectif_global.split(/[;,]\s*/).forEach(item => {
+          const li = document.createElement('li');
+          li.textContent = item;
+          detailObjective.appendChild(li);
+        });
+      }
+    }
+
+    if (detailTarget) {
+      detailTarget.innerHTML = '';
+      if (project.cible) {
+        project.cible.split(/[;,]\s*/).forEach(item => {
+          const li = document.createElement('li');
+          li.textContent = item;
+          detailTarget.appendChild(li);
+        });
+      }
+    }
+
+    if (detailSites) {
+      detailSites.innerHTML = '';
+      if (project.sites) {
+        project.sites.split(/[;,]\s*/).forEach(item => {
+          const li = document.createElement('li');
+          li.textContent = item;
+          detailSites.appendChild(li);
+        });
+      }
+    }
+
+    if (detailAchievements) {
+      detailAchievements.innerHTML = '';
+      if (project.realisations) {
+        project.realisations.split(/[;,]\s*/).forEach(item => {
+          const li = document.createElement('li');
+          li.textContent = item;
+          detailAchievements.appendChild(li);
+        });
+      }
+    }
+
+    // Remplir la galerie photo
+    if (detailPhotoGallery) {
+      detailPhotoGallery.innerHTML = '';
+      if (project.photos && Array.isArray(project.photos)) {
+        project.photos.forEach((photo, index) => {
+          const img = document.createElement('img');
+          img.src = photo;
+          img.alt = `Photo ${index + 1}`;
+          img.addEventListener('click', () => {
+            // Ouvrir le modal d'image si disponible
+            if (typeof openImageModal === 'function') {
+              openImageModal(project.photos, index);
+            }
+          });
+          detailPhotoGallery.appendChild(img);
+        });
+      }
+    }
+
+    // Gérer la checkbox de zoom
+    const zoomCheckbox = sidebarContent.querySelector('#zoom-to-sites');
+    if (zoomCheckbox && project.id_projet) {
+      // Retirer les anciens écouteurs
+      const newZoomCheckbox = zoomCheckbox.cloneNode(true);
+      zoomCheckbox.parentNode.replaceChild(newZoomCheckbox, zoomCheckbox);
+
+      newZoomCheckbox.addEventListener('change', async function() {
+        if (this.checked) {
+          try {
+            const zoomLoading = document.getElementById('zoom-loading');
+            if (zoomLoading) zoomLoading.style.display = 'inline-block';
+            this.disabled = true;
+
+            const response = await fetch(`/api/projects/${project.id_projet}/sites`);
+            if (!response.ok) throw new Error(await response.text());
+
+            const data = await response.json();
+            const [minX, minY, maxX, maxY] = data.bbox.match(/\d+\.?\d*/g).map(Number);
+            const extent = ol.proj.transformExtent(
+              [minX, minY, maxX, maxY],
+              'EPSG:4326',
+              'EPSG:3857'
+            );
+
+            map.getView().fit(extent, {
+              padding: [50, 50, 50, 50],
+              duration: 1000
+            });
+
+            if (typeof highlightSites === 'function') {
+              highlightSites(data.communes);
+            }
+
+            // Fermer automatiquement la sidebar sur petit écran (< 768px)
+            if (window.innerWidth < 768) {
+              if (typeof modernSidebar !== 'undefined' && modernSidebar.isOpen()) {
+                setTimeout(() => {
+                  modernSidebar.close();
+                }, 800); // Délai pour laisser l'animation de zoom se terminer
+              }
+            }
+          } catch (error) {
+            console.error("Erreur:", error);
+            this.checked = false;
+            alert("Erreur lors du chargement des sites");
+          } finally {
+            const zoomLoading = document.getElementById('zoom-loading');
+            if (zoomLoading) zoomLoading.style.display = 'none';
+            this.disabled = false;
+          }
+        } else {
+          if (typeof resetSitesHighlight === 'function') {
+            resetSitesHighlight();
+          }
+        }
+      });
+    }
+  }, 10);
+}
+
+// Fonction renderProjectListInSidebar() supprimée - inutilisée, on utilise renderProjectList() qui clone le DOM
 
 // Function to format lists with bullet points
 function formatList(text) {
@@ -1916,9 +2435,18 @@ document.addEventListener('DOMContentLoaded', function () {
   const toggleBtn = document.getElementById('story-map-toggle-btn');
   const storyMapControl = document.querySelector('.ol-control.ol-storymap');
   const toggleIcon = document.getElementById('story-toggle-icon');
+  const loadingScreen = document.getElementById('loading');
 
   // État initial : Story Map visible
   let isStoryMapVisible = true;
+
+  // Afficher le bouton après la fin du chargement
+  const checkLoading = setInterval(function() {
+    if (loadingScreen && loadingScreen.style.display === 'none') {
+      toggleBtn.classList.add('loaded');
+      clearInterval(checkLoading);
+    }
+  }, 100);
 
   // Fonction toggle
   toggleBtn.addEventListener('click', function () {
@@ -1928,15 +2456,116 @@ document.addEventListener('DOMContentLoaded', function () {
       // Afficher la Story Map
       storyMapControl.classList.remove('story-collapsed');
       toggleBtn.classList.remove('collapsed');
-      toggleIcon.className = 'fas fa-book-open';
+      toggleIcon.className = 'fa-solid fa-map-location-dot';
       toggleBtn.title = 'Masquer Story Map';
     } else {
       // Masquer la Story Map
       storyMapControl.classList.add('story-collapsed');
       toggleBtn.classList.add('collapsed');
-      toggleIcon.className = 'fas fa-book';
+      toggleIcon.className = 'fa-solid fa-map-location';
       toggleBtn.title = 'Afficher Story Map';
     }
   });
+});
+
+// ===== GESTION DE LA SIDEBAR MODERNE =====
+const modernSidebar = {
+  sidebar: null,
+  sidebarContent: null,
+  sidebarTitle: null,
+  sidebarIcon: null,
+  closeBtn: null,
+  overlay: null,
+  mapElement: null,
+
+  // Initialisation
+  init: function () {
+    this.sidebar = document.getElementById('modern-sidebar');
+    this.sidebarContent = document.getElementById('sidebar-content');
+    this.sidebarTitle = document.getElementById('sidebar-title');
+    this.sidebarIcon = document.getElementById('sidebar-icon');
+    this.closeBtn = document.getElementById('sidebar-close-btn');
+    this.overlay = document.querySelector('.sidebar-overlay');
+    this.mapElement = document.getElementById('map');
+
+    // Événements
+    if (this.closeBtn) {
+      this.closeBtn.addEventListener('click', () => this.close());
+    }
+
+    if (this.overlay) {
+      this.overlay.addEventListener('click', () => this.close());
+    }
+
+    // Fermer avec la touche Escape
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape' && this.sidebar.classList.contains('active')) {
+        this.close();
+      }
+    });
+  },
+
+  // Ouvrir la sidebar avec du contenu
+  open: function (title, iconClass, content) {
+    if (!this.sidebar) return;
+
+    // Mettre à jour le titre et l'icône
+    if (this.sidebarTitle) {
+      this.sidebarTitle.textContent = title;
+    }
+
+    if (this.sidebarIcon) {
+      this.sidebarIcon.className = iconClass;
+    }
+
+    // Injecter le contenu
+    if (this.sidebarContent && content) {
+      this.sidebarContent.innerHTML = content;
+    }
+
+    // Activer la sidebar
+    this.sidebar.classList.add('active');
+
+    // Désactiver le scroll du body
+    document.body.style.overflow = 'hidden';
+  },
+
+  // Fermer la sidebar
+  close: function () {
+    if (!this.sidebar) return;
+
+    // Détruire les graphiques de la sidebar s'ils existent
+    if (typeof sidebarDemographyChart !== 'undefined' && sidebarDemographyChart) {
+      sidebarDemographyChart.destroy();
+      sidebarDemographyChart = null;
+    }
+    if (typeof sidebarFamilyChart !== 'undefined' && sidebarFamilyChart) {
+      sidebarFamilyChart.destroy();
+      sidebarFamilyChart = null;
+    }
+
+    // Désactiver la sidebar
+    this.sidebar.classList.remove('active');
+
+    // Réactiver le scroll du body
+    document.body.style.overflow = '';
+
+    // Vider le contenu après l'animation
+    setTimeout(() => {
+      if (this.sidebarContent) {
+        this.sidebarContent.innerHTML = '';
+      }
+    }, 400);
+  },
+
+  // Vérifier si la sidebar est ouverte
+  isOpen: function () {
+    return this.sidebar && this.sidebar.classList.contains('active');
+  }
+};
+
+// Initialiser la sidebar au chargement du DOM
+document.addEventListener('DOMContentLoaded', function () {
+  modernSidebar.init();
 });
 

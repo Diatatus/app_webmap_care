@@ -46,6 +46,29 @@
   </div>
   <!-- Carte -->
   <div id="map" class="map2"></div>
+
+  <!-- Sidebar moderne pour remplacer les popups -->
+  <div id="modern-sidebar" class="modern-sidebar">
+    <div class="sidebar-overlay"></div>
+    <div class="sidebar-container">
+      <!-- Header de la sidebar -->
+      <div class="sidebar-header">
+        <div class="sidebar-title-wrapper">
+          <i id="sidebar-icon" class="fas fa-info-circle"></i>
+          <h2 id="sidebar-title">Informations</h2>
+        </div>
+        <button id="sidebar-close-btn" class="sidebar-close-btn" title="Fermer">
+          <i class="fas fa-times"></i>
+        </button>
+      </div>
+
+      <!-- Contenu dynamique de la sidebar -->
+      <div class="sidebar-content" id="sidebar-content">
+        <!-- Le contenu sera injecté dynamiquement ici -->
+      </div>
+    </div>
+  </div>
+
   <!-- Buttons couche de données -->
   <div id="layer-slider-container">
     <div id="layer-slider" class="custom-layer-slider-horizontal">
@@ -76,6 +99,7 @@
         <div class="search-container">
           <i class="fas fa-search search-icon" id="search-toggle"></i>
           <input id="inpt_search" type="text" class="searchTerm" placeholder="Rechercher...">
+          <i class="fas fa-times search-clear" id="search-clear" style="display: none;"></i>
           <div class="liveDataDiv" id="liveDataDiv"></div>
         </div>
       </div>
@@ -106,7 +130,7 @@
 
   <!-- Story Map Toggle Button -->
   <button id="story-map-toggle-btn" class="story-map-toggle-btn" title="Afficher/Masquer Story Map">
-    <i class="fas fa-book-open" id="story-toggle-icon"></i>
+    <i class="fa-solid fa-map-location-dot" id="story-toggle-icon"></i>
   </button>
 
   <!-- Story Map -->
@@ -168,7 +192,7 @@
 
     <div id="popup-info" class="popup-info">
       <!-- Démographie -->
-      <h3><strong>-- Démographie --</strong></h3>
+      <h3><i class="fas fa-users"></i> Démographie</h3>
       <br />
       <div id="demography-icons">
         <div class="demography-icon-group">
@@ -184,7 +208,7 @@
         <canvas id="demography-chart"></canvas>
       </div>
       <br />
-      <h3><strong>-- Santé --</strong></h3>
+      <h3><i class="fas fa-heart-pulse"></i> Santé</h3>
       <div id="health-icons">
         <div id="access-sanity-icon">
           <i class="fas fa-hand-holding-medical fa-2x"></i>
@@ -230,7 +254,7 @@
       </div>
       <br />
       <!-- Economie -->
-      <h3><strong>-- Economie et Emploi --</strong></h3>
+      <h3><i class="fas fa-chart-line"></i> Économie et Emploi</h3>
       <div id="economy-icons">
         <div id="poverty-rate-icon">
           <i class="fas fa-hand-holding-usd fa-2x"></i>
@@ -256,13 +280,12 @@
       </div>
       <br />
       <!-- Foyer et Planning famillial -->
-      <h3><strong>-- Foyer et Planning Familial --</strong></h3>
+      <h3><i class="fas fa-house-user"></i> Foyer et Planning Familial</h3>
       <div id="family-planning-icons">
         <div id="unmet-need-icon">
           <i class="fas fa-person-breastfeeding fa-2x"></i>
           <p id="need-unmet">
-            Besoins non satisfaits en matière des femmes de planification
-            familiale :<br />
+            Satisfaction des femmes en matière de planification familiale :<br />
             <strong><span id="unmet-need"></span>%</strong>
           </p>
         </div>

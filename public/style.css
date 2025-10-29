@@ -4654,15 +4654,16 @@
           border-left: 1px solid rgba(255, 255, 255, 0.4);
           transform: translateX(100%);
           transition: transform 0.4s cubic-bezier(0.4, 0, 0.2, 1);
-          pointer-events: auto;
+          pointer-events: none;
           display: flex;
           flex-direction: column;
           overflow: hidden;
         }
 
-        /* Sidebar active - slide in */
+        /* Sidebar active - slide in et activer les pointer-events */
         .modern-sidebar.active .sidebar-container {
           transform: translateX(0);
+          pointer-events: auto;
         }
 
         /* Header de la sidebar */
@@ -4765,8 +4766,23 @@
 
         /* Responsive pour tablettes */
         @media (max-width: 1024px) {
+          /* Sur tablette/mobile, la sidebar prend toute la largeur */
+          .modern-sidebar {
+            width: 100%;
+            right: 0;
+            left: auto;
+          }
+
           .sidebar-container {
-            width: 400px;
+            width: 100%;
+            max-width: 100%;
+          }
+
+          /* IMPORTANT : Overlay désactivé car sidebar prend 100%
+             L'utilisateur doit utiliser le bouton X pour fermer */
+          .modern-sidebar.active .sidebar-overlay {
+            pointer-events: none !important;
+            background: transparent;
           }
 
           .sidebar-header {
@@ -4792,6 +4808,13 @@
 
         /* Responsive pour mobile */
         @media (max-width: 768px) {
+          /* Sur mobile, la sidebar prend toute la largeur */
+          .modern-sidebar {
+            width: 100%;
+            right: 0;
+            left: auto;
+          }
+
           .sidebar-container {
             width: 100%;
             max-width: 100%;
@@ -4850,6 +4873,18 @@
         }
 
         @media (max-width: 480px) {
+          /* Sur très petit écran, sidebar prend toute la largeur */
+          .modern-sidebar {
+            width: 100%;
+            right: 0;
+            left: auto;
+          }
+
+          .sidebar-container {
+            width: 100%;
+            max-width: 100%;
+          }
+
           .sidebar-header {
             padding: 16px 18px;
           }

@@ -37,8 +37,6 @@ document.addEventListener('DOMContentLoaded', function () {
           document.getElementById('loading').style.transition = 'opacity 0.5s ease-out';
           setTimeout(() => {
             document.getElementById('loading').style.display = 'none';
-            // Réactiver le scroll du body
-            document.body.style.overflow = 'auto';
 
             // Afficher les contrôles après le chargement
             const zoomControls = document.getElementById('zoom-controls');

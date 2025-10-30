@@ -445,7 +445,7 @@
           overflow: hidden;
         }
 
-        /* Motifs de courbes de niveau en relief sur le loader */
+        /* Image de courbes de niveau topographiques sur le loader */
         .loader::before {
           content: '';
           position: absolute;
@@ -453,52 +453,14 @@
           left: 0;
           width: 100%;
           height: 100%;
-          background-image:
-            repeating-radial-gradient(circle at 30% 40%,
-              transparent 0,
-              transparent 80px,
-              rgba(255, 255, 255, 0.04) 80px,
-              rgba(255, 255, 255, 0.04) 82px,
-              transparent 82px,
-              transparent 100px,
-              rgba(255, 255, 255, 0.05) 100px,
-              rgba(255, 255, 255, 0.05) 103px
-            ),
-            repeating-radial-gradient(circle at 70% 60%,
-              transparent 0,
-              transparent 60px,
-              rgba(229, 91, 0, 0.06) 60px,
-              rgba(229, 91, 0, 0.06) 62px,
-              transparent 62px,
-              transparent 90px,
-              rgba(229, 91, 0, 0.08) 90px,
-              rgba(229, 91, 0, 0.08) 93px
-            ),
-            repeating-radial-gradient(circle at 50% 80%,
-              transparent 0,
-              transparent 70px,
-              rgba(255, 255, 255, 0.03) 70px,
-              rgba(255, 255, 255, 0.03) 72px
-            );
-          opacity: 0.7;
+          background-image: url('./resources/images/topographic-contour-lines.png');
+          background-size: cover;
+          background-position: center;
+          background-repeat: no-repeat;
+          opacity: 0.2;
           animation: contour-float 30s ease-in-out infinite;
           pointer-events: none;
-        }
-
-        /* Lignes de grille cartographique sur le loader */
-        .loader::after {
-          content: '';
-          position: absolute;
-          top: 0;
-          left: 0;
-          width: 100%;
-          height: 100%;
-          background-image:
-            linear-gradient(rgba(255, 255, 255, 0.03) 1px, transparent 1px),
-            linear-gradient(90deg, rgba(255, 255, 255, 0.03) 1px, transparent 1px);
-          background-size: 40px 40px;
-          opacity: 0.4;
-          pointer-events: none;
+          filter: brightness(0) invert(1);
         }
 
         /* Élever les éléments au-dessus des pseudo-éléments */

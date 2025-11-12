@@ -817,10 +817,25 @@ function createCharts(feature) {
     data: demographyData,
     options: {
       responsive: true,
+      maintainAspectRatio: true,
+      aspectRatio: 1.5,
       plugins: {
         legend: {
           position: "bottom",
+          labels: {
+            font: {
+              size: 11
+            }
+          }
         },
+        title: {
+          display: true,
+          text: 'Répartition par sexe',
+          font: {
+            size: 13,
+            weight: 'bold'
+          }
+        }
       },
     },
   });
@@ -831,6 +846,29 @@ function createCharts(feature) {
     {
       type: "pie",
       data: familyData,
+      options: {
+        responsive: true,
+        maintainAspectRatio: true,
+        aspectRatio: 1.5,
+        plugins: {
+          legend: {
+            position: "bottom",
+            labels: {
+              font: {
+                size: 11
+              }
+            }
+          },
+          title: {
+            display: true,
+            text: 'Justification violence conjugale',
+            font: {
+              size: 13,
+              weight: 'bold'
+            }
+          }
+        }
+      }
     }
   );
 }

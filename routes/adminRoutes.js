@@ -828,46 +828,41 @@ router.put(
       const setClauses = fields.map((field, idx) => `${field.name} = $${idx + 1}`);
       const values = fields.map(field => field.value);
 
-      if (fields.length === 0 && selectedCommuneIds.length === 0) {
+      if (fields.length === 0 && selectedCommuneIds.length === 0 && selectedBureauBaseIds.length === 0) {
         return res.status(400).json({ error: "Aucune donnée à mettre à jour." });
       }
 
-      // Update the `projets` table
-      const projectUpdateQuery = `
-        UPDATE projets
-        SET ${setClauses.join(", ")}
-        WHERE id_projet = $${fields.length + 1}
-        RETURNING *;
-      `;
-      values.push(id); // Add project ID to values for WHERE clause
+      try {
+          // Start a transaction for atomicity
+          await pool.query('BEGIN');
 
-      
+          // Update the `projets` table if there are fields to update
+          let projectResult;
+          if (fields.length > 0) {
+              const projectUpdateQuery = `
+                  UPDATE projets
+                  SET ${setClauses.join(", ")}
+                  WHERE id_projet = $${fields.length + 1}
+                  RETURNING *;
+              `;
+              values.push(id); // Add project ID to values for WHERE clause
 
-      if (projectResult.rows.length === 0) {
-        return res.status(404).json({ error: "Projet non trouvé." });
-      }
+              projectResult = await pool.query(projectUpdateQuery, values);
 
-      // Handle the `projets_communes` junction table
-      // Start a transaction for atomicity
-        await pool.query('BEGIN');
-        let projectResult;
+              if (projectResult.rows.length === 0) {
+                  await pool.query('ROLLBACK');
+                  return res.status(404).json({ error: "Projet non trouvé." });
+              }
+          } else {
+              // If no fields to update, just fetch the existing project
+              const fetchQuery = `SELECT * FROM projets WHERE id_projet = $1`;
+              projectResult = await pool.query(fetchQuery, [id]);
 
-        try {
-            // Update the `projets` table
-            const projectUpdateQuery = `
-                UPDATE projets
-                SET ${setClauses.join(", ")}
-                WHERE id_projet = $${fields.length + 1}
-                RETURNING *;
-            `;
-            values.push(id); // Add project ID to values for WHERE clause
-
-            projectResult = await pool.query(projectUpdateQuery, values);
-
-            if (projectResult.rows.length === 0) {
-                await pool.query('ROLLBACK');
-                return res.status(404).json({ error: "Projet non trouvé." });
-            }
+              if (projectResult.rows.length === 0) {
+                  await pool.query('ROLLBACK');
+                  return res.status(404).json({ error: "Projet non trouvé." });
+              }
+          }
 
             // Handle the `projets_communes` junction table
             await pool.query('DELETE FROM projets_communes WHERE id_projet = $1', [id]);
@@ -895,13 +890,13 @@ router.put(
                 await pool.query(insertBureauxBaseQuery);
             }
 
-            await pool.query('COMMIT');
-            res.json({ success: true, project: projectResult.rows[0] });
+          await pool.query('COMMIT');
+          res.json({ success: true, project: projectResult.rows[0] });
 
-        } catch (transactionError) {
-            await pool.query('ROLLBACK'); // Rollback if any part of the transaction fails
-            throw transactionError; // Re-throw to be caught by the outer catch
-        }
+      } catch (transactionError) {
+          await pool.query('ROLLBACK'); // Rollback if any part of the transaction fails
+          throw transactionError; // Re-throw to be caught by the outer catch
+      }
 
     } catch (err) {
         console.error("Erreur lors de la mise à jour du projet :", err.stack);

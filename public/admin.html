@@ -12,37 +12,53 @@
     <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
     <style>
 /* ================================================
-   VERSION CSS: 2.0 - MODIFICATION: 2025-10-23
-   FORCE RELOAD DU CACHE NAVIGATEUR
+   VERSION CSS: 3.0 - CHARTE GRAPHIQUE CARE
+   MODIFICATION: 2025-11-12
+   Interface épurée et professionnelle
    ================================================ */
-/* ===== VARIABLES CSS AMÉLIORÉES ===== */
+/* ===== VARIABLES CSS - CHARTE GRAPHIQUE CARE ===== */
 :root {
+    /* Couleurs principales CARE */
     --primary-color: #e55b00;
     --primary-hover: #cc5000;
+    --primary-light: #fff3e0;
+
+    /* Couleurs neutres */
     --secondary-color: #6c757d;
-    --accent-color: #ffa500;
+    --secondary-hover: #5a6268;
+
+    /* Couleurs fonctionnelles */
     --success-color: #28a745;
     --danger-color: #dc3545;
     --warning-color: #ffc107;
     --info-color: #17a2b8;
 
-    --background-light: #f5f7fa;
-    --background-dark: #2c3e50;
-    --card-background: #ffffff;
-    --text-dark: #2d3748;
+    /* Arrière-plans */
+    --background-light: #f8f9fa;
+    --background-white: #ffffff;
+    --header-bg: #2c3e50;
+
+    /* Texte */
+    --text-dark: #333333;
     --text-light: #ffffff;
-    --text-muted: #718096;
-    --border-color: #e2e8f0;
+    --text-muted: #6c757d;
 
-    --shadow-sm: 0 1px 3px rgba(0, 0, 0, 0.06);
-    --shadow-md: 0 4px 6px rgba(0, 0, 0, 0.07);
-    --shadow-lg: 0 10px 15px rgba(0, 0, 0, 0.1);
-    --shadow-xl: 0 20px 25px rgba(0, 0, 0, 0.15);
+    /* Bordures */
+    --border-color: #dee2e6;
+    --border-light: #e9ecef;
 
+    /* Ombres */
+    --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.05);
+    --shadow-md: 0 2px 4px rgba(0, 0, 0, 0.08);
+    --shadow-lg: 0 4px 8px rgba(0, 0, 0, 0.12);
+    --shadow-xl: 0 8px 16px rgba(0, 0, 0, 0.15);
+
+    /* Rayons de bordure */
     --border-radius-sm: 4px;
-    --border-radius: 8px;
-    --border-radius-lg: 12px;
+    --border-radius: 6px;
+    --border-radius-lg: 8px;
 
+    /* Transitions */
     --transition-fast: 150ms ease;
     --transition-base: 250ms ease;
     --transition-slow: 350ms ease;
@@ -73,7 +89,7 @@ body {
     position: relative;
 }
 
-/* Overlay sombre pour améliorer la lisibilité */
+/* Overlay pour la page de connexion */
 body::before {
     content: '';
     position: fixed;
@@ -81,13 +97,13 @@ body::before {
     left: 0;
     width: 100%;
     height: 100%;
-    background: rgba(0, 0, 0, 0.4);
+    background: rgba(0, 0, 0, 0.3);
     z-index: -1;
 }
 
-/* ===== HEADER AMÉLIORÉ ===== */
+/* ===== HEADER ===== */
 header {
-    background: linear-gradient(135deg, var(--background-dark) 0%, #34495e 100%);
+    background: var(--header-bg);
     color: var(--text-light);
     padding: 0 30px;
     position: fixed;
@@ -95,12 +111,11 @@ header {
     top: 0;
     left: 0;
     z-index: 1000;
-    box-shadow: var(--shadow-lg);
+    box-shadow: var(--shadow-md);
     height: 70px;
     display: flex;
     justify-content: space-between;
     align-items: center;
-    backdrop-filter: blur(10px);
 }
 
 .header-left {
@@ -112,13 +127,12 @@ header {
 .logo-container {
     width: 45px;
     height: 45px;
-    background: var(--card-background);
+    background: var(--background-white);
     border-radius: var(--border-radius);
     padding: 5px;
     display: flex;
     align-items: center;
     justify-content: center;
-    box-shadow: var(--shadow-md);
 }
 
 .logo-container img {
@@ -160,7 +174,7 @@ header h1 {
 .user-avatar {
     width: 35px;
     height: 35px;
-    background: linear-gradient(135deg, var(--primary-color), var(--accent-color));
+    background: var(--primary-color);
     border-radius: 50%;
     display: flex;
     align-items: center;
@@ -170,7 +184,7 @@ header h1 {
 }
 
 .logout-btn {
-    background: rgba(220, 53, 69, 0.9);
+    background: var(--danger-color);
     border: none;
     color: var(--text-light);
     font-size: 0.95em;
@@ -182,13 +196,12 @@ header h1 {
     align-items: center;
     gap: 8px;
     font-weight: 500;
-    box-shadow: var(--shadow-sm);
 }
 
 .logout-btn:hover {
-    background: var(--danger-color);
-    transform: translateY(-2px);
-    box-shadow: var(--shadow-md);
+    background: #c82333;
+    transform: translateY(-1px);
+    box-shadow: var(--shadow-sm);
 }
 
 .logout-btn:active {
@@ -204,15 +217,14 @@ header h1 {
     padding: 0;
 }
 
-/* Quand l'utilisateur est connecté, cacher le fond d'image */
-#adminInterface:not(.hidden) ~ * body::before,
-body:has(#adminInterface:not(.hidden))::before {
-    background: var(--bg-light) !important;
-}
-
+/* Quand l'utilisateur est connecté, fond uni et propre */
 body:has(#adminInterface:not(.hidden)) {
     background-image: none !important;
-    background: linear-gradient(135deg, #f5f7fa 0%, #e8ecf1 100%) !important;
+    background: var(--background-light) !important;
+}
+
+body:has(#adminInterface:not(.hidden))::before {
+    background: none !important;
 }
 
 section {
@@ -264,59 +276,41 @@ section {
 
 /* ===== NAVIGATION TABS ===== */
 nav {
-    margin: 0 0 30px 0;
+    margin: 0 0 25px 0;
     display: flex;
-    gap: 12px;
-    background: var(--card-background);
-    padding: 20px;
-    border-radius: var(--border-radius-lg);
-    box-shadow: var(--shadow-md);
+    gap: 10px;
+    background: var(--background-white);
+    padding: 15px;
+    border-radius: var(--border-radius);
+    box-shadow: var(--shadow-sm);
     flex-wrap: wrap;
+    border: 1px solid var(--border-light);
 }
 
 nav button {
     flex: 1;
     min-width: 150px;
-    padding: 14px 28px;
-    background: linear-gradient(135deg, #f8f9fa, #e9ecef);
-    border: 2px solid transparent;
+    padding: 12px 24px;
+    background: var(--background-white);
+    border: 1px solid var(--border-color);
     color: var(--text-dark);
     border-radius: var(--border-radius);
     cursor: pointer;
     font-size: 0.95em;
     font-weight: 600;
     transition: all var(--transition-base);
-    box-shadow: var(--shadow-sm);
-    position: relative;
-    overflow: hidden;
-}
-
-nav button::before {
-    content: '';
-    position: absolute;
-    top: 0;
-    left: -100%;
-    width: 100%;
-    height: 100%;
-    background: linear-gradient(90deg, transparent, rgba(255,255,255,0.4), transparent);
-    transition: left 0.5s;
-}
-
-nav button:hover::before {
-    left: 100%;
 }
 
 nav button:hover {
+    background: var(--primary-light);
     border-color: var(--primary-color);
-    transform: translateY(-3px);
-    box-shadow: var(--shadow-md);
+    transform: translateY(-1px);
 }
 
 nav button.active {
-    background: linear-gradient(135deg, var(--primary-color), var(--primary-hover));
+    background: var(--primary-color);
     color: var(--text-light);
     border-color: var(--primary-color);
-    box-shadow: var(--shadow-lg);
 }
 
 nav button i {
@@ -325,10 +319,11 @@ nav button i {
 
 /* ===== CONTENT AREA ===== */
 #contentArea {
-    background: var(--card-background);
-    padding: 30px;
-    border-radius: var(--border-radius-lg);
-    box-shadow: var(--shadow-md);
+    background: var(--background-white);
+    padding: 25px;
+    border-radius: var(--border-radius);
+    box-shadow: var(--shadow-sm);
+    border: 1px solid var(--border-light);
     min-height: 500px;
 }
 
@@ -346,7 +341,7 @@ h2 {
 }
 
 .add-btn {
-    background: linear-gradient(135deg, var(--success-color), #20c997);
+    background: var(--success-color);
     border: none;
     color: var(--text-light);
     padding: 10px 20px;
@@ -355,15 +350,15 @@ h2 {
     font-size: 0.9em;
     font-weight: 600;
     transition: all var(--transition-base);
-    box-shadow: var(--shadow-sm);
     display: flex;
     align-items: center;
     gap: 8px;
 }
 
 .add-btn:hover {
-    transform: translateY(-2px);
-    box-shadow: var(--shadow-md);
+    background: #218838;
+    transform: translateY(-1px);
+    box-shadow: var(--shadow-sm);
 }
 
 .hidden {
@@ -453,7 +448,7 @@ th, td {
 
 /* En-tête du tableau */
 th {
-    background: linear-gradient(135deg, #2c3e50, #34495e);
+    background: var(--header-bg);
     color: var(--text-light);
     position: sticky;
     top: 0;
@@ -463,7 +458,6 @@ th {
     text-transform: uppercase;
     font-size: 0.8em;
     letter-spacing: 0.5px;
-    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
 }
 
 th:first-child {
@@ -476,18 +470,16 @@ th:last-child {
 
 /* Lignes du tableau */
 tbody tr {
-    background-color: var(--card-background);
+    background-color: var(--background-white);
     transition: all var(--transition-fast);
 }
 
 tbody tr:nth-child(even) {
-    background-color: #f8f9fa;
+    background-color: var(--background-light);
 }
 
 tbody tr:hover {
-    background-color: rgba(229, 91, 0, 0.05);
-    transform: scale(1.01);
-    box-shadow: var(--shadow-sm);
+    background-color: var(--primary-light);
 }
 
 td {
@@ -498,15 +490,15 @@ td {
 .fixed-column {
     position: sticky;
     right: 0;
-    background: linear-gradient(135deg, #f8f9fa, #e9ecef);
+    background: var(--background-light);
     z-index: 5;
-    box-shadow: -4px 0 10px rgba(0, 0, 0, 0.08);
+    box-shadow: -2px 0 4px rgba(0, 0, 0, 0.05);
     text-align: center;
     min-width: 120px;
 }
 
 thead th.fixed-column {
-    background: linear-gradient(135deg, #2c3e50, #34495e);
+    background: var(--header-bg);
     color: var(--text-light);
     z-index: 15;
 }
@@ -526,40 +518,36 @@ thead th.fixed-column {
     align-items: center;
     justify-content: center;
     min-width: 35px;
-    box-shadow: var(--shadow-sm);
 }
 
 .editBtn {
-    background: linear-gradient(135deg, var(--info-color), #138496);
+    background: var(--info-color);
     color: var(--text-light);
 }
 
 .editBtn:hover {
-    background: linear-gradient(135deg, #138496, #117a8b);
-    transform: translateY(-2px);
-    box-shadow: var(--shadow-md);
+    background: #138496;
+    transform: translateY(-1px);
 }
 
 .deleteBtn {
-    background: linear-gradient(135deg, var(--danger-color), #c82333);
+    background: var(--danger-color);
     color: var(--text-light);
 }
 
 .deleteBtn:hover {
-    background: linear-gradient(135deg, #c82333, #bd2130);
-    transform: translateY(-2px);
-    box-shadow: var(--shadow-md);
+    background: #c82333;
+    transform: translateY(-1px);
 }
 
 .fixed-btn {
-    background: linear-gradient(135deg, var(--primary-color), var(--primary-hover));
+    background: var(--primary-color);
     color: var(--text-light);
 }
 
 .fixed-btn:hover {
-    background: linear-gradient(135deg, var(--primary-hover), #b34700);
-    transform: translateY(-2px);
-    box-shadow: var(--shadow-md);
+    background: var(--primary-hover);
+    transform: translateY(-1px);
 }
 
 .editBtn i,
@@ -569,7 +557,7 @@ thead th.fixed-column {
 }
 
 
-/* ===== FORMULAIRES AMÉLIORÉS ===== */
+/* ===== FORMULAIRES ===== */
 form {
     width: 100%;
     max-width: 1400px;
@@ -577,11 +565,11 @@ form {
     display: grid;
     grid-template-columns: 1fr;
     gap: 20px;
-    padding: 30px;
-    border: none;
-    border-radius: var(--border-radius-lg);
-    background: var(--card-background);
-    box-shadow: var(--shadow-md);
+    padding: 25px;
+    border: 1px solid var(--border-light);
+    border-radius: var(--border-radius);
+    background: var(--background-white);
+    box-shadow: var(--shadow-sm);
 }
 
 /* Exception pour le formulaire de connexion - disposition en colonne unique */
@@ -674,9 +662,9 @@ form {
     grid-template-columns: repeat(3, 1fr);
     gap: 20px;
     padding: 20px;
-    background: rgba(229, 91, 0, 0.03);
+    background: var(--primary-light);
     border-radius: var(--border-radius);
-    border-left: 4px solid var(--primary-color);
+    border-left: 3px solid var(--primary-color);
 }
 
 @media (min-width: 768px) and (max-width: 1199px) {
@@ -757,51 +745,39 @@ form {
     color: var(--danger-color);
 }
 
-/* Inputs avec bordure bien visible */
+/* Inputs */
 .form-group input[type="text"],
 .form-group input[type="password"],
 .form-group input[type="number"],
 .form-group input[type="email"],
 .form-group input[type="file"],
 .form-group select {
-    padding: 8px 12px;
-    border: 2px solid rgba(229, 91, 0, 0.5);
+    padding: 10px 12px;
+    border: 1px solid var(--border-color);
     border-radius: var(--border-radius);
     font-size: 0.9em;
     font-family: 'Montserrat', sans-serif;
     transition: all var(--transition-base);
-    background-color: rgba(255, 255, 255, 0.98);
-    backdrop-filter: blur(10px);
-    -webkit-backdrop-filter: blur(10px);
-    color: #1a202c;
+    background-color: var(--background-white);
+    color: var(--text-dark);
     width: 100%;
     box-sizing: border-box;
-    position: relative;
-    z-index: 1;
-    font-weight: 600;
-    box-shadow: 0 2px 8px rgba(229, 91, 0, 0.15);
     height: 40px;
     min-height: 40px;
     max-height: 40px;
 }
 
 .form-group textarea {
-    padding: 8px 12px;
-    border: 2px solid rgba(229, 91, 0, 0.5);
+    padding: 10px 12px;
+    border: 1px solid var(--border-color);
     border-radius: var(--border-radius);
     font-size: 0.9em;
     font-family: 'Montserrat', sans-serif;
     transition: all var(--transition-base);
-    background-color: rgba(255, 255, 255, 0.98);
-    backdrop-filter: blur(10px);
-    -webkit-backdrop-filter: blur(10px);
-    color: #1a202c;
+    background-color: var(--background-white);
+    color: var(--text-dark);
     width: 100%;
     box-sizing: border-box;
-    position: relative;
-    z-index: 1;
-    font-weight: 600;
-    box-shadow: 0 2px 8px rgba(229, 91, 0, 0.15);
     min-height: 70px;
     max-height: 120px;
     resize: vertical;
@@ -817,11 +793,9 @@ form {
 .form-group select:focus,
 .form-group textarea:focus {
     border-color: var(--primary-color);
-    border-width: 3px;
-    box-shadow: 0 0 0 4px rgba(229, 91, 0, 0.3), 0 4px 12px rgba(229, 91, 0, 0.2);
+    border-width: 2px;
+    box-shadow: 0 0 0 3px rgba(229, 91, 0, 0.1);
     outline: none;
-    background-color: rgba(255, 255, 255, 1);
-    transform: translateY(-1px);
 }
 
 .form-group input:disabled,
@@ -885,50 +859,42 @@ form {
     overflow-y: auto;
 }
 
-/* Boutons de formulaire avec glassmorphism */
+/* Boutons de formulaire */
 form button[type="submit"],
 form .btn-cancel {
-    padding: 14px 30px;
-    border: 2px solid rgba(255, 255, 255, 0.3);
+    padding: 12px 28px;
+    border: none;
     color: var(--text-light);
     border-radius: var(--border-radius);
     cursor: pointer;
-    font-size: 1em;
+    font-size: 0.95em;
     font-weight: 600;
     transition: all var(--transition-base);
     text-transform: uppercase;
     letter-spacing: 0.5px;
-    position: relative;
-    z-index: 1;
-    backdrop-filter: blur(10px);
-    -webkit-backdrop-filter: blur(10px);
     display: inline-flex;
     align-items: center;
     gap: 8px;
 }
 
 form button[type="submit"] {
-    background: linear-gradient(135deg, var(--primary-color), var(--primary-hover));
-    box-shadow: 0 4px 20px rgba(229, 91, 0, 0.4);
+    background: var(--primary-color);
 }
 
 form button[type="submit"]:hover {
-    background: linear-gradient(135deg, var(--primary-hover), #b34700);
-    transform: translateY(-2px);
-    box-shadow: 0 8px 30px rgba(229, 91, 0, 0.6);
-    border-color: rgba(255, 255, 255, 0.5);
+    background: var(--primary-hover);
+    transform: translateY(-1px);
+    box-shadow: var(--shadow-sm);
 }
 
 form .btn-cancel {
-    background: linear-gradient(135deg, var(--secondary-color), #5a6268);
-    box-shadow: 0 4px 20px rgba(108, 117, 125, 0.4);
+    background: var(--secondary-color);
 }
 
 form .btn-cancel:hover {
-    background: linear-gradient(135deg, #5a6268, #495057);
-    transform: translateY(-2px);
-    box-shadow: 0 8px 30px rgba(108, 117, 125, 0.6);
-    border-color: rgba(255, 255, 255, 0.5);
+    background: var(--secondary-hover);
+    transform: translateY(-1px);
+    box-shadow: var(--shadow-sm);
 }
 
 form button[type="submit"]:active,
